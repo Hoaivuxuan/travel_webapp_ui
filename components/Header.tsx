@@ -1,245 +1,120 @@
 'use client';
 
 import Link from 'next/link';
-import { Fragment, useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import {
-  ChatBubbleLeftIcon,
-  ChevronDownIcon,
   HomeIcon,
   PaperAirplaneIcon,
   PhoneIcon,
   PlayCircleIcon,
 } from '@heroicons/react/20/solid';
-import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react';
-import { cn } from '@/lib/utils';
+import { Dialog } from '@headlessui/react';
 
 const products = [
-  {
-    name: 'Book a Stay',
-    description: 'Get a better understanding of your traffic',
-    href: '#',
-    icon: HomeIcon,
-  },
-  {
-    name: 'Book a Flight',
-    description: 'Speak directly to your customers',
-    href: '#',
-    icon: PaperAirplaneIcon,
-  },
-  {
-    name: 'Contact our Support Team',
-    description: 'Your customers’ data will be safe and secure',
-    href: '#',
-    icon: ChatBubbleLeftIcon,
-  },
-];
-
-const callsToAction = [
-  { name: 'See Demo Booking', href: '#', icon: PlayCircleIcon },
-  { name: 'Contact Support', href: '#', icon: PhoneIcon },
+  { name: 'Lưu trú', href: '/', icon: HomeIcon },
+  { name: 'Chuyến bay', href: '/', icon: PaperAirplaneIcon },
+  { name: 'Thuê xe', href: '/rental', icon: PhoneIcon },
+  { name: 'Điểm tham quan', href: '/', icon: PlayCircleIcon },
 ];
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeItem, setActiveItem] = useState('');
+
+  const handleLinkClick = (name: SetStateAction<string>, href: string) => {
+    setMobileMenuOpen(false);
+  };
+
+  const handleLogoClick = () => {
+    setActiveItem('Lưu trú');
+  };
 
   return (
     <header className='bg-[#013B94]'>
-      <nav
-        className='flex items-center justify-between p-6 mx-auto max-w-7xl lg:px-8'
-        aria-label='Global'>
-        <div className='flex lg:flex-1'>
-          <Link href='/' className='-m-1.5 p-1.5'>
-            <span className='sr-only'>Booking.com</span>
-            <img
-              className='w-auto h-12'
-              src='https://static1.squarespace.com/static/5bde0f00c3c16aa95581e2e2/62b4cb1add9d257dd43bb03d/62b653fedc7c895918d19b24/1656116254983/booking+logo+white.png?format=1500w'
-              alt=''
-            />
-          </Link>
-        </div>
+      <nav className='flex items-center justify-between p-6 mx-auto max-w-7xl'>
+        <Link href='/' className='flex items-center' onClick={handleLogoClick}>
+          <span className='sr-only'>Booking.com</span>
+          <img
+            className='h-12'
+            src='https://static1.squarespace.com/static/5bde0f00c3c16aa95581e2e2/62b4cb1add9d257dd43bb03d/62b653fedc7c895918d19b24/1656116254983/booking+logo+white.png?format=1500w'
+            alt='Logo'
+          />
+        </Link>
 
         <div className='flex lg:hidden'>
           <button
             type='button'
-            className='-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-white'
+            className='p-2.5 text-white'
             onClick={() => setMobileMenuOpen(true)}>
-            <span className='sr-only'>Open main menu</span>
             <Bars3Icon className='w-6 h-6' aria-hidden='true' />
           </button>
         </div>
 
-        <Popover.Group className='hidden lg:flex lg:gap-x-12'>
-          <Popover className='relative'>
-            <Popover.Button className='flex items-center text-sm font-semibold leading-6 text-white gap-x-1'>
-              Stays
-              <ChevronDownIcon
-                className='flex-none w-5 h-5 text-white'
-                aria-hidden='true'
-              />
-            </Popover.Button>
+        <div className='hidden lg:flex lg:gap-x-12 justify-between flex-grow'>
+          <div className='flex justify-center flex-grow'>
+            {products.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                onClick={() => handleLinkClick(item.name, item.href)}
+                className={`flex items-center text-sm font-semibold text-white mr-4 ${
+                  item.href !== '#' && item.name === activeItem ? 'bg-blue-600 rounded-lg p-2' : ''
+                }`}
+              >
+                <item.icon className='h-5 w-5 mr-2' aria-hidden='true' />
+                {item.name}
+              </Link>
+            ))}
+          </div>
 
-            <Transition
-              as={Fragment}
-              enter='transition ease-out duration-200'
-              enterFrom='opacity-0 translate-y-1'
-              enterTo='opacity-100 translate-y-0'
-              leave='transition ease-in duration-150'
-              leaveFrom='opacity-100 translate-y-0'
-              leaveTo='opacity-0 translate-y-1'>
-              <Popover.Panel className='absolute z-10 w-screen max-w-md mt-3 overflow-hidden bg-white shadow-lg -left-8 top-full rounded-3xl ring-1 ring-gray-900/5'>
-                <div className='p-4'>
-                  {products.map((item) => (
-                    <div
-                      key={item.name}
-                      className='relative flex items-center p-4 text-sm leading-6 rounded-lg group gap-x-6 hover:bg-gray-50'>
-                      <div className='flex items-center justify-center flex-none rounded-lg h-11 w-11 bg-gray-50 group-hover:bg-gray-200'>
-                        <item.icon
-                          className='h-6 w-6 text-[#013B94] group-hover:text-blue-600'
-                          aria-hidden='true'
-                        />
-                      </div>
-
-                      <div className='flex-auto'>
-                        <a
-                          href={item.href}
-                          className='block font-semibold text-[#013B94]'>
-                          {item.name}
-                          <span className='absolute inset-0' />
-                        </a>
-                        <p className='mt-1 text-[#013B94]'>
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className='grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50'>
-                  {callsToAction.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className='flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-[#013B94] hover:bg-gray-100'>
-                      <item.icon
-                        className='h-5 w-5 flex-none text-[#013B94]'
-                        aria-hidden='true'
-                      />
-                      {item.name}
-                    </a>
-                  ))}
-                </div>
-              </Popover.Panel>
-            </Transition>
-          </Popover>
-
-          <a href='#' className='text-sm font-semibold leading-6 text-white'>
-            Flights
-          </a>
-          <a href='#' className='text-sm font-semibold leading-6 text-white'>
-            Car Rentals
-          </a>
-          <a href='#' className='text-sm font-semibold leading-6 text-white'>
-            Attractions
-          </a>
-          <a href='#' className='text-sm font-semibold leading-6 text-white'>
-            Flight + Hotel
-          </a>
-        </Popover.Group>
-
-        <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-          <a href='#' className='text-sm font-semibold leading-6 text-white'>
-            Log in <span aria-hidden='true'>&rarr;</span>
-          </a>
+          <Link 
+            href='/login' 
+            onClick={() => handleLinkClick('Đăng Nhập', '/login')}
+            className='ml-4 px-4 py-2 text-sm font-semibold text-white bg-blue-700 rounded-lg hover:bg-blue-800 transition duration-200'>
+            Đăng Nhập
+          </Link>
         </div>
       </nav>
 
-      <Dialog
-        as='div'
-        className='lg:hidden'
-        open={mobileMenuOpen}
-        onClose={setMobileMenuOpen}>
-        <div className='fixed inset-0 z-10' />
-
-        <Dialog.Panel className='fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-[#013B94] px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
+      <Dialog as='div' open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)}>
+        <div className='fixed inset-0 z-10 bg-black opacity-30' />
+        <Dialog.Panel className='fixed inset-y-0 right-0 z-20 w-full bg-[#013B94] p-6'>
           <div className='flex items-center justify-between'>
-            <a href='#' className='-m-1.5 p-1.5'>
-              <span className='sr-only'>Booking.com</span>
+            <Link href='/' className='flex items-center' onClick={handleLogoClick}>
               <img
-                className='w-auto h-8'
+                className='h-8'
                 src='https://static1.squarespace.com/static/5bde0f00c3c16aa95581e2e2/62b4cb1add9d257dd43bb03d/62b653fedc7c895918d19b24/1656116254983/booking+logo+white.png?format=1500w'
-                alt=''
+                alt='Logo'
               />
-            </a>
+            </Link>
             <button
               type='button'
-              className='-m-2.5 rounded-md p-2.5 text-white'
+              className='text-white'
               onClick={() => setMobileMenuOpen(false)}>
-              <span className='sr-only'>Close menu</span>
               <XMarkIcon className='w-6 h-6' aria-hidden='true' />
             </button>
           </div>
 
-          <div className='flow-root mt-6'>
-            <div className='-my-6 divide-y divide-gray-500/10'>
-              <div className='py-6 space-y-2'>
-                <Disclosure as='div' className='-mx-3'>
-                  {({ open }) => (
-                    <>
-                      <Disclosure.Button className='flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-white hover:bg-blue-800'>
-                        Stays
-                        <ChevronDownIcon
-                          className={cn(
-                            open ? 'rotate-180' : '',
-                            'h-5 w-5 flex-none'
-                          )}
-                          aria-hidden='true'
-                        />
-                      </Disclosure.Button>
-                      <Disclosure.Panel className='mt-2 space-y-2'>
-                        {[...products, ...callsToAction].map((item) => (
-                          <Disclosure.Button
-                            key={item.name}
-                            as='a'
-                            href={item.href}
-                            className='block py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-white rounded-lg hover:bg-blue-800'>
-                            {item.name}
-                          </Disclosure.Button>
-                        ))}
-                      </Disclosure.Panel>
-                    </>
-                  )}
-                </Disclosure>
-                <a
-                  href='#'
-                  className='block px-3 py-2 -mx-3 text-base font-semibold leading-7 text-white rounded-lg hover:bg-blue-800'>
-                  Flights
-                </a>
-                <a
-                  href='#'
-                  className='block px-3 py-2 -mx-3 text-base font-semibold leading-7 text-white rounded-lg hover:bg-blue-800'>
-                  Car Rentals
-                </a>
-                <a
-                  href='#'
-                  className='block px-3 py-2 -mx-3 text-base font-semibold leading-7 text-white rounded-lg hover:bg-blue-800'>
-                  Attractions
-                </a>
-                <a
-                  href='#'
-                  className='block px-3 py-2 -mx-3 text-base font-semibold leading-7 text-white rounded-lg hover:bg-blue-800'>
-                  Flight + Hotel
-                </a>
-              </div>
-
-              <div className='py-6'>
-                <a
-                  href='#'
-                  className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white hover:bg-blue-800'>
-                  Log In
-                </a>
-              </div>
-            </div>
+          <div className='mt-6'>
+            {products.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                onClick={() => handleLinkClick(item.name, item.href)}
+                className={`block p-2 text-base font-semibold text-white rounded-lg hover:bg-blue-800 ${
+                  item.href !== '#' && item.name === activeItem ? 'bg-blue-600' : ''
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
+            <Link
+              href='/login'
+              onClick={() => handleLinkClick('Đăng Nhập', '/login')}
+              className='block p-2 text-base font-semibold text-white bg-blue-700 hover:bg-blue-800 rounded-lg transition duration-200'>
+              Đăng Nhập
+            </Link>
           </div>
         </Dialog.Panel>
       </Dialog>

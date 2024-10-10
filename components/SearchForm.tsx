@@ -30,31 +30,34 @@ export const formSchema = z.object({
   adults: z
     .string()
     .min(1, {
-      message: 'Please select at least 1 adult',
+      message: 'Vui lòng chọn ít nhất 1 người lớn',
     })
-    .max(12, { message: 'Max 12 adults Occupancy' }),
+    .max(12, { message: 'Tối đa 12 người lớn' }),
   children: z.string().min(0).max(12, {
-    message: 'Max 12 children Occupancy',
+    message: 'Tối đa 12 trẻ em',
   }),
   rooms: z.string().min(1, {
-    message: 'Please select at least 1 room',
+    message: 'Vui lòng chọn ít nhất 1 phòng',
   }),
 });
 
 function SearchForm() {
   const router = useRouter();
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       location: '',
       dates: {
-        from: undefined,
-        to: undefined,
+        from: today,
+        to: tomorrow,
       },
-      adults: '1',
-      children: '0',
-      rooms: '1',
+      adults: '',
+      children: '',
+      rooms: '',
     },
   });
 
@@ -93,16 +96,10 @@ function SearchForm() {
             name='location'
             render={({ field }) => (
               <FormItem>
-                <FormLabel className='flex text-white'>
-                  Location
-                  <BedDoubleIcon className='w-4 h-4 ml-2 text-white' />
-                </FormLabel>
-
-                <FormMessage />
-
                 <FormControl>
-                  <Input placeholder='London, UK' {...field} />
+                  <Input placeholder='Bạn muốn đến đâu?' {...field} />
                 </FormControl>
+                {/* <FormMessage /> */}
               </FormItem>
             )}
           />
@@ -114,9 +111,6 @@ function SearchForm() {
             name='dates'
             render={({ field }) => (
               <FormItem className='flex flex-col'>
-                <FormLabel className='text-white'>Dates</FormLabel>
-                <FormMessage />
-
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -139,7 +133,7 @@ function SearchForm() {
                             format(field.value?.from, 'LLL dd, y')
                           )
                         ) : (
-                          <span>Select your dates</span>
+                          <span>Chọn ngày của bạn</span>
                         )}
                       </Button>
                     </FormControl>
@@ -158,6 +152,7 @@ function SearchForm() {
                     />
                   </PopoverContent>
                 </Popover>
+                {/* <FormMessage /> */}
               </FormItem>
             )}
           />
@@ -170,11 +165,10 @@ function SearchForm() {
               name='adults'
               render={({ field }) => (
                 <FormItem className='flex flex-col'>
-                  <FormLabel className='text-white'>Adults</FormLabel>
-                  <FormMessage />
                   <FormControl>
-                    <Input type='number' placeholder='Adults' {...field} />
+                    <Input type='number' placeholder='Người lớn' {...field} />
                   </FormControl>
+                  {/* <FormMessage /> */}
                 </FormItem>
               )}
             />
@@ -186,11 +180,10 @@ function SearchForm() {
               name='children'
               render={({ field }) => (
                 <FormItem className='flex flex-col'>
-                  <FormLabel className='text-white'>Children</FormLabel>
-                  <FormMessage />
                   <FormControl>
-                    <Input type='number' placeholder='Children' {...field} />
+                    <Input type='number' placeholder='Trẻ em' {...field} />
                   </FormControl>
+                  {/* <FormMessage /> */}
                 </FormItem>
               )}
             />
@@ -202,11 +195,10 @@ function SearchForm() {
               name='rooms'
               render={({ field }) => (
                 <FormItem className='flex flex-col'>
-                  <FormLabel className='text-white'>Rooms</FormLabel>
-                  <FormMessage />
                   <FormControl>
-                    <Input type='number' placeholder='rooms' {...field} />
+                    <Input type='number' placeholder='Phòng' {...field} />
                   </FormControl>
+                  {/* <FormMessage /> */}
                 </FormItem>
               )}
             />
@@ -214,7 +206,7 @@ function SearchForm() {
 
           <div className='mt-auto'>
             <Button type='submit' className='text-base bg-blue-500'>
-              Search
+              Tìm kiếm
             </Button>
           </div>
         </div>

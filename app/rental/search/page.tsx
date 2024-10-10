@@ -1,14 +1,14 @@
 import Link from 'next/link';
-import SearchForm from '@/components/SearchForm';
 import { fetchResults } from '@/lib/fetchResults';
 import { notFound } from 'next/navigation';
 import { listStays } from '@/data/fakeData';
+import RentalSearchForm from '@/components/rental/RentalSearchForm';
 
 type Props = {
-  searchParams: SearchParams;
+  searchParams: RentalSearchParams;
 };
 
-export type SearchParams = {
+export type RentalSearchParams = {
   url: URL;
   group_adults: string;
   group_children: string;
@@ -17,7 +17,7 @@ export type SearchParams = {
   checkout: string;
 };
 
-async function SearchPage({ searchParams }: Props) {
+async function RentalSearchPage({ searchParams }: Props) {
   if (!searchParams.url) return notFound();
 
   let results = null;
@@ -35,7 +35,7 @@ async function SearchPage({ searchParams }: Props) {
     <section>
       <div className='p-6 mx-auto max-w-7xl lg:px-8'>
         <div className='pt-4 pb-8'>
-          <SearchForm />
+          <RentalSearchForm />
         </div>
 
         <h1 className='pb-3 text-4xl font-bold'>Your Trip Results</h1>
@@ -96,4 +96,4 @@ async function SearchPage({ searchParams }: Props) {
   );
 }
 
-export default SearchPage;
+export default RentalSearchPage;
