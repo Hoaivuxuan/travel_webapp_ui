@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import { fetchResults } from '@/lib/fetchResults';
 import { notFound } from 'next/navigation';
-import { listStays } from '@/data/fakeData';
+import { listings } from '@/data/fakeData';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSuitcase, faUserFriends, faCar } from '@fortawesome/free-solid-svg-icons';
 import RentalSearchForm from '@/components/rental/RentalSearchForm';
 
 type Props = {
@@ -10,9 +11,7 @@ type Props = {
 
 export type RentalSearchParams = {
   url: URL;
-  group_adults: string;
-  group_children: string;
-  no_rooms: string;
+  location: string;
   checkin: string;
   checkout: string;
 };
@@ -21,71 +20,64 @@ async function RentalSearchPage({ searchParams }: Props) {
   if (!searchParams.url) return notFound();
 
   let results = null;
-  try {
-    results = await fetchResults(searchParams);
-  } catch (error) {
-    console.error('Error fetching results:', error);
-  }
-
   if (!results) {
-    results = listStays;
+    results = listings;
   }
 
   return (
     <section>
       <div className='p-6 mx-auto max-w-7xl lg:px-8'>
-        <div className='pt-4 pb-8'>
+        <div className='py-8'>
           <RentalSearchForm />
         </div>
 
-        <h1 className='pb-3 text-4xl font-bold'>Your Trip Results</h1>
+        <h1 className='pb-3 text-4xl font-bold'>Car Rental Without Driver</h1>
 
-        <h2 className='pb-3'>
-          Dates of trip:
-          <span className='ml-2 italic'>
-            {searchParams.checkin} to {searchParams.checkout}
+        <h2 className='pb-3 italic'>
+          {searchParams.location}
+          <span className='ml-2'>
+            từ {searchParams.checkin} đến {searchParams.checkout}
           </span>
         </h2>
 
         <hr className='mb-5' />
 
-        <div className='mt-5 space-y-2'>
-          {results.content.listings.map((item, i) => (
+        <div className='mt-5 space-y-4'>
+          {results.content.listCars.map((item, i) => (
             <div
               key={i}
-              className='flex justify-between p-5 space-x-4 space-y-2 border rounded-lg'>
+              className='flex p-4 space-x-4 border rounded-lg hover:shadow-lg transition-shadow duration-200'>
+              
               <img
                 src={item.url}
-                alt='image of property'
-                className='rounded-lg h-44 w-44'
+                alt={`Image of ${item.model}`}
+                className='rounded-lg h-32 w-auto'
               />
 
-              <div className='flex justify-between flex-1 space-x-5'>
+              <div className='flex flex-col justify-between flex-1'>
                 <div>
-                  <Link
-                    href={item.link}
-                    className='font-bold text-blue-500 hover:text-blue-600 hover:underline'>
-                    {item.title}
-                  </Link>
-                  <p className='text-xs'>{item.description}</p>
+                  <p className='font-bold text-blue-600 text-lg'>{item.model}</p>
+                  <p className='text-sm text-gray-700 flex items-center'>
+                    <FontAwesomeIcon icon={faCar} className='mr-1 w-4' />
+                    {item.details.transmission}
+                  </p>
+                  <p className='text-sm flex items-center text-gray-600'>
+                    <FontAwesomeIcon icon={faUserFriends} className='mr-1 w-4' />
+                    {item.details.seats} ghế
+                  </p>
+                  <p className='text-sm flex items-center text-gray-600'>
+                    <FontAwesomeIcon icon={faSuitcase} className='mr-1 w-4' />
+                    {item.details.baggage_capacity} hành lý
+                  </p>
                 </div>
 
-                <div className='flex flex-col justify-between'>
-                  <div className='flex items-start justify-end space-x-2 text-right'>
-                    <div>
-                      <p className='font-bold'>{item.rating_word}</p>
-                      <p className='text-xs'>{item.rating_count}</p>
-                    </div>
-
-                    <p className='flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold text-white bg-blue-900 rounded-lg'>
-                      {item.rating || 'N/A'}
-                    </p>
-                  </div>
-
-                  <div className='text-right'>
-                    <p className='text-xs'>{item.booking_metadata}</p>
-                    <p className='text-2xl font-bold'>{item.price}</p>
-                  </div>
+                <div className='flex justify-between items-center mt-2'>
+                  <p className='text-xl font-bold text-orange-600 text-right flex-1'>{item.price} VNĐ/ngày</p>
+                  <Link
+                    href={`/rental/${item.id}`}
+                    className='bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold ml-4'>
+                    Tiếp tục
+                  </Link>
                 </div>
               </div>
             </div>

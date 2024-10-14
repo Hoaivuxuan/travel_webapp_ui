@@ -2,7 +2,7 @@ import Link from 'next/link';
 import SearchForm from '@/components/SearchForm';
 import { fetchResults } from '@/lib/fetchResults';
 import { notFound } from 'next/navigation';
-import { listStays } from '@/data/fakeData';
+import { listings } from '@/data/fakeData';
 
 type Props = {
   searchParams: SearchParams;
@@ -28,7 +28,7 @@ async function SearchPage({ searchParams }: Props) {
   }
 
   if (!results) {
-    results = listStays;
+    results = listings;
   }
 
   return (
@@ -50,13 +50,13 @@ async function SearchPage({ searchParams }: Props) {
         <hr className='mb-5' />
 
         <div className='mt-5 space-y-2'>
-          {results.content.listings.map((item, i) => (
+          {results.content.listStays.map((item, i) => (
             <div
               key={i}
               className='flex justify-between p-5 space-x-4 space-y-2 border rounded-lg'>
               <img
                 src={item.url}
-                alt='image of property'
+                alt={`Image of ${item.title}`}
                 className='rounded-lg h-44 w-44'
               />
 

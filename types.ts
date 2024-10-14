@@ -12,7 +12,6 @@ export type Listing = {
 
 export type Result = {
   content: {
-    listings: Listing[];
-    total_listings: string;
+    listStays: Listing[];
   };
 };

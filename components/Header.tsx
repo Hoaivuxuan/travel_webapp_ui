@@ -2,20 +2,15 @@
 
 import Link from 'next/link';
 import { SetStateAction, useState } from 'react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import {
-  HomeIcon,
-  PaperAirplaneIcon,
-  PhoneIcon,
-  PlayCircleIcon,
-} from '@heroicons/react/20/solid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faPlane, faCar, faMap } from '@fortawesome/free-solid-svg-icons';
 import { Dialog } from '@headlessui/react';
 
 const products = [
-  { name: 'Lưu trú', href: '/', icon: HomeIcon },
-  { name: 'Chuyến bay', href: '/', icon: PaperAirplaneIcon },
-  { name: 'Thuê xe', href: '/rental', icon: PhoneIcon },
-  { name: 'Điểm tham quan', href: '/', icon: PlayCircleIcon },
+  { name: 'stays', title: 'LƯU TRÚ', href: '/', icon: faHome },
+  { name: 'flights', title: 'CHUYẾN BAY', href: '/', icon: faPlane },
+  { name: 'rental', title: 'CHO THUÊ XE', href: '/rental', icon: faCar },
+  { name: 'travel_guides', title: 'ĐIỂM THAM QUAN', href: '/', icon: faMap },
 ];
 
 const Header = () => {
@@ -24,10 +19,11 @@ const Header = () => {
 
   const handleLinkClick = (name: SetStateAction<string>, href: string) => {
     setMobileMenuOpen(false);
+    setActiveItem(name); // Set active item on link click
   };
 
   const handleLogoClick = () => {
-    setActiveItem('Lưu trú');
+    setActiveItem('');
   };
 
   return (
@@ -47,7 +43,7 @@ const Header = () => {
             type='button'
             className='p-2.5 text-white'
             onClick={() => setMobileMenuOpen(true)}>
-            <Bars3Icon className='w-6 h-6' aria-hidden='true' />
+            <FontAwesomeIcon icon={['fas', 'bars']} className='w-6 h-6' aria-hidden='true' />
           </button>
         </div>
 
@@ -58,12 +54,12 @@ const Header = () => {
                 key={item.name}
                 href={item.href}
                 onClick={() => handleLinkClick(item.name, item.href)}
-                className={`flex items-center text-sm font-semibold text-white mr-4 ${
+                className={`flex items-center text-sm font-semibold text-white mx-4 ${
                   item.href !== '#' && item.name === activeItem ? 'bg-blue-600 rounded-lg p-2' : ''
                 }`}
               >
-                <item.icon className='h-5 w-5 mr-2' aria-hidden='true' />
-                {item.name}
+                <FontAwesomeIcon icon={item.icon} className='h-5 w-5 mr-2' aria-hidden='true' />
+                {item.title}
               </Link>
             ))}
           </div>
@@ -92,7 +88,7 @@ const Header = () => {
               type='button'
               className='text-white'
               onClick={() => setMobileMenuOpen(false)}>
-              <XMarkIcon className='w-6 h-6' aria-hidden='true' />
+              <FontAwesomeIcon icon={['fas', 'times']} className='w-6 h-6' aria-hidden='true' />
             </button>
           </div>
 
@@ -106,7 +102,8 @@ const Header = () => {
                   item.href !== '#' && item.name === activeItem ? 'bg-blue-600' : ''
                 }`}
               >
-                {item.name}
+                <FontAwesomeIcon icon={item.icon} className='mr-2' />
+                {item.title}
               </Link>
             ))}
             <Link
