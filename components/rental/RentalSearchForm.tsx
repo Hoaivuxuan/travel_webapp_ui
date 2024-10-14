@@ -18,9 +18,10 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { Calendar } from '../ui/calendar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar, faClock, faMapLocation } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar, faMapLocation } from '@fortawesome/free-solid-svg-icons';
 
 export const formSchema = z.object({
+  driver: z.string(),
   location: z.string().min(2).max(50),
   dates: z.object({
     startDate: z.date(),
@@ -41,6 +42,7 @@ function RentalSearchForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      driver: 'false',
       location: '',
       dates: {
         startDate: today,
@@ -57,14 +59,13 @@ function RentalSearchForm() {
     const currentPath = window.location.pathname;
 
     const url = new URL('https://www.booking.com/searchresults.html');
-
+    url.searchParams.set('ss', values.driver);
     url.searchParams.set('location', values.location);
     url.searchParams.set('checkin', checkin);
     url.searchParams.set('checkout', checkout);
     url.searchParams.set('start_time', values.startTime);
     url.searchParams.set('end_time', values.endTime); 
 
-    // console.log(currentPath);
     console.log(url.href);
 
     if (currentPath.includes('/search')) {

@@ -3,33 +3,44 @@
 import Link from 'next/link';
 import { SetStateAction, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faPlane, faCar, faMap } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faPlane, faCar, faTheaterMasks } from '@fortawesome/free-solid-svg-icons';
 import { Dialog } from '@headlessui/react';
 
 const products = [
-  { name: 'stays', title: 'LƯU TRÚ', href: '/', icon: faHome },
-  { name: 'flights', title: 'CHUYẾN BAY', href: '/', icon: faPlane },
+  { name: 'stays', title: 'LƯU TRÚ', href: '/home', icon: faHome },
+  { name: 'flights', title: 'CHUYẾN BAY', href: '/flights', icon: faPlane },
   { name: 'rental', title: 'CHO THUÊ XE', href: '/rental', icon: faCar },
-  { name: 'travel_guides', title: 'ĐIỂM THAM QUAN', href: '/', icon: faMap },
+  { name: 'activities', title: 'HOẠT ĐỘNG & VUI CHƠI', href: '/activities', icon: faTheaterMasks },
 ];
+
+const user = {
+  name: "ddthumonky88",
+  avatar: "https://bizweb.dktcdn.net/100/438/408/files/anh-luffy-yody-vn-67.jpg?v=1688806271889", // Replace with actual avatar URL
+};
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to manage login status
 
   const handleLinkClick = (name: SetStateAction<string>, href: string) => {
     setMobileMenuOpen(false);
-    setActiveItem(name); // Set active item on link click
+    setActiveItem(name);
   };
 
   const handleLogoClick = () => {
     setActiveItem('');
   };
 
+  const handleLoginClick = () => {
+    window.location.href = '/login';
+    setIsLoggedIn(true);
+  };
+
   return (
     <header className='bg-[#013B94]'>
       <nav className='flex items-center justify-between p-6 mx-auto max-w-7xl'>
-        <Link href='/' className='flex items-center' onClick={handleLogoClick}>
+        <Link href='/home' className='flex items-center' onClick={handleLogoClick}>
           <span className='sr-only'>Booking.com</span>
           <img
             className='h-12'
@@ -64,12 +75,25 @@ const Header = () => {
             ))}
           </div>
 
-          <Link 
-            href='/login' 
-            onClick={() => handleLinkClick('Đăng Nhập', '/login')}
-            className='ml-4 px-4 py-2 text-sm font-semibold text-white bg-blue-700 rounded-lg hover:bg-blue-800 transition duration-200'>
-            Đăng Nhập
-          </Link>
+          {/* User Info or Login Button */}
+          <div className='flex items-center space-x-2'>
+            {isLoggedIn ? (
+              <>
+                <img
+                  src={user.avatar}
+                  alt={`${user.name}'s avatar`}
+                  className='w-10 h-10 rounded-full'
+                />
+                <span className='font-bold text-white'>{user.name}</span>
+              </>
+            ) : (
+              <button
+                onClick={handleLoginClick}
+                className='text-white font-semibold bg-blue-600 rounded-lg px-4 py-2'>
+                Đăng Nhập
+              </button>
+            )}
+          </div>
         </div>
       </nav>
 
@@ -106,12 +130,25 @@ const Header = () => {
                 {item.title}
               </Link>
             ))}
-            <Link
-              href='/login'
-              onClick={() => handleLinkClick('Đăng Nhập', '/login')}
-              className='block p-2 text-base font-semibold text-white bg-blue-700 hover:bg-blue-800 rounded-lg transition duration-200'>
-              Đăng Nhập
-            </Link>
+            {/* User Avatar or Login Button in Mobile Menu */}
+            <div className='flex items-center mt-4'>
+              {isLoggedIn ? (
+                <>
+                  <img
+                    src={user.avatar}
+                    alt={`${user.name}'s avatar`}
+                    className='w-10 h-10 rounded-full'
+                  />
+                  <span className='ml-2 text-white font-semibold'>{user.name}</span>
+                </>
+              ) : (
+                <button
+                  onClick={handleLoginClick}
+                  className='text-white font-semibold bg-blue-600 rounded-lg px-4 py-2'>
+                  Đăng Nhập
+                </button>
+              )}
+            </div>
           </div>
         </Dialog.Panel>
       </Dialog>

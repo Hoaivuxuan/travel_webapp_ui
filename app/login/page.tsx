@@ -8,7 +8,7 @@ const LoginPage = () => {
 
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    // Logic đăng nhập ở đây
+    window.location.href = '/home';
   };
 
   return (

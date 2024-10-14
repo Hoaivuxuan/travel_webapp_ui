@@ -34,7 +34,7 @@ async function RentalSearchPage({ searchParams }: Props) {
         <h1 className='pb-3 text-4xl font-bold'>Car Rental Without Driver</h1>
 
         <h2 className='pb-3 italic'>
-          {searchParams.location}
+          {searchParams.location},
           <span className='ml-2'>
             từ {searchParams.checkin} đến {searchParams.checkout}
           </span>

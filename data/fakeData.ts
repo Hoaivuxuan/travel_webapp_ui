@@ -347,3 +347,8 @@ export const listings = {
     ],
   },
 };
+
+export const fakeUser = {
+  name: "John Doe",
+  avatar: "https://example.com/path/to/avatar.jpg",
+};
