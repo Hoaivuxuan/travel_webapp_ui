@@ -31,6 +31,7 @@ async function RentalSearchPage({ searchParams }: Props) {
   }
 
   const searchResults = searchParams.type === 'cars' ? results.content.listCars : results.content.listMotors;
+  const idType = searchParams.type === 'cars' ? 'C' : 'M';
   
   return (
     <section>
@@ -56,12 +57,13 @@ async function RentalSearchPage({ searchParams }: Props) {
               key={i}
               className='flex p-4 space-x-4 border rounded-lg hover:shadow-lg transition-shadow duration-200'>
               
-              <img
-                src={getCarImageUrl(item.model, item.token)}
-                alt={`Image of ${item.model}`}
-                className='rounded-lg h-32 w-auto'
-              />
-
+              <div className='w-[200px] h-[200px] px-auto'>
+                <img
+                  src={getCarImageUrl(item.model, item.token)}
+                  alt={`${idType}${item.id}`}
+                  className='rounded-lg w-[200px]'
+                />
+              </div>
               <div className='flex flex-col justify-between flex-1'>
                 <div>
                   <p className='font-bold text-blue-600 text-lg'>{item.model}</p>

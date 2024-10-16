@@ -365,10 +365,10 @@ export const listings = {
       },
       {
         id: 4,
-        model: 'SYM Star SR 170',
+        model: 'SYM Star SR 125',
         price: '1,100,000',
         details: {
-          engine: '170cc',
+          engine: '125cc',
           fuel_type: 'Petrol',
           year: 2022,
           features: ['Advanced Suspension', 'Fuel Injection', 'LED Lights'],
