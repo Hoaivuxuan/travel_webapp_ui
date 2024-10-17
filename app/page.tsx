@@ -1,5 +1,5 @@
-import SearchForm from "@/components/SearchForm";
-import { destination } from "@/data/fakeData";
+import SearchForm from '@/components/home/SearchForm';
+import { destination } from '@/data/fakeData';
 
 export default function Home() {
   const trendingDestinations = destination.slice(0, 5);

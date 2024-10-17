@@ -12,15 +12,9 @@ import {
 import { Dialog } from "@headlessui/react";
 
 const products = [
-  { name: "stays", title: "LƯU TRÚ", href: "/home", icon: faHome },
-  { name: "flights", title: "CHUYẾN BAY", href: "/flights", icon: faPlane },
-  { name: "rental", title: "CHO THUÊ XE", href: "/rental", icon: faCar },
-  {
-    name: "activities",
-    title: "HOẠT ĐỘNG & VUI CHƠI",
-    href: "/activities",
-    icon: faTheaterMasks,
-  },
+  { name: 'stays', title: 'LƯU TRÚ', href: '/home', icon: faHome },
+  { name: 'rental', title: 'CHO THUÊ XE', href: '/rental', icon: faCar },
+  { name: 'activities', title: 'HOẠT ĐỘNG & VUI CHƠI', href: '/activities', icon: faTheaterMasks },
 ];
 
 const user = {

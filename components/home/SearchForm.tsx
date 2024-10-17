@@ -5,21 +5,20 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
-import { BedDoubleIcon, CalendarIcon } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { CalendarIcon } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { format } from 'date-fns';
-
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
-  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { Calendar } from './ui/calendar';
+import { Calendar } from '../ui/calendar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 export const formSchema = z.object({
   location: z.string().min(2).max(50),
@@ -29,16 +28,12 @@ export const formSchema = z.object({
   }),
   adults: z
     .string()
-    .min(1, {
-      message: 'Vui lòng chọn ít nhất 1 người lớn',
-    })
+    .min(1, { message: 'Vui lòng chọn ít nhất 1 người lớn' })
     .max(12, { message: 'Tối đa 12 người lớn' }),
   children: z.string().min(0).max(12, {
     message: 'Tối đa 12 trẻ em',
   }),
-  rooms: z.string().min(1, {
-    message: 'Vui lòng chọn ít nhất 1 phòng',
-  }),
+  rooms: z.string().min(1, { message: 'Vui lòng chọn ít nhất 1 phòng' }),
 });
 
 function SearchForm() {
@@ -55,15 +50,15 @@ function SearchForm() {
         from: today,
         to: tomorrow,
       },
-      adults: '',
-      children: '',
-      rooms: '',
+      adults: '1',
+      children: '0',
+      rooms: '1',
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-
+    const currentPath = window.location.pathname;
     const checkin_monthday = values.dates.from.getDate().toString();
     const checkin_month = (values.dates.from.getMonth() + 1).toString();
     const checkin_year = values.dates.from.getFullYear().toString();
@@ -82,15 +77,24 @@ function SearchForm() {
     url.searchParams.set('checkin', checkin);
     url.searchParams.set('checkout', checkout);
 
-    router.push(`/search?url=${url.href}`);
+    if (currentPath.includes('/home')) {
+      if (currentPath.includes('/search')) {
+        router.push(`search?url=${url.href}`);
+      }
+      else {
+        router.push(`home/search?url=${url.href}`);
+      }
+    }
   }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='flex flex-col items-center justify-center space-x-0 space-y-4 rounded-lg lg:flex-row lg:max-w-6xl lg:mx-auto lg:space-x-2 lg:space-y-0'>
-        <div className='grid w-full lg:max-w-sm items-center gap-1.5'>
+        className='grid grid-cols-9 gap-4 rounded-lg  lg:max-w-6xl lg:mx-auto'>
+        
+        {/* Location Field */}
+        <div className='col-span-3'>
           <FormField
             control={form.control}
             name='location'
@@ -99,13 +103,13 @@ function SearchForm() {
                 <FormControl>
                   <Input placeholder='Bạn muốn đến đâu?' {...field} />
                 </FormControl>
-                {/* <FormMessage /> */}
               </FormItem>
             )}
           />
         </div>
 
-        <div className='grid w-full lg:max-w-sm flex-1 items-center gap-1.5'>
+        {/* Dates Field */}
+        <div className='col-span-2'>
           <FormField
             control={form.control}
             name='dates'
@@ -116,10 +120,9 @@ function SearchForm() {
                     <FormControl>
                       <Button
                         id='date'
-                        name='dates'
                         variant={'outline'}
                         className={cn(
-                          'w-full lg:w-[300px] justify-start text-left font-normal',
+                          'w-full justify-start text-left font-normal',
                           !field.value.from && 'text-muted-foreground'
                         )}>
                         <CalendarIcon className='w-4 h-4 mr-3 opacity-50' />
@@ -152,64 +155,63 @@ function SearchForm() {
                     />
                   </PopoverContent>
                 </Popover>
-                {/* <FormMessage /> */}
               </FormItem>
             )}
           />
         </div>
 
-        <div className='flex items-center w-full space-x-2'>
-          <div className='grid items-center flex-1'>
-            <FormField
-              control={form.control}
-              name='adults'
-              render={({ field }) => (
-                <FormItem className='flex flex-col'>
-                  <FormControl>
-                    <Input type='number' placeholder='Người lớn' {...field} />
-                  </FormControl>
-                  {/* <FormMessage /> */}
-                </FormItem>
-              )}
-            />
-          </div>
+        {/* Adults Field */}
+        <div className='col-span-1'>
+          <FormField
+            control={form.control}
+            name='adults'
+            render={({ field }) => (
+              <FormItem className='flex flex-col'>
+                <FormControl>
+                  <Input type='number' placeholder='Người lớn' {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </div>
 
-          <div className='grid items-center flex-1'>
-            <FormField
-              control={form.control}
-              name='children'
-              render={({ field }) => (
-                <FormItem className='flex flex-col'>
-                  <FormControl>
-                    <Input type='number' placeholder='Trẻ em' {...field} />
-                  </FormControl>
-                  {/* <FormMessage /> */}
-                </FormItem>
-              )}
-            />
-          </div>
+        {/* Children Field */}
+        <div className='col-span-1'>
+          <FormField
+            control={form.control}
+            name='children'
+            render={({ field }) => (
+              <FormItem className='flex flex-col'>
+                <FormControl>
+                  <Input type='number' placeholder='Trẻ em' {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </div>
 
-          <div className='grid items-center flex-1'>
-            <FormField
-              control={form.control}
-              name='rooms'
-              render={({ field }) => (
-                <FormItem className='flex flex-col'>
-                  <FormControl>
-                    <Input type='number' placeholder='Phòng' {...field} />
-                  </FormControl>
-                  {/* <FormMessage /> */}
-                </FormItem>
-              )}
-            />
-          </div>
+        {/* Rooms Field */}
+        <div className='col-span-1'>
+          <FormField
+            control={form.control}
+            name='rooms'
+            render={({ field }) => (
+              <FormItem className='flex flex-col'>
+                <FormControl>
+                  <Input type='number' placeholder='Phòng' {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </div>
 
-          <div className='mt-auto'>
-            <Button type='submit' className='text-base bg-blue-500'>
+        {/* Submit Button */}
+          <div className='col-span-1 flex justify-center'>
+            <Button type='submit' className='text-base bg-yellow-400 w-full'>
+              <FontAwesomeIcon icon={faSearch} className='m-2 w-5 text-base' />
               Tìm kiếm
             </Button>
           </div>
-        </div>
       </form>
     </Form>
   );

@@ -1,4 +1,4 @@
-import SearchForm from '@/components/SearchForm';
+import SearchForm from '@/components/home/SearchForm';
 import { destination } from '@/data/fakeData';
 
 export default function Home() {
