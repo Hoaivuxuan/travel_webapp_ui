@@ -58,7 +58,7 @@ function SearchForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-
+    const currentPath = window.location.pathname;
     const checkin_monthday = values.dates.from.getDate().toString();
     const checkin_month = (values.dates.from.getMonth() + 1).toString();
     const checkin_year = values.dates.from.getFullYear().toString();
@@ -77,7 +77,14 @@ function SearchForm() {
     url.searchParams.set('checkin', checkin);
     url.searchParams.set('checkout', checkout);
 
-    router.push(`/search?url=${url.href}`);
+    if (currentPath.includes('/home')) {
+      if (currentPath.includes('/search')) {
+        router.push(`search?url=${url.href}`);
+      }
+      else {
+        router.push(`home/search?url=${url.href}`);
+      }
+    }
   }
 
   return (

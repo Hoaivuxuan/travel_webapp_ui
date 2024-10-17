@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import SearchForm from '@/components/hotel/SearchForm';
+import SearchForm from '@/components/home/SearchForm';
 import { fetchResults } from '@/lib/fetchResults';
 import { notFound } from 'next/navigation';
 import { listings } from '@/data/fakeData';
