@@ -130,9 +130,8 @@ const RentalDetailPage = () => {
         </div>
 
         <div className='col-span-1 p-4 bg-white border rounded-lg hover:shadow-lg transition-shadow duration-200'>
-          
-          <p className='text-xl font-bold'>{rentalItem.price} VNĐ</p>
           <h3 className='text-lg font-semibold'>CHI TIẾT GIÁ CẢ</h3>
+          <p className='text-xl font-bold'>{rentalItem.price} VNĐ</p>
           <hr className='my-2' />
 
           <div className='space-y-2 mt-4 text-sm leading-loose'>

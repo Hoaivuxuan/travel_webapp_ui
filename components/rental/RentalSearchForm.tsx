@@ -7,23 +7,25 @@ import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { format } from 'date-fns';
+import "./index.css";
 
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { Calendar } from '../ui/calendar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar, faMapLocation } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar, faMapLocation, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 
 export const formSchema = z.object({
   type: z.string(),
-  location: z.string().min(2).max(50),
+  location: z.string().min(1, "Vui lòng chọn địa điểm thuê xe của bạn.").max(50),
   dates: z.object({
     startDate: z.date(),
     endDate: z.date(),
@@ -83,10 +85,10 @@ function RentalSearchForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='bg-blue-600 flex flex-col p-4 items-center justify-center space-y-4 rounded-lg max-w-7xl lg:mx-auto'>
-
-        <div>
-          <div className='grid items-center w-full gap-1.5'>
+        className='bg-blue-600 py-4 px-6 rounded-lg max-w-7xl lg:mx-auto'>
+        
+        <div className='grid grid-cols-8 gap-4'>
+          <div className='col-span-8'>
             <div className='flex space-x-4 text-white'>
               <span>
                 <strong>Chọn loại phương tiện: </strong>
@@ -102,7 +104,6 @@ function RentalSearchForm() {
                 />
                 <span>Ô TÔ</span>
               </label>
-
               <label className='flex items-center space-x-2'>
                 <input
                   type='radio'
@@ -116,17 +117,17 @@ function RentalSearchForm() {
               </label>
             </div>
           </div>
-        </div>
 
-        <div className='flex space-x-4'>
-          <div className='grid items-center w-[450px] gap-1.5'>
+          <hr className='col-span-8 text-gray-500' />
+
+          <div className='col-span-8'>
             <FormField
               control={form.control}
               name='location'
               render={({ field }) => (
-                <FormItem>
+                <FormItem className='form-item'>
                   <FormControl>
-                    <div className="relative">
+                    <div className="relative w-[50%]">
                       <Input
                         placeholder='Điền địa điểm nhận xe'
                         {...field}
@@ -137,17 +138,18 @@ function RentalSearchForm() {
                       </span>
                     </div>
                   </FormControl>
+                  <FormMessage className='px-2 text-white text-sm italic'/>
                 </FormItem>
               )}
             />
           </div>
-
-          <div className='grid items-center gap-1.5'>
+          
+          <div className='col-span-2'>
             <FormField
               control={form.control}
               name='dates.startDate'
               render={({ field }) => (
-                <FormItem>
+                <FormItem className='form-item'>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -178,27 +180,25 @@ function RentalSearchForm() {
             />
           </div>
 
-          <div className='grid items-center gap-1.5'>
+          <div className='col-span-1'>
             <FormField
               control={form.control}
               name='startTime'
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <div className="relative">
-                      <Input
-                        type='time'
-                        placeholder='Giờ bắt đầu'
-                        {...field}
-                      />
-                    </div>
+                    <Input
+                      type='time'
+                      placeholder='Giờ bắt đầu'
+                      {...field}
+                    />
                   </FormControl>
                 </FormItem>
               )}
             />
           </div>
 
-          <div className='grid items-center gap-1.5'>
+          <div className='col-span-2'>
             <FormField
               control={form.control}
               name='dates.endDate'
@@ -234,32 +234,29 @@ function RentalSearchForm() {
             />
           </div>
 
-          <div className='grid tems-center gap-1.5'>
+          <div className='col-span-1'>
             <FormField
               control={form.control}
               name='endTime'
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <div className="relative">
-                      <Input
-                        type='time'
-                        placeholder='Giờ kết thúc'
-                        {...field}
-                      />
-                    </div>
+                    <Input
+                      type='time'
+                      placeholder='Giờ kết thúc'
+                      {...field}
+                    />
                   </FormControl>
                 </FormItem>
               )}
             />
           </div>
-          
-          <div className='flex items-center space-x-2'>
-            <div className='mt-auto'>
-              <Button type='submit' className='text-base bg-yellow-400'>
-                Tìm kiếm
-              </Button>
-            </div>
+
+          <div className='col-span-2 flex justify-center'>
+            <Button type='submit' className='text-base bg-yellow-400 w-full'>
+              <FontAwesomeIcon icon={faSearch} className='m-2 w-5 text-base' />
+              Tìm xe
+            </Button>
           </div>
         </div>
       </form>

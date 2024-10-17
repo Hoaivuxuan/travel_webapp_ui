@@ -55,18 +55,21 @@ async function RentalSearchPage({ searchParams }: Props) {
           {searchResults.map((item, i) => (
             <div
               key={i}
-              className='flex p-4 space-x-4 border rounded-lg hover:shadow-lg transition-shadow duration-200'>
+              className='grid grid-cols-5 gap-4 p-4 border rounded-lg hover:shadow-lg transition-shadow duration-200'>
               
-              <div className='w-[200px] h-[200px] px-auto'>
+              {/* Hình ảnh */}
+              <div className='col-span-1 flex justify-center items-center h-[200px]'>
                 <img
                   src={getCarImageUrl(item.model, item.token)}
                   alt={`${idType}${item.id}`}
-                  className='rounded-lg w-[200px]'
+                  className='rounded-lg w-full h-auto'
                 />
               </div>
-              <div className='flex flex-col justify-between flex-1'>
+    
+              {/* Thông tin xe */}
+              <div className='flex flex-col justify-between col-span-3'>
                 <div>
-                  <p className='font-bold text-blue-600 text-lg'>{item.model}</p>
+                  <p className='mb-4 font-bold text-blue-600 text-lg'>{item.model}</p>
                   <p className='text-sm text-gray-700 flex items-center'>
                     <FontAwesomeIcon icon={faCar} className='mr-2 w-4' />
                     {item.details.transmission.toUpperCase()}
@@ -80,12 +83,15 @@ async function RentalSearchPage({ searchParams }: Props) {
                     {item.details.baggage_capacity} hành lý
                   </p>
                 </div>
-
-                <div className='flex justify-between items-center mt-2'>
-                  <p className='text-xl font-bold text-orange-600 text-right flex-1'>{item.price} VNĐ/ngày</p>
+              </div>
+    
+              {/* Giá cả và nút Tiếp tục */}
+              <div className='flex flex-col justify-end col-span-1 h-full'>
+                <div className='flex flex-col justify-end items-end mt-2'>
+                  <p className='text-xl font-bold text-orange-600 text-right'>{item.price} VNĐ/ngày</p>
                   <Link
                     href={`/rental/${searchParams.type}/${item.id}`}
-                    className='bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold ml-4'>
+                    className='bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2'>
                     Tiếp tục
                   </Link>
                 </div>
