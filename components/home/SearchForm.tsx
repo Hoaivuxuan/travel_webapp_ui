@@ -89,7 +89,7 @@ function SearchForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder='Bạn muốn đến đâu?' {...field} />
+                    <Input placeholder='Bạn đang ở đâu?' {...field} />
                   </FormControl>
                 </FormItem>
               )}

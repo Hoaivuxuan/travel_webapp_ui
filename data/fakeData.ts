@@ -92,7 +92,7 @@ content: {
         latitude: 21.0294967,
         longitude: 105.8544441
       },
-      amenities: ['Free Wi-Fi', 'Air conditioning', 'Non-smoking'],
+      amenities: ['Wi-Fi miễn phí', 'Điều hòa không khí', 'Không hút thuốc'],
       price: 791667,
       url: 'https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o='
     },
@@ -106,7 +106,7 @@ content: {
         latitude: 21.0310245,
         longitude: 105.8521729
       },
-      amenities: ['Free Wi-Fi', 'Air conditioning', 'Non-smoking'],
+      amenities: ['Wi-Fi miễn phí', 'Điều hòa không khí', 'Không hút thuốc'],
       price: 720000,
       url: 'https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o='
     },
@@ -120,7 +120,7 @@ content: {
         latitude: 21.0277834,
         longitude: 105.8501748
       },
-      amenities: ['Free Wi-Fi', 'Air conditioning', 'Non-smoking'],
+      amenities: ['Wi-Fi miễn phí', 'Điều hòa không khí', 'Không hút thuốc'],
       price: 1200000,
       url: 'https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o='
     },
@@ -134,7 +134,7 @@ content: {
         latitude: 21.0361925,
         longitude: 105.8462587
       },
-      amenities: ['Free Wi-Fi', 'Air conditioning', 'Non-smoking', 'Pool'],
+      amenities: ['Wi-Fi miễn phí', 'Điều hòa không khí', 'Không hút thuốc', 'Hồ bơi'],
       price: 950000,
       url: 'https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o='
     },
@@ -148,7 +148,7 @@ content: {
         latitude: 21.0254174,
         longitude: 105.8428926
       },
-      amenities: ['Free Wi-Fi', 'Air conditioning', 'Non-smoking', 'Gym', 'Balcony'],
+      amenities: ['Wi-Fi miễn phí', 'Điều hòa không khí', 'Không hút thuốc', 'Phòng tập gym', 'Ban công'],
       price: 1450000,
       url: 'https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o='
     },
@@ -162,7 +162,7 @@ content: {
         latitude: 21.0374891,
         longitude: 105.8589225
       },
-      amenities: ['Free Wi-Fi', 'Air conditioning', 'Non-smoking', 'Garden'],
+      amenities: ['Wi-Fi miễn phí', 'Điều hòa không khí', 'Không hút thuốc', 'Vườn'],
       price: 680000,
       url: 'https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o='
     },
@@ -176,7 +176,7 @@ content: {
         latitude: 21.0233276,
         longitude: 105.8472843
       },
-      amenities: ['Free Wi-Fi', 'Air conditioning', 'Non-smoking', 'Elevator', 'Balcony', 'Kitchen'],
+      amenities: ['Wi-Fi miễn phí', 'Điều hòa không khí', 'Không hút thuốc', 'Thang máy', 'Ban công', 'Bếp'],
       price: 2000000,
       url: 'https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o='
     },
@@ -190,7 +190,7 @@ content: {
         latitude: 21.0331234,
         longitude: 105.8455052
       },
-      amenities: ['Free Wi-Fi', 'Air conditioning', 'Non-smoking', 'Breakfast included'],
+      amenities: ['Wi-Fi miễn phí', 'Điều hòa không khí', 'Không hút thuốc', 'Bữa sáng bao gồm'],
       price: 850000,
       url: 'https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o='
     },
@@ -204,7 +204,7 @@ content: {
         latitude: 21.0245027,
         longitude: 105.8435553
       },
-      amenities: ['Free Wi-Fi', 'Air conditioning', 'Non-smoking', 'Laundry service'],
+      amenities: ['Wi-Fi miễn phí', 'Điều hòa không khí', 'Không hút thuốc', 'Dịch vụ giặt là'],
       price: 1650000,
       url: 'https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o='
     },
@@ -218,7 +218,7 @@ content: {
         latitude: 21.028511,
         longitude: 105.848598
       },
-      amenities: ['Free Wi-Fi', 'Non-smoking', 'Shared kitchen'],
+      amenities: ['Wi-Fi miễn phí', 'Không hút thuốc', 'Bếp chung'],
       price: 300000,
       url: 'https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o='
     },

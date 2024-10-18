@@ -6,11 +6,13 @@ const RentalPage = () => {
   return (
     <main className='bg-white'>
       <div className='bg-[#013B94] py-2'>
-        <section className='bg-[#013B94] p-6 mx-auto h-[300px] max-w-7xl'>
-          <h2 className='text-5xl font-bold text-white'>Thuê xe cho bất cứ chuyến đi nào</h2>
-          <h3 className='py-5 text-xl text-white'>
-            Xe thuê giá cả hợp lý, chất lượng ổn định...
-          </h3>
+        <section className='bg-[#013B94] grid grid-cols-2 gap-2 p-6 mx-auto h-[300px] max-w-7xl'>
+          <div className='col-span-1'>
+            <h2 className='text-4xl font-bold text-white'>Dịch vụ cho thuê xe ô tô và xe máy tự lái giá rẻ tại Booking.com</h2>
+            <h3 className='py-5 text-sm text-white'>
+              Tìm và đặt ngay dịch vụ cho thuê xe ô tô và xe máy tự lái giá rẻ tại Booking.com - nền tảng du lịch cung cấp dịch vụ cho thuê xe giá rẻ trên khắp Việt Nam
+            </h3>
+          </div>
         </section>
       </div>
     
