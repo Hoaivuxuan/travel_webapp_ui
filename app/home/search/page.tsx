@@ -21,12 +21,6 @@ async function SearchPage({ searchParams }: Props) {
   if (!searchParams.url) return notFound();
 
   let results = null;
-  try {
-    results = await fetchResults(searchParams);
-  } catch (error) {
-    console.error('Error fetching results:', error);
-  }
-
   if (!results) {
     results = listings;
   }
@@ -50,42 +44,45 @@ async function SearchPage({ searchParams }: Props) {
         <hr className='mb-5' />
 
         <div className='mt-5 space-y-2'>
-          {results.content.listStays.map((item, i) => (
+          {results.content.listHotels.map((item, i) => (
             <div
               key={i}
-              className='flex justify-between p-5 space-x-4 space-y-2 border rounded-lg'>
-              <img
-                src={item.url}
-                alt={`Image of ${item.title}`}
-                className='rounded-lg h-44 w-44'
-              />
+              className="grid grid-cols-5 gap-4 p-4 border rounded-lg hover:shadow-lg transition-shadow duration-200">
+              <div className="col-span-1 flex justify-center items-center h-[200px]">
+                <img
+                  src={item.url}
+                  alt={`Image of ${item.name}`}
+                  className="rounded-lg w-full h-auto"
+                />
+              </div>
 
-              <div className='flex justify-between flex-1 space-x-5'>
-                <div>
-                  <Link
-                    href={item.link}
-                    className='font-bold text-blue-500 hover:text-blue-600 hover:underline'>
-                    {item.title}
-                  </Link>
-                  <p className='text-xs'>{item.description}</p>
-                </div>
+              <div className="col-span-2">
+                <p className='mb-2 font-bold text-blue-600 text-lg'>{item.name}</p>
+                <p className="text-sm mb-2">{item.type}</p>
+              </div>
 
-                <div className='flex flex-col justify-between'>
-                  <div className='flex items-start justify-end space-x-2 text-right'>
+              <div className="col-span-1">
+                <div className="flex flex-col justify-between h-full">
+                  <div className="flex justify-end space-x-2 text-right">
                     <div>
-                      <p className='font-bold'>{item.rating_word}</p>
-                      <p className='text-xs'>{item.rating_count}</p>
+                      <p className="font-bold">{item.rating}</p>
+                      <p className="text-xs">{item.reviewCount} reviews</p>
                     </div>
-
-                    <p className='flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold text-white bg-blue-900 rounded-lg'>
+                    <p className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold text-white bg-blue-900 rounded-lg">
                       {item.rating || 'N/A'}
                     </p>
                   </div>
+                </div>
+              </div>
 
-                  <div className='text-right'>
-                    <p className='text-xs'>{item.booking_metadata}</p>
-                    <p className='text-2xl font-bold'>{item.price}</p>
-                  </div>
+              <div className='flex flex-col justify-end col-span-1 h-full'>
+                <div className='flex flex-col justify-end items-end mt-2'>
+                  <p className='text-xl font-bold text-orange-600 text-right'>{item.price} VNĐ/ngày</p>
+                  <Link
+                    href='#'
+                    className='bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2'>
+                    Chọn phòng
+                  </Link>
                 </div>
               </div>
             </div>
