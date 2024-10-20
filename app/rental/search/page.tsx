@@ -57,7 +57,6 @@ async function RentalSearchPage({ searchParams }: Props) {
               key={i}
               className='grid grid-cols-5 gap-4 p-4 border rounded-lg hover:shadow-lg transition-shadow duration-200'>
               
-              {/* Hình ảnh */}
               <div className='col-span-1 flex justify-center items-center h-[200px]'>
                 <img
                   src={getCarImageUrl(item.model, item.token)}
@@ -66,7 +65,6 @@ async function RentalSearchPage({ searchParams }: Props) {
                 />
               </div>
     
-              {/* Thông tin xe */}
               <div className='flex flex-col justify-between col-span-3'>
                 <div>
                   <p className='mb-4 font-bold text-blue-600 text-lg'>{item.model}</p>
@@ -85,7 +83,6 @@ async function RentalSearchPage({ searchParams }: Props) {
                 </div>
               </div>
     
-              {/* Giá cả và nút Tiếp tục */}
               <div className='flex flex-col justify-end col-span-1 h-full'>
                 <div className='flex flex-col justify-end items-end mt-2'>
                   <p className='text-xl font-bold text-orange-600 text-right'>{item.price} VNĐ/ngày</p>
