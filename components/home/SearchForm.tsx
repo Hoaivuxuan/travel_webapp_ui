@@ -1,23 +1,25 @@
-'use client';
+"use client";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
-import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { format, addDays } from 'date-fns';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { format, addDays } from "date-fns";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { Calendar } from "../ui/calendar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
-import { Calendar } from '../ui/calendar';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar, faChild, faHome, faMoon, faPerson, faSearch } from '@fortawesome/free-solid-svg-icons';
+  faCalendar,
+  faChild,
+  faHome,
+  faMoon,
+  faPerson,
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const formSchema = z.object({
   location: z.string().min(2).max(50),
@@ -36,7 +38,7 @@ function SearchForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      location: '',
+      location: "",
       checkInDate: today,
       nights: 1,
       checkOutDate: addDays(today, 1),
@@ -46,10 +48,13 @@ function SearchForm() {
     },
   });
 
-  const updateCheckOutDate = (checkInDate: Date | undefined, nights: number | undefined) => {
+  const updateCheckOutDate = (
+    checkInDate: Date | undefined,
+    nights: number | undefined
+  ) => {
     if (checkInDate && nights !== undefined) {
       const newCheckOutDate = addDays(checkInDate, nights);
-      form.setValue('checkOutDate', newCheckOutDate);
+      form.setValue("checkOutDate", newCheckOutDate);
     }
   };
 
@@ -57,16 +62,16 @@ function SearchForm() {
     console.log(values);
     const currentPath = window.location.pathname;
 
-    const url = new URL('https://www.booking.com/searchresults.html');
-    url.searchParams.set('ss', values.location);
-    url.searchParams.set('group_adults', values.adults.toString());
-    url.searchParams.set('group_children', values.children.toString());
-    url.searchParams.set('no_rooms', values.rooms.toString());
-    url.searchParams.set('checkin', format(values.checkInDate, 'yyyy-MM-dd'));
-    url.searchParams.set('checkout', format(values.checkOutDate, 'yyyy-MM-dd'));
+    const url = new URL("https://www.booking.com/searchresults.html");
+    url.searchParams.set("ss", values.location);
+    url.searchParams.set("group_adults", values.adults.toString());
+    url.searchParams.set("group_children", values.children.toString());
+    url.searchParams.set("no_rooms", values.rooms.toString());
+    url.searchParams.set("checkin", format(values.checkInDate, "yyyy-MM-dd"));
+    url.searchParams.set("checkout", format(values.checkOutDate, "yyyy-MM-dd"));
 
-    if (currentPath.includes('/home')) {
-      if (currentPath.includes('/search')) {
+    if (currentPath.includes("/home")) {
+      if (currentPath.includes("/search")) {
         router.push(`search?url=${url.href}`);
       } else {
         router.push(`home/search?url=${url.href}`);
@@ -78,56 +83,62 @@ function SearchForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='bg-blue-600 py-4 px-6 rounded-lg max-w-7xl lg:mx-auto'>
-        
-        <div className='grid grid-cols-9 gap-4'>
+        className="bg-blue-600 py-4 px-6 rounded-lg max-w-7xl lg:mx-auto"
+      >
+        <div className="grid grid-cols-9 gap-4">
           {/* Location Field */}
-          <div className='col-span-6'>
+          <div className="col-span-6">
             <FormField
               control={form.control}
-              name='location'
+              name="location"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder='Bạn muốn đến đâu?' {...field} />
+                    <Input placeholder="Bạn muốn đến đâu?" {...field} />
                   </FormControl>
                 </FormItem>
               )}
             />
           </div>
 
-          <div className='col-span-3'></div>
+          <div className="col-span-3"></div>
 
           {/* Check-in Date Field */}
-          <div className='col-span-3'>
+          <div className="col-span-3">
             <FormField
               control={form.control}
-              name='checkInDate'
+              name="checkInDate"
               render={({ field }) => (
-                <FormItem className='flex flex-col'>
+                <FormItem className="flex flex-col">
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
-                          id='date'
-                          variant={'outline'}
+                          id="date"
+                          variant={"outline"}
                           className={cn(
-                            'w-full justify-start text-left font-normal',
-                            !field.value && 'text-muted-foreground'
-                          )}>
-                          <FontAwesomeIcon icon={faCalendar} className='w-4 h-4 mr-2' />
-                          {field.value ? format(field.value, 'LLL dd, y') : 'Chọn ngày nhận phòng'}
+                            "w-full justify-start text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          <FontAwesomeIcon
+                            icon={faCalendar}
+                            className="w-4 h-4 mr-2"
+                          />
+                          {field.value
+                            ? format(field.value, "LLL dd, y")
+                            : "Chọn ngày nhận phòng"}
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className='w-auto p-0' align='start'>
+                    <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         initialFocus
-                        mode='single'
+                        mode="single"
                         selected={field.value}
                         onSelect={(date) => {
                           field.onChange(date);
-                          updateCheckOutDate(date, form.getValues('nights'));
+                          updateCheckOutDate(date, form.getValues("nights"));
                         }}
                         numberOfMonths={2}
                         disabled={(date) =>
@@ -142,20 +153,20 @@ function SearchForm() {
           </div>
 
           {/* Nights Field */}
-          <div className='col-span-3'>
+          <div className="col-span-3">
             <FormField
               control={form.control}
-              name='nights'
+              name="nights"
               render={({ field }) => (
-                <FormItem className='flex flex-col'>
+                <FormItem className="flex flex-col">
                   <FormControl>
                     <select
                       {...field}
-                      className='p-2 border border-gray-300 rounded w-full'
+                      className="p-2 border border-gray-300 rounded w-full"
                       onChange={(e) => {
                         const newNights = Number(e.target.value);
                         field.onChange(newNights);
-                        const checkInDate = form.getValues('checkInDate');
+                        const checkInDate = form.getValues("checkInDate");
                         updateCheckOutDate(checkInDate, newNights);
                       }}
                     >
@@ -173,16 +184,18 @@ function SearchForm() {
           </div>
 
           {/* Check-out Date Field */}
-          <div className='col-span-3'>
+          <div className="col-span-3">
             <FormField
               control={form.control}
-              name='checkOutDate'
+              name="checkOutDate"
               render={({ field }) => (
-                <FormItem className='flex flex-col'>
+                <FormItem className="flex flex-col">
                   <FormControl>
                     <Input
-                      type='text'
-                      value={field.value ? format(field.value, 'LLL dd, y') : ''}
+                      type="text"
+                      value={
+                        field.value ? format(field.value, "LLL dd, y") : ""
+                      }
                       readOnly
                       onChange={() => {
                         // Bỏ qua sự kiện onChange để ngăn người dùng thay đổi giá trị
@@ -195,16 +208,16 @@ function SearchForm() {
           </div>
 
           {/* Adults Field */}
-          <div className='col-span-2'>
+          <div className="col-span-2">
             <FormField
               control={form.control}
-              name='adults'
+              name="adults"
               render={({ field }) => (
-                <FormItem className='flex flex-col'>
+                <FormItem className="flex flex-col">
                   <FormControl>
                     <select
                       {...field}
-                      className='p-2 border border-gray-300 rounded w-full'
+                      className="p-2 border border-gray-300 rounded w-full"
                     >
                       {[...Array(12)].map((_, index) => (
                         <option key={index + 1} value={index + 1}>
@@ -219,16 +232,16 @@ function SearchForm() {
           </div>
 
           {/* Children Field */}
-          <div className='col-span-2'>
+          <div className="col-span-2">
             <FormField
               control={form.control}
-              name='children'
+              name="children"
               render={({ field }) => (
-                <FormItem className='flex flex-col'>
+                <FormItem className="flex flex-col">
                   <FormControl>
                     <select
                       {...field}
-                      className='p-2 border border-gray-300 rounded w-full'
+                      className="p-2 border border-gray-300 rounded w-full"
                     >
                       {[...Array(12)].map((_, index) => (
                         <option key={index} value={index}>
@@ -243,16 +256,16 @@ function SearchForm() {
           </div>
 
           {/* Rooms Field */}
-          <div className='col-span-2'>
+          <div className="col-span-2">
             <FormField
               control={form.control}
-              name='rooms'
+              name="rooms"
               render={({ field }) => (
-                <FormItem className='flex flex-col'>
+                <FormItem className="flex flex-col">
                   <FormControl>
                     <select
                       {...field}
-                      className='p-2 border border-gray-300 rounded w-full'
+                      className="p-2 border border-gray-300 rounded w-full"
                     >
                       {[...Array(12)].map((_, index) => (
                         <option key={index + 1} value={index + 1}>
@@ -267,9 +280,12 @@ function SearchForm() {
           </div>
 
           {/* Submit Button */}
-          <div className='col-span-3 flex justify-center'>
-            <Button type='submit' className='text-base bg-yellow-400 w-full flex items-center justify-center'>
-              <FontAwesomeIcon icon={faSearch} className='m-2 w-5 text-base' />
+          <div className="col-span-3 flex justify-center">
+            <Button
+              type="submit"
+              className="text-base bg-yellow-400 w-full flex items-center justify-center"
+            >
+              <FontAwesomeIcon icon={faSearch} className="m-2 w-5 text-base" />
               Tìm kiếm
             </Button>
           </div>
