@@ -5,7 +5,6 @@ import { SetStateAction, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
-  faPlane,
   faCar,
   faTheaterMasks,
 } from "@fortawesome/free-solid-svg-icons";

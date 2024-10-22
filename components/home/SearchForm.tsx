@@ -58,10 +58,11 @@ function SearchForm() {
     const currentPath = window.location.pathname;
 
     const url = new URL('https://www.booking.com/searchresults.html');
-    url.searchParams.set('ss', values.location);
-    url.searchParams.set('group_adults', values.adults.toString());
-    url.searchParams.set('group_children', values.children.toString());
-    url.searchParams.set('no_rooms', values.rooms.toString());
+    url.searchParams.set('ss', 'true');
+    url.searchParams.set('location', values.location);
+    url.searchParams.set('adults', values.adults.toString());
+    url.searchParams.set('children', values.children.toString());
+    url.searchParams.set('rooms', values.rooms.toString());
     url.searchParams.set('checkin', format(values.checkInDate, 'yyyy-MM-dd'));
     url.searchParams.set('checkout', format(values.checkOutDate, 'yyyy-MM-dd'));
 

@@ -1,7 +1,12 @@
+"use client";
+
+import React from 'react';
 import Link from 'next/link';
+import axios from 'axios';
 import SearchForm from '@/components/home/SearchForm';
 import { notFound } from 'next/navigation';
 import { listings } from '@/data/fakeData';
+import GoogleMapReact from "google-map-react";
 
 type Props = {
   searchParams: SearchParams;
@@ -9,9 +14,10 @@ type Props = {
 
 export type SearchParams = {
   url: URL;
-  group_adults: string;
-  group_children: string;
-  no_rooms: string;
+  location: string;
+  adults: string;
+  children: string;
+  rooms: string;
   checkin: string;
   checkout: string;
 };
@@ -32,9 +38,8 @@ async function SearchPage({ searchParams }: Props) {
         </div>
 
         <h2 className='pb-3'>
-          Dates of trip:
-          <span className='ml-2 italic'>
-            {searchParams.checkin} to {searchParams.checkout}
+          <span className='ml-2'>
+            {searchParams.location} - {searchParams.checkin} to {searchParams.checkout}
           </span>
         </h2>
 
@@ -70,7 +75,7 @@ async function SearchPage({ searchParams }: Props) {
                         className="bg-gray-200 text-gray-600 rounded-lg px-3 py-1 my-1 text-sm flex items-center relative group">
                         {item.amenities.length - 3}+
                         <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-4 rounded-lg text-sm w-max">
-                          Cơ sơ lưu trú này có: 
+                          Cơ sở lưu trú này có: 
                           <ul className="list-disc pl-5">
                             {item.amenities.map((amenity, index) => (
                               <li key={index} className="text-white">
