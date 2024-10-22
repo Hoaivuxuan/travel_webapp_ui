@@ -87,7 +87,7 @@ content: {
       name: 'The Gallery Homestay - By Pegasy Group',
       rating: 8.0,
       reviewCount: 6,
-      type: 'Homestay',
+      type: 'Homestays',
       location: {
         latitude: 21.0294967,
         longitude: 105.8544441
@@ -101,7 +101,7 @@ content: {
       name: 'Cozy Central Homestay',
       rating: 7.8,
       reviewCount: 12,
-      type: 'Homestay',
+      type: 'Homestays',
       location: {
         latitude: 21.0310245,
         longitude: 105.8521729
@@ -115,7 +115,7 @@ content: {
       name: 'Modern Apartment in Heart of Hanoi',
       rating: 8.5,
       reviewCount: 18,
-      type: 'Apartment',
+      type: 'Apartments',
       location: {
         latitude: 21.0277834,
         longitude: 105.8501748
@@ -129,7 +129,7 @@ content: {
       name: 'Riverside Boutique Homestay',
       rating: 9.2,
       reviewCount: 28,
-      type: 'Homestay',
+      type: 'Homestays',
       location: {
         latitude: 21.0361925,
         longitude: 105.8462587
@@ -143,7 +143,7 @@ content: {
       name: 'Hanoi Deluxe Apartment',
       rating: 8.7,
       reviewCount: 22,
-      type: 'Apartment',
+      type: 'Apartments',
       location: {
         latitude: 21.0254174,
         longitude: 105.8428926
@@ -157,7 +157,7 @@ content: {
       name: 'Tranquil Garden Homestay',
       rating: 8.0,
       reviewCount: 15,
-      type: 'Homestay',
+      type: 'Homestays',
       location: {
         latitude: 21.0374891,
         longitude: 105.8589225
@@ -171,7 +171,7 @@ content: {
       name: 'Luxury Serviced Apartment',
       rating: 9.0,
       reviewCount: 35,
-      type: 'Apartment',
+      type: 'Apartments',
       location: {
         latitude: 21.0233276,
         longitude: 105.8472843
@@ -185,7 +185,7 @@ content: {
       name: 'Charming Homestay in Old Quarter',
       rating: 8.3,
       reviewCount: 10,
-      type: 'Homestay',
+      type: 'Homestays',
       location: {
         latitude: 21.0331234,
         longitude: 105.8455052
@@ -199,7 +199,7 @@ content: {
       name: 'Elegant Suites Hoan Kiem',
       rating: 9.5,
       reviewCount: 50,
-      type: 'Apartment',
+      type: 'Apartments',
       location: {
         latitude: 21.0245027,
         longitude: 105.8435553
@@ -213,7 +213,7 @@ content: {
       name: 'Sunny Hostel Hanoi',
       rating: 7.5,
       reviewCount: 30,
-      type: 'Hostel',
+      type: 'Hostels',
       location: {
         latitude: 21.028511,
         longitude: 105.848598
