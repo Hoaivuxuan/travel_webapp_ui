@@ -35,17 +35,15 @@ async function RentalSearchPage({ searchParams }: Props) {
   
   return (
     <section>
-      <div className='p-6 mx-auto max-w-7xl lg:px-8'>
-        <div className='py-8'>
+      <div className='py-6 mx-auto max-w-7xl'>
+        <div className='py-2'>
           <RentalSearchForm />
         </div>
 
-        <h1 className='pb-3 text-4xl font-bold'>Car Rental Without Driver</h1>
-
-        <h2 className='pb-3 italic'>
-          {searchParams.location},
+        <h1 className='py-3 text-4xl font-bold'>Car Rental Without Driver</h1>
+        <h2 className='pb-3'>
           <span className='ml-2'>
-            từ {searchParams.checkin} đến {searchParams.checkout}
+            {searchParams.location}, từ {searchParams.checkin} đến {searchParams.checkout}
           </span>
         </h2>
 

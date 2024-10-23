@@ -4,6 +4,7 @@ import React from 'react';
 import { useParams, notFound, useRouter } from 'next/navigation';
 import { listings } from '@/data/fakeData';
 import Link from 'next/link';
+import FAQSection from '@/components/home/FAQs';
 
 const HotelDetailPage = () => {
   const { id } = useParams();
@@ -26,7 +27,7 @@ const HotelDetailPage = () => {
           Quay lại trang trước
         </a>
       </div>
-      <div className="px-6 pt-2 mx-auto -mb-4 max-w-7xl grid grid-cols-2 gap-4">
+      <div className="px-6 pt-2 mx-auto -mb-4 max-w-7xl grid grid-cols-2 gap-2">
         <div className="h-[418px]">
           <img
             src={hotelItem.url}
@@ -53,7 +54,7 @@ const HotelDetailPage = () => {
             <div className="col-span-6 pb-4">
               <h1 className="text-2xl font-bold mb-2">{hotelItem.name}</h1>
               <div className="flex items-center">
-                <span className="text-blue-500 bg-blue-100 px-2 py-1 rounded-full text-sm mr-2">
+                <span className="bg-blue-200 text-blue-600 rounded-lg px-2 py-1 text-sm inline-block mt-2">
                   {hotelItem.type}
                 </span>
               </div>
@@ -115,6 +116,10 @@ const HotelDetailPage = () => {
         <div className='bg-white p-4 w-full border rounded-lg hover:shadow-lg transition-shadow duration-200'>
 
         </div>
+      </div>
+      <div className='px-6 py-2 mx-auto max-w-7xl'>
+        <h2 className="text-xl font-semibold px-2 pb-2">Những câu hỏi thường gặp về {hotelItem.name}</h2>
+        <FAQSection hotelId={hotelItem.id} />
       </div>
     </div>
   );

@@ -6,6 +6,8 @@ import SearchForm from '@/components/home/SearchForm';
 import { notFound } from 'next/navigation';
 import { listings } from '@/data/fakeData';
 import { type_hotel } from '@/data/typeHotel';
+import 'rc-slider/assets/index.css';
+import Slider from 'rc-slider';
 
 type Props = {
   searchParams: SearchParams;
@@ -24,10 +26,13 @@ export type SearchParams = {
 function SearchPage({ searchParams }: Props) {
   if (!searchParams.url) return notFound();
 
+  const minPrice = Math.min(...listings.content.listHotels.map((hotel) => hotel.price));
+  const maxPrice = Math.max(...listings.content.listHotels.map((hotel) => hotel.price));
   const [selectedTypes, setSelectedTypes] = useState<number[]>([]);
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([minPrice, maxPrice]);
+  const [showAll, setShowAll] = useState(false);
 
-  // Hàm xử lý chọn loại khách sạn
   const handleTypeSelection = (id: number) => {
     setSelectedTypes((prevSelected) =>
       prevSelected.includes(id)
@@ -36,25 +41,27 @@ function SearchPage({ searchParams }: Props) {
     );
   };
 
-  // Hàm xử lý chọn điểm đánh giá
   const handleRatingSelection = (rating: number) => {
     setSelectedRatings((prevSelected) =>
       prevSelected.includes(rating)
-        ? prevSelected.filter((r) => r !== rating)
+        ? prevSelected.filter((rat) => rat !== rating)
         : [...prevSelected, rating]
     );
   };
 
-  // Lọc theo loại khách sạn và điểm đánh giá
+  const handlePriceChange = (value: number | number[]) => {
+    if (Array.isArray(value)) {
+      setPriceRange([value[0], value[1]]);
+    }
+  };
+
   const filteredResults = listings.content.listHotels.filter((item) => {
-    // Lọc theo loại khách sạn (nếu có chọn)
     const matchesType =
       selectedTypes.length === 0 ||
       selectedTypes.some((typeId) =>
         type_hotel.find((hotel) => hotel.id === typeId && hotel.name === item.type)
       );
 
-    // Lọc theo điểm đánh giá (nếu có chọn)
     const matchesRating =
       selectedRatings.length === 0 ||
       selectedRatings.some((rating) => {
@@ -65,28 +72,48 @@ function SearchPage({ searchParams }: Props) {
         return false;
       });
 
-    return matchesType && matchesRating;
+    const matchesPrice = item.price >= priceRange[0] && item.price <= priceRange[1];
+
+    return matchesType && matchesRating && matchesPrice;
   });
+
+  const displayedResults = showAll ? filteredResults : filteredResults.slice(0, 10);
 
   return (
     <section>
-      <div className="p-6 mx-auto max-w-7xl lg:px-8">
+      <div className="py-6 mx-auto max-w-7xl">
         <div className="pt-4 pb-8">
           <SearchForm />
         </div>
 
         <h2 className="pb-3">
           <span className="ml-2">
-            {searchParams.location} - {searchParams.checkin} to {searchParams.checkout}
+            {searchParams.location}, từ {searchParams.checkin} đến {searchParams.checkout} ({filteredResults.length} kết quả)
           </span>
         </h2>
 
         <hr className="mb-5" />
-
         <div className="grid grid-cols-5 gap-4">
-          {/* Bộ lọc */}
           <aside className="col-span-1 p-4 border rounded-lg hover:shadow-lg transition-shadow duration-200">
             <h3 className="font-bold text-sm mb-3">Chọn lọc theo:</h3>
+
+            <hr className="my-2" />
+            <div className="mb-6 text-sm">
+              <h4 className="font-semibold mb-2">Giá mỗi đêm (VNĐ)</h4>
+              <Slider
+                range
+                min={minPrice}
+                max={maxPrice}
+                defaultValue={priceRange}
+                onChange={handlePriceChange}
+                trackStyle={[{ backgroundColor: '#1D4ED8' }]}
+                handleStyle={[{ borderColor: '#1D4ED8' }, { borderColor: '#1D4ED8' }]}
+              />
+              <div className="flex justify-between mt-2 text-xs">
+                <span>{priceRange[0].toLocaleString('vi-VN')} VNĐ</span>
+                <span>{priceRange[1].toLocaleString('vi-VN')} VNĐ</span>
+              </div>
+            </div>
 
             <hr className="my-2" />
             <div className="mb-6 text-sm">
@@ -161,10 +188,9 @@ function SearchPage({ searchParams }: Props) {
             </div>
           </aside>
 
-          {/* Danh sách khách sạn */}
           <div className="col-span-4">
             <div className="space-y-2">
-              {filteredResults.map((item, i) => (
+              {displayedResults.map((item, i) => (
                 <div
                   key={i}
                   className="grid grid-cols-5 gap-4 p-4 border rounded-lg hover:shadow-lg transition-shadow duration-200">
@@ -176,11 +202,14 @@ function SearchPage({ searchParams }: Props) {
                     />
                   </div>
 
-                  <div className="col-span-3">
-                    <div className="grid grid-cols-3 gap-2">
-                      <div className="col-span-2">
-                        <p className="mt-2 font-bold text-blue-600 text-lg">{item.name}</p>
-                        <p className="bg-blue-200 text-blue-600 rounded-lg px-3 py-1 text-sm inline-block mt-2">{item.type}</p>
+                  <div className="col-span-4">
+                    <div className="grid grid-cols-4 gap-2">
+                      <div className="col-span-3">
+                        <p className="mt-2 text-blue-600 text-lg font-bold ">{item.name}</p>
+                        <p className="mt-2 text-blue-600 text-xs">{item.city}</p>
+                        <p className="mt-2 text-blue-600 text-xs bg-blue-200 rounded-lg px-2 py-1 inline-block">
+                          {item.type}
+                        </p>
                       </div>
                       <div className="flex flex-col items-end h-full">
                         <div className="flex items-center space-x-2 text-right mt-2">
@@ -189,7 +218,7 @@ function SearchPage({ searchParams }: Props) {
                           </p>
                         </div>
                         <div className="flex items-center space-x-2 text-right mt-2">
-                          <p className="text-sm">{item.reviewCount} lượt đánh giá</p>
+                          <p className="text-xs">{item.reviewCount} lượt đánh giá</p>
                         </div>
                       </div>
 
@@ -200,14 +229,14 @@ function SearchPage({ searchParams }: Props) {
                           {item.amenities.slice(0, 3).map((amenity, index) => (
                             <div
                               key={index}
-                              className="bg-gray-200 text-gray-600 rounded-lg px-3 py-1 my-1 text-sm flex items-center">
+                              className="bg-gray-200 text-gray-600 rounded-lg px-2 py-1 my-1 text-xs flex items-center">
                               {amenity}
                             </div>
                           ))}
                           <div
-                            className="bg-gray-200 text-gray-600 rounded-lg px-3 py-1 my-1 text-sm flex items-center relative group">
+                            className="bg-gray-200 text-gray-600 rounded-lg px-2 py-1 my-1 text-xs flex items-center relative group">
                             {item.amenities.length - 3}+
-                            <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-4 rounded-lg text-sm w-max">
+                            <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-4 rounded-lg text-xs w-max">
                               Cơ sở lưu trú này có: 
                               <ul className="list-disc pl-5">
                                 {item.amenities.map((amenity, index) => (
@@ -223,28 +252,40 @@ function SearchPage({ searchParams }: Props) {
                         item.amenities.map((amenity, index) => (
                           <div
                             key={index}
-                            className="bg-gray-200 text-gray-600 rounded-lg px-3 py-1 my-1 text-sm flex items-center">
+                            className="bg-gray-200 text-gray-600 rounded-lg px-2 py-1 my-1 text-xs flex items-center">
                             {amenity}
                           </div>
                         ))
                       )}
                     </div>
-                  </div>
-                  
-                  <div className="flex flex-row justify-between col-span-1 h-full">
-                    <div className="border-l border-gray-300 h-full mx-2"></div>
-                    <div className="flex flex-col justify-end items-end mt-2">
-                      <p className="text-lg font-bold text-blue-600 text-right">{item.price.toLocaleString('vi-VN')} VNĐ</p>
-                      <Link
-                        href={`/home/detail/${item.id}`}
-                        className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2">
-                        Chọn phòng
-                      </Link>
+                    <div>
+                      <div className="flex flex-row justify-between col-span-1 h-full">
+                        <div className="border-l border-gray-300 h-full mx-2"></div>
+                        <div className="flex flex-col justify-end items-end mt-2">
+                          <p className="text-lg font-bold text-blue-600 text-right">{item.price.toLocaleString('vi-VN')} VNĐ/đêm</p>
+                          <Link
+                            href={`/home/detail/${item.id}`}
+                            className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2">
+                            Chọn phòng
+                          </Link>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
+
+            {filteredResults.length > 10 && (
+              <div className="mt-4 text-center">
+                <button
+                  onClick={() => setShowAll(!showAll)}
+                  className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-500 transition-colors duration-200"
+                >
+                  {showAll ? 'Ẩn bớt' : 'Xem thêm'}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

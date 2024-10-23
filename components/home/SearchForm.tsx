@@ -12,15 +12,17 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { Calendar } from '../ui/calendar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar, faChild, faHome, faMoon, faPerson, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar, faSearch } from '@fortawesome/free-solid-svg-icons';
+import "./index.css";
 
 export const formSchema = z.object({
-  location: z.string().min(2).max(50),
+  location: z.string().min(1, "Vui lòng chọn địa điểm thuê xe của bạn.").max(50),
   checkInDate: z.date(),
   nights: z.number().min(1).max(30),
   checkOutDate: z.date(),
@@ -57,21 +59,19 @@ function SearchForm() {
     console.log(values);
     const currentPath = window.location.pathname;
 
-    const url = new URL('https://www.booking.com/searchresults.html');
+    const url = new URL('https://searchresults.html');
     url.searchParams.set('ss', 'true');
     url.searchParams.set('location', values.location);
+    url.searchParams.set('checkin', format(values.checkInDate, 'yyyy-MM-dd'));
+    url.searchParams.set('checkout', format(values.checkOutDate, 'yyyy-MM-dd'));
     url.searchParams.set('adults', values.adults.toString());
     url.searchParams.set('children', values.children.toString());
     url.searchParams.set('rooms', values.rooms.toString());
-    url.searchParams.set('checkin', format(values.checkInDate, 'yyyy-MM-dd'));
-    url.searchParams.set('checkout', format(values.checkOutDate, 'yyyy-MM-dd'));
 
-    if (currentPath.includes('/home')) {
-      if (currentPath.includes('/search')) {
-        router.push(`search?url=${url.href}`);
-      } else {
-        router.push(`home/search?url=${url.href}`);
-      }
+    if (currentPath.includes('/search')) {
+      router.push(`search?url=${url.href}`);
+    } else {
+      router.push(`home/search?url=${url.href}`);
     }
   }
 
@@ -92,6 +92,7 @@ function SearchForm() {
                   <FormControl>
                     <Input placeholder='Bạn đang ở đâu?' {...field} />
                   </FormControl>
+                  <FormMessage className='px-2 text-white text-sm italic'/>
                 </FormItem>
               )}
             />
@@ -116,7 +117,7 @@ function SearchForm() {
                             'w-full justify-start text-left font-normal',
                             !field.value && 'text-muted-foreground'
                           )}>
-                          <FontAwesomeIcon icon={faCalendar} className='w-4 h-4 mr-2' />
+                          <FontAwesomeIcon icon={faCalendar} className='w-4 h-4 mr-2 text-gray-400' />
                           {field.value ? format(field.value, 'LLL dd, y') : 'Chọn ngày nhận phòng'}
                         </Button>
                       </FormControl>
@@ -130,7 +131,7 @@ function SearchForm() {
                           field.onChange(date);
                           updateCheckOutDate(date, form.getValues('nights'));
                         }}
-                        numberOfMonths={2}
+                        numberOfMonths={1}
                         disabled={(date) =>
                           date < new Date(new Date().setHours(0, 0, 0, 0))
                         }
@@ -160,7 +161,6 @@ function SearchForm() {
                         updateCheckOutDate(checkInDate, newNights);
                       }}
                     >
-                      {/* Tạo các tùy chọn từ 1 đến 30 */}
                       {[...Array(30)].map((_, index) => (
                         <option key={index + 1} value={index + 1}>
                           {index + 1} đêm
