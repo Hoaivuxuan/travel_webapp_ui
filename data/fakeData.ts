@@ -507,7 +507,7 @@ export const listings = {
       {
         id: 1,
         model: 'Kia Morning',
-        price: '589,280',
+        price: 589280,
         details: {
           transmission: 'Automatic',
           baggage_capacity: 2,
@@ -521,7 +521,7 @@ export const listings = {
       {
         id: 2,
         model: 'Hyundai Grand i10',
-        price: '589,280',
+        price: 589280,
         details: {
           transmission: 'Automatic',
           baggage_capacity: 2,
@@ -535,7 +535,7 @@ export const listings = {
       {
         id: 3,
         model: 'VinFast Fadil',
-        price: '589,280',
+        price: 589280,
         details: {
           transmission: 'Automatic',
           baggage_capacity: 2,
@@ -549,7 +549,7 @@ export const listings = {
       {
         id: 4,
         model: 'Toyota Yaris',
-        price: '620,000',
+        price: 620000,
         details: {
           transmission: 'Automatic',
           baggage_capacity: 3,
@@ -563,7 +563,7 @@ export const listings = {
       {
         id: 5,
         model: 'Mazda 3',
-        price: '700,000',
+        price: 700000,
         details: {
           transmission: 'Automatic',
           baggage_capacity: 2,
@@ -577,7 +577,7 @@ export const listings = {
       {
         id: 6,
         model: 'Honda City',
-        price: '650,000',
+        price: 650000,
         details: {
           transmission: 'Automatic',
           baggage_capacity: 3,
@@ -591,7 +591,7 @@ export const listings = {
       {
         id: 7,
         model: 'Mitsubishi Xpander',
-        price: '650,000',
+        price: 650000,
         details: {
           transmission: 'Automatic',
           baggage_capacity: 3,
@@ -605,7 +605,7 @@ export const listings = {
       {
         id: 8,
         model: 'Kia Cerato',
-        price: '620,000',
+        price: 620000,
         details: {
           transmission: 'Automatic',
           baggage_capacity: 3,
@@ -621,7 +621,7 @@ export const listings = {
       {
         id: 1,
         model: 'Yamaha Exciter 150',
-        price: '1,000,000',
+        price: 1000000,
         details: {
           engine: '150cc',
           fuel_type: 'Petrol',
@@ -636,7 +636,7 @@ export const listings = {
       {
         id: 2,
         model: 'Honda Winner X',
-        price: '1,200,000',
+        price: 1200000,
         details: {
           engine: '150cc',
           fuel_type: 'Petrol',
@@ -651,7 +651,7 @@ export const listings = {
       {
         id: 3,
         model: 'Suzuki Raider 150',
-        price: '950,000',
+        price: 950000,
         details: {
           engine: '150cc',
           fuel_type: 'Petrol',
@@ -666,7 +666,7 @@ export const listings = {
       {
         id: 4,
         model: 'SYM Star SR 125',
-        price: '1,100,000',
+        price: 1100000,
         details: {
           engine: '125cc',
           fuel_type: 'Petrol',
@@ -681,7 +681,7 @@ export const listings = {
       {
         id: 5,
         model: 'Yamaha MT-15',
-        price: '1,500,000',
+        price: 1500000,
         details: {
           engine: '155cc',
           fuel_type: 'Petrol',
@@ -696,7 +696,7 @@ export const listings = {
       {
         id: 6,
         model: 'Honda CBR150R',
-        price: '1,800,000',
+        price: 1800000,
         details: {
           engine: '150cc',
           fuel_type: 'Petrol',
@@ -711,7 +711,7 @@ export const listings = {
       {
         id: 7,
         model: 'Kawasaki Z125 Pro',
-        price: '850,000',
+        price: 850000,
         details: {
           engine: '125cc',
           fuel_type: 'Petrol',
@@ -726,7 +726,7 @@ export const listings = {
       {
         id: 8,
         model: 'Yamaha XSR155',
-        price: '1,400,000',
+        price: 1400000,
         details: {
           engine: '155cc',
           fuel_type: 'Petrol',
@@ -743,6 +743,13 @@ export const listings = {
 };
 
 export const fakeUser = {
-name: "John Doe",
-avatar: "https://example.com/path/to/avatar.jpg",
+  name: 'ddthumonky88',
+  displayName: 'Monkey D. Luffy',
+  email: 'dothutsk2k2@gmail.com',
+  phone: '0123456789',
+  birthDate: '01/01/1990',
+  nationality: 'Vietnam',
+  gender: 'Male',
+  address: '123 East Blue, Grand Line',
+  avatar: 'https://bizweb.dktcdn.net/100/438/408/files/anh-luffy-yody-vn-67.jpg?v=1688806271889',
 };

@@ -25,7 +25,7 @@ import { useState } from 'react';
 
 export const formSchema = z.object({
   type: z.string(),
-  location: z.string().min(1, "Vui lòng chọn địa điểm thuê xe của bạn.").max(50),
+  location: z.string().min(1, "Vui lòng chọn địa điểm thuê xe của bạn!").max(50),
   dates: z.object({
     startDate: z.date(),
     endDate: z.date(),
@@ -53,8 +53,8 @@ function RentalSearchForm() {
         startDate: today,
         endDate: tomorrow,
       },
-      startTime: '09:00',
-      endTime: '09:00',
+      startTime: '09:00', // Start time in 24-hour format
+      endTime: '09:00',   // End time in 24-hour format
     },
   });
 
@@ -63,14 +63,14 @@ function RentalSearchForm() {
     const checkout = format(values.dates.endDate, 'dd-MM-yyyy');
     const currentPath = window.location.pathname;
 
-    const url = new URL('https://www.booking.com/searchresults.html');
+    const url = new URL('https://searchresults.html');
     url.searchParams.set('ss', 'false');
     url.searchParams.set('type', selectedType);
     url.searchParams.set('location', values.location);
     url.searchParams.set('checkin', checkin);
     url.searchParams.set('checkout', checkout);
-    url.searchParams.set('start_time', values.startTime);
-    url.searchParams.set('end_time', values.endTime); 
+    url.searchParams.set('start_time', values.startTime); // 24-hour format time
+    url.searchParams.set('end_time', values.endTime);     // 24-hour format time
 
     console.log(url.href);
 
@@ -125,11 +125,11 @@ function RentalSearchForm() {
               control={form.control}
               name='location'
               render={({ field }) => (
-                <FormItem className='form-item'>
+                <FormItem>
                   <FormControl>
                     <div className="relative w-[50%]">
                       <Input
-                        placeholder='Điền địa điểm nhận xe'
+                        placeholder='Bạn đang ở đâu?'
                         {...field}
                         className='pl-10'
                       />
@@ -149,7 +149,7 @@ function RentalSearchForm() {
               control={form.control}
               name='dates.startDate'
               render={({ field }) => (
-                <FormItem className='form-item'>
+                <FormItem>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -171,7 +171,7 @@ function RentalSearchForm() {
                         selected={field.value}
                         onSelect={field.onChange}
                         numberOfMonths={1}
-                        disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                        disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))} // Disable past dates
                       />
                     </PopoverContent>
                   </Popover>
@@ -187,11 +187,26 @@ function RentalSearchForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      type='time'
-                      placeholder='Giờ bắt đầu'
-                      {...field}
-                    />
+                    <div className="flex">
+                      <select
+                        className='p-2 border border-gray-300 rounded-lg w-full'
+                        value={field.value}
+                        onChange={(e) => field.onChange(e.target.value)} // Cập nhật trực tiếp giá trị
+                      >
+                        {[...Array(24)].map((_, hourIndex) => (
+                          [...Array(2)].map((_, minuteIndex) => {
+                            const hour = hourIndex.toString().padStart(2, '0');
+                            const minutes = (minuteIndex * 30).toString().padStart(2, '0');
+                            const time = `${hour}:${minutes}`;
+                            return (
+                              <option key={`${hourIndex}-${minuteIndex}`} value={time}>
+                                {time}
+                              </option>
+                            );
+                          })
+                        ))}
+                      </select>
+                    </div>
                   </FormControl>
                 </FormItem>
               )}
@@ -225,7 +240,7 @@ function RentalSearchForm() {
                         selected={field.value}
                         onSelect={field.onChange}
                         numberOfMonths={1}
-                        disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                        disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))} // Disable past dates
                       />
                     </PopoverContent>
                   </Popover>
@@ -241,11 +256,26 @@ function RentalSearchForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      type='time'
-                      placeholder='Giờ kết thúc'
-                      {...field}
-                    />
+                    <div className="flex">
+                      <select
+                        className='p-2 border border-gray-300 rounded-lg w-full'
+                        value={field.value}
+                        onChange={(e) => field.onChange(e.target.value)} // Cập nhật trực tiếp giá trị
+                      >
+                        {[...Array(24)].map((_, hourIndex) => (
+                          [...Array(2)].map((_, minuteIndex) => {
+                            const hour = hourIndex.toString().padStart(2, '0');
+                            const minutes = (minuteIndex * 30).toString().padStart(2, '0');
+                            const time = `${hour}:${minutes}`;
+                            return (
+                              <option key={`${hourIndex}-${minuteIndex}`} value={time}>
+                                {time}
+                              </option>
+                            );
+                          })
+                        ))}
+                      </select>
+                    </div>
                   </FormControl>
                 </FormItem>
               )}

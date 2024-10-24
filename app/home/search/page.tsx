@@ -5,7 +5,7 @@ import Link from 'next/link';
 import SearchForm from '@/components/home/SearchForm';
 import { notFound } from 'next/navigation';
 import { listings } from '@/data/fakeData';
-import { type_hotel } from '@/data/typeHotel';
+import { ratingLabel, type_hotel } from '@/data/typeHotel';
 import 'rc-slider/assets/index.css';
 import Slider from 'rc-slider';
 
@@ -31,7 +31,7 @@ function SearchPage({ searchParams }: Props) {
   const [selectedTypes, setSelectedTypes] = useState<number[]>([]);
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([minPrice, maxPrice]);
-  const [showAll, setShowAll] = useState(false);
+  const [itemsToShow, setItemsToShow] = useState(10);
 
   const handleTypeSelection = (id: number) => {
     setSelectedTypes((prevSelected) =>
@@ -77,7 +77,7 @@ function SearchPage({ searchParams }: Props) {
     return matchesType && matchesRating && matchesPrice;
   });
 
-  const displayedResults = showAll ? filteredResults : filteredResults.slice(0, 10);
+  const displayedResults = filteredResults.slice(0, itemsToShow);
 
   return (
     <section>
@@ -189,7 +189,7 @@ function SearchPage({ searchParams }: Props) {
           </aside>
 
           <div className="col-span-4">
-            <div className="space-y-2">
+            <div className="space-y-3">
               {displayedResults.map((item, i) => (
                 <div
                   key={i}
@@ -206,19 +206,28 @@ function SearchPage({ searchParams }: Props) {
                     <div className="grid grid-cols-4 gap-2">
                       <div className="col-span-3">
                         <p className="mt-2 text-blue-600 text-lg font-bold ">{item.name}</p>
-                        <p className="mt-2 text-blue-600 text-xs">{item.city}</p>
-                        <p className="mt-2 text-blue-600 text-xs bg-blue-200 rounded-lg px-2 py-1 inline-block">
+                        <Link
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.city)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <p className="text-blue-600 text-xs underline">{item.city}</p>
+                        </Link>
+                        <p className="mt-4 text-blue-600 text-xs bg-blue-200 rounded-lg px-2 py-1 inline-block">
                           {item.type}
                         </p>
                       </div>
                       <div className="flex flex-col items-end h-full">
                         <div className="flex items-center space-x-2 text-right mt-2">
+                          <div>
+                            <p className='text-blue-600 text-sm font-bold'>
+                              {ratingLabel.find(r => item.rating >= r.min)?.label || "Đánh giá"}
+                            </p>
+                            <p className="text-xs">{item.reviewCount} lượt đánh giá</p>
+                          </div>
                           <p className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold text-white bg-blue-600 rounded-lg">
                             {item.rating.toFixed(1) || 'N/A'}
                           </p>
-                        </div>
-                        <div className="flex items-center space-x-2 text-right mt-2">
-                          <p className="text-xs">{item.reviewCount} lượt đánh giá</p>
                         </div>
                       </div>
 
@@ -276,13 +285,13 @@ function SearchPage({ searchParams }: Props) {
               ))}
             </div>
 
-            {filteredResults.length > 10 && (
+            {filteredResults.length > itemsToShow && (
               <div className="mt-4 text-center">
                 <button
-                  onClick={() => setShowAll(!showAll)}
+                  onClick={() => setItemsToShow(itemsToShow + 10)}
                   className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-500 transition-colors duration-200"
                 >
-                  {showAll ? 'Ẩn bớt' : 'Xem thêm'}
+                  Xem thêm
                 </button>
               </div>
             )}

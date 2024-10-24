@@ -22,3 +22,10 @@ export const type_hotel: TypeHotel[] = [
     { id: 16, name: 'Campsites' },
     { id: 17, name: 'Homestays' }
 ];
+
+export const ratingLabel = [
+    { label: "Tuyệt hảo", min: 9 },
+    { label: "Rất tốt", min: 8 },
+    { label: "Tốt", min: 7 },
+    { label: "Dễ chịu", min: 6 },
+];

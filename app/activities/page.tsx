@@ -31,7 +31,17 @@ export default function Search({ params }: { params: { id: string } }) {
 
   return (
     <main className="bg-white">
-      <section className="py-4 rounded-lg max-w-7xl lg:mx-auto">
+      <div className='bg-[#013B94] py-2'>
+        <section className='bg-[#013B94] grid grid-cols-2 gap-2 p-6 mx-auto h-[300px] max-w-7xl'>
+          <div className='col-span-1'>
+            <h2 className='text-4xl font-bold text-white'>Địa điểm tham quan, hoạt động và trải nghiệm</h2>
+            <h3 className='py-5 text-sm text-white'>
+              Khám phá các hoạt động và địa điểm tham quan mới theo sở thích và gu du lịch của bạn
+            </h3>
+          </div>
+        </section>
+      </div>
+      <div className="py-4 rounded-lg max-w-7xl lg:mx-auto">
         <div className="h-[25vh]">
           <GoogleMapReact
             bootstrapURLKeys={{ key: "" }}
@@ -45,7 +55,7 @@ export default function Search({ params }: { params: { id: string } }) {
             />
           </GoogleMapReact>
         </div>
-      </section>
+      </div>
     </main>
   );
 }

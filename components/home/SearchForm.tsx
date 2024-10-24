@@ -22,7 +22,7 @@ import { faCalendar, faSearch } from '@fortawesome/free-solid-svg-icons';
 import "./index.css";
 
 export const formSchema = z.object({
-  location: z.string().min(1, "Vui lòng chọn địa điểm thuê xe của bạn.").max(50),
+  location: z.string().min(1, "Vui lòng chọn địa điểm thuê xe của bạn!").max(50),
   checkInDate: z.date(),
   nights: z.number().min(1).max(30),
   checkOutDate: z.date(),

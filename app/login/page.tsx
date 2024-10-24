@@ -1,14 +1,23 @@
 'use client';
 
 import { useState } from 'react';
+import { useAuth } from '@/app/login/AuthContext'; // Import useAuth
 
 const LoginPage = () => {
+  const { login } = useAuth(); // Lấy hàm login từ AuthContext
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    window.location.href = '/home';
+    
+    // Thực hiện kiểm tra thông tin đăng nhập ở đây (ví dụ: kiểm tra email và password)
+    if (email && password) { // Điều kiện đơn giản, bạn có thể thay đổi theo yêu cầu của mình
+      login(); // Gọi hàm login khi đăng nhập thành công
+      window.location.href = '/home'; // Chuyển hướng đến trang chính
+    } else {
+      alert("Email hoặc mật khẩu không hợp lệ!"); // Hiển thị thông báo lỗi nếu thông tin không hợp lệ
+    }
   };
 
   return (
