@@ -35,7 +35,7 @@ export default function Home() {
         </section>
       </div>
 
-      <section className="py-6 px-2 m-4 mt-0 -mb-14 lg:px-4">
+      <section className="py-6 px-2 m-4 -mt-[5rem] -mb-14 lg:px-4">
         <SearchForm />
       </section>
 

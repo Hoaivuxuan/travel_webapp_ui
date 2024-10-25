@@ -21,7 +21,7 @@ import { cn } from '@/lib/utils';
 import { Calendar } from '../ui/calendar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar, faMapLocation, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export const formSchema = z.object({
   type: z.string(),
@@ -53,10 +53,30 @@ function RentalSearchForm() {
         startDate: today,
         endDate: tomorrow,
       },
-      startTime: '09:00', // Start time in 24-hour format
-      endTime: '09:00',   // End time in 24-hour format
+      startTime: '09:00',
+      endTime: '09:00',
     },
   });
+
+  useEffect(() => {
+    const storedValues = localStorage.getItem('rentalSearchFormValues');
+    if (storedValues) {
+      const parsedValues = JSON.parse(storedValues);
+      form.setValue('type', parsedValues.type || 'cars');
+      form.setValue('location', parsedValues.location || '');
+      form.setValue('dates.startDate', new Date(parsedValues.dates.startDate));
+      form.setValue('dates.endDate', new Date(parsedValues.dates.endDate));
+      form.setValue('startTime', parsedValues.startTime || '09:00');
+      form.setValue('endTime', parsedValues.endTime || '09:00');
+      setSelectedType(parsedValues.type || 'cars');
+    }
+
+    const subscription = form.watch((value) => {
+      localStorage.setItem('rentalSearchFormValues', JSON.stringify(value));
+    });
+
+    return () => subscription.unsubscribe();
+  }, [form]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const checkin = format(values.dates.startDate, 'dd-MM-yyyy');
@@ -69,8 +89,8 @@ function RentalSearchForm() {
     url.searchParams.set('location', values.location);
     url.searchParams.set('checkin', checkin);
     url.searchParams.set('checkout', checkout);
-    url.searchParams.set('start_time', values.startTime); // 24-hour format time
-    url.searchParams.set('end_time', values.endTime);     // 24-hour format time
+    url.searchParams.set('start_time', values.startTime);
+    url.searchParams.set('end_time', values.endTime);
 
     console.log(url.href);
 
@@ -85,55 +105,23 @@ function RentalSearchForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='bg-blue-600 py-4 px-6 rounded-lg max-w-7xl lg:mx-auto'>
+        className='bg-blue-600 p-4 rounded-lg max-w-7xl lg:mx-auto'>
         
-        <div className='grid grid-cols-8 gap-4'>
-          <div className='col-span-8'>
-            <div className='flex space-x-4 text-white'>
-              <span>
-                <strong>Chọn loại phương tiện: </strong>
-              </span>
-              <label className='flex items-center space-x-2'>
-                <input
-                  type='radio'
-                  name='type'
-                  value='cars'
-                  checked={selectedType === 'cars'}
-                  onChange={() => setSelectedType('cars')}
-                  className='form-radio text-blue-600'
-                />
-                <span>Ô TÔ</span>
-              </label>
-              <label className='flex items-center space-x-2'>
-                <input
-                  type='radio'
-                  name='type'
-                  value='motors'
-                  checked={selectedType === 'motors'}
-                  onChange={() => setSelectedType('motors')}
-                  className='form-radio text-blue-600'
-                />
-                <span>XE MÁY</span>
-              </label>
-            </div>
-          </div>
-
-          <hr className='col-span-8 text-gray-500' />
-
-          <div className='col-span-8'>
+        <div className='grid grid-cols-10 gap-2'>
+          <div className='col-span-3'>
             <FormField
               control={form.control}
               name='location'
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <div className="relative w-[50%]">
+                    <div className="relative">
                       <Input
                         placeholder='Bạn đang ở đâu?'
                         {...field}
                         className='pl-10'
                       />
-                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                      <span className="absolute left-4 top-1/2 transform -translate-y-1/2">
                         <FontAwesomeIcon icon={faMapLocation} className='mr-2 w-4 text-gray-400' />
                       </span>
                     </div>
@@ -144,23 +132,26 @@ function RentalSearchForm() {
             />
           </div>
           
-          <div className='col-span-2'>
+          <div className='col-span-2 bg-white border border-gray-300 rounded-lg px-4 py-2'>
             <FormField
               control={form.control}
               name='dates.startDate'
               render={({ field }) => (
                 <FormItem>
+                  <label className="block text-xs">
+                    Ngày nhận xe
+                  </label>
                   <Popover>
-                    <PopoverTrigger asChild>
+                    <PopoverTrigger asChild className='!p-0'>
                       <FormControl>
                         <Button
                           variant={'outline'}
                           className={cn(
-                            'w-full justify-start text-left font-normal',
+                            'w-full h-auto border border-white justify-start text-left font-normal',
                             !field.value && 'text-muted-foreground'
                           )}>
                           <FontAwesomeIcon icon={faCalendar} className='mr-2 w-4 text-gray-400' />
-                          {field.value ? format(field.value, 'LLL dd, y') : 'Ngày bắt đầu'}
+                          {field.value ? format(field.value, 'dd/MM/yyyy') : 'Ngày nhận xe'}
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -180,18 +171,21 @@ function RentalSearchForm() {
             />
           </div>
 
-          <div className='col-span-1'>
+          <div className='col-span-1 bg-white border border-gray-300 rounded-lg px-4 py-2'>
             <FormField
               control={form.control}
               name='startTime'
               render={({ field }) => (
                 <FormItem>
+                  <label className="block text-xs">
+                    Thời gian
+                  </label>
                   <FormControl>
                     <div className="flex">
                       <select
-                        className='p-2 border border-gray-300 rounded-lg w-full'
+                        className='rounded-lg w-full text-sm'
                         value={field.value}
-                        onChange={(e) => field.onChange(e.target.value)} // Cập nhật trực tiếp giá trị
+                        onChange={(e) => field.onChange(e.target.value)}
                       >
                         {[...Array(24)].map((_, hourIndex) => (
                           [...Array(2)].map((_, minuteIndex) => {
@@ -213,23 +207,26 @@ function RentalSearchForm() {
             />
           </div>
 
-          <div className='col-span-2'>
+          <div className='col-span-2 bg-white border border-gray-300 rounded-lg px-4 py-2'>
             <FormField
               control={form.control}
               name='dates.endDate'
               render={({ field }) => (
                 <FormItem>
+                  <label className="block text-xs">
+                    Ngày trả xe
+                  </label>
                   <Popover>
-                    <PopoverTrigger asChild>
+                    <PopoverTrigger asChild className='!p-0'>
                       <FormControl>
                         <Button
                           variant={'outline'}
                           className={cn(
-                            'w-full justify-start text-left font-normal',
+                            'w-full h-auto border border-white justify-start text-left font-normal',
                             !field.value && 'text-muted-foreground'
                           )}>
                           <FontAwesomeIcon icon={faCalendar} className='mr-2 w-4 text-gray-400' />
-                          {field.value ? format(field.value, 'LLL dd, y') : 'Ngày kết thúc'}
+                          {field.value ? format(field.value, 'dd/MM/yyyy') : 'Ngày kết thúc'}
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -240,7 +237,7 @@ function RentalSearchForm() {
                         selected={field.value}
                         onSelect={field.onChange}
                         numberOfMonths={1}
-                        disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))} // Disable past dates
+                        disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
                       />
                     </PopoverContent>
                   </Popover>
@@ -249,18 +246,21 @@ function RentalSearchForm() {
             />
           </div>
 
-          <div className='col-span-1'>
+          <div className='col-span-1 bg-white border border-gray-300 rounded-lg px-4 py-2'>
             <FormField
               control={form.control}
               name='endTime'
               render={({ field }) => (
                 <FormItem>
+                  <label className="block text-xs">
+                    Thời gian
+                  </label>
                   <FormControl>
                     <div className="flex">
                       <select
-                        className='p-2 border border-gray-300 rounded-lg w-full'
+                        className='rounded-lg w-full text-sm'
                         value={field.value}
-                        onChange={(e) => field.onChange(e.target.value)} // Cập nhật trực tiếp giá trị
+                        onChange={(e) => field.onChange(e.target.value)}
                       >
                         {[...Array(24)].map((_, hourIndex) => (
                           [...Array(2)].map((_, minuteIndex) => {
@@ -281,15 +281,43 @@ function RentalSearchForm() {
               )}
             />
           </div>
-
-          <div className='col-span-2 flex justify-center'>
-            <Button type='submit' className='text-base bg-yellow-400 w-full'>
-              <FontAwesomeIcon icon={faSearch} className='m-2 w-5 text-base' />
-              Tìm xe
+          
+          <div className='col-span-1 flex justify-center'>
+            <Button type='submit' className='bg-[#013B94] text-base font-bold w-full'>
+              Tìm kiếm
             </Button>
           </div>
         </div>
       </form>
+      <div className='max-w-7xl mt-4 lg:mx-auto'>
+        <div className='flex space-x-4 text-base ml-2'>
+          <span>
+            <strong>Chọn loại phương tiện: </strong>
+          </span>
+          <label className='flex items-center space-x-2'>
+            <input
+              type='radio'
+              name='type'
+              value='cars'
+              checked={selectedType === 'cars'}
+              onChange={() => setSelectedType('cars')}
+              className='form-radio text-blue-600'
+            />
+            <span>Ô TÔ</span>
+          </label>
+          <label className='flex items-center space-x-2'>
+            <input
+              type='radio'
+              name='type'
+              value='motors'
+              checked={selectedType === 'motors'}
+              onChange={() => setSelectedType('motors')}
+              className='form-radio text-blue-600'
+            />
+            <span>XE MÁY</span>
+          </label>
+        </div>
+      </div>
     </Form>
   );
 }

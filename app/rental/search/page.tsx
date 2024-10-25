@@ -33,17 +33,15 @@ async function RentalSearchPage({ searchParams }: Props) {
   }
 
   const searchResults = searchParams.type === 'cars' ? results.content.listCars : results.content.listMotors;
-  const idType = searchParams.type === 'cars' ? 'C' : 'M';
   
   return (
     <section>
       <div className='py-6 mx-auto max-w-7xl'>
-        <div className='py-2'>
+        <div className='py-4'>
           <RentalSearchForm />
         </div>
 
-        <h1 className='py-3 text-4xl font-bold'>Car Rental Without Driver</h1>
-        <h2 className='pb-3'>
+        <h2 className='py-4'>
           <span className='ml-2'>
             {searchParams.location}, từ {searchParams.checkin} đến {searchParams.checkout}
           </span>
@@ -66,8 +64,9 @@ async function RentalSearchPage({ searchParams }: Props) {
                   <div className='col-span-1 flex justify-center items-center h-[200px]'>
                     <img
                       src={getCarImageUrl(item.model, item.token)}
-                      alt={`${idType}${item.id}`}
+                      alt={`Image ${item.id}`}
                       className='rounded-lg w-full h-auto'
+                      onError={(e) => { (e.target as HTMLImageElement).src = 'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'; }}
                     />
                   </div>
         
@@ -95,7 +94,7 @@ async function RentalSearchPage({ searchParams }: Props) {
                       <Link
                         href={`/rental/${searchParams.type}/${item.id}`}
                         className='bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2'>
-                        Tiếp tục
+                        Xem chi tiết
                       </Link>
                     </div>
                   </div>

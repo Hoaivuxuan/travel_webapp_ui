@@ -82,11 +82,11 @@ function SearchPage({ searchParams }: Props) {
   return (
     <section>
       <div className="py-6 mx-auto max-w-7xl">
-        <div className="pt-4 pb-8">
+        <div className="pb-4">
           <SearchForm />
         </div>
 
-        <h2 className="pb-3">
+        <h2 className="py-4">
           <span className="ml-2">
             {searchParams.location}, từ {searchParams.checkin} đến {searchParams.checkout} ({filteredResults.length} kết quả)
           </span>

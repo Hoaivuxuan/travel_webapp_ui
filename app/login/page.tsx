@@ -1,22 +1,29 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '@/app/login/AuthContext'; // Import useAuth
+import { useAuth } from '@/app/login/AuthContext';
+import { ToastContainer } from 'react-toastify';
+import Notification from '@/components/Notification';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginPage = () => {
-  const { login } = useAuth(); // Lấy hàm login từ AuthContext
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  
+  const { notifySuccess, notifyWarning } = Notification();
 
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     
-    // Thực hiện kiểm tra thông tin đăng nhập ở đây (ví dụ: kiểm tra email và password)
-    if (email && password) { // Điều kiện đơn giản, bạn có thể thay đổi theo yêu cầu của mình
-      login(); // Gọi hàm login khi đăng nhập thành công
-      window.location.href = '/home'; // Chuyển hướng đến trang chính
+    if (email && password) {
+      login();
+      notifySuccess("Đăng nhập thành công!");
+      setTimeout(() => {
+        window.location.href = '/home';
+      }, 3000);
     } else {
-      alert("Email hoặc mật khẩu không hợp lệ!"); // Hiển thị thông báo lỗi nếu thông tin không hợp lệ
+      notifyWarning("Email hoặc mật khẩu không hợp lệ!");
     }
   };
 
@@ -44,13 +51,17 @@ const LoginPage = () => {
             className='w-full p-2 border border-gray-300 rounded'
           />
         </div>
-        <button type='submit' className='w-full bg-[#013B94] text-white p-2 rounded'>
-          Đăng Nhập
-        </button>
-        <p className='mt-4 text-center'>
-          Chưa có tài khoản? <a href='/register' className='text-blue-600'>Đăng ký ở đây</a>
-        </p>
+        <div className='mt-4'>
+          <button type='submit' className='w-full bg-[#013B94] text-white p-2 rounded'>
+            Đăng Nhập
+          </button>
+          <p className='mt-2 text-center'>
+            Chưa có tài khoản? <a href='/register' className='text-blue-600'>Đăng ký ở đây</a>
+          </p>
+        </div>
       </form>
+
+      <ToastContainer /> {/* Include ToastContainer for displaying toasts */}
     </div>
   );
 };

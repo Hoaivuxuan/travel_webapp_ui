@@ -39,6 +39,7 @@ const RentalDetailPage = () => {
                 src={getCarImageUrl(rentalItem.model, rentalItem.token)}
                 alt={`Car ${rentalItem.id}`}
                 className='rounded-lg w-full h-auto'
+                onError={(e) => { (e.target as HTMLImageElement).src = 'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'; }}
               />
             </div>
             <div>
