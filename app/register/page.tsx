@@ -1,15 +1,31 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ToastContainer } from 'react-toastify';
+import Notification from '@/components/Notification';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const router = useRouter();
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const { notifySuccess, notifyWarning } = Notification();
+
+  const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    // Logic đăng ký ở đây
+
+    if (password !== confirmPassword) {
+      notifyWarning('Mật khẩu và xác nhận mật khẩu không khớp.');
+      return;
+    }
+
+    notifySuccess('Bạn đã đăng ký thành công!');
+    setTimeout(() => {
+      router.push('/login');
+    }, 3000);
   };
 
   return (
@@ -46,13 +62,17 @@ const RegisterPage = () => {
             className='w-full p-2 border border-gray-300 rounded'
           />
         </div>
-        <button type='submit' className='w-full bg-[#013B94] text-white p-2 rounded'>
-          Đăng Ký
-        </button>
-        <p className='mt-4 text-center'>
-          Đã có tài khoản? <a href='/login' className='text-blue-600'>Đăng nhập ở đây</a>
-        </p>
+        <div className='mt-4'>
+          <button type='submit' className='w-full bg-[#013B94] text-white p-2 rounded'>
+            Đăng Ký
+          </button>
+          <p className='mt-2 text-center'>
+            Đã có tài khoản? <a href='/login' className='text-blue-600'>Đăng nhập ở đây</a>
+          </p>
+        </div>
       </form>
+
+      <ToastContainer />
     </div>
   );
 };
