@@ -1,22 +1,20 @@
 package com.duy.BackendDoAn.models;
 
-import com.duy.BackendDoAn.models.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
+import java.util.Locale;
 
 @Entity
-@Table(name = "booking_room")
+@Table(name = "booking_ticket")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BookingRoom {
+public class BookingTicket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,22 +22,20 @@ public class BookingRoom {
     @Column(name = "booking_date")
     private LocalDate booking_date;
 
-    @Column(name = "check_in_date")
-    private LocalDate check_in_date;
+    @Column(name = "number_adult_ticket")
+    private Long number_adult_ticket;
 
-    @Column(name = "check_out_date")
-    private LocalDate check_out_date;
+    @Column(name = "number_children_ticket")
+    private Long number_children_ticket;
 
     @Column(name = "total_price")
     private Float total_price;
 
     @ManyToOne
+    @JoinColumn(name = "ticket_class_id")
+    private TicketClass ticketClass;
+
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @Column(name = "status")
-    private String status;
-
-    @OneToMany(mappedBy = "bookingRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<BookedRoom> bookedRooms;
 }

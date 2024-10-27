@@ -1,7 +1,7 @@
 package com.duy.BackendDoAn.repositories;
 
-import com.duy.BackendDoAn.models.Role;
+import com.duy.BackendDoAn.models.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RoleRepository extends JpaRepository<Role, Long> {
+public interface RoomRepository extends JpaRepository<Room, Long> {
 }

@@ -1,9 +1,10 @@
 package com.duy.BackendDoAn.models;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-
 
 @Entity
 @Table(name = "hotel")
@@ -23,24 +24,43 @@ public class Hotel {
     @Column(name = "hotel_email", length = 100)
     private String hotelEmail;
 
+    @Column(name = "phone_number")
+    private String phone_number;
+
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "longitude")
+    private Float longitude;
+
+    @Column(name = "latitude")
+    private Float latitude;
+
     @Column(name = "description")
     private String description;
 
     @Column(name = "rating")
     private Float rating;
 
-    @ManyToOne
-    @JoinColumn(name = "status")
-    private HotelStatus hotelStatus;
+    @Column(name = "status")
+    private String hotelStatus;
 
     @ManyToOne
-    @JoinColumn(name = "province_id")
-    private Province province;
+    @JoinColumn(name = "city_id")
+    private City city;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
 
+    @Column(name = "type_of_hotel")
+    private String type_of_hotel;
+
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<HotelImage> hotelImage;
+    @JsonManagedReference
+    private List<HotelImage> hotelImages;
+
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Room> rooms;
 }
+

@@ -1,15 +1,16 @@
 package com.duy.BackendDoAn.models;
+
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "vehicle_rental_facility")
+@Table(name = "rental_facility")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class VehicleRentalFacility {
+public class RentalFacility {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,7 +19,7 @@ public class VehicleRentalFacility {
     private String name;
 
     @Column(name = "phone_number")
-    private String phoneNumber;
+    private String phone_number;
 
     @Column(name = "email")
     private String email;
@@ -26,10 +27,12 @@ public class VehicleRentalFacility {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "address")
+    private String address;
 
     @ManyToOne
-    @JoinColumn(name = "province_id")
-    private Province province;
+    @JoinColumn(name = "city_id")
+    private City city;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")

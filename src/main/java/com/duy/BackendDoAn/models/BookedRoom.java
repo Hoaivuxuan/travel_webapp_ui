@@ -1,8 +1,7 @@
 package com.duy.BackendDoAn.models;
+
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.Date;
 
 @Entity
 @Table(name = "booked_room")
@@ -16,20 +15,17 @@ public class BookedRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "check_in_date")
-    private Date checkInDate;
+    @Column(name = "amount")
+    private Long amount;
 
-    @Column(name = "check_out_date")
-    private Date checkOutDate;
-
-    @Column(name = "total_room_price")
-    private Float totalRoomPrice;
+    @Column(name = "price_per")
+    private Float price_per;
 
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
 
     @ManyToOne
-    @JoinColumn(name = "booking_id")
+    @JoinColumn(name = "booking_room_id")
     private BookingRoom bookingRoom;
 }

@@ -5,7 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.UniqueElements;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -24,22 +26,21 @@ public class UserDTO {
     @JsonProperty("phone_number")
     private String phoneNumber;
 
+    @JsonProperty("email")
+    private String email;
+
     @JsonProperty("address")
     private String address;
 
     @JsonProperty("date_of_birth")
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @JsonProperty("active")
     private boolean active;
 
-    @JsonProperty("username")
-    private String username;
-
     @JsonProperty("password")
     private String password;
 
-    @NotNull(message = "Role ID is required")
-    @JsonProperty("role_id")
-    private Long roleId;
+    @JsonProperty("role")
+    private String role;
 }

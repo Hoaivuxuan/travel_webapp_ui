@@ -1,8 +1,8 @@
 package com.duy.BackendDoAn.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.List;
 
 @Entity
 @Table(name = "room")
@@ -16,27 +16,29 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "room_number", length = 10)
-    private String roomNumber;
-
-    @Column(name = "price_per_night")
-    private Float pricePerNight;
+    @Column(name = "price_per_day")
+    private Float price_per_day;
 
     @Column(name = "description")
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "type_of_room")
-    private TypeOfRoom typeOfRoom;
+    @Column(name = "child_count")
+    private Long child_count;
+
+    @Column(name = "adult_count")
+    private Long adult_count;
+
+    @Column(name = "available_room")
+    private Long available_room;
+
+    @Column(name = "type_of_room")
+    private String type_of_room;
+
+    @Column(name = "type_of_bed")
+    private String type_of_bed;
 
     @ManyToOne
     @JoinColumn(name = "hotel_id")
+    @JsonBackReference
     private Hotel hotel;
-
-    @ManyToOne
-    @JoinColumn(name = "status")
-    private Status status;
-
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<BookedRoom> bookedRooms;
 }

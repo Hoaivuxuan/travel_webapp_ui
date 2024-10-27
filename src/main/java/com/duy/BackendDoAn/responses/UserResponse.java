@@ -3,7 +3,9 @@ package com.duy.BackendDoAn.responses;
 import com.duy.BackendDoAn.models.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -28,27 +30,22 @@ public class UserResponse {
     private String address;
 
     @JsonProperty("date_of_birth")
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @JsonProperty("active")
     private boolean active;
 
-    @JsonProperty("username")
-    private String username;
-
-    @JsonProperty("role_id")
-    private Long roleId;
+    @JsonProperty("role")
+    private String role;
 
     public static UserResponse fromUser(User user){
         return UserResponse.builder().id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .phoneNumber(user.getPhoneNumber())
+                .firstName(user.getFirst_name())
+                .lastName(user.getLast_name())
+                .phoneNumber(user.getPhone_number())
                 .address(user.getAddress())
-                .dateOfBirth(user.getDateOfBirth())
+                .dateOfBirth(user.getDate_of_birth())
                 .active(user.isActive())
-                .username(user.getUsername())
-                .roleId(user.getRole().getId())
                 .build();
     }
 }
