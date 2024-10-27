@@ -1,20 +1,32 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faCar, faTheaterMasks, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '@/app/login/AuthContext';
-import { useState, SetStateAction } from 'react';
+import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faHome,
+  faCar,
+  faTheaterMasks,
+  faUser,
+  faSignOutAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "@/app/login/AuthContext";
+import { useState, SetStateAction } from "react";
 
 const products = [
-  { name: 'hotel', title: 'TÌM NƠI LƯU TRÚ', href: '/home', icon: faHome },
-  { name: 'rental', title: 'CHO THUÊ XE', href: '/rental', icon: faCar },
-  { name: 'activities', title: 'HOẠT ĐỘNG & VUI CHƠI', href: '/activities', icon: faTheaterMasks },
+  { name: "hotel", title: "TÌM NƠI LƯU TRÚ", href: "/home", icon: faHome },
+  { name: "rental", title: "CHO THUÊ XE", href: "/rental", icon: faCar },
+  {
+    name: "activities",
+    title: "HOẠT ĐỘNG & VUI CHƠI",
+    href: "/activities",
+    icon: faTheaterMasks,
+  },
 ];
 
 const user = {
-  name: 'ddthumonky88',
-  avatar: 'https://bizweb.dktcdn.net/100/438/408/files/anh-luffy-yody-vn-67.jpg?v=1688806271889',
+  name: "ddthumonky88",
+  avatar:
+    "https://bizweb.dktcdn.net/100/438/408/files/anh-luffy-yody-vn-67.jpg?v=1688806271889",
 };
 
 const Header = () => {
@@ -41,7 +53,11 @@ const Header = () => {
     <header className="bg-[#013B94]">
       <nav className="grid grid-cols-6 items-center p-6 mx-auto max-w-7xl">
         <div className="col-span-1">
-          <Link href="/home" className="flex items-center" onClick={handleLogoClick}>
+          <Link
+            href="/home"
+            className="flex items-center"
+            onClick={handleLogoClick}
+          >
             <span className="sr-only">Booking.com</span>
             <img
               className="h-12"
@@ -64,7 +80,11 @@ const Header = () => {
                     : ""
                 }`}
               >
-                <FontAwesomeIcon icon={item.icon} className="h-5 w-5 mr-2" aria-hidden="true" />
+                <FontAwesomeIcon
+                  icon={item.icon}
+                  className="h-5 w-5 mr-2"
+                  aria-hidden="true"
+                />
                 {item.title}
               </Link>
             ))}
@@ -74,21 +94,33 @@ const Header = () => {
         <div className="col-span-1 relative flex items-center justify-end space-x-2">
           {isLoggedIn ? (
             <>
-              <img src={user.avatar} alt={`${user.name}'s avatar`} className="w-10 h-10 rounded-full cursor-pointer" onClick={() => setDropdownOpen(!dropdownOpen)} />
-              <span className="font-bold text-white cursor-pointer" onClick={() => setDropdownOpen(!dropdownOpen)}>
+              <img
+                src={user.avatar}
+                alt={`${user.name}'s avatar`}
+                className="w-10 h-10 rounded-full cursor-pointer"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              />
+              <span
+                className="font-bold text-white cursor-pointer"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
                 {user.name}
               </span>
 
               {dropdownOpen && (
                 <div className="absolute right-0 top-10 mt-2 w-48 bg-white rounded-lg shadow-lg">
-                  <Link href="/settings/personal"
+                  <Link
+                    href="/settings/personal"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
                     onClick={() => setActiveItem("")}
                   >
-                      <FontAwesomeIcon icon={faUser} className="mr-2" />
-                      Quản lý tài khoản
+                    <FontAwesomeIcon icon={faUser} className="mr-2" />
+                    Quản lý tài khoản
                   </Link>
-                  <button onClick={handleLogoutClick} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-200">
+                  <button
+                    onClick={handleLogoutClick}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                  >
                     <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
                     Đăng xuất
                   </button>
@@ -96,7 +128,10 @@ const Header = () => {
               )}
             </>
           ) : (
-            <Link href="/login" className="text-white font-semibold bg-blue-600 rounded-lg px-4 py-2">
+            <Link
+              href="/login"
+              className="text-white font-semibold bg-blue-600 rounded-lg px-4 py-2"
+            >
               Đăng Nhập
             </Link>
           )}

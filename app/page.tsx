@@ -1,10 +1,13 @@
-'use client';
+"use client";
 
-import React, { useRef } from 'react';
-import SearchForm from '@/components/home/SearchForm';
-import { destination } from '@/data/fakeData';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useRef } from "react";
+import SearchForm from "@/components/home/SearchForm";
+import { destination } from "@/data/fakeData";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Home() {
   const trendingDestinations = destination.slice(0, 5);
@@ -12,13 +15,13 @@ export default function Home() {
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+      scrollContainerRef.current.scrollBy({ left: -300, behavior: "smooth" });
     }
   };
 
   const scrollRight = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+      scrollContainerRef.current.scrollBy({ left: 300, behavior: "smooth" });
     }
   };
 
@@ -75,14 +78,19 @@ export default function Home() {
         <div className="relative flex items-center">
           <button
             onClick={scrollLeft}
-            className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500">
+            className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500"
+          >
             <FontAwesomeIcon icon={faChevronLeft} />
           </button>
           <div
             ref={scrollContainerRef}
-            className="flex py-5 space-x-4 overflow-x-hidden scroll-smooth">
+            className="flex py-5 space-x-4 overflow-x-hidden scroll-smooth"
+          >
             {destination.map((item) => (
-              <div key={item.id} className="space-y-1 cursor-pointer shrink-0 w-[233.59px]">
+              <div
+                key={item.id}
+                className="space-y-1 cursor-pointer shrink-0 w-[233.59px]"
+              >
                 <img
                   key={item.id}
                   className="object-cover rounded-lg w-80 h-72"
@@ -99,7 +107,8 @@ export default function Home() {
           </div>
           <button
             onClick={scrollRight}
-            className="absolute -right-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500">
+            className="absolute -right-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500"
+          >
             <FontAwesomeIcon icon={faChevronRight} />
           </button>
         </div>

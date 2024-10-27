@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { fakeUser } from '@/data/fakeData';
-import React, { useState } from 'react';
-import SettingsMenu from '@/components/settings/SettingsMenu';
+import { fakeUser } from "@/data/fakeData";
+import React, { useState } from "react";
+import SettingsMenu from "@/components/settings/SettingsMenu";
 
 type UserInfoKeys = keyof typeof fakeUser;
 
@@ -12,14 +12,14 @@ const PersonalInfoPage = () => {
   const [values, setValues] = useState<typeof fakeUser>(user);
 
   const personalInfo = [
-    { label: 'Tên', key: 'name' as UserInfoKeys },
-    { label: 'Tên hiển thị', key: 'displayName' as UserInfoKeys },
-    { label: 'Địa chỉ email', key: 'email' as UserInfoKeys, verified: true },
-    { label: 'Số điện thoại', key: 'phone' as UserInfoKeys },
-    { label: 'Ngày sinh', key: 'birthDate' as UserInfoKeys },
-    { label: 'Quốc tịch', key: 'nationality' as UserInfoKeys },
-    { label: 'Giới tính', key: 'gender' as UserInfoKeys },
-    { label: 'Địa chỉ', key: 'address' as UserInfoKeys },
+    { label: "Tên", key: "name" as UserInfoKeys },
+    { label: "Tên hiển thị", key: "displayName" as UserInfoKeys },
+    { label: "Địa chỉ email", key: "email" as UserInfoKeys, verified: true },
+    { label: "Số điện thoại", key: "phone" as UserInfoKeys },
+    { label: "Ngày sinh", key: "birthDate" as UserInfoKeys },
+    { label: "Quốc tịch", key: "nationality" as UserInfoKeys },
+    { label: "Giới tính", key: "gender" as UserInfoKeys },
+    { label: "Địa chỉ", key: "address" as UserInfoKeys },
   ];
 
   const handleEditClick = (index: number) => {
@@ -46,7 +46,8 @@ const PersonalInfoPage = () => {
           />
         </div>
         <p className="mb-6 text-gray-600">
-          Cập nhật thông tin của bạn và tìm hiểu các thông tin này được sử dụng ra sao.
+          Cập nhật thông tin của bạn và tìm hiểu các thông tin này được sử dụng
+          ra sao.
         </p>
         <div className="divide-y">
           {personalInfo.map((info, index) => (
@@ -57,14 +58,18 @@ const PersonalInfoPage = () => {
                   <input
                     type="text"
                     value={values[info.key]}
-                    onChange={(e) => handleInputChange(info.key, e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange(info.key, e.target.value)
+                    }
                     className="mt-1 p-1 border rounded w-full"
                   />
                 ) : (
                   <div className="flex items-center">
                     <span>{values[info.key]}</span>
                     {info.verified && (
-                      <span className="ml-2 text-green-600 font-bold">Xác thực</span>
+                      <span className="ml-2 text-green-600 font-bold">
+                        Xác thực
+                      </span>
                     )}
                   </div>
                 )}
