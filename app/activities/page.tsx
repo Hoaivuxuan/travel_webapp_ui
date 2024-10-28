@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import GoogleMapReact from "google-map-react";
 import { activities } from "@/data/fakeData";
+import "./style.css";
 
 const AnyReactComponent = ({ text }: any) => <div>{text}</div>;
 
@@ -61,18 +62,16 @@ export default function Search({ params }: { params: { id: string } }) {
             Xem tất cả
           </button>
         </div>
+
         <div className="py-5 grid grid-cols-4 gap-4">
           {trendingActivities.map((item) => (
-            <div key={item.id} className="cursor-pointer">
+            <div key={item.id} className="cursor-pointer activity-container">
               <img
-                key={item.id}
-                className="object-cover rounded-lg w-full h-72"
+                className="activity-image h-72"
                 src={item.src}
                 alt={item.title}
               />
-              <span className="pt-3">
-                <p className="font-bold">{item.title}</p>
-              </span>
+              <div className="activity-title">{item.title}</div>
             </div>
           ))}
         </div>
@@ -80,18 +79,16 @@ export default function Search({ params }: { params: { id: string } }) {
         <div className="pt-5">
           <h3 className="text-xl font-bold">Tìm hoạt động vui chơi ở Hà Nội</h3>
         </div>
+
         <div className="py-5 grid grid-cols-4 gap-4">
           {trendingActivities.map((item) => (
-            <div key={item.id} className="cursor-pointer">
+            <div key={item.id} className="cursor-pointer activity-container">
               <img
-                key={item.id}
-                className="object-cover rounded-lg w-full h-72"
+                className="activity-image h-72"
                 src={item.src}
                 alt={item.title}
               />
-              <span className="pt-3">
-                <p className="font-bold">{item.title}</p>
-              </span>
+              <div className="activity-title">{item.title}</div>
             </div>
           ))}
         </div>
