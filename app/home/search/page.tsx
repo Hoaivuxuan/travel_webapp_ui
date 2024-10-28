@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import SearchForm from "@/components/home/SearchForm";
 import { notFound } from "next/navigation";
 import { listings } from "@/data/fakeData";
-import { ratingLabel, type_hotel } from "@/data/typeHotel";
+import { type_hotel } from "@/data/typeHotel";
 import "rc-slider/assets/index.css";
 import Slider from "rc-slider";
 import HotelItem from "./HotelItem";

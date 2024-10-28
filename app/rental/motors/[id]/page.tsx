@@ -67,18 +67,6 @@ const RentalDetailPage = () => {
               <h2 className="text-xl font-semibold">THÔNG TIN CHI TIẾT</h2>
               <div className="px-2 space-y-2">
                 <div className="flex items-center">
-                  <FontAwesomeIcon icon={faUserFriends} className="mr-2 w-4" />
-                  <span>Số ghế: {rentalItem.details.seats}</span>
-                </div>
-                <div className="flex items-center">
-                  <FontAwesomeIcon icon={faCalendar} className="mr-2 w-4" />
-                  <span>Năm: {rentalItem.details.year}</span>
-                </div>
-                <div className="flex items-center">
-                  <FontAwesomeIcon icon={faCar} className="mr-2 w-4" />
-                  <span>Hộp số: {rentalItem.details.transmission}</span>
-                </div>
-                <div className="flex items-center">
                   <FontAwesomeIcon icon={faSuitcase} className="mr-2 w-4" />
                   <span>
                     Khối lượng hành lý: {rentalItem.details.baggage_capacity}

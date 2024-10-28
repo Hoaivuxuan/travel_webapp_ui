@@ -4,16 +4,13 @@ import { useParams, notFound, useRouter } from "next/navigation";
 import { listings } from "@/data/fakeData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCalendar,
   faCar,
-  faClock,
   faGasPump,
-  faHotel,
-  faInfoCircle,
-  faMoneyBill1Wave,
+  faLocationDot,
   faSuitcase,
   faUserFriends,
 } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
 
 const RentalDetailPage = () => {
   const { id } = useParams();
@@ -21,6 +18,26 @@ const RentalDetailPage = () => {
   const rentalItem = listings.content.listCars.find(
     (item) => item.id.toString() === id,
   );
+
+  const [pickupInfo, setPickupInfo] = useState({ date: "", location: "" });
+  const [dropoffInfo, setDropoffInfo] = useState({ date: "", location: "" });
+
+  useEffect(() => {
+    const storedValues = localStorage.getItem("rentalSearchFormValues");
+    if (storedValues) {
+      const { dates, location } = JSON.parse(storedValues);
+      setPickupInfo({
+        date: new Date(dates.startDate).toLocaleDateString("vi-VN"),
+        location,
+      });
+      setDropoffInfo({
+        date: new Date(dates.endDate).toLocaleDateString("vi-VN"),
+        location,
+      });
+    }
+  }, []);
+
+  // const dateCount = dropoffInfo.date - pickupInfo.date;
 
   if (!rentalItem) return notFound();
 
@@ -31,7 +48,7 @@ const RentalDetailPage = () => {
 
   return (
     <div>
-      <div className="p-6 !pb-2 mx-auto max-w-6xl">
+      <div className="p-6 !pb-2 mx-auto max-w-7xl">
         <a
           href="#"
           className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-gray-400 transition duration-150"
@@ -43,165 +60,171 @@ const RentalDetailPage = () => {
           Quay lại trang trước
         </a>
       </div>
-      <section className="p-6 !pt-2 mx-auto max-w-6xl grid grid-cols-4 gap-4">
-        <div className="col-span-3 p-4 bg-white border rounded-lg hover:shadow-lg transition-shadow duration-200">
-          <div className="grid grid-cols-2 gap-4 my-4 pb-4">
-            <div className="h-auto">
-              <img
-                src={getCarImageUrl(rentalItem.model, rentalItem.token)}
-                alt={`Car ${rentalItem.id}`}
-                className="rounded-lg w-full h-auto"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    "https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg";
-                }}
-              />
-            </div>
-            <div>
-              <div className="pb-4">
-                <h1 className="text-2xl font-bold">{rentalItem.model}</h1>
-                <p className="text-gray-500 text-sm">
-                  Cung cấp bởi Mioto Ho Chi Minh City
-                </p>
+      <section className="p-6 !pt-2 mx-auto max-w-7xl grid grid-cols-3 gap-4 mb-6">
+        <div className="col-span-2">
+          <div className="p-4 bg-white">
+            <div className="grid grid-cols-2 gap-4 my-4 pb-4">
+              <div className="h-auto">
+                <img
+                  src={getCarImageUrl(rentalItem.model, rentalItem.token)}
+                  alt={`Car ${rentalItem.id}`}
+                  className="rounded-lg w-full h-auto"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src =
+                      "https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg";
+                  }}
+                />
               </div>
-              <h2 className="text-xl font-semibold">THÔNG TIN CHI TIẾT</h2>
-              <div className="px-2 space-y-2">
-                <div className="flex items-center">
-                  <FontAwesomeIcon icon={faUserFriends} className="mr-2 w-4" />
-                  <span>Số ghế: {rentalItem.details.seats}</span>
+              <div>
+                <div className="pb-4">
+                  <h1 className="text-2xl font-bold">{rentalItem.model}</h1>
+                  <p className="text-gray-500 text-sm">
+                    Cung cấp bởi Mioto Ho Chi Minh City
+                  </p>
                 </div>
-                <div className="flex items-center">
-                  <FontAwesomeIcon icon={faCalendar} className="mr-2 w-4" />
-                  <span>Năm: {rentalItem.details.year}</span>
+                <div className="px-2 space-y-2">
+                  <div className="flex items-center">
+                    <FontAwesomeIcon
+                      icon={faUserFriends}
+                      className="mr-2 w-4"
+                    />
+                    <span>{rentalItem.details.seats} chỗ ngồi</span>
+                  </div>
+                  <div className="flex items-center">
+                    <FontAwesomeIcon icon={faCar} className="mr-2 w-4" />
+                    <span>Hộp số: {rentalItem.details.transmission}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <FontAwesomeIcon icon={faSuitcase} className="mr-2 w-4" />
+                    <span>
+                      Khối lượng hành lý: {rentalItem.details.baggage_capacity}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <FontAwesomeIcon icon={faGasPump} className="mr-2 w-4" />
+                    <span>Loại nhiên liệu: {rentalItem.details.fuel_type}</span>
+                  </div>
                 </div>
-                <div className="flex items-center">
-                  <FontAwesomeIcon icon={faCar} className="mr-2 w-4" />
-                  <span>Hộp số: {rentalItem.details.transmission}</span>
-                </div>
-                <div className="flex items-center">
-                  <FontAwesomeIcon icon={faSuitcase} className="mr-2 w-4" />
-                  <span>
-                    Khối lượng hành lý: {rentalItem.details.baggage_capacity}
-                  </span>
-                </div>
-                <div className="flex items-center">
-                  <FontAwesomeIcon icon={faGasPump} className="mr-2 w-4" />
-                  <span>Loại nhiên liệu: {rentalItem.details.fuel_type}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-6 p-4 border border-gray-300 rounded-lg">
-            <h3 className="text-lg font-semibold mb-2">Tiện ích</h3>
-            <div className="space-y-2 px-2">
-              <div className="flex items-center">
-                <FontAwesomeIcon icon={faMoneyBill1Wave} className="mr-2 w-4" />
-                <span>Đặt Cọc Bằng Tiền Mặt Hoặc Chuyển Khoản Ngân Hàng</span>
-              </div>
-              <div className="flex items-center">
-                <FontAwesomeIcon icon={faHotel} className="mr-2 w-4" />
-                <span>Đón/trả miễn phí tại khách sạn</span>
-              </div>
-              <div className="flex items-center">
-                <FontAwesomeIcon icon={faClock} className="mr-2 w-4" />
-                <span>Áp dụng phí trong trường hợp trả xe muộn</span>
-              </div>
-              <div className="flex items-center">
-                <FontAwesomeIcon icon={faInfoCircle} className="mr-2 w-4" />
-                <span>Không có thông tin về bảo hiểm.</span>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 p-4 border border-gray-300 rounded-lg">
-            <h3 className="text-lg font-semibold mb-2">Chính sách thuê xe</h3>
-            <div className="space-y-2 px-2">
-              <div className="flex items-center">
-                <FontAwesomeIcon icon={faClock} className="mr-2 w-4" />
-                <span>Sử dụng tối đa 24 giờ mỗi ngày thuê</span>
-              </div>
-              <div className="flex items-center">
-                <FontAwesomeIcon icon={faGasPump} className="mr-2 w-4" />
-                <span>Trả xe với cùng mức nhiên liệu khi nhận</span>
-              </div>
-            </div>
-            <button className="mt-2 text-blue-500">Tìm hiểu thêm</button>
-          </div>
-
-          <div className="mt-6 p-4 border border-gray-300 rounded-lg">
-            <h3 className="text-lg font-semibold mb-2">Yêu cầu thuê xe</h3>
-            <div className="space-y-2 px-2">
-              <div className="flex items-center">
-                <FontAwesomeIcon icon={faUserFriends} className="mr-2 w-4" />
-                <span>CCCD / Passport</span>
-              </div>
-              <div className="flex items-center">
-                <FontAwesomeIcon icon={faMoneyBill1Wave} className="mr-2 w-4" />
-                <span>Đặt cọc VND 15.000.000</span>
-              </div>
-              <div className="flex items-center">
-                <FontAwesomeIcon icon={faCar} className="mr-2 w-4" />
-                <span>Giấy phép Lái xe và Giấy phép lái xe Quốc tế</span>
-              </div>
-            </div>
-            <button className="mt-2 text-blue-500">Tìm hiểu thêm</button>
-          </div>
-        </div>
-
-        <div className="col-span-1 p-4 bg-white border rounded-lg hover:shadow-lg transition-shadow duration-200">
-          <h3 className="text-lg font-semibold">CHI TIẾT GIÁ CẢ</h3>
-          <p className="text-xl font-bold">{rentalItem.price} VNĐ</p>
           <hr className="my-2" />
+          <div className="p-4">
+            <h3 className="text-lg font-bold mb-4">Lựa chọn tuyệt vời!</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Đánh giá của khách hàng: 8,6 / 10</span>
+              </div>
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Chính sách nhiên liệu phổ biến nhất</span>
+              </div>
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Không phải chờ đợi lâu</span>
+              </div>
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Quầy thanh toán dễ tìm</span>
+              </div>
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Nhân viên quầy thanh toán sẵn sàng hỗ trợ</span>
+              </div>
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Hủy đặt thuê miễn phí</span>
+              </div>
+            </div>
+          </div>
 
-          <div className="space-y-2 mt-4 text-sm">
-            <div className="flex justify-between">
-              <span className="text-gray-700">Giá thuê cơ bản</span>
-              <span className="text-gray-700">{rentalItem.price} VNĐ</span>
+          <hr className="my-2" />
+          <div className="p-4">
+            <h3 className="text-lg font-bold mb-4">Giá đã bao gồm:</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Miễn phí hủy tối đa 48 giờ trước khi nhận xe</span>
+              </div>
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Bảo hiểm hư hại do va chạm với mức miễn thường bằng 0 VNĐ</span>
+              </div>
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Bảo hiểm Mất trộm với mức miễn thường bằng 0 VNĐ</span>
+              </div>
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Số kilômét không giới hạn</span>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-700">Đón xe ở địa điểm khác</span>
-              <span className="text-gray-700">0 VNĐ</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-700">Trả xe ở địa điểm khác</span>
-              <span className="text-gray-700">0 VNĐ</span>
-            </div>
-
-            <hr className="my-2" />
-            <div className="flex justify-between font-bold">
-              <span className="text-gray-700">Bạn thanh toán</span>
-              <span className="text-gray-700">{rentalItem.price} VNĐ</span>
-            </div>
-
-            <button className="bg-[#018DF3] text-white py-2 rounded mt-4 w-full">
-              Tiếp tục
-            </button>
           </div>
         </div>
 
-        <div className="col-span-3 p-4 bg-white border rounded-lg hover:shadow-lg transition-shadow duration-200">
-          <h3 className="text-lg font-semibold">THÔNG TIN THUÊ XE</h3>
-          <div className="space-y-4 p-4">
-            <div>
-              <h4 className="pb-2 font-semibold">Địa điểm nhận xe</h4>
-              <input
-                type="text"
-                className="border rounded p-2 w-full"
-                placeholder="Noi Bai International Airport (HAN)"
-              />
+        <div className="col-span-1 grid grid-cols-1 gap-4">
+          <div className="p-4 bg-white border rounded-lg">
+            <h3 className="text-lg font-bold mb-4">Nhận xe và trả xe</h3>
+            <div className="space-y-6 relative">
+              <div className="h-[74px] absolute left-2 top-6 bottom-6 border border-blue-300"></div>
+              <div className="flex items-start space-x-2">
+                <div className="flex-none">
+                  <FontAwesomeIcon icon={faLocationDot} className="w-5 text-blue-600" />
+                </div>
+                <div className="flex-grow px-1">
+                  <div className="mb-1 text-gray-700">{pickupInfo.date}</div>
+                  <div className="font-bold">{pickupInfo.location}</div>
+                  <a href="#" className="text-blue-600 hover:underline">
+                    Xem hướng dẫn nhận xe
+                  </a>
+                </div>
+              </div>
+              <div className="flex items-start space-x-2">
+                <div className="flex-none">
+                  <FontAwesomeIcon icon={faLocationDot} className="w-5 text-blue-600" />
+                </div>
+                <div className="flex-grow px-1">
+                  <div className="mb-1 text-gray-700">{dropoffInfo.date}</div>
+                  <div className="font-bold">{dropoffInfo.location}</div>
+                  <a href="#" className="text-blue-600 hover:underline">
+                    Xem hướng dẫn trả xe
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="space-y-4 p-4">
-            <div>
-              <h4 className="pb-2 font-semibold">Địa điểm trả xe</h4>
-              <input
-                type="text"
-                className="border rounded p-2 w-full"
-                placeholder="Noi Bai International Airport (HAN)"
-              />
+
+          <div className="p-4 bg-white border rounded-lg">
+            <h3 className="text-lg font-bold mb-4">Chi tiết giá cả</h3>
+            <div className="space-y-2 mt-4">
+              <div className="flex justify-between">
+                <span className="text-gray-700">Phí thuê xe</span>
+                <span className="text-gray-700">{rentalItem.price.toLocaleString("vn-VN")} VNĐ</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-700">Đón xe ở địa điểm khác</span>
+                <span className="text-gray-700">0 VNĐ</span>
+              </div>
+
+              <hr className="my-2" />
+              <div className="flex justify-between font-bold">
+                <span className="text-gray-700">Giá cho 4 ngày</span>
+                <span className="text-gray-700">{rentalItem.price.toLocaleString("vn-VN")} VNĐ</span>
+              </div>
             </div>
           </div>
+
+          <div className="p-4 bg-white border rounded-lg">
+            <h3 className="text-lg font-bold mb-4">Thông tin thêm</h3>
+          </div>
+        </div>
+
+        <div className="col-span-2">
+          <button className="bg-[#018DF3] text-white py-2 rounded mt-4 w-full">
+            Tiếp tục
+          </button>
         </div>
       </section>
     </div>

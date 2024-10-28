@@ -16,8 +16,8 @@
 .form-error::before {
   content: "";
   position: absolute;
-  top: -5px;
-  left: 20px;
+  top: -10px;
+  left: 12px;
   border-width: 5px;
   border-style: solid;
   border-color: transparent transparent #d32f2f transparent;

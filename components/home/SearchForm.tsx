@@ -7,13 +7,7 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { format } from "date-fns";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Calendar } from "../ui/calendar";
@@ -25,7 +19,7 @@ import { useEffect } from "react";
 export const formSchema = z.object({
   location: z
     .string()
-    .min(1, "Vui lòng chọn địa điểm thuê xe của bạn!")
+    .min(1, "Vui lòng nhập điểm đến để bắt đầu tìm kiếm!")
     .max(50),
   dateRange: z.object({
     from: z.date(),
@@ -47,7 +41,7 @@ function SearchForm() {
       dateRange: {
         from: today,
         to: new Date(today.getTime() + 24 * 60 * 60 * 1000),
-      }, // Mặc định ngày trả phòng là 1 ngày sau
+      },
       adults: 2,
       children: 0,
       rooms: 1,
