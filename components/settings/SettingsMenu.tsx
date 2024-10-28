@@ -1,7 +1,7 @@
 // components/settings/SettingsMenu.tsx
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faCog, faCreditCard } from '@fortawesome/free-solid-svg-icons';
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faCog, faCreditCard } from "@fortawesome/free-solid-svg-icons";
 
 const SettingsMenu = () => {
   return (

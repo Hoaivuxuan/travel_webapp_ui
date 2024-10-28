@@ -18,13 +18,9 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Calendar } from "../ui/calendar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCalendar,
-  faMapLocation,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
-import "./index.css";
+import { faCalendar, faMapLocation } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
+import "./index.css";
 
 export const formSchema = z.object({
   location: z
@@ -35,9 +31,6 @@ export const formSchema = z.object({
     from: z.date(),
     to: z.date(),
   }),
-  adults: z.number().min(1).max(12),
-  children: z.number().min(0).max(12),
-  rooms: z.number().min(1).max(10),
 });
 
 function SearchForm() {
@@ -51,10 +44,7 @@ function SearchForm() {
       dateRange: {
         from: today,
         to: new Date(today.getTime() + 24 * 60 * 60 * 1000),
-      }, // Mặc định ngày trả phòng là 1 ngày sau
-      adults: 2,
-      children: 0,
-      rooms: 1,
+      },
     },
   });
 
@@ -67,9 +57,6 @@ function SearchForm() {
         from: new Date(parsedValues.dateRange.from),
         to: new Date(parsedValues.dateRange.to),
       });
-      form.setValue("adults", parsedValues.adults || 2);
-      form.setValue("children", parsedValues.children || 0);
-      form.setValue("rooms", parsedValues.rooms || 1);
     }
 
     const subscription = form.watch((value) => {
@@ -88,17 +75,14 @@ function SearchForm() {
     url.searchParams.set("location", values.location);
     url.searchParams.set(
       "checkin",
-      format(values.dateRange.from, "yyyy-MM-dd")
+      format(values.dateRange.from, "yyyy-MM-dd"),
     );
     url.searchParams.set("checkout", format(values.dateRange.to, "yyyy-MM-dd"));
-    url.searchParams.set("adults", values.adults.toString());
-    url.searchParams.set("children", values.children.toString());
-    url.searchParams.set("rooms", values.rooms.toString());
 
     if (currentPath.includes("/search")) {
       router.push(`search?url=${url.href}`);
     } else {
-      router.push(`home/search?url=${url.href}`);
+      router.push(`activities/search?url=${url.href}`);
     }
   }
 
@@ -111,7 +95,6 @@ function SearchForm() {
         <div className="grid grid-cols-9 gap-2">
           <div className="col-span-8">
             <div className=" grid grid-cols-12 gap-2">
-              {/* Location Field */}
               <div className="col-span-6">
                 <FormField
                   control={form.control}
@@ -133,13 +116,16 @@ function SearchForm() {
                           </span>
                         </div>
                       </FormControl>
-                      <FormMessage className="px-2 text-white text-sm italic" />
+                      {form.formState.errors.location && (
+                        <div className="form-error !-mt-3">
+                          {form.formState.errors.location.message}
+                        </div>
+                      )}
                     </FormItem>
                   )}
                 />
               </div>
 
-              {/* Date Range Field */}
               <div className="col-span-6">
                 <FormField
                   control={form.control}
@@ -153,7 +139,7 @@ function SearchForm() {
                               variant="outline"
                               className={cn(
                                 "w-full justify-start text-left font-normal",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               <FontAwesomeIcon
@@ -163,7 +149,7 @@ function SearchForm() {
                               {field.value?.from && field.value?.to
                                 ? `${format(
                                     field.value.from,
-                                    "dd/MM/yyyy"
+                                    "dd/MM/yyyy",
                                   )} - ${format(field.value.to, "dd/MM/yyyy")}`
                                 : "Chọn khoảng thời gian lưu trú"}
                             </Button>
@@ -191,13 +177,12 @@ function SearchForm() {
             </div>
           </div>
 
-          {/* Submit Button */}
           <div className="col-span-1 flex items-end justify-center">
             <Button
               type="submit"
               className="bg-[#013B94] text-base font-bold w-full"
             >
-              Tìm
+              Tìm kiếm
             </Button>
           </div>
         </div>

@@ -1,5 +1,11 @@
-'use client';
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+"use client";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 type AuthContextType = {
   isLoggedIn: boolean;
@@ -13,20 +19,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const loggedInStatus = localStorage.getItem('isLoggedIn');
-    if (loggedInStatus === 'true') {
+    const loggedInStatus = localStorage.getItem("isLoggedIn");
+    if (loggedInStatus === "true") {
       setIsLoggedIn(true);
     }
   }, []);
 
   const login = () => {
     setIsLoggedIn(true);
-    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem("isLoggedIn", "true");
   };
 
   const logout = () => {
     setIsLoggedIn(false);
-    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem("isLoggedIn");
   };
 
   return (
@@ -39,7 +45,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

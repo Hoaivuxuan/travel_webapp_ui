@@ -1,5 +1,5 @@
-import { SearchParams } from '@/app/home/search/page';
-import { Result } from '@/types';
+import { SearchParams } from "@/app/home/search/page";
+import { Result } from "@/types";
 
 export async function fetchResults(searchParams: SearchParams) {
   const username = process.env.OXYLABS_USERNAME;
@@ -7,27 +7,27 @@ export async function fetchResults(searchParams: SearchParams) {
 
   const url = new URL(searchParams.url);
   Object.keys(searchParams).forEach((key) => {
-    if (key === 'url' || key === 'location') return;
+    if (key === "url" || key === "location") return;
 
     const value = searchParams[key as keyof SearchParams];
 
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       url.searchParams.append(key, value);
     }
   });
 
-  console.log('scraping url >>>', url.href);
+  console.log("scraping url >>>", url.href);
 
   const body = {
-    source: 'universal',
+    source: "universal",
     url: url.href,
     parse: true,
-    render: 'html',
+    render: "html",
     parsing_instructions: {
       listings: {
         _fns: [
           {
-            _fn: 'xpath',
+            _fn: "xpath",
             _args: ["//div[@data-testid='property-card-container']"],
           },
         ],
@@ -35,7 +35,7 @@ export async function fetchResults(searchParams: SearchParams) {
           title: {
             _fns: [
               {
-                _fn: 'xpath_one',
+                _fn: "xpath_one",
                 _args: [".//div[@data-testid='title']/text()"],
               },
             ],
@@ -43,7 +43,7 @@ export async function fetchResults(searchParams: SearchParams) {
           description: {
             _fns: [
               {
-                _fn: 'xpath_one',
+                _fn: "xpath_one",
                 _args: [
                   ".//h4[contains(@class, 'abf093bdfe e8f7c070a7')]/text()",
                 ],
@@ -53,7 +53,7 @@ export async function fetchResults(searchParams: SearchParams) {
           booking_metadata: {
             _fns: [
               {
-                _fn: 'xpath_one',
+                _fn: "xpath_one",
                 _args: [
                   ".//div[contains(@class, 'c5ca594cb1 f19ed67e4b')]/div[contains(@class, 'abf093bdfe f45d8e4c32')]/text()",
                 ],
@@ -63,7 +63,7 @@ export async function fetchResults(searchParams: SearchParams) {
           link: {
             _fns: [
               {
-                _fn: 'xpath_one',
+                _fn: "xpath_one",
                 _args: [".//a[contains(@class, 'a78ca197d0')]/@href"],
               },
             ],
@@ -71,7 +71,7 @@ export async function fetchResults(searchParams: SearchParams) {
           price: {
             _fns: [
               {
-                _fn: 'xpath_one',
+                _fn: "xpath_one",
                 _args: [
                   `.//span[contains(@class, 'f6431b446c fbfd7c1165 e84eb96b1f')]/text()`,
                 ],
@@ -81,15 +81,15 @@ export async function fetchResults(searchParams: SearchParams) {
           url: {
             _fns: [
               {
-                _fn: 'xpath_one',
-                _args: ['.//img/@src'],
+                _fn: "xpath_one",
+                _args: [".//img/@src"],
               },
             ],
           },
           rating_word: {
             _fns: [
               {
-                _fn: 'xpath_one',
+                _fn: "xpath_one",
                 _args: [
                   ".//div[@class='a3b8729ab1 e6208ee469 cb2cbb3ccb']/text()",
                 ],
@@ -99,7 +99,7 @@ export async function fetchResults(searchParams: SearchParams) {
           rating: {
             _fns: [
               {
-                _fn: 'xpath_one',
+                _fn: "xpath_one",
                 _args: [".//div[@class='a3b8729ab1 d86cee9b25']/text()"],
               },
             ],
@@ -107,7 +107,7 @@ export async function fetchResults(searchParams: SearchParams) {
           rating_count: {
             _fns: [
               {
-                _fn: 'xpath_one',
+                _fn: "xpath_one",
                 _args: [
                   ".//div[@class='abf093bdfe f45d8e4c32 d935416c47']/text()",
                 ],
@@ -119,24 +119,24 @@ export async function fetchResults(searchParams: SearchParams) {
       total_listings: {
         _fns: [
           {
-            _fn: 'xpath_one',
-            _args: ['.//h1/text()'],
+            _fn: "xpath_one",
+            _args: [".//h1/text()"],
           },
         ],
       },
     },
   };
 
-  const response = await fetch('https://realtime.oxylabs.io/v1/queries', {
-    method: 'POST',
+  const response = await fetch("https://realtime.oxylabs.io/v1/queries", {
+    method: "POST",
     body: JSON.stringify(body),
     next: {
       revalidate: 60 * 60,
     },
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization:
-        'Basic ' + Buffer.from(`${username}:${password}`).toString('base64'),
+        "Basic " + Buffer.from(`${username}:${password}`).toString("base64"),
     },
   })
     .then((response) => response.json())
