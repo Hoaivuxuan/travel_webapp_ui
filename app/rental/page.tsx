@@ -41,7 +41,7 @@ const RentalPage = () => {
         </section>
       </div>
 
-      <section className="py-4 px-2 mx-4 -my-16 lg:px-4">
+      <section className="py-4 px-2 mx-4 -mt-16 -mb-14 lg:px-4">
         <RentalSearchForm />
       </section>
 

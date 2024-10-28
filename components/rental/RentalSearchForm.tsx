@@ -316,35 +316,13 @@ function RentalSearchForm() {
           </div>
         </div>
       </form>
-      <div className="max-w-7xl mt-4 lg:mx-auto">
+      {/* <div className="max-w-7xl mt-4 lg:mx-auto">
         <div className="flex space-x-4 text-base ml-2">
           <span>
             <strong>Chọn loại phương tiện: </strong>
           </span>
-          <label className="flex items-center space-x-2">
-            <input
-              type="radio"
-              name="type"
-              value="cars"
-              checked={selectedType === "cars"}
-              onChange={() => setSelectedType("cars")}
-              className="form-radio text-blue-600"
-            />
-            <span>Ô TÔ</span>
-          </label>
-          <label className="flex items-center space-x-2">
-            <input
-              type="radio"
-              name="type"
-              value="motors"
-              checked={selectedType === "motors"}
-              onChange={() => setSelectedType("motors")}
-              className="form-radio text-blue-600"
-            />
-            <span>XE MÁY</span>
-          </label>
         </div>
-      </div>
+      </div> */}
     </Form>
   );
 }

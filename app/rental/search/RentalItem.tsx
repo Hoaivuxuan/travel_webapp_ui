@@ -4,6 +4,8 @@ import {
   faSuitcase,
   faUserFriends,
   faCar,
+  faMotorcycle,
+  faGasPump,
 } from "@fortawesome/free-solid-svg-icons";
 import { listings } from "@/data/fakeData";
 
@@ -44,15 +46,15 @@ export function CarItem({ id }: RentalItemProps) {
         <div>
           <p className="mb-4 font-bold text-blue-600 text-lg">{item.model}</p>
           <p className="text-sm text-gray-700 flex items-center">
-            <FontAwesomeIcon icon={faCar} className="mr-2 w-4" />
-            {item.details.transmission.toUpperCase()}
+            <FontAwesomeIcon icon={faCar} className="mx-2 w-4" />
+            {item.details.transmission}
           </p>
           <p className="text-sm flex items-center text-gray-600">
-            <FontAwesomeIcon icon={faUserFriends} className="mr-2 w-4" />
+            <FontAwesomeIcon icon={faUserFriends} className="mx-2 w-4" />
             {item.details.seats} ghế
           </p>
           <p className="text-sm flex items-center text-gray-600">
-            <FontAwesomeIcon icon={faSuitcase} className="mr-2 w-4" />
+            <FontAwesomeIcon icon={faSuitcase} className="mx-2 w-4" />
             {item.details.baggage_capacity} hành lý
           </p>
         </div>
@@ -98,13 +100,13 @@ export function MotorItem({ id }: RentalItemProps) {
       <div className="flex flex-col justify-between col-span-3">
         <div>
           <p className="mb-4 font-bold text-blue-600 text-lg">{item.model}</p>
-          <p className="text-sm flex items-center text-gray-600">
-            <FontAwesomeIcon icon={faUserFriends} className="mr-2 w-4" />
-            {item.details.seats} ghế
+          <p className="text-sm text-gray-700 flex items-center">
+            <FontAwesomeIcon icon={faMotorcycle} className="mx-2 w-4" />
+            {item.details.engine} phân khối
           </p>
           <p className="text-sm flex items-center text-gray-600">
-            <FontAwesomeIcon icon={faSuitcase} className="mr-2 w-4" />
-            {item.details.baggage_capacity} hành lý
+            <FontAwesomeIcon icon={faGasPump} className="mx-2 w-4" />
+            {item.details.fuel_type}
           </p>
         </div>
       </div>
