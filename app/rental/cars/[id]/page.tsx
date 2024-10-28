@@ -150,7 +150,9 @@ const RentalDetailPage = () => {
               </div>
               <div className="flex items-start space-x-2">
                 <span className="text-green-600">✔</span>
-                <span>Bảo hiểm hư hại do va chạm với mức miễn thường bằng 0 VNĐ</span>
+                <span>
+                  Bảo hiểm hư hại do va chạm với mức miễn thường bằng 0 VNĐ
+                </span>
               </div>
               <div className="flex items-start space-x-2">
                 <span className="text-green-600">✔</span>
@@ -171,7 +173,10 @@ const RentalDetailPage = () => {
               <div className="h-[74px] absolute left-2 top-6 bottom-6 border border-blue-300"></div>
               <div className="flex items-start space-x-2">
                 <div className="flex-none">
-                  <FontAwesomeIcon icon={faLocationDot} className="w-5 text-blue-600" />
+                  <FontAwesomeIcon
+                    icon={faLocationDot}
+                    className="w-5 text-blue-600"
+                  />
                 </div>
                 <div className="flex-grow px-1">
                   <div className="mb-1 text-gray-700">{pickupInfo.date}</div>
@@ -183,7 +188,10 @@ const RentalDetailPage = () => {
               </div>
               <div className="flex items-start space-x-2">
                 <div className="flex-none">
-                  <FontAwesomeIcon icon={faLocationDot} className="w-5 text-blue-600" />
+                  <FontAwesomeIcon
+                    icon={faLocationDot}
+                    className="w-5 text-blue-600"
+                  />
                 </div>
                 <div className="flex-grow px-1">
                   <div className="mb-1 text-gray-700">{dropoffInfo.date}</div>
@@ -201,7 +209,9 @@ const RentalDetailPage = () => {
             <div className="space-y-2 mt-4">
               <div className="flex justify-between">
                 <span className="text-gray-700">Phí thuê xe</span>
-                <span className="text-gray-700">{rentalItem.price.toLocaleString("vn-VN")} VNĐ</span>
+                <span className="text-gray-700">
+                  {rentalItem.price.toLocaleString("vn-VN")} VNĐ
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-700">Đón xe ở địa điểm khác</span>
@@ -211,7 +221,9 @@ const RentalDetailPage = () => {
               <hr className="my-2" />
               <div className="flex justify-between font-bold">
                 <span className="text-gray-700">Giá cho 4 ngày</span>
-                <span className="text-gray-700">{rentalItem.price.toLocaleString("vn-VN")} VNĐ</span>
+                <span className="text-gray-700">
+                  {rentalItem.price.toLocaleString("vn-VN")} VNĐ
+                </span>
               </div>
             </div>
           </div>

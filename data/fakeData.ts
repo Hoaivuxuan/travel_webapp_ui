@@ -79,6 +79,79 @@ export const destination: Destination[] = [
   },
 ];
 
+export const activities: Destination[] = [
+  {
+    id: 1,
+    src: "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+    title: "Tour đi bộ tham quan thành phố có hướng dẫn viên",
+    location: "Việt Nam",
+    description: "0 Deals",
+  },
+  {
+    id: 2,
+    src: "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222572168.jpg?k=5f351c429055fff045356847861f726ac480e3d395192ce444fe5ab703b8cd78&o=&quot",
+    title: "Tour ẩm thực đường phố có hướng dẫn",
+    location: "Việt Nam",
+    description: "0 Deals",
+  },
+  {
+    id: 3,
+    src: "https://q-xx.bstatic.com/xdata/images/xphoto/800x800/134504627.jpg?k=59846544bc292a578cde7b0a595ee412afd4b28a459bd300ef6e60b2d8aed0e2&o=&quot",
+    title: "Ninh Binh - Hoa Lu - Mua Cave - Tam Coc 1 Day Tour",
+    location: "Việt Nam",
+    description: "0 Deals",
+  },
+  {
+    id: 4,
+    src: "https://q-xx.bstatic.com/xdata/images/xphoto/800x800/129738758.jpg?k=cf6f7ae9a919901fa00d220fe02d1a652d0e6434351bbc1fc806d485be440b7a&o=&quot",
+    title: "Tour Vịnh Hạ Long cả ngày có kèm bữa trưa, đi từ Hà Nội",
+    location: "Việt Nam",
+    description: "0 Deals",
+  },
+  {
+    id: 5,
+    src: "https://r-xx.bstatic.com/xdata/images/city/540x405/640445.jpg?k=50b44df6e3029c95c1874da1ae9634d62ac2264961b917271d56d7637ccb059c&o=",
+    title: "Ninh Bình",
+    location: "Việt Nam",
+    description: "0 Deals",
+  },
+  {
+    id: 6,
+    src: "https://r-xx.bstatic.com/xdata/images/city/540x405/688853.jpg?k=f6427c8fccdf777e4bbc75fcd245e7c66204280181bea23350388c76c57348d1&o=",
+    title: "Hà Nội",
+    location: "Việt Nam",
+    description: "0 Deals",
+  },
+  {
+    id: 7,
+    src: "https://r-xx.bstatic.com/xdata/images/city/540x405/688893.jpg?k=d32ef7ff94e5d02b90908214fb2476185b62339549a1bd7544612bdac51fda31&o=",
+    title: "TP. Hồ Chí Minh",
+    location: "Việt Nam",
+    description: "0 Deals",
+  },
+  {
+    id: 8,
+    src: "https://r-xx.bstatic.com/xdata/images/city/540x405/688844.jpg?k=02892d4252c5e4272ca29db5faf12104004f81d13ff9db724371de0c526e1e15&o=",
+    title: "Đà Nẵng",
+    location: "Việt Nam",
+    description: "0 Deals",
+  },
+  {
+    id: 9,
+    src: "https://r-xx.bstatic.com/xdata/images/city/540x405/688866.jpg?k=fc9d2cb9fe2f6d1160e10542cd2b83f5a8008401d33e8750ee3c2691cf4d4f7e&o=",
+    title: "Hội An",
+    location: "Việt Nam",
+    description: "0 Deals",
+  },
+  {
+    id: 10,
+    src: "https://r-xx.bstatic.com/xdata/images/city/540x405/640445.jpg?k=50b44df6e3029c95c1874da1ae9634d62ac2264961b917271d56d7637ccb059c&o=",
+    title: "Ninh Bình",
+    location: "Việt Nam",
+    description: "0 Deals",
+  },
+];
+
 export const listings = {
   content: {
     listHotels: [
