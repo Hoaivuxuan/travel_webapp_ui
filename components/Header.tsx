@@ -1,78 +1,77 @@
 "use client";
 
 import Link from "next/link";
-import { SetStateAction, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
-  faPlane,
   faCar,
   faTheaterMasks,
+  faUser,
+  faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import { Dialog } from "@headlessui/react";
+import { useAuth } from "@/app/login/AuthContext";
+import { useState, SetStateAction } from "react";
 
 const products = [
-  { name: 'stays', title: 'LƯU TRÚ', href: '/home', icon: faHome },
-  { name: 'rental', title: 'CHO THUÊ XE', href: '/rental', icon: faCar },
-  { name: 'activities', title: 'HOẠT ĐỘNG & VUI CHƠI', href: '/activities', icon: faTheaterMasks },
+  { name: "hotel", title: "TÌM NƠI LƯU TRÚ", href: "/home", icon: faHome },
+  { name: "rental", title: "CHO THUÊ XE", href: "/rental", icon: faCar },
+  {
+    name: "activities",
+    title: "HOẠT ĐỘNG & VUI CHƠI",
+    href: "/activities",
+    icon: faTheaterMasks,
+  },
 ];
 
 const user = {
   name: "ddthumonky88",
   avatar:
-    "https://bizweb.dktcdn.net/100/438/408/files/anh-luffy-yody-vn-67.jpg?v=1688806271889", // Replace with actual avatar URL
+    "https://bizweb.dktcdn.net/100/438/408/files/anh-luffy-yody-vn-67.jpg?v=1688806271889",
 };
 
 const Header = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isLoggedIn, login, logout } = useAuth();
   const [activeItem, setActiveItem] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to manage login status
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleLinkClick = (name: SetStateAction<string>, href: string) => {
-    setMobileMenuOpen(false);
-    setActiveItem(name);
+    if (!isLoggedIn) {
+      window.location.href = "/login";
+    } else {
+      setActiveItem(name);
+      setDropdownOpen(false);
+    }
   };
 
   const handleLogoClick = () => {
-    setActiveItem("");
+    setActiveItem("hotel");
+    setDropdownOpen(false);
   };
 
-  const handleLoginClick = () => {
-    window.location.href = "/login";
-    setIsLoggedIn(true);
+  const handleLogoutClick = () => {
+    logout();
+    setDropdownOpen(false);
   };
 
   return (
     <header className="bg-[#013B94]">
-      <nav className="flex items-center justify-between p-6 mx-auto max-w-7xl">
-        <Link
-          href="/home"
-          className="flex items-center"
-          onClick={handleLogoClick}
-        >
-          <span className="sr-only">Booking.com</span>
-          <img
-            className="h-12"
-            src="https://static1.squarespace.com/static/5bde0f00c3c16aa95581e2e2/62b4cb1add9d257dd43bb03d/62b653fedc7c895918d19b24/1656116254983/booking+logo+white.png?format=1500w"
-            alt="Logo"
-          />
-        </Link>
-
-        <div className="flex lg:hidden">
-          <button
-            type="button"
-            className="p-2.5 text-white"
-            onClick={() => setMobileMenuOpen(true)}
+      <nav className="grid grid-cols-6 items-center p-6 mx-auto max-w-7xl">
+        <div className="col-span-1">
+          <Link
+            href="/home"
+            className="flex items-center"
+            onClick={handleLogoClick}
           >
-            <FontAwesomeIcon
-              icon={["fas", "bars"]}
-              className="w-6 h-6"
-              aria-hidden="true"
+            <span className="sr-only">Booking.com</span>
+            <img
+              className="h-12"
+              src="https://static1.squarespace.com/static/5bde0f00c3c16aa95581e2e2/62b4cb1add9d257dd43bb03d/62b653fedc7c895918d19b24/1656116254983/booking+logo+white.png?format=1500w"
+              alt="Logo"
             />
-          </button>
+          </Link>
         </div>
 
-        <div className="hidden lg:flex lg:gap-x-12 justify-between flex-grow">
+        <div className="col-span-4 flex justify-center">
           <div className="flex justify-center flex-grow">
             {products.map((item) => (
               <Link
@@ -94,103 +93,54 @@ const Header = () => {
               </Link>
             ))}
           </div>
+        </div>
 
-          {/* User Info or Login Button */}
-          <div className="flex items-center space-x-2">
-            {isLoggedIn ? (
-              <>
-                <img
-                  src={user.avatar}
-                  alt={`${user.name}'s avatar`}
-                  className="w-10 h-10 rounded-full"
-                />
-                <span className="font-bold text-white">{user.name}</span>
-              </>
-            ) : (
-              <button
-                onClick={handleLoginClick}
-                className="text-white font-semibold bg-blue-600 rounded-lg px-4 py-2"
+        <div className="col-span-1 relative flex items-center justify-end space-x-2">
+          {isLoggedIn ? (
+            <>
+              <img
+                src={user.avatar}
+                alt={`${user.name}'s avatar`}
+                className="w-10 h-10 rounded-full cursor-pointer"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              />
+              <span
+                className="font-bold text-white cursor-pointer"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
               >
-                Đăng Nhập
-              </button>
-            )}
-          </div>
+                {user.name}
+              </span>
+
+              {dropdownOpen && (
+                <div className="absolute right-0 top-10 mt-2 w-48 bg-white rounded-lg shadow-lg">
+                  <Link
+                    href="/settings/personal"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                    onClick={() => setActiveItem("")}
+                  >
+                    <FontAwesomeIcon icon={faUser} className="mr-2" />
+                    Quản lý tài khoản
+                  </Link>
+                  <button
+                    onClick={handleLogoutClick}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                  >
+                    <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
+                    Đăng xuất
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <Link
+              href="/login"
+              className="text-white font-semibold bg-blue-600 rounded-lg px-4 py-2"
+            >
+              Đăng Nhập
+            </Link>
+          )}
         </div>
       </nav>
-
-      <Dialog
-        as="div"
-        open={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
-      >
-        <div className="fixed inset-0 z-10 bg-black opacity-30" />
-        <Dialog.Panel className="fixed inset-y-0 right-0 z-20 w-full bg-[#013B94] p-6">
-          <div className="flex items-center justify-between">
-            <Link
-              href="/"
-              className="flex items-center"
-              onClick={handleLogoClick}
-            >
-              <img
-                className="h-8"
-                src="https://static1.squarespace.com/static/5bde0f00c3c16aa95581e2e2/62b4cb1add9d257dd43bb03d/62b653fedc7c895918d19b24/1656116254983/booking+logo+white.png?format=1500w"
-                alt="Logo"
-              />
-            </Link>
-            <button
-              type="button"
-              className="text-white"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <FontAwesomeIcon
-                icon={["fas", "times"]}
-                className="w-6 h-6"
-                aria-hidden="true"
-              />
-            </button>
-          </div>
-
-          <div className="mt-6">
-            {products.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => handleLinkClick(item.name, item.href)}
-                className={`block p-2 text-base font-semibold text-white rounded-lg hover:bg-blue-800 ${
-                  item.href !== "#" && item.name === activeItem
-                    ? "bg-blue-600"
-                    : ""
-                }`}
-              >
-                <FontAwesomeIcon icon={item.icon} className="mr-2" />
-                {item.title}
-              </Link>
-            ))}
-            {/* User Avatar or Login Button in Mobile Menu */}
-            <div className="flex items-center mt-4">
-              {isLoggedIn ? (
-                <>
-                  <img
-                    src={user.avatar}
-                    alt={`${user.name}'s avatar`}
-                    className="w-10 h-10 rounded-full"
-                  />
-                  <span className="ml-2 text-white font-semibold">
-                    {user.name}
-                  </span>
-                </>
-              ) : (
-                <button
-                  onClick={handleLoginClick}
-                  className="text-white font-semibold bg-blue-600 rounded-lg px-4 py-2"
-                >
-                  Đăng Nhập
-                </button>
-              )}
-            </div>
-          </div>
-        </Dialog.Panel>
-      </Dialog>
     </header>
   );
 };

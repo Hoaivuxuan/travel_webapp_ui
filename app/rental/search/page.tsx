@@ -1,9 +1,10 @@
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { listings } from '@/data/fakeData';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSuitcase, faUserFriends, faCar } from '@fortawesome/free-solid-svg-icons';
-import RentalSearchForm from '@/components/rental/RentalSearchForm';
+"use client";
+
+import { notFound } from "next/navigation";
+import { useState, useMemo } from "react";
+import { listings } from "@/data/fakeData";
+import { CarItem, MotorItem } from "./RentalItem";
+import RentalSearchForm from "@/components/rental/RentalSearchForm";
 
 type Props = {
   searchParams: RentalSearchParams;
@@ -17,87 +18,116 @@ export type RentalSearchParams = {
   type: string;
 };
 
-const getCarImageUrl = (model: string, token: string) => {
-  const img_model = model.replaceAll(' ', '-').toLowerCase();
-  return `https://firebasestorage.googleapis.com/v0/b/travel-web-32360.appspot.com/o/${img_model}.jpg?alt=media&token=${token}`;
-};
-
 async function RentalSearchPage({ searchParams }: Props) {
   if (!searchParams.url) return notFound();
 
-  let results = null;
-  if (!results) {
-    results = listings;
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([
+    "car",
+    "motor",
+  ]);
+
+  const searchResult = useMemo(() => {
+    return [
+      ...listings.content.listCars.map((item) => ({ ...item, type: "car" })),
+      ...listings.content.listMotors.map((item) => ({
+        ...item,
+        type: "motor",
+      })),
+    ].sort((a, b) => a.model.localeCompare(b.model));
+  }, []);
+
+  const [itemsToShow, setItemsToShow] = useState(10);
+
+  const filteredResults = useMemo(() => {
+    return searchResult.filter((item) => selectedTypes.includes(item.type));
+  }, [searchResult, selectedTypes]);
+
+  const displayedResults = filteredResults.slice(0, itemsToShow);
+
+  const handleCheckboxChange = (type: string) => {
+    setSelectedTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
+    );
+  };
+
+  if (searchResult.length === 0) {
+    return (
+      <div className="text-center py-4">
+        <h2 className="text-xl font-semibold">
+          Không có kết quả nào cho tìm kiếm của bạn.
+        </h2>
+      </div>
+    );
   }
 
-  const searchResults = searchParams.type === 'cars' ? results.content.listCars : results.content.listMotors;
-  const idType = searchParams.type === 'cars' ? 'C' : 'M';
-  
   return (
     <section>
-      <div className='p-6 mx-auto max-w-7xl lg:px-8'>
-        <div className='py-8'>
+      <div className="py-6 mx-auto max-w-7xl">
+        <div className="py-4">
           <RentalSearchForm />
         </div>
 
-        <h1 className='pb-3 text-4xl font-bold'>Car Rental Without Driver</h1>
-
-        <h2 className='pb-3 italic'>
-          {searchParams.location},
-          <span className='ml-2'>
-            từ {searchParams.checkin} đến {searchParams.checkout}
+        <h2 className="py-4">
+          <span className="ml-2">
+            {searchParams.location}, từ {searchParams.checkin} đến{" "}
+            {searchParams.checkout} ({filteredResults.length} kết quả)
           </span>
         </h2>
 
-        <hr className='mb-5' />
+        <hr className="mb-5" />
 
-        <div className='mt-5 space-y-4'>
-          {searchResults.map((item, i) => (
-            <div
-              key={i}
-              className='grid grid-cols-5 gap-4 p-4 border rounded-lg hover:shadow-lg transition-shadow duration-200'>
-              
-              {/* Hình ảnh */}
-              <div className='col-span-1 flex justify-center items-center h-[200px]'>
-                <img
-                  src={getCarImageUrl(item.model, item.token)}
-                  alt={`${idType}${item.id}`}
-                  className='rounded-lg w-full h-auto'
-                />
-              </div>
-    
-              {/* Thông tin xe */}
-              <div className='flex flex-col justify-between col-span-3'>
-                <div>
-                  <p className='mb-4 font-bold text-blue-600 text-lg'>{item.model}</p>
-                  <p className='text-sm text-gray-700 flex items-center'>
-                    <FontAwesomeIcon icon={faCar} className='mr-2 w-4' />
-                    {item.details.transmission.toUpperCase()}
-                  </p>
-                  <p className='text-sm flex items-center text-gray-600'>
-                    <FontAwesomeIcon icon={faUserFriends} className='mr-2 w-4' />
-                    {item.details.seats} ghế
-                  </p>
-                  <p className='text-sm flex items-center text-gray-600'>
-                    <FontAwesomeIcon icon={faSuitcase} className='mr-2 w-4' />
-                    {item.details.baggage_capacity} hành lý
-                  </p>
-                </div>
-              </div>
-    
-              {/* Giá cả và nút Tiếp tục */}
-              <div className='flex flex-col justify-end col-span-1 h-full'>
-                <div className='flex flex-col justify-end items-end mt-2'>
-                  <p className='text-xl font-bold text-orange-600 text-right'>{item.price} VNĐ/ngày</p>
-                  <Link
-                    href={`/rental/${searchParams.type}/${item.id}`}
-                    className='bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2'>
-                    Tiếp tục
-                  </Link>
-                </div>
-              </div>
+        <div className="grid grid-cols-5 gap-4">
+          <aside className="col-span-1 p-4 border rounded-lg">
+            <h3 className="font-bold text-sm mb-3">Chọn lọc theo:</h3>
+            <hr className="my-2" />
+
+            <div className="mb-6 text-sm">
+              <h4 className="font-semibold mb-2">Loại phương tiện</h4>
+              <ul>
+                <li className="mb-1 flex items-center">
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    checked={selectedTypes.includes("car")}
+                    onChange={() => handleCheckboxChange("car")}
+                  />
+                  <label className="flex-grow">Ô tô</label>
+                </li>
+                <li className="mb-1 flex items-center">
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    checked={selectedTypes.includes("motor")}
+                    onChange={() => handleCheckboxChange("motor")}
+                  />
+                  <label className="flex-grow">Mô tô</label>
+                </li>
+              </ul>
             </div>
-          ))}
+          </aside>
+
+          <div className="col-span-4">
+            <div className="space-y-4">
+              {displayedResults.map((item) =>
+                item.type === "car" ? (
+                  <CarItem key={item.id} id={item.id.toString()} />
+                ) : (
+                  <MotorItem key={item.id} id={item.id.toString()} />
+                ),
+              )}
+            </div>
+
+            {filteredResults.length > itemsToShow && (
+              <div className="mt-4 text-center">
+                <button
+                  onClick={() => setItemsToShow(itemsToShow + 10)}
+                  className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-500 transition-colors duration-200"
+                >
+                  Xem thêm
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>
