@@ -32,7 +32,25 @@ const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
     lastName: "",
     email: "",
     phone: "",
+    phoneCountry: "",
     country: "",
+  });
+
+  const [paymentAddress, setPaymentAddress] = useState({
+    firstName: "",
+    lastName: "",
+    phone: "",
+    phoneCountry: "",
+    country: "",
+    city: "",
+    postalCode: "",
+  });
+
+  const [paymentInfo, setPaymentInfo] = useState({
+    cardholderName: "",
+    cardNumber: "",
+    expirationDate: "",
+    cvc: "",
   });
 
   useEffect(() => {
@@ -60,9 +78,18 @@ const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
     setDriverInfo((prevInfo) => ({ ...prevInfo, [name]: value }));
   };
 
-  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setDriverInfo((prevInfo) => ({ ...prevInfo, country: value }));
+  const handleDriverInfoChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+    setDriverInfo((prevInfo) => ({ ...prevInfo, [name]: value }));
+  };
+
+  const handlePaymentAddressChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+    setPaymentAddress((prevAddress) => ({ ...prevAddress, [name]: value }));
   };
 
   return (
@@ -70,7 +97,7 @@ const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
       <div className="col-span-2">
         <div className="p-4 bg-white">
           <div className="grid grid-cols-2 gap-4 my-4 pb-4">
-            <div className="h-[300px] border border-gray-400 mx-4">
+            <div className="h-[300px] mx-4">
               <img
                 src={getImageUrl(item.model, item.token)}
                 alt={`Motor ${item.id}`}
@@ -104,16 +131,31 @@ const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
 
         <hr className="my-2" />
         <div className="p-4">
-          <h3 className="text-xl font-bold mb-4">
+          <h3 className="text-xl font-bold mb-2">
             Thông tin người lái xe chính
           </h3>
+          <div className="mb-4">Theo đúng những gì được ghi trên bằng lái</div>
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <label className="block mb-1">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={driverInfo.email}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="Nhập email"
+                  required
+                />
+                <label className="block ml-1 mt-2 text-sm text-gray-500">
+                  Để chúng tôi có thể gửi email xác nhận và voucher
+                </label>
+              </div>
               <div>
                 <label className="block mb-1">Tên</label>
                 <input
                   type="text"
-                  id="firstName"
                   name="firstName"
                   value={driverInfo.firstName}
                   onChange={handleInputChange}
@@ -126,7 +168,6 @@ const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
                 <label className="block mb-1">Họ</label>
                 <input
                   type="text"
-                  id="lastName"
                   name="lastName"
                   value={driverInfo.lastName}
                   onChange={handleInputChange}
@@ -136,42 +177,42 @@ const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
                 />
               </div>
               <div>
-                <label className="block mb-1">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={driverInfo.email}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded"
-                  placeholder="Nhập email"
-                  required
-                />
+                <label className="block mb-1">Điện thoại liên lạc</label>
+                <div className="grid grid-cols-5 gap-1">
+                  <select
+                    name="phoneCountry"
+                    value={driverInfo.phoneCountry}
+                    onChange={handleDriverInfoChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  >
+                    {countries.map((country) => (
+                      <option key={country.code} value={country.code}>
+                        {country.flag}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="col-span-4 flex">
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={driverInfo.phone}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border border-gray-300 rounded"
+                      required
+                    />
+                  </div>
+                </div>
               </div>
               <div>
-                <label className="block mb-1">Điện thoại</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={driverInfo.phone}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded"
-                  placeholder="+84"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block mb-1">Quốc gia</label>
+                <label className="block mb-1">Quốc gia cư trú</label>
                 <select
-                  id="country"
                   name="country"
                   value={driverInfo.country}
-                  onChange={handleCountryChange}
+                  onChange={handleDriverInfoChange}
                   className="w-full p-2 border border-gray-300 rounded"
                   required
                 >
-                  <option value="">Chọn quốc gia</option>
                   {countries.map((country) => (
                     <option key={country.code} value={country.code}>
                       {country.name}
@@ -185,57 +226,213 @@ const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
 
         <hr className="my-2" />
         <div className="p-4">
-          <h3 className="text-xl font-bold mb-4">Thông tin người lái xe</h3>
-        </div>
-      </div>
-
-      <div className="col-span-1 space-y-4">
-        <div className="p-4 bg-white border rounded-lg">
-          <h3 className="text-lg font-bold mb-4">Chi tiết giá cả</h3>
-          <div className="space-y-2 mt-4">
-            <div className="flex justify-between">
-              <span className="text-gray-700">Phí thuê xe</span>
-              <span className="text-gray-700">{item.price} VNĐ</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-700">Dịch vụ khác</span>
-              <span className="text-gray-700">0 VNĐ</span>
-            </div>
-
-            <hr className="my-2" />
-            <div className="flex justify-between font-bold">
-              <span className="text-gray-700">Giá cho 4 ngày</span>
-              <span className="text-gray-700">{item.price} VNĐ</span>
+          <h3 className="text-xl font-bold mb-4">Địa chỉ thanh toán</h3>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block mb-1">Tên</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={paymentAddress.firstName}
+                  onChange={handlePaymentAddressChange}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="Tên"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block mb-1">Họ</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={paymentAddress.lastName}
+                  onChange={handlePaymentAddressChange}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="Họ"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block mb-1">Điện thoại liên lạc</label>
+                <div className="grid grid-cols-5 gap-1">
+                  <select
+                    name="phoneCountry"
+                    value={paymentAddress.phoneCountry}
+                    onChange={handlePaymentAddressChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                    required
+                  >
+                    {countries.map((country) => (
+                      <option key={country.code} value={country.code}>
+                        {country.flag}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="col-span-4 flex">
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={paymentAddress.phone}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border border-gray-300 rounded"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label className="block mb-1">Quốc gia</label>
+                <select
+                  name="country"
+                  value={paymentAddress.country}
+                  onChange={handlePaymentAddressChange}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  required
+                >
+                  {countries.map((country) => (
+                    <option key={country.code} value={country.code}>
+                      {country.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block mb-1">Thành phố</label>
+                <input
+                  type="text"
+                  name="city"
+                  value={paymentAddress.city}
+                  onChange={handlePaymentAddressChange}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block mb-1">Mã bưu điện</label>
+                <input
+                  type="text"
+                  name="postalCode"
+                  value={paymentAddress.postalCode}
+                  onChange={handlePaymentAddressChange}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="Mã bưu điện"
+                  required
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="p-4 bg-white border rounded-lg">
-          <h3 className="text-lg font-bold mb-4">Lựa chọn tuyệt vời!</h3>
-          <div className="grid grid-cols-1 gap-4">
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>Đánh giá của khách hàng: 8,6 / 10</span>
+        <hr className="my-2" />
+        <div className="p-4">
+          <h3 className="text-xl font-bold mb-4">
+            Bạn muốn thanh toán bằng cách nào?
+          </h3>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <label className="block mb-1">Tên chủ thẻ</label>
+                <input
+                  type="text"
+                  name="cardholder-name"
+                  value={paymentInfo.cardholderName}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="Nhập tên chủ thẻ"
+                  required
+                />
+              </div>
+              <div className="col-span-2">
+                <label className="block mb-1">Số thẻ</label>
+                <input
+                  type="text"
+                  name="card-number"
+                  value={paymentInfo.cardNumber}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="Nhập số thẻ"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block mb-1">Ngày hết hạn</label>
+                <input
+                  type="text"
+                  name="expiration-date"
+                  value={paymentInfo.expirationDate}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="MM/YY"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block mb-1">CVC</label>
+                <input
+                  type="text"
+                  name="cvc"
+                  value={paymentInfo.cvc}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="CVC"
+                  required
+                />
+              </div>
             </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>Chính sách nhiên liệu phổ biến nhất</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="col-span-1">
+        <div className="space-y-4 sticky top-4">
+          <div className="p-4 bg-white border rounded-lg">
+            <h3 className="text-lg font-bold mb-4">Chi tiết giá cả</h3>
+            <div className="space-y-2 mt-4">
+              <div className="flex justify-between">
+                <span className="text-gray-700">Phí thuê xe</span>
+                <span className="text-gray-700">{item.price} VNĐ</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-700">Dịch vụ khác</span>
+                <span className="text-gray-700">0 VNĐ</span>
+              </div>
+
+              <hr className="my-2" />
+              <div className="flex justify-between font-bold">
+                <span className="text-gray-700">Giá cho 4 ngày</span>
+                <span className="text-gray-700">{item.price} VNĐ</span>
+              </div>
             </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>Không phải chờ đợi lâu</span>
-            </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>Quầy thanh toán dễ tìm</span>
-            </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>Nhân viên quầy thanh toán sẵn sàng hỗ trợ</span>
-            </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>Hủy đặt thuê miễn phí</span>
+          </div>
+
+          <div className="p-4 bg-white border rounded-lg">
+            <h3 className="text-lg font-bold mb-4">Lựa chọn tuyệt vời!</h3>
+            <div className="grid grid-cols-1 gap-4">
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Đánh giá của khách hàng: 8,6 / 10</span>
+              </div>
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Chính sách nhiên liệu phổ biến nhất</span>
+              </div>
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Không phải chờ đợi lâu</span>
+              </div>
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Quầy thanh toán dễ tìm</span>
+              </div>
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Nhân viên quầy thanh toán sẵn sàng hỗ trợ</span>
+              </div>
+              <div className="flex items-start space-x-2">
+                <span className="text-green-600">✔</span>
+                <span>Hủy đặt thuê miễn phí</span>
+              </div>
             </div>
           </div>
         </div>

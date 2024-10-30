@@ -1,6 +1,7 @@
 "use client";
 
 import { notFound } from "next/navigation";
+import { useState, useMemo } from "react";
 import { listings } from "@/data/fakeData";
 import { CarItem, MotorItem } from "./RentalItem";
 import RentalSearchForm from "@/components/rental/RentalSearchForm";
@@ -17,22 +18,39 @@ export type RentalSearchParams = {
   type: string;
 };
 
-const getImageUrl = (model: string, token: string) => {
-  const img_model = model.replaceAll(" ", "-").toLowerCase();
-  return `https://firebasestorage.googleapis.com/v0/b/travel-web-32360.appspot.com/o/${img_model}.jpg?alt=media&token=${token}`;
-};
-
 async function RentalSearchPage({ searchParams }: Props) {
   if (!searchParams.url) return notFound();
 
-  let results = listings;
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([
+    "car",
+    "motor",
+  ]);
 
-  const searchResults = [
-    ...results.content.listCars.map((item) => ({ ...item, type: "car" })),
-    ...results.content.listMotors.map((item) => ({ ...item, type: "motor" })),
-  ].sort((a, b) => a.model.localeCompare(b.model));
+  const searchResult = useMemo(() => {
+    return [
+      ...listings.content.listCars.map((item) => ({ ...item, type: "car" })),
+      ...listings.content.listMotors.map((item) => ({
+        ...item,
+        type: "motor",
+      })),
+    ].sort((a, b) => a.model.localeCompare(b.model));
+  }, []);
 
-  if (searchResults.length === 0) {
+  const [itemsToShow, setItemsToShow] = useState(10);
+
+  const filteredResults = useMemo(() => {
+    return searchResult.filter((item) => selectedTypes.includes(item.type));
+  }, [searchResult, selectedTypes]);
+
+  const displayedResults = filteredResults.slice(0, itemsToShow);
+
+  const handleCheckboxChange = (type: string) => {
+    setSelectedTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
+    );
+  };
+
+  if (searchResult.length === 0) {
     return (
       <div className="text-center py-4">
         <h2 className="text-xl font-semibold">
@@ -52,7 +70,7 @@ async function RentalSearchPage({ searchParams }: Props) {
         <h2 className="py-4">
           <span className="ml-2">
             {searchParams.location}, từ {searchParams.checkin} đến{" "}
-            {searchParams.checkout} ({searchResults.length} kết quả)
+            {searchParams.checkout} ({filteredResults.length} kết quả)
           </span>
         </h2>
 
@@ -62,10 +80,35 @@ async function RentalSearchPage({ searchParams }: Props) {
           <aside className="col-span-1 p-4 border rounded-lg">
             <h3 className="font-bold text-sm mb-3">Chọn lọc theo:</h3>
             <hr className="my-2" />
+
+            <div className="mb-6 text-sm">
+              <h4 className="font-semibold mb-2">Loại phương tiện</h4>
+              <ul>
+                <li className="mb-1 flex items-center">
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    checked={selectedTypes.includes("car")}
+                    onChange={() => handleCheckboxChange("car")}
+                  />
+                  <label className="flex-grow">Ô tô</label>
+                </li>
+                <li className="mb-1 flex items-center">
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    checked={selectedTypes.includes("motor")}
+                    onChange={() => handleCheckboxChange("motor")}
+                  />
+                  <label className="flex-grow">Mô tô</label>
+                </li>
+              </ul>
+            </div>
           </aside>
+
           <div className="col-span-4">
             <div className="space-y-4">
-              {searchResults.map((item) =>
+              {displayedResults.map((item) =>
                 item.type === "car" ? (
                   <CarItem key={item.id} id={item.id.toString()} />
                 ) : (
@@ -73,6 +116,17 @@ async function RentalSearchPage({ searchParams }: Props) {
                 ),
               )}
             </div>
+
+            {filteredResults.length > itemsToShow && (
+              <div className="mt-4 text-center">
+                <button
+                  onClick={() => setItemsToShow(itemsToShow + 10)}
+                  className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-500 transition-colors duration-200"
+                >
+                  Xem thêm
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

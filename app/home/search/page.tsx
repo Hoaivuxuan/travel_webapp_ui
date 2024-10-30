@@ -38,6 +38,7 @@ function SearchPage({ searchParams }: Props) {
     minPrice,
     maxPrice,
   ]);
+
   const [itemsToShow, setItemsToShow] = useState(10);
 
   const handleTypeSelection = (id: number) => {
