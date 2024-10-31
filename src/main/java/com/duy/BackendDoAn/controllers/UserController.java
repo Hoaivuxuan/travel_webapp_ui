@@ -3,11 +3,13 @@ package com.duy.BackendDoAn.controllers;
 import com.duy.BackendDoAn.dtos.UserDTO;
 import com.duy.BackendDoAn.dtos.UserLoginDTO;
 import com.duy.BackendDoAn.models.User;
+import com.duy.BackendDoAn.responses.LoginResponse;
 import com.duy.BackendDoAn.responses.RegisterResponse;
 import com.duy.BackendDoAn.responses.UserResponse;
 import com.duy.BackendDoAn.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -44,12 +46,16 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody UserLoginDTO userLoginDTO){
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody UserLoginDTO userLoginDTO){
+        LoginResponse loginResponse = new LoginResponse();
         try {
             String token  = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
-            return ResponseEntity.ok(token);
+            loginResponse.setToken(token);
+            loginResponse.setMessage("Login successfully");
+            return ResponseEntity.ok(loginResponse);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            loginResponse.setMessage("Login failed");
+            return ResponseEntity.badRequest().body(loginResponse);
         }
     }
 

@@ -26,6 +26,9 @@ public class UserDTO {
     @JsonProperty("phone_number")
     private String phoneNumber;
 
+    @JsonProperty("avatar")
+    private String avatar;
+
     @JsonProperty("email")
     private String email;
 

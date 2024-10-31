@@ -3,6 +3,7 @@ CREATE TABLE users (
     first_name varchar(100) not null,
     last_name varchar(100) not null,
     phone_number varchar(20) not null unique,
+    avatar varchar(255),
     email varchar(255) not null unique,
     address varchar(255),
     date_of_birth DATE not null,

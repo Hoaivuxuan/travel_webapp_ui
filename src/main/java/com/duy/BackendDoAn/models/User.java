@@ -34,6 +34,9 @@ public class User implements UserDetails {
     @Column(name = "phone_number", length = 20, nullable = false, unique = true)
     private String phone_number;
 
+    @Column(name = "avatar", length = 254)
+    private String avatar;
+
     @Column(name = "email", length = 254, nullable = false)
     private String email;
 

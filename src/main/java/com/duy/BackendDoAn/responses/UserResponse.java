@@ -26,6 +26,9 @@ public class UserResponse {
     @JsonProperty("phone_number")
     private String phoneNumber;
 
+    @JsonProperty("avatar")
+    private String avatar;
+
     @JsonProperty("address")
     private String address;
 
@@ -43,6 +46,7 @@ public class UserResponse {
                 .firstName(user.getFirst_name())
                 .lastName(user.getLast_name())
                 .phoneNumber(user.getPhone_number())
+                .avatar(user.getAvatar())
                 .address(user.getAddress())
                 .dateOfBirth(user.getDate_of_birth())
                 .active(user.isActive())

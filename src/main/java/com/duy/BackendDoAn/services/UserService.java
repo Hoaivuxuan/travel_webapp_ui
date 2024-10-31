@@ -31,12 +31,13 @@ public class UserService {
                 .first_name(userDTO.getFirstName())
                 .last_name(userDTO.getLastName())
                 .phone_number(userDTO.getPhoneNumber())
+                .avatar(userDTO.getAvatar())
                 .email(userDTO.getEmail())
                 .address(userDTO.getAddress())
                 .date_of_birth(userDTO.getDateOfBirth())
                 .active(userDTO.isActive())
                 .password(userDTO.getPassword())
-                .role("USER")
+                .role(userDTO.getRole())
                 .build();
         String password = userDTO.getPassword();
         String encodedPassword = passwordEncoder.encode(password);
