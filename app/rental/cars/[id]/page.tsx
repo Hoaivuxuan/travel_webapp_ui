@@ -11,7 +11,7 @@ const CarRentalDetailPage = () => {
   const router = useRouter();
 
   const rentalItem = listings.content.listCars.find(
-    (item) => item.id.toString() === id,
+    (item) => item.id === Number(id),
   );
   if (!rentalItem) return notFound();
 
@@ -22,7 +22,7 @@ const CarRentalDetailPage = () => {
       <div className="p-6 !pb-2 mx-auto max-w-7xl">
         <a
           href="#"
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-gray-400 transition duration-150"
+          className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-gray-400 transition duration-150"
           onClick={(e) => {
             e.preventDefault();
             router.back();

@@ -8,38 +8,35 @@ import {
   faGasPump,
 } from "@fortawesome/free-solid-svg-icons";
 import { listings } from "@/data/fakeData";
+import ImageComponent from "@/components/GetImage";
+import { useRouter } from "next/navigation";
 
 export type RentalItemProps = {
   id: string;
 };
 
-const getImageUrl = (model: string, token: string) => {
-  const img_model = model.replaceAll(" ", "-").toLowerCase();
-  return `https://firebasestorage.googleapis.com/v0/b/travel-web-32360.appspot.com/o/${img_model}.jpg?alt=media&token=${token}`;
-};
-
-const defaultImage =
-  "https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg";
-
 export function CarItem({ id }: RentalItemProps) {
+  const router = useRouter();
   const item = listings.content.listCars.find(
-    (car) => car.id.toString() === id,
+    (car) => car.id.toString() === id
   );
 
   if (!item) {
     return <div>Không tìm thấy thông tin xe.</div>;
   }
 
+  const handleDetailClick = () => {
+    router.push(`/rental/cars/${item.id.toString().padStart(6, "0")}`);
+  };
+
   return (
     <div className="grid grid-cols-5 gap-4 p-4 border rounded-lg hover:shadow-lg transition-shadow duration-200">
       <div className="col-span-1 flex justify-center items-center h-[200px]">
-        <img
-          src={getImageUrl(item.model, item.token)}
-          alt={`Image of ${item.model}`}
-          className="rounded-lg w-full h-auto"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = defaultImage;
-          }}
+        <ImageComponent
+          folder="car"
+          id={item.id}
+          token={item.token}
+          className="rounded-lg w-full h-auto max-h-[280px] mx-auto"  
         />
       </div>
       <div className="flex flex-col justify-between col-span-3">
@@ -64,12 +61,12 @@ export function CarItem({ id }: RentalItemProps) {
           <p className="text-lg font-bold text-blue-600 text-right">
             {item.price.toLocaleString("vi-VN")} VNĐ
           </p>
-          <Link
-            href={`/rental/cars/${item.id}`}
+          <button
+            onClick={handleDetailClick}
             className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2"
           >
             Xem chi tiết
-          </Link>
+          </button>
         </div>
       </div>
     </div>
@@ -77,24 +74,27 @@ export function CarItem({ id }: RentalItemProps) {
 }
 
 export function MotorItem({ id }: RentalItemProps) {
+  const router = useRouter();
   const item = listings.content.listMotors.find(
-    (motor) => motor.id.toString() === id,
+    (motor) => motor.id.toString() === id
   );
 
   if (!item) {
-    return <div>Không tìm thấy thông tin xe máy.</div>;
+    return <div>Không tìm thấy thông tin xe.</div>;
   }
+
+  const handleDetailClick = () => {
+    router.push(`/rental/motors/${item.id.toString().padStart(6, "0")}`);
+  };
 
   return (
     <div className="grid grid-cols-5 gap-4 p-4 border rounded-lg hover:shadow-lg transition-shadow duration-200">
       <div className="col-span-1 flex justify-center items-center h-[200px]">
-        <img
-          src={getImageUrl(item.model, item.token)}
-          alt={`Image of ${item.model}`}
-          className="rounded-lg w-full h-auto"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = defaultImage;
-          }}
+        <ImageComponent
+          folder="motor"
+          id={item.id}
+          token={item.token}
+          className="rounded-lg w-full h-auto max-h-[280px] mx-auto"  
         />
       </div>
       <div className="flex flex-col justify-between col-span-3">
@@ -115,12 +115,12 @@ export function MotorItem({ id }: RentalItemProps) {
           <p className="text-lg font-bold text-blue-600 text-right">
             {item.price.toLocaleString("vi-VN")} VNĐ
           </p>
-          <Link
-            href={`/rental/motors/${item.id}`}
+          <button
+            onClick={handleDetailClick}
             className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2"
           >
             Xem chi tiết
-          </Link>
+          </button>
         </div>
       </div>
     </div>
