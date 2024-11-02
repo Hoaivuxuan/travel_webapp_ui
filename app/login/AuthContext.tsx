@@ -1,16 +1,11 @@
 "use client";
-import {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-} from "react";
+
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
 type AuthContextType = {
   isLoggedIn: boolean;
   email: string | null;
-  login: (email: string) => void;
+  login: (userEmail: string) => void;
   logout: () => void;
 };
 
@@ -29,11 +24,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const login = (email: string) => {
+  const login = (userEmail: string) => {
     setIsLoggedIn(true);
-    setEmail(email);
+    setEmail(userEmail);
     localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("email", email);
+    localStorage.setItem("email", userEmail);
   };
 
   const logout = () => {

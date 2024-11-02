@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image"; // Import Image component
+import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -30,6 +30,8 @@ const Header = () => {
   
   const { isLoggedIn, email, logout } = useAuth();
   const username = email ? email.split("@")[0] : "User";
+
+  console.log("Current Email:", email);
 
   const handleLinkClick = (name: SetStateAction<string>, href: string) => {
     if (!isLoggedIn) {

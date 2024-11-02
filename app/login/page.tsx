@@ -15,7 +15,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
+  
     if (email && password) {
       try {
         const response = await fetch("http://localhost:8080/users/login", {
@@ -25,7 +25,7 @@ const LoginPage = () => {
           },
           body: JSON.stringify({ email, password }),
         });
-
+  
         if (response.ok) {
           const data = await response.json();
           login(data.email);
@@ -42,7 +42,7 @@ const LoginPage = () => {
     } else {
       notifyWarning("Email hoặc mật khẩu không hợp lệ!");
     }
-  };
+  };  
 
   return (
     <div className="flex justify-center items-center h-screen bg-[#f0f4f8]">
