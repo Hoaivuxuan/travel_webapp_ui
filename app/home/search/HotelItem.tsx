@@ -3,17 +3,25 @@
 import Link from "next/link";
 import { ratingLabel } from "@/data/typeHotel";
 import { listings } from "@/data/fakeData";
+import { useRouter } from "next/navigation";
 
 type HotelItemProps = {
-  id: number;
+  id: string;
 };
 
 const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
-  const item = listings.content.listHotels.find((hotel) => hotel.id === id);
+  const router = useRouter();
+  const item = listings.content.listHotels.find(
+    (hotel) => hotel.id.toString() === id
+  );
 
   if (!item) {
-    return <div>Không tìm thấy khách sạn</div>;
+    return <div>Không tìm thấy thông tin xe.</div>;
   }
+
+  const handleDetailClick = () => {
+    router.push(`/home/detail/${item.id.toString().padStart(6, "0")}`);
+  };
 
   return (
     <div className="grid grid-cols-5 gap-4 p-4 border rounded-lg hover:shadow-lg transition-shadow duration-200">
@@ -98,12 +106,12 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
               <p className="text-lg font-bold text-blue-600 text-right">
                 {item.price.toLocaleString("vi-VN")} VNĐ/đêm
               </p>
-              <Link
-                href={`/home/detail/${item.id}`}
+              <button
+                onClick={handleDetailClick}
                 className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2"
               >
                 Chọn phòng
-              </Link>
+              </button>
             </div>
           </div>
         </div>

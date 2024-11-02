@@ -76,10 +76,7 @@ function SearchForm() {
     const url = new URL("https://searchresults.html");
     url.searchParams.set("ss", "true");
     url.searchParams.set("location", values.location);
-    url.searchParams.set(
-      "checkin",
-      format(values.dateRange.from, "yyyy-MM-dd"),
-    );
+    url.searchParams.set("checkin", format(values.dateRange.from, "yyyy-MM-dd"));
     url.searchParams.set("checkout", format(values.dateRange.to, "yyyy-MM-dd"));
     url.searchParams.set("adults", values.adults.toString());
     url.searchParams.set("children", values.children.toString());

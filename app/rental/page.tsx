@@ -56,7 +56,7 @@ const RentalPage = () => {
         <div className="relative flex items-center">
           <button
             onClick={scrollLeft}
-            className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500"
+            className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600"
           >
             <FontAwesomeIcon icon={faChevronLeft} />
           </button>
@@ -85,7 +85,7 @@ const RentalPage = () => {
           </div>
           <button
             onClick={scrollRight}
-            className="absolute -right-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500"
+            className="absolute -right-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600"
           >
             <FontAwesomeIcon icon={faChevronRight} />
           </button>

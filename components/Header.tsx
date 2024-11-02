@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -23,16 +24,14 @@ const products = [
   },
 ];
 
-const user = {
-  name: "ddthumonky88",
-  avatar:
-    "https://bizweb.dktcdn.net/100/438/408/files/anh-luffy-yody-vn-67.jpg?v=1688806271889",
-};
-
 const Header = () => {
-  const { isLoggedIn, login, logout } = useAuth();
   const [activeItem, setActiveItem] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  
+  const { isLoggedIn, email, logout } = useAuth();
+  const username = email ? email.split("@")[0] : "User";
+
+  console.log("Current Email:", email);
 
   const handleLinkClick = (name: SetStateAction<string>, href: string) => {
     if (!isLoggedIn) {
@@ -63,10 +62,12 @@ const Header = () => {
             onClick={handleLogoClick}
           >
             <span className="sr-only">Booking.com</span>
-            <img
-              className="h-12"
+            <Image
               src="https://static1.squarespace.com/static/5bde0f00c3c16aa95581e2e2/62b4cb1add9d257dd43bb03d/62b653fedc7c895918d19b24/1656116254983/booking+logo+white.png?format=1500w"
               alt="Logo"
+              width={150} // Specify the image width
+              height={50} // Specify the image height
+              className="h-12"
             />
           </Link>
         </div>
@@ -98,9 +99,11 @@ const Header = () => {
         <div className="col-span-1 relative flex items-center justify-end space-x-2">
           {isLoggedIn ? (
             <>
-              <img
-                src={user.avatar}
-                alt={`${user.name}'s avatar`}
+              <Image
+                src="https://bizweb.dktcdn.net/100/438/408/files/anh-luffy-yody-vn-67.jpg?v=1688806271889"
+                alt={`${username}'s avatar`}
+                width={40} // Specify the avatar width
+                height={40} // Specify the avatar height
                 className="w-10 h-10 rounded-full cursor-pointer"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               />
@@ -108,7 +111,7 @@ const Header = () => {
                 className="font-bold text-white cursor-pointer"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
-                {user.name}
+                {username}
               </span>
 
               {dropdownOpen && (

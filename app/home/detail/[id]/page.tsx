@@ -1,27 +1,32 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useParams, notFound, useRouter } from "next/navigation";
 import { listings } from "@/data/fakeData";
 import { ratingLabel } from "@/data/typeHotel";
 import Link from "next/link";
 import FAQSection from "@/components/home/FAQs";
+import Modal from "@/components/Modal";
 
 const HotelDetailPage = () => {
   const { id } = useParams();
   const router = useRouter();
   const hotelItem =
-    listings.content.listHotels.find((item) => item.id.toString() === id) ||
+    listings.content.listHotels.find((item) => item.id === Number(id)) ||
     undefined;
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [directionsUrl, setDirectionsUrl] = useState("");
+
   if (!hotelItem) return notFound();
+  const hotelAddress = encodeURIComponent(`${hotelItem.address}`);
 
   return (
     <div className="bg-gray-100 pb-6">
       <div className="p-6 !pb-3 mx-auto max-w-7xl">
         <a
           href="#"
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-gray-400 transition duration-150"
+          className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-gray-400 transition duration-150"
           onClick={(e) => {
             e.preventDefault();
             router.back();
@@ -67,14 +72,12 @@ const HotelDetailPage = () => {
                 <p className="text-xl font-bold text-blue-600 text-right">
                   {hotelItem.price} VNĐ/đêm
                 </p>
-                <Link
-                  href="#"
-                  className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2"
-                >
+                <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-green-400 text-sm font-semibold mt-2">
                   Chọn phòng
-                </Link>
+                </button>
               </div>
             </div>
+
             <div className="text-sm col-span-8 bg-white rounded-lg mt-4">
               <div className="grid grid-cols-3 gap-4">
                 <div className="border p-4 rounded-lg">
@@ -84,8 +87,7 @@ const HotelDetailPage = () => {
                     </p>
                     <div className="ml-4">
                       <h3 className="text-lg font-semibold">
-                        {ratingLabel.find((r) => hotelItem.rating >= r.min)
-                          ?.label || "Đánh giá"}
+                        {ratingLabel.find((r) => hotelItem.rating >= r.min)?.label || "Đánh giá"}
                       </h3>
                       <p className="text-sm text-gray-600">
                         {hotelItem.reviewCount} đánh giá
@@ -97,14 +99,48 @@ const HotelDetailPage = () => {
 
                 <div className="border p-4 rounded-lg">
                   <h4 className="text-lg font-semibold mb-2">Trong khu vực</h4>
-                  <p className="text-gray-600">
-                    29 Hàng Bông, Hàng Gai, Hoàn Kiếm, Hà Nội, Việt Nam
-                  </p>
-                  <ul className="list-disc pl-5 mt-2">
-                    <li>Nhà thờ Lớn Hà Nội - 259 m</li>
-                    <li>Hồ Hoàn Kiếm - 465 m</li>
-                    <li>Hanoi Train Street - 468 m</li>
-                  </ul>
+                  <p className="text-gray-600 mb-4">{hotelItem.address}</p>
+                  <div
+                    className="relative group"
+                    style={{ height: "300px", overflow: "hidden" }}
+                  >
+                    <iframe
+                      src={`https://www.google.com/maps?q=${hotelAddress}&output=embed`}
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      title="Hotel Location"
+                    />
+                    <button
+                      className="absolute bottom-4 right-4 bg-blue-600 text-white py-2 px-4 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    >
+                      Tìm đường đi
+                    </button>
+                    <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                      <h2 className="text-lg font-semibold">Chỉ đường đến khách sạn</h2>
+                      <div className="mt-4">
+                        <iframe
+                          width="600"
+                          height="450"
+                          src={directionsUrl}
+                          frameBorder="0"
+                          style={{ border: 0 }}
+                          allowFullScreen
+                          title="Google Maps Directions"
+                        />
+                      </div>
+                      <div className="mt-4 flex justify-end">
+                        <button
+                          onClick={() => setIsModalOpen(false)}
+                          className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-600"
+                        >
+                          Đóng
+                        </button>
+                      </div>
+                    </Modal>
+                  </div>
                 </div>
 
                 <div className="border p-4 rounded-lg">

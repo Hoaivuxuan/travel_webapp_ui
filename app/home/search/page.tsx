@@ -26,26 +26,18 @@ export type SearchParams = {
 function SearchPage({ searchParams }: Props) {
   if (!searchParams.url) return notFound();
 
-  const minPrice = Math.min(
-    ...listings.content.listHotels.map((hotel) => hotel.price),
-  );
-  const maxPrice = Math.max(
-    ...listings.content.listHotels.map((hotel) => hotel.price),
-  );
+  const minPrice = Math.min(...listings.content.listHotels.map((hotel) => hotel.price));
+  const maxPrice = Math.max(...listings.content.listHotels.map((hotel) => hotel.price));
   const [selectedTypes, setSelectedTypes] = useState<number[]>([]);
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([
-    minPrice,
-    maxPrice,
-  ]);
-
+  const [priceRange, setPriceRange] = useState<[number, number]>([minPrice, maxPrice]);
   const [itemsToShow, setItemsToShow] = useState(10);
 
   const handleTypeSelection = (id: number) => {
     setSelectedTypes((prevSelected) =>
       prevSelected.includes(id)
         ? prevSelected.filter((itemId) => itemId !== id)
-        : [...prevSelected, id],
+        : [...prevSelected, id]
     );
   };
 
@@ -53,7 +45,7 @@ function SearchPage({ searchParams }: Props) {
     setSelectedRatings((prevSelected) =>
       prevSelected.includes(rating)
         ? prevSelected.filter((rat) => rat !== rating)
-        : [...prevSelected, rating],
+        : [...prevSelected, rating]
     );
   };
 
@@ -67,9 +59,7 @@ function SearchPage({ searchParams }: Props) {
     const matchesType =
       selectedTypes.length === 0 ||
       selectedTypes.some((typeId) =>
-        type_hotel.find(
-          (hotel) => hotel.id === typeId && hotel.name === item.type,
-        ),
+        type_hotel.find((hotel) => hotel.id === typeId && hotel.name === item.type)
       );
 
     const matchesRating =
@@ -82,8 +72,7 @@ function SearchPage({ searchParams }: Props) {
         return false;
       });
 
-    const matchesPrice =
-      item.price >= priceRange[0] && item.price <= priceRange[1];
+    const matchesPrice = item.price >= priceRange[0] && item.price <= priceRange[1];
 
     return matchesType && matchesRating && matchesPrice;
   });
@@ -99,14 +88,13 @@ function SearchPage({ searchParams }: Props) {
 
         <h2 className="py-4">
           <span className="ml-2">
-            {searchParams.location}, từ {searchParams.checkin} đến{" "}
-            {searchParams.checkout} ({filteredResults.length} kết quả)
+            {searchParams.location}, từ {searchParams.checkin} đến {searchParams.checkout} ({filteredResults.length} kết quả)
           </span>
         </h2>
 
         <hr className="mb-5" />
         <div className="grid grid-cols-5 gap-4">
-          <aside className="col-span-1 p-4 border rounded-lg hover:shadow-lg transition-shadow duration-200">
+          <aside className="col-span-1 p-4 border rounded-lg sticky top-6 h-fit">
             <h3 className="font-bold text-sm mb-3">Chọn lọc theo:</h3>
 
             <hr className="my-2" />
@@ -210,7 +198,7 @@ function SearchPage({ searchParams }: Props) {
           <div className="col-span-4">
             <div className="space-y-3">
               {displayedResults.map((item) => (
-                <HotelItem key={item.id} id={item.id} />
+                <HotelItem key={item.id} id={item.id.toString()} />
               ))}
             </div>
 
@@ -218,7 +206,7 @@ function SearchPage({ searchParams }: Props) {
               <div className="mt-4 text-center">
                 <button
                   onClick={() => setItemsToShow(itemsToShow + 10)}
-                  className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-500 transition-colors duration-200"
+                  className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-600 transition-colors duration-200"
                 >
                   Xem thêm
                 </button>

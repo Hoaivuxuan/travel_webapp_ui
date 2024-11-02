@@ -13,19 +13,36 @@ const LoginPage = () => {
 
   const { notifySuccess, notifyWarning } = Notification();
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
+  
     if (email && password) {
-      login();
-      notifySuccess("Đăng nhập thành công!");
-      setTimeout(() => {
-        window.location.href = "/home";
-      }, 3000);
+      try {
+        const response = await fetch("http://localhost:8080/users/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          login(data.email);
+          notifySuccess("Đăng nhập thành công!");
+          setTimeout(() => {
+            window.location.href = "/home";
+          }, 3000);
+        } else {
+          notifyWarning("Email hoặc mật khẩu không hợp lệ!");
+        }
+      } catch (error) {
+        notifyWarning("Đã xảy ra lỗi trong quá trình đăng nhập!");
+      }
     } else {
       notifyWarning("Email hoặc mật khẩu không hợp lệ!");
     }
-  };
+  };  
 
   return (
     <div className="flex justify-center items-center h-screen bg-[#f0f4f8]">
@@ -69,7 +86,7 @@ const LoginPage = () => {
           </p>
         </div>
       </form>
-      <ToastContainer /> {/* Include ToastContainer for displaying toasts */}
+      <ToastContainer />
     </div>
   );
 };
