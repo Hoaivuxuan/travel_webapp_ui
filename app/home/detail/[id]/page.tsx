@@ -65,7 +65,7 @@ const HotelDetailPage = () => {
             <div className="flex flex-row justify-end col-span-2 h-full">
               <div className="flex flex-col justify-end items-end mt-2">
                 <p className="text-xl font-bold text-blue-600 text-right">
-                  {hotelItem.price.toLocaleString("vi-VN")} VNĐ/đêm
+                  {hotelItem.price} VNĐ/đêm
                 </p>
                 <Link
                   href="#"

@@ -148,7 +148,7 @@ const MotorRentalDetail: React.FC<MotorRentalDetailProps> = ({
         </div>
       </div>
 
-      <div className="col-span-1 grid grid-cols-1 gap-4">
+      <div className="col-span-1 space-y-4">
         <div className="p-4 bg-white border rounded-lg">
           <h3 className="text-lg font-bold mb-4">Nhận xe và trả xe</h3>
           <div className="space-y-6 relative">
@@ -191,9 +191,7 @@ const MotorRentalDetail: React.FC<MotorRentalDetailProps> = ({
           <div className="space-y-2 mt-4">
             <div className="flex justify-between">
               <span className="text-gray-700">Phí thuê xe</span>
-              <span className="text-gray-700">
-                {item.price.toLocaleString()} VNĐ
-              </span>
+              <span className="text-gray-700">{item.price} VNĐ</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-700">Dịch vụ khác</span>
@@ -203,9 +201,7 @@ const MotorRentalDetail: React.FC<MotorRentalDetailProps> = ({
             <hr className="my-2" />
             <div className="flex justify-between font-bold">
               <span className="text-gray-700">Giá cho 4 ngày</span>
-              <span className="text-gray-700">
-                {item.price.toLocaleString()} VNĐ
-              </span>
+              <span className="text-gray-700">{item.price} VNĐ</span>
             </div>
           </div>
         </div>

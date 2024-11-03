@@ -1,5 +1,11 @@
 [
   {
+    "name": "Vietnam",
+    "flag": "🇻🇳",
+    "code": "VN",
+    "phoneCode": "+84"
+  },
+  {
     "name": "Afghanistan",
     "flag": "🇦🇫",
     "code": "AF",
@@ -63,7 +69,7 @@
     "name": "Bahamas",
     "flag": "🇧🇸",
     "code": "BS",
-    "phoneCode": "+1-242"
+    "phoneCode": "+1242"
   },
   {
     "name": "Bahrain",
@@ -81,7 +87,7 @@
     "name": "Barbados",
     "flag": "🇧🇧",
     "code": "BB",
-    "phoneCode": "+1-246"
+    "phoneCode": "+1246"
   },
   {
     "name": "Belarus",
@@ -279,13 +285,13 @@
     "name": "Dominica",
     "flag": "🇩🇲",
     "code": "DM",
-    "phoneCode": "+1-767"
+    "phoneCode": "+1767"
   },
   {
     "name": "Dominican Republic",
     "flag": "🇩🇴",
     "code": "DO",
-    "phoneCode": "+1-809"
+    "phoneCode": "+1809"
   },
   {
     "name": "Ecuador",
@@ -393,7 +399,7 @@
     "name": "Grenada",
     "flag": "🇬🇩",
     "code": "GD",
-    "phoneCode": "+1-473"
+    "phoneCode": "+1473"
   },
   {
     "name": "Guatemala",
@@ -489,7 +495,7 @@
     "name": "Jamaica",
     "flag": "🇯🇲",
     "code": "JM",
-    "phoneCode": "+1-876"
+    "phoneCode": "+1876"
   },
   {
     "name": "Japan",
@@ -849,19 +855,19 @@
     "name": "Saint Kitts and Nevis",
     "flag": "🇰🇳",
     "code": "KN",
-    "phoneCode": "+1-869"
+    "phoneCode": "+1869"
   },
   {
     "name": "Saint Lucia",
     "flag": "🇱🇨",
     "code": "LC",
-    "phoneCode": "+1-758"
+    "phoneCode": "+1758"
   },
   {
     "name": "Saint Vincent and the Grenadines",
     "flag": "🇻🇨",
     "code": "VC",
-    "phoneCode": "+1-784"
+    "phoneCode": "+1784"
   },
   {
     "name": "Samoa",
@@ -1047,7 +1053,7 @@
     "name": "Trinidad and Tobago",
     "flag": "🇹🇹",
     "code": "TT",
-    "phoneCode": "+1-868"
+    "phoneCode": "+1868"
   },
   {
     "name": "Tunisia",
@@ -1132,12 +1138,6 @@
     "flag": "🇻🇪",
     "code": "VE",
     "phoneCode": "+58"
-  },
-  {
-    "name": "Vietnam",
-    "flag": "🇻🇳",
-    "code": "VN",
-    "phoneCode": "+84"
   },
   {
     "name": "Yemen",

@@ -35,8 +35,12 @@ const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleLinkClick = (name: SetStateAction<string>, href: string) => {
-    setActiveItem(name);
-    setDropdownOpen(false);
+    if (!isLoggedIn) {
+      window.location.href = "/login";
+    } else {
+      setActiveItem(name);
+      setDropdownOpen(false);
+    }
   };
 
   const handleLogoClick = () => {
