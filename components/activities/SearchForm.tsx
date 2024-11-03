@@ -25,7 +25,7 @@ import "./index.css";
 export const formSchema = z.object({
   location: z
     .string()
-    .min(1, "Vui lòng chọn địa điểm thuê xe của bạn!")
+    .min(1, "Vui lòng chọn địa điểm tham quan của bạn!")
     .max(50),
   dateRange: z.object({
     from: z.date(),
@@ -82,7 +82,7 @@ function SearchForm() {
     if (currentPath.includes("/search")) {
       router.push(`search?url=${url.href}`);
     } else {
-      router.push(`activities/search?url=${url.href}`);
+      router.push(`activities/search`);
     }
   }
 
