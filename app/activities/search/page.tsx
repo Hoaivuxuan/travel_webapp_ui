@@ -4,13 +4,18 @@ import SearchForm from "@/components/activities/SearchForm";
 import ActivityCard from "@/components/AttractionCard";
 import FilterPanel from "@/components/activities/FilterPanel";
 import { useEffect } from "react";
+import { useRouter } from 'next/navigation';
 import { activitiesSearch } from "@/data/fakeData";
 import "./style.css";
 
 const AnyReactComponent = ({ text }: any) => <div>{text}</div>;
 
 export default function Search({ params }: { params: { id: string } }) {
+  const router = useRouter();
 
+  const handleCardClick = (index: number) => {
+    router.push(`/activities/detail/${index}`);
+  };
   return (
     <main className="bg-white">
       <div className="bg-[#013B94] py-2">
@@ -36,7 +41,9 @@ export default function Search({ params }: { params: { id: string } }) {
 
         <div className="flex-1 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6 ml-6">
           {activitiesSearch.map((activity, index) => (
-            <ActivityCard key={index} {...activity} />
+            <div key={index} onClick={() => handleCardClick(index)}>
+              <ActivityCard {...activity} />
+            </div>
           ))}
         </div>
       </section>

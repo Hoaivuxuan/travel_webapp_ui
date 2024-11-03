@@ -659,6 +659,28 @@ export const listings = {
         url: "https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o=",
       },
     ],
+    listActivitis: [{
+        id: 1,
+        name: "Buổi biểu diễn múa rối nước Thăng Long",
+        description:
+          "Buổi biểu diễn múa rối nước Thăng Long.",
+        distanceToCenter: 7,
+        roomTypes: "Phòng đôi, Phòng gia đình",
+        activities: "Đi bộ, Thư giãn",
+        checkInTime: "14:00",
+        checkOutTime: "12:00",
+        rating: 8.5,
+        reviewCount: 30,
+        type: "Homestays",
+        city: "Ninh Bình",
+        location: {
+          latitude: 20.25,
+          longitude: 105.9884,
+        },
+        amenities: ["Wi-Fi miễn phí", "Vườn", "Bếp chung"],
+        price: 650000,
+        url: "https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o=",
+      }], 
     listCars: [
       {
         id: 1,

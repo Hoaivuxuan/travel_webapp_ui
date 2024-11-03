@@ -25,7 +25,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   availableDate = "Mở cửa từ 5 tháng 11",
 }) => {
   return (
-    <div className="flex border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 max-w">
+    <div  className="flex border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 max-w">
       <img src={imageUrl} alt={title} className="w-1/3 h-full object-cover" />
       <div className="p-4 flex-1">
         <h3 className="text-lg font-semibold">{title}</h3>

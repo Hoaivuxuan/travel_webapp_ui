@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from 'next/navigation';
 import SearchForm from "@/components/activities/SearchForm";
 import { useEffect } from "react";
 import { activities } from "@/data/fakeData";
@@ -8,8 +9,13 @@ import "./style.css";
 const AnyReactComponent = ({ text }: any) => <div>{text}</div>;
 
 export default function Activities({ params }: { params: { id: string } }) {
+  const router = useRouter();
   const trendingActivities = activities.slice(0, 4);
   const nearbyDestinations = activities.slice(2, 5);
+
+  const handleImageClick = () => {
+    router.push("/activities/search");
+  };
 
   useEffect(() => {
     if (params) {
@@ -91,7 +97,7 @@ export default function Activities({ params }: { params: { id: string } }) {
         </div>
         <div className="py-5 grid grid-cols-3 gap-4">
           {nearbyDestinations.map((item) => (
-            <div key={item.id} className="cursor-pointer">
+            <div key={item.id} onClick={handleImageClick} className="cursor-pointer">
               <img
                 key={item.id}
                 className="object-cover rounded-xl w-full h-72"
@@ -104,7 +110,7 @@ export default function Activities({ params }: { params: { id: string } }) {
             </div>
           ))}
           {nearbyDestinations.map((item) => (
-            <div key={item.id} className="cursor-pointer">
+            <div key={item.id} onClick={handleImageClick} className="cursor-pointer">
               <img
                 key={item.id}
                 className="object-cover rounded-xl w-full h-72"
