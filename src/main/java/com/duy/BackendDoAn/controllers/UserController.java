@@ -2,6 +2,7 @@ package com.duy.BackendDoAn.controllers;
 
 import com.duy.BackendDoAn.dtos.UserDTO;
 import com.duy.BackendDoAn.dtos.UserLoginDTO;
+import com.duy.BackendDoAn.dtos.UserRegisterDTO;
 import com.duy.BackendDoAn.models.User;
 import com.duy.BackendDoAn.responses.LoginResponse;
 import com.duy.BackendDoAn.responses.RegisterResponse;
@@ -23,7 +24,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody UserDTO userDTO, BindingResult result){
+    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO, BindingResult result){
         RegisterResponse registerResponse = new RegisterResponse();
         if(result.hasErrors()) {
             List<String> errorMessages = result.getFieldErrors()
@@ -35,7 +36,7 @@ public class UserController {
         }
 
         try {
-            User user = userService.add(userDTO);
+            User user = userService.add(userRegisterDTO);
             registerResponse.setMessage("Register Successfully");
             registerResponse.setUser(user);
             return ResponseEntity.ok(registerResponse);
@@ -59,13 +60,28 @@ public class UserController {
         }
     }
 
-//    @PostMapping("/details")
-//    public ResponseEntity<UserResponse> getUserDetails
-//
-//    @PutMapping
-//    public ResponseEntity<UserResponse> updateUser(@Valid @RequestBody UserDTO userDTO, BindingResult result){
-//
-//    }
+    @PostMapping("/details")
+    public ResponseEntity<UserResponse> getUserDetails(@RequestHeader("Authorization") String authorizationHeader){
+        try {
+            String extractedToken = authorizationHeader.substring(7);
+            User user = userService.getUserDetailFromToken(extractedToken);
+            return ResponseEntity.ok(UserResponse.fromUser(user));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<UserResponse> updateUser(@Valid @RequestBody UserDTO userDTO, @RequestHeader("Authorization") String authorizationHeader){
+        try {
+            String extractedToken = authorizationHeader.substring(7);
+            UserResponse userResponse = new UserResponse();
+            User updatedUser = userService.updateUserDetails(userDTO, extractedToken);
+            return ResponseEntity.ok(UserResponse.fromUser(updatedUser));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 
 }

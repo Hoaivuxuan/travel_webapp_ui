@@ -37,6 +37,7 @@ public class WebSecurityConfig {
                                     "/users/login"
                             )
                             .permitAll();
+                    requests.requestMatchers("/**").permitAll();
                 })
                 .csrf(AbstractHttpConfigurer::disable);
 

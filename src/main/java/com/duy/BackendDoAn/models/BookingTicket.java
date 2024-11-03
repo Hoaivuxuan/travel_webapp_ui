@@ -22,6 +22,9 @@ public class BookingTicket {
     @Column(name = "booking_date")
     private LocalDate booking_date;
 
+    @Column(name = "tour_date")
+    private LocalDate tour_date;
+
     @Column(name = "number_adult_ticket")
     private Long number_adult_ticket;
 

@@ -1,6 +1,7 @@
 package com.duy.BackendDoAn.models;
 
 import com.duy.BackendDoAn.models.User;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.cglib.core.Local;
@@ -41,5 +42,14 @@ public class BookingRoom {
     private String status;
 
     @OneToMany(mappedBy = "bookingRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<BookedRoom> bookedRooms;
+
+    public Hotel getHotel() {
+        if (bookedRooms != null && !bookedRooms.isEmpty()) {
+            BookedRoom bookedRoom = bookedRooms.get(0); // Lấy một phòng đã đặt
+            return bookedRoom.getRoom().getHotel(); // Truy xuất khách sạn từ phòng đã đặt
+        }
+        return null;
+    }
 }

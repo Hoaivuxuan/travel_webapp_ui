@@ -28,10 +28,10 @@ public class User implements UserDetails {
     @Column(name = "first_name", length = 100, nullable = false)
     private String first_name;
 
-    @Column(name = "last_name", length = 100, nullable = false)
+    @Column(name = "last_name", length = 100)
     private String last_name;
 
-    @Column(name = "phone_number", length = 20, nullable = false, unique = true)
+    @Column(name = "phone_number", length = 20)
     private String phone_number;
 
     @Column(name = "avatar", length = 254)
@@ -43,7 +43,7 @@ public class User implements UserDetails {
     @Column(name = "address", length = 255)
     private String address;
 
-    @Column(name = "date_of_birth", nullable = false)
+    @Column(name = "date_of_birth")
     private LocalDate date_of_birth;
 
     @Column(name = "active")

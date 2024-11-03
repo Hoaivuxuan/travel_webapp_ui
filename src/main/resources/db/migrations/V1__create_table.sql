@@ -1,12 +1,12 @@
 CREATE TABLE users (
     id INT auto_increment primary key,
     first_name varchar(100) not null,
-    last_name varchar(100) not null,
-    phone_number varchar(20) not null unique,
+    last_name varchar(100),
+    phone_number varchar(20) unique,
     avatar varchar(255),
     email varchar(255) not null unique,
     address varchar(255),
-    date_of_birth DATE not null,
+    date_of_birth DATE,
     active TINYINT(1),
     password varchar(100) not null,
     role varchar(100)
@@ -215,6 +215,7 @@ CREATE TABLE ticket_profit (
 CREATE TABLE booking_ticket (
     id INT AUTO_INCREMENT PRIMARY KEY,
     booking_date DATE,
+    tour_date DATE,
     number_adult_ticket INT,
     number_children_ticket INT,
     total_price FLOAT,

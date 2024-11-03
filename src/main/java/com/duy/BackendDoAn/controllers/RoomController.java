@@ -16,9 +16,8 @@ public class RoomController {
     public final RoomService roomService;
     @PostMapping
     public ResponseEntity<RoomResponse> createRoom(@Valid @RequestBody RoomDTO roomDTO) throws Exception{
-        RoomResponse roomResponse = new RoomResponse();
         Room newRoom = roomService.addRoom(roomDTO);
-        roomResponse = RoomResponse.fromRoom(newRoom);
+        RoomResponse roomResponse = RoomResponse.fromRoom(newRoom);
         return ResponseEntity.ok(roomResponse);
     }
 
