@@ -21,7 +21,8 @@ const PersonalInfoPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const personalInfo = [
-    { label: "Tên", key: "name" as UserInfoKeys },
+    { label: "Họ", key: "lastName" as UserInfoKeys },
+    { label: "Tên", key: "firstName" as UserInfoKeys },
     { label: "Tên hiển thị", key: "displayName" as UserInfoKeys },
     { label: "Địa chỉ email", key: "email" as UserInfoKeys, verified: true },
     { label: "Số điện thoại", key: "phone" as UserInfoKeys },
@@ -34,11 +35,7 @@ const PersonalInfoPage = () => {
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-      }
+      setIsAuthenticated(!!user);
     });
   }, []);
 
@@ -47,7 +44,7 @@ const PersonalInfoPage = () => {
       alert("Vui lòng đăng nhập để tải lên.");
       return;
     }
-  
+
     try {
       const storageRef = ref(storage, `user/${file.name}`);
       await uploadBytes(storageRef, file);
@@ -57,7 +54,7 @@ const PersonalInfoPage = () => {
       console.error("Lỗi khi tải lên:", error);
     }
   };
-  
+
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -87,7 +84,7 @@ const PersonalInfoPage = () => {
   };
 
   const uploadAvatarToFirebase = async (file: File) => {
-    const safeFileName = file.name.replace(/\s+/g, '_'); // Replace spaces with underscores
+    const safeFileName = file.name.replace(/\s+/g, '_');
     const storageRef = ref(storage, `user/${safeFileName}`);
     setLoading(true);
     try {
@@ -124,32 +121,76 @@ const PersonalInfoPage = () => {
           </div>
         </div>
         <div className="divide-y">
-          {personalInfo.map((info, index) => (
-            <div
-              key={index}
-              className="py-4 flex items-center justify-between"
-            >
-              <div className="grid grid-cols-10 gap-2 items-center w-full">
-                <div className="col-span-2 font-semibold">
-                  {info.label}
+          {/* Họ và Tên */}
+          <div className="py-4 flex items-center justify-between">
+            <div className="grid grid-cols-11 gap-2 items-center w-full">
+              <div className="col-span-2 font-semibold">Họ và Tên</div>
+              {editingIndex === 0 ? (
+                <>
+                  <div className="col-span-4">
+                    <input
+                      type="text"
+                      value={values.lastName}
+                      onChange={(e) => handleInputChange("lastName", e.target.value)}
+                      className="mt-1 p-1 border rounded w-full"
+                    />
+                  </div>
+                  <div className="col-span-4">
+                    <input
+                      type="text"
+                      value={values.firstName}
+                      onChange={(e) => handleInputChange("firstName", e.target.value)}
+                      className="mt-1 p-1 border rounded w-full"
+                    />
+                  </div>
+                </>
+              ) : (
+                <div className="col-span-8">
+                  <input
+                    type="text"
+                    value={`${values.lastName} ${values.firstName}`}
+                    readOnly
+                    className="mt-1 p-1 border rounded w-full bg-gray-100 cursor-not-allowed"
+                  />
                 </div>
-                <div className="col-span-7">
+              )}
+              <div className="text-center col-span-1">
+                {editingIndex === 0 ? (
+                  <button
+                    onClick={() => setEditingIndex(null)}
+                    className="text-gray-500 hover:text-blue-500"
+                  >
+                    <FontAwesomeIcon icon={faTimes} size="lg" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleEditClick(0)}
+                    className="text-blue-500 hover:text-blue-700"
+                  >
+                    <FontAwesomeIcon icon={faEdit} size="lg" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+          {/* Các thông tin cá nhân khác */}
+          {personalInfo.slice(2).map((info, index) => (
+            <div key={index} className="py-4 flex items-center justify-between">
+              <div className="grid grid-cols-11 gap-2 items-center w-full">
+                <div className="col-span-2 font-semibold">{info.label}</div>
+                <div className="col-span-8">
                   <input
                     type="text"
                     value={values[info.key]}
-                    readOnly={editingIndex !== index}
-                    onChange={(e) =>
-                      handleInputChange(info.key, e.target.value)
-                    }
+                    readOnly={editingIndex !== index + 1}
+                    onChange={(e) => handleInputChange(info.key, e.target.value)}
                     className={`mt-1 p-1 border rounded w-full ${
-                      editingIndex === index
-                        ? ""
-                        : "bg-gray-100 cursor-not-allowed"
+                      editingIndex === index + 1 ? "" : "bg-gray-100 cursor-not-allowed"
                     }`}
                   />
                 </div>
                 <div className="text-center">
-                  {editingIndex === index ? (
+                  {editingIndex === index + 1 ? (
                     <button
                       onClick={() => setEditingIndex(null)}
                       className="text-gray-500 hover:text-blue-500"
@@ -158,7 +199,7 @@ const PersonalInfoPage = () => {
                     </button>
                   ) : (
                     <button
-                      onClick={() => handleEditClick(index)}
+                      onClick={() => handleEditClick(index + 1)}
                       className="text-blue-500 hover:text-blue-700"
                     >
                       <FontAwesomeIcon icon={faEdit} size="lg" />

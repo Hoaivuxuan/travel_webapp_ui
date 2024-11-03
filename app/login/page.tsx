@@ -5,6 +5,7 @@ import { useAuth } from "@/app/login/AuthContext";
 import { ToastContainer } from "react-toastify";
 import Notification from "@/components/Notification";
 import "react-toastify/dist/ReactToastify.css";
+import { decodeJwt } from "jose"; // Import the decode function from jose
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -28,19 +29,26 @@ const LoginPage = () => {
   
         if (response.ok) {
           const data = await response.json();
-          login(data.email);
-          notifySuccess("Đăng nhập thành công!");
-          setTimeout(() => {
-            window.location.href = "/home";
-          }, 3000);
+          const decodedToken = decodeJwt(data.token);
+          const email = decodedToken.sub;
+
+          if (email) {
+            notifySuccess("Đăng nhập thành công!");
+            login(email.toLowerCase());
+            setTimeout(() => {
+              window.location.href = "/home";
+            }, 3000);
+          } else {
+            notifyWarning("Đã xảy ra lỗi trong quá trình đăng nhập!");
+          }
         } else {
-          notifyWarning("Email hoặc mật khẩu không hợp lệ!");
+          notifyWarning("Email hoặc mật khẩu không đúng!");
         }
       } catch (error) {
         notifyWarning("Đã xảy ra lỗi trong quá trình đăng nhập!");
       }
     } else {
-      notifyWarning("Email hoặc mật khẩu không hợp lệ!");
+      notifyWarning("Email hoặc mật khẩu không đúng!");
     }
   };  
 

@@ -868,14 +868,14 @@ export const listings = {
 };
 
 export const fakeUser = {
-  name: "ddthumonky88",
-  displayName: "Monkey D. Luffy",
-  email: "dothutsk2k2@gmail.com",
-  phone: "0123456789",
+  lastName: "Nguyễn",
+  firstName: "Văn A",
+  displayName: "nguyena",
+  email: "nguyena@example.com",
+  phone: "123456789",
   birthDate: "01/01/1990",
-  nationality: "Vietnam",
-  gender: "Male",
-  address: "123 East Blue, Grand Line",
-  avatar:
-    "https://bizweb.dktcdn.net/100/438/408/files/anh-luffy-yody-vn-67.jpg?v=1688806271889",
+  nationality: "Việt Nam",
+  gender: "Nam",
+  address: "Địa chỉ giả",
+  avatar: "https://bizweb.dktcdn.net/100/438/408/files/anh-luffy-yody-vn-67.jpg?v=1688806271889",
 };

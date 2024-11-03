@@ -31,8 +31,6 @@ const Header = () => {
   const { isLoggedIn, email, logout } = useAuth();
   const username = email ? email.split("@")[0] : "User";
 
-  console.log("Current Email:", email);
-
   const handleLinkClick = (name: SetStateAction<string>, href: string) => {
     if (!isLoggedIn) {
       window.location.href = "/login";
@@ -65,8 +63,8 @@ const Header = () => {
             <Image
               src="https://static1.squarespace.com/static/5bde0f00c3c16aa95581e2e2/62b4cb1add9d257dd43bb03d/62b653fedc7c895918d19b24/1656116254983/booking+logo+white.png?format=1500w"
               alt="Logo"
-              width={150} // Specify the image width
-              height={50} // Specify the image height
+              width={150}
+              height={50}
               className="h-12"
             />
           </Link>
@@ -102,8 +100,8 @@ const Header = () => {
               <Image
                 src="https://bizweb.dktcdn.net/100/438/408/files/anh-luffy-yody-vn-67.jpg?v=1688806271889"
                 alt={`${username}'s avatar`}
-                width={40} // Specify the avatar width
-                height={40} // Specify the avatar height
+                width={40}
+                height={40}
                 className="w-10 h-10 rounded-full cursor-pointer"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               />
