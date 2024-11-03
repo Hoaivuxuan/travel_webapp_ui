@@ -79,6 +79,55 @@ export const destination: Destination[] = [
   },
 ];
 
+// data/fakeData.ts
+export const activitiesSearch = [
+  {
+    title: "Buổi biểu diễn múa rối nước Thăng Long",
+    location: "Hà Nội",
+    isBestSeller: true,
+    rating: 4.5,
+    reviews: 950,
+    price: "US$4.39",
+    imageUrl: "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+  },
+  {
+    title: "Tour đi bộ tham quan thành phố có hướng dẫn viên",
+    location: "Hà Nội",
+    isBestSeller: true,
+    rating: 4.6,
+    reviews: 446,
+    price: "US$55",
+    imageUrl: "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+  },
+  {
+    title: "Tour ẩm thực phố cổ",
+    location: "Hà Nội",
+    isBestSeller: false,
+    rating: 4.8,
+    reviews: 625,
+    price: "US$18.99",
+    imageUrl: "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+  },
+  {
+    title: "Tour Vịnh Hạ Long cả ngày có kèm bữa trưa, đi từ Hà Nội",
+    location: "Hà Nội",
+    isBestSeller: true,
+    rating: 4.4,
+    reviews: 276,
+    price: "US$49",
+    imageUrl: "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+  },
+  {
+    title: "Lớp học nấu ăn và tour tham quan chợ",
+    location: "Hà Nội",
+    isBestSeller: false,
+    rating: 4.8,
+    reviews: 211,
+    price: "US$39.29",
+    imageUrl: "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+  },
+];
+
 export const activities: Destination[] = [
   {
     id: 1,

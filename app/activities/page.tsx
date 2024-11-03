@@ -7,7 +7,7 @@ import "./style.css";
 
 const AnyReactComponent = ({ text }: any) => <div>{text}</div>;
 
-export default function Search({ params }: { params: { id: string } }) {
+export default function Activities({ params }: { params: { id: string } }) {
   const trendingActivities = activities.slice(0, 4);
   const nearbyDestinations = activities.slice(2, 5);
 
