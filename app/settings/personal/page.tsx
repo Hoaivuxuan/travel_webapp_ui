@@ -7,7 +7,8 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { storage } from "@/lib/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTimes } from "@fortawesome/free-solid-svg-icons"; // Import FontAwesome icons
+import { faEdit, faTimes } from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image";
 
 type UserInfoKeys = keyof typeof fakeUser;
 
@@ -105,11 +106,13 @@ const PersonalInfoPage = () => {
         <div className="flex items-center mb-8">
           <h1 className="text-2xl font-bold flex-grow">Thông tin cá nhân</h1>
           <div className="relative">
-            <img
+            <Image
               src={avatar}
               alt="Profile"
               className="rounded-full max-w-[100px] max-h-[100px] object-cover cursor-pointer"
               onClick={() => document.getElementById("avatar-upload")?.click()}
+              width={100}
+              height={100}
             />
             <Input
               id="avatar-upload"
@@ -121,7 +124,6 @@ const PersonalInfoPage = () => {
           </div>
         </div>
         <div className="divide-y">
-          {/* Họ và Tên */}
           <div className="py-4 flex items-center justify-between">
             <div className="grid grid-cols-11 gap-2 items-center w-full">
               <div className="col-span-2 font-semibold">Họ và Tên</div>
@@ -133,6 +135,7 @@ const PersonalInfoPage = () => {
                       value={values.lastName}
                       onChange={(e) => handleInputChange("lastName", e.target.value)}
                       className="mt-1 p-1 border rounded w-full"
+                      aria-label="Họ"
                     />
                   </div>
                   <div className="col-span-4">
@@ -141,6 +144,7 @@ const PersonalInfoPage = () => {
                       value={values.firstName}
                       onChange={(e) => handleInputChange("firstName", e.target.value)}
                       className="mt-1 p-1 border rounded w-full"
+                      aria-label="Tên"
                     />
                   </div>
                 </>
@@ -159,6 +163,7 @@ const PersonalInfoPage = () => {
                   <button
                     onClick={() => setEditingIndex(null)}
                     className="text-gray-500 hover:text-blue-500"
+                    aria-label="Hủy chỉnh sửa"
                   >
                     <FontAwesomeIcon icon={faTimes} size="lg" />
                   </button>
@@ -166,6 +171,7 @@ const PersonalInfoPage = () => {
                   <button
                     onClick={() => handleEditClick(0)}
                     className="text-blue-500 hover:text-blue-700"
+                    aria-label="Chỉnh sửa tên"
                   >
                     <FontAwesomeIcon icon={faEdit} size="lg" />
                   </button>
@@ -173,7 +179,7 @@ const PersonalInfoPage = () => {
               </div>
             </div>
           </div>
-          {/* Các thông tin cá nhân khác */}
+
           {personalInfo.slice(2).map((info, index) => (
             <div key={index} className="py-4 flex items-center justify-between">
               <div className="grid grid-cols-11 gap-2 items-center w-full">
@@ -187,6 +193,7 @@ const PersonalInfoPage = () => {
                     className={`mt-1 p-1 border rounded w-full ${
                       editingIndex === index + 1 ? "" : "bg-gray-100 cursor-not-allowed"
                     }`}
+                    aria-label={info.label}
                   />
                 </div>
                 <div className="text-center">
@@ -194,6 +201,7 @@ const PersonalInfoPage = () => {
                     <button
                       onClick={() => setEditingIndex(null)}
                       className="text-gray-500 hover:text-blue-500"
+                      aria-label="Hủy chỉnh sửa"
                     >
                       <FontAwesomeIcon icon={faTimes} size="lg" />
                     </button>
@@ -201,6 +209,7 @@ const PersonalInfoPage = () => {
                     <button
                       onClick={() => handleEditClick(index + 1)}
                       className="text-blue-500 hover:text-blue-700"
+                      aria-label={`Chỉnh sửa ${info.label}`}
                     >
                       <FontAwesomeIcon icon={faEdit} size="lg" />
                     </button>
@@ -213,7 +222,7 @@ const PersonalInfoPage = () => {
         <div className="mt-4 text-right">
           <button
             onClick={handleSaveClick}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
             disabled={loading}
           >
             {loading ? "Đang lưu..." : "Lưu Thông Tin"}

@@ -1,4 +1,3 @@
-// RentalDetailSection.tsx
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGasPump,
@@ -22,16 +21,12 @@ const MotorRentalDetail: React.FC<MotorRentalDetailProps> = ({
   id,
   onContinue,
 }) => {
+  const [pickupInfo, setPickupInfo] = useState({ date: "", location: "" });
+  const [dropoffInfo, setDropoffInfo] = useState({ date: "", location: "" });
+
   const item = listings.content.listMotors.find(
     (motor) => motor.id.toString() === id,
   );
-
-  if (!item) {
-    return <NotFound />;
-  }
-
-  const [pickupInfo, setPickupInfo] = useState({ date: "", location: "" });
-  const [dropoffInfo, setDropoffInfo] = useState({ date: "", location: "" });
 
   useEffect(() => {
     const storedValues = localStorage.getItem("rentalSearchFormValues");
@@ -48,6 +43,10 @@ const MotorRentalDetail: React.FC<MotorRentalDetailProps> = ({
     }
   }, []);
 
+  if (!item) {
+    return <NotFound />;
+  }
+
   return (
     <section className="p-6 !pt-2 mx-auto max-w-7xl grid grid-cols-3 gap-4 mb-6">
       <div className="col-span-2">
@@ -58,7 +57,7 @@ const MotorRentalDetail: React.FC<MotorRentalDetailProps> = ({
                 folder="motor"
                 id={item.id}
                 token={item.token}
-                className="rounded-lg w-full h-auto max-h-[280px] mx-auto"  
+                className="rounded-lg w-full h-auto max-h-[280px] mx-auto"
               />
             </div>
             <div>

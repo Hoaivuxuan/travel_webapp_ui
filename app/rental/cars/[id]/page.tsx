@@ -10,12 +10,12 @@ const CarRentalDetailPage = () => {
   const { id } = useParams();
   const router = useRouter();
 
-  const rentalItem = listings.content.listCars.find(
-    (item) => item.id === Number(id),
-  );
-  if (!rentalItem) return notFound();
-
   const [isPaymentVisible, setIsPaymentVisible] = useState(false);
+
+  const rentalItem = listings.content.listCars.find((item) => item.id === Number(id));
+  if (!rentalItem) {
+    return notFound();
+  }
 
   return (
     <div>

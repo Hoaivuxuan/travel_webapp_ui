@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ratingLabel } from "@/data/typeHotel";
 import { listings } from "@/data/fakeData";
 import { useRouter } from "next/navigation";
+import Image from "next/image"; // Import Next.js Image component
 
 type HotelItemProps = {
   id: string;
@@ -16,7 +17,7 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
   );
 
   if (!item) {
-    return <div>Không tìm thấy thông tin xe.</div>;
+    return <div>Không tìm thấy thông tin khách sạn.</div>;
   }
 
   const handleDetailClick = () => {
@@ -24,19 +25,21 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
   };
 
   return (
-    <div className="grid grid-cols-5 gap-4 p-4 border rounded-lg hover:shadow-lg transition-shadow duration-200">
-      <div className="col-span-1 flex justify-center items-center h-[200px]">
-        <img
+    <div className="grid grid-cols-5 gap-4 border rounded-lg hover:shadow-lg transition-shadow duration-200">
+      <div className="col-span-1 flex justify-center items-center">
+        <Image 
           src={item.url}
           alt={`Image of ${item.name}`}
-          className="rounded-lg w-full h-full"
+          className="rounded-l-lg h-full w-auto" 
+          width={300} 
+          height={300} 
         />
       </div>
 
-      <div className="col-span-4">
+      <div className="col-span-4 p-4">
         <div className="grid grid-cols-4 gap-2">
           <div className="col-span-3">
-            <p className="mt-2 text-blue-600 text-lg font-bold ">{item.name}</p>
+            <p className="mt-2 text-blue-600 text-lg font-bold">{item.name}</p>
             <Link
               href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.city)}`}
               target="_blank"
@@ -52,8 +55,7 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
             <div className="flex items-center space-x-2 text-right mt-2">
               <div>
                 <p className="text-blue-600 text-sm font-bold">
-                  {ratingLabel.find((r) => item.rating >= r.min)?.label ||
-                    "Đánh giá"}
+                  {ratingLabel.find((r) => item.rating >= r.min)?.label || "Đánh giá"}
                 </p>
                 <p className="text-xs">{item.reviewCount} lượt đánh giá</p>
               </div>

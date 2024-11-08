@@ -1,7 +1,9 @@
 "use client";
+
 import SearchForm from "@/components/home/SearchForm";
 import { destination } from "@/data/fakeData";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function Hotel() {
   const trendingDestinations = destination.slice(0, 5);
@@ -27,16 +29,25 @@ export default function Hotel() {
               key={item.id}
               className="cursor-pointer"
               onClick={() => router.push(`/hotel/search/${item.id}`)}
+              role="button"
+              tabIndex={0}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  router.push(`/hotel/search/${item.id}`);
+                }
+              }}
             >
-              <img
-                key={item.id}
+              <Image
                 className="object-cover rounded-lg w-full h-72"
                 src={item.src}
-                alt=""
+                alt={`Image of ${item.title}`}
+                width={300}
+                height={300}
+                priority
               />
               <div className="pt-3">
                 <p className="font-bold">{item.title}</p>
-                <p className="">{item.location}</p>
+                <p>{item.location}</p>
                 <p className="text-sm font-light">{item.description}</p>
               </div>
             </div>
@@ -56,16 +67,25 @@ export default function Hotel() {
               key={item.id}
               className="space-y-1 cursor-pointer shrink-0"
               onClick={() => router.push(`/hotel/search/${item.id}`)}
+              role="button"
+              tabIndex={0}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  router.push(`/hotel/search/${item.id}`);
+                }
+              }}
             >
-              <img
-                key={item.id}
+              <Image
                 className="object-cover rounded-lg w-80 h-72"
                 src={item.src}
-                alt=""
+                alt={`Image of ${item.title}`}
+                width={320}
+                height={320}
+                priority
               />
               <div className="pt-3">
                 <p className="font-bold">{item.title}</p>
-                <p className="">{item.location}</p>
+                <p>{item.location}</p>
                 <p className="text-sm font-light">{item.description}</p>
               </div>
             </div>
