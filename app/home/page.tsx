@@ -8,6 +8,7 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 
 export default function Home() {
   const trendingDestinations = destination.slice(0, 5);
@@ -55,11 +56,12 @@ export default function Home() {
         <div className="py-5 grid grid-cols-5 gap-4">
           {trendingDestinations.map((item) => (
             <div key={item.id} className="cursor-pointer">
-              <img
-                key={item.id}
+              <Image
                 className="object-cover rounded-lg w-full h-72"
                 src={item.src}
                 alt={item.title}
+                width={540}
+                height={405}
               />
               <div className="pt-3">
                 <p className="font-bold">{item.title}</p>
@@ -93,11 +95,12 @@ export default function Home() {
                 key={item.id}
                 className="space-y-1 cursor-pointer shrink-0 w-[233.59px]"
               >
-                <img
-                  key={item.id}
+                <Image
                   className="object-cover rounded-lg w-80 h-72"
                   src={item.src}
                   alt={item.title}
+                  width={540}
+                  height={405}
                 />
                 <div className="pt-3 px-1">
                   <p className="font-bold">{item.title}</p>
