@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import SearchForm from "@/components/activities/SearchForm";
 import { useEffect } from "react";
 import { activities } from "@/data/fakeData";
+import Image from "next/image";
 import "./style.css";
 
 const AnyReactComponent = ({ text }: any) => <div>{text}</div>;
@@ -65,10 +66,12 @@ export default function Activities({ params }: { params: { id: string } }) {
         <div className="py-5 grid grid-cols-4 gap-4">
           {trendingActivities.map((item) => (
             <div key={item.id} className="cursor-pointer activity-container">
-              <img
+              <Image
                 className="activity-image h-72"
                 src={item.src}
                 alt={item.title}
+                width={540}
+                height={405}
               />
               <div className="activity-title">{item.title}</div>
             </div>
@@ -82,10 +85,12 @@ export default function Activities({ params }: { params: { id: string } }) {
         <div className="py-5 grid grid-cols-4 gap-4">
           {trendingActivities.map((item) => (
             <div key={item.id} className="cursor-pointer activity-container">
-              <img
+              <Image
                 className="activity-image h-72"
                 src={item.src}
                 alt={item.title}
+                width={540}
+                height={405}
               />
               <div className="activity-title">{item.title}</div>
             </div>
@@ -97,12 +102,13 @@ export default function Activities({ params }: { params: { id: string } }) {
         </div>
         <div className="py-5 grid grid-cols-3 gap-4">
           {nearbyDestinations.map((item) => (
-            <div key={item.id} onClick={handleImageClick} className="cursor-pointer">
-              <img
-                key={item.id}
+            <div key={item.id} className="cursor-pointer">
+              <Image
                 className="object-cover rounded-xl w-full h-72"
                 src={item.src}
                 alt={item.title}
+                width={540}
+                height={405}
               />
               <div className="pt-3">
                 <p className="">{item.location}</p>
@@ -110,12 +116,13 @@ export default function Activities({ params }: { params: { id: string } }) {
             </div>
           ))}
           {nearbyDestinations.map((item) => (
-            <div key={item.id} onClick={handleImageClick} className="cursor-pointer">
-              <img
-                key={item.id}
+            <div key={item.id} className="cursor-pointer">
+              <Image
                 className="object-cover rounded-xl w-full h-72"
                 src={item.src}
                 alt={item.title}
+                width={540}
+                height={405}
               />
               <div className="pt-3">
                 <p className="">{item.location}</p>
@@ -124,21 +131,6 @@ export default function Activities({ params }: { params: { id: string } }) {
           ))}
         </div>
       </section>
-      {/* <div className="py-4 rounded-lg max-w-7xl lg:mx-auto">
-        <div className="h-[25vh]">
-          <GoogleMapReact
-            bootstrapURLKeys={{ key: "" }}
-            defaultCenter={defaultProps.center}
-            defaultZoom={defaultProps.zoom}
-          >
-            <AnyReactComponent
-              lat={59.955413}
-              lng={30.337844}
-              text="My Marker"
-            />
-          </GoogleMapReact>
-        </div>
-      </div> */}
     </main>
   );
 }

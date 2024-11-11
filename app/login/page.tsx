@@ -5,6 +5,7 @@ import { useAuth } from "@/app/login/AuthContext";
 import { ToastContainer } from "react-toastify";
 import Notification from "@/components/Notification";
 import "react-toastify/dist/ReactToastify.css";
+import { decodeJwt } from "jose"; // Import the decode function from jose
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -13,19 +14,43 @@ const LoginPage = () => {
 
   const { notifySuccess, notifyWarning } = Notification();
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
+  
     if (email && password) {
-      login();
-      notifySuccess("Đăng nhập thành công!");
-      setTimeout(() => {
-        window.location.href = "/home";
-      }, 3000);
+      try {
+        const response = await fetch("http://localhost:8080/users/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          const decodedToken = decodeJwt(data.token);
+          const email = decodedToken.sub;
+
+          if (email) {
+            notifySuccess("Đăng nhập thành công!");
+            login(email.toLowerCase());
+            setTimeout(() => {
+              window.location.href = "/home";
+            }, 3000);
+          } else {
+            notifyWarning("Đã xảy ra lỗi trong quá trình đăng nhập!");
+          }
+        } else {
+          notifyWarning("Email hoặc mật khẩu không đúng!");
+        }
+      } catch (error) {
+        notifyWarning("Đã xảy ra lỗi trong quá trình đăng nhập!");
+      }
     } else {
-      notifyWarning("Email hoặc mật khẩu không hợp lệ!");
+      notifyWarning("Email hoặc mật khẩu không đúng!");
     }
-  };
+  };  
 
   return (
     <div className="flex justify-center items-center h-screen bg-[#f0f4f8]">
@@ -69,7 +94,7 @@ const LoginPage = () => {
           </p>
         </div>
       </form>
-      <ToastContainer /> {/* Include ToastContainer for displaying toasts */}
+      <ToastContainer />
     </div>
   );
 };

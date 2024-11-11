@@ -28,7 +28,10 @@ async function RentalSearchPage({ searchParams }: Props) {
 
   const searchResult = useMemo(() => {
     return [
-      ...listings.content.listCars.map((item) => ({ ...item, type: "car" })),
+      ...listings.content.listCars.map((item) => ({ 
+        ...item,
+        type: "car",
+      })),
       ...listings.content.listMotors.map((item) => ({
         ...item,
         type: "motor",
@@ -77,7 +80,7 @@ async function RentalSearchPage({ searchParams }: Props) {
         <hr className="mb-5" />
 
         <div className="grid grid-cols-5 gap-4">
-          <aside className="col-span-1 p-4 border rounded-lg">
+          <aside className="col-span-1 p-4 border rounded-lg sticky top-6 h-fit">
             <h3 className="font-bold text-sm mb-3">Chọn lọc theo:</h3>
             <hr className="my-2" />
 
@@ -121,7 +124,7 @@ async function RentalSearchPage({ searchParams }: Props) {
               <div className="mt-4 text-center">
                 <button
                   onClick={() => setItemsToShow(itemsToShow + 10)}
-                  className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-500 transition-colors duration-200"
+                  className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-600 transition-colors duration-200"
                 >
                   Xem thêm
                 </button>

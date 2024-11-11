@@ -1,5 +1,5 @@
-// components/activities/ActivityCard.tsx
 import React from "react";
+import Image from "next/image";
 
 interface ActivityCardProps {
   title: string;
@@ -25,8 +25,14 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   availableDate = "Mở cửa từ 5 tháng 11",
 }) => {
   return (
-    <div  className="flex border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 max-w">
-      <img src={imageUrl} alt={title} className="w-1/3 h-full object-cover" />
+    <article className="flex border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 max-w">
+      <Image 
+        src={imageUrl} 
+        alt={`Hình ảnh của ${title}`} 
+        className="w-1/3 h-full object-cover" 
+        width={300} 
+        height={200} 
+      />
       <div className="p-4 flex-1">
         <h3 className="text-lg font-semibold">{title}</h3>
         <p className="text-sm text-gray-500">{location}</p>
@@ -52,11 +58,14 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         <p className="mt-2 text-blue-500 font-bold">{price}</p>
         <p className="text-sm text-gray-500">{availableDate}</p>
 
-        <button className="w-full mt-4 border border-blue-600 text-blue-600 py-2 rounded hover:bg-blue-50 transition duration-200">
+        <button 
+          className="w-full mt-4 border border-blue-600 text-blue-600 py-2 rounded hover:bg-blue-50 transition duration-200"
+          aria-label={`Xem chỗ trống cho ${title}`}
+        >
           Xem chỗ trống
         </button>
       </div>
-    </div>
+    </article>
   );
 };
 

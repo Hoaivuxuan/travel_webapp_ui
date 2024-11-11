@@ -8,6 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useRef } from "react";
+import Image from "next/image";
 
 const RentalPage = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -27,7 +28,7 @@ const RentalPage = () => {
   return (
     <main className="bg-white">
       <div className="bg-[#013B94] py-2">
-        <section className="bg-[#013B94] grid grid-cols-2 gap-2 p-6 mx-auto h-[300px] max-w-7xl">
+        <section className="grid grid-cols-2 gap-2 p-6 mx-auto h-[300px] max-w-7xl">
           <div className="col-span-1">
             <h2 className="text-4xl font-bold text-white">
               Dịch vụ cho thuê xe ô tô và xe máy tự lái giá rẻ tại Booking.com
@@ -56,7 +57,8 @@ const RentalPage = () => {
         <div className="relative flex items-center">
           <button
             onClick={scrollLeft}
-            className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500"
+            aria-label="Scroll left"
+            className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             <FontAwesomeIcon icon={faChevronLeft} />
           </button>
@@ -69,15 +71,17 @@ const RentalPage = () => {
                 key={item.id}
                 className="space-y-1 cursor-pointer shrink-0 w-[233.59px]"
               >
-                <img
-                  key={item.id}
+                <Image
                   className="object-cover rounded-lg w-80 h-72"
                   src={item.src}
                   alt={item.title}
+                  width={320}
+                  height={320}
+                  priority
                 />
                 <div className="pt-3 px-1">
                   <p className="font-bold">{item.title}</p>
-                  <p className="">{item.location}</p>
+                  <p>{item.location}</p>
                   <p className="text-sm font-light">{item.description}</p>
                 </div>
               </div>
@@ -85,7 +89,8 @@ const RentalPage = () => {
           </div>
           <button
             onClick={scrollRight}
-            className="absolute -right-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500"
+            aria-label="Scroll right"
+            className="absolute -right-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             <FontAwesomeIcon icon={faChevronRight} />
           </button>

@@ -7,6 +7,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { listings } from "@/data/fakeData";
 import countries from "@/data/listCountry.json";
+import ImageComponent from "@/components/GetImage";
+import NotFound from "@/components/NotFound";
 
 export type RentalItemProps = {
   id: string;
@@ -18,11 +20,11 @@ interface MotorRentalPaymentProps extends RentalItemProps {
 
 const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
   const item = listings.content.listMotors.find(
-    (Motor) => Motor.id.toString() === id,
+    (motor) => motor.id.toString() === id,
   );
 
   if (!item) {
-    return <div>Không tìm thấy thông tin xe.</div>;
+    return <NotFound />;
   }
 
   const [pickupInfo, setPickupInfo] = useState({ date: "", location: "" });
@@ -68,11 +70,6 @@ const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
     }
   }, []);
 
-  const getImageUrl = (model: string, token: string) => {
-    const img_model = model.replaceAll(" ", "-").toLowerCase();
-    return `https://firebasestorage.googleapis.com/v0/b/travel-web-32360.appspot.com/o/${img_model}.jpg?alt=media&token=${token}`;
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setDriverInfo((prevInfo) => ({ ...prevInfo, [name]: value }));
@@ -98,14 +95,11 @@ const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
         <div className="p-4 bg-white">
           <div className="grid grid-cols-2 gap-4 my-4 pb-4">
             <div className="h-[300px] mx-4">
-              <img
-                src={getImageUrl(item.model, item.token)}
-                alt={`Motor ${item.id}`}
-                className="rounded-lg w-full h-auto max-h-[280px] mx-auto"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    "https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg";
-                }}
+              <ImageComponent
+                folder="motor"
+                id={item.id}
+                token={item.token}
+                className="rounded-lg w-full h-auto max-h-[280px] mx-auto"  
               />
             </div>
             <div>
