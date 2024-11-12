@@ -19,14 +19,6 @@ interface MotorRentalPaymentProps extends RentalItemProps {
 }
 
 const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
-  const item = listings.content.listMotors.find(
-    (motor) => motor.id.toString() === id,
-  );
-
-  if (!item) {
-    return <NotFound />;
-  }
-
   const [pickupInfo, setPickupInfo] = useState({ date: "", location: "" });
   const [dropoffInfo, setDropoffInfo] = useState({ date: "", location: "" });
   const [driverInfo, setDriverInfo] = useState({
@@ -88,6 +80,14 @@ const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
     const { name, value } = e.target;
     setPaymentAddress((prevAddress) => ({ ...prevAddress, [name]: value }));
   };
+
+  const item = listings.content.listMotors.find(
+    (motor) => motor.id.toString() === id,
+  );
+
+  if (!item) {
+    return <NotFound />;
+  }
 
   return (
     <section className="p-6 !pt-2 mx-auto max-w-7xl grid grid-cols-3 gap-4 mb-6">
@@ -433,10 +433,7 @@ const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
       </div>
 
       <div className="col-span-1">
-        <button
-          className="bg-[#018DF3] text-white py-2 rounded mt-4 w-full"
-          onClick={onBack}
-        >
+        <button className="bg-[#018DF3] text-white py-2 rounded mt-4 w-full" onClick={onBack}>
           QUAY LẠI
         </button>
       </div>

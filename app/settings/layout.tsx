@@ -1,4 +1,3 @@
-// components/settings/SettingsLayout.tsx
 import React from "react";
 import SettingsMenu from "@/components/settings/SettingsMenu";
 

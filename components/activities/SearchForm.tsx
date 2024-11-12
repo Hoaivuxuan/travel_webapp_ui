@@ -49,7 +49,7 @@ function SearchForm() {
   });
 
   useEffect(() => {
-    const storedValues = localStorage.getItem("searchFormValues");
+    const storedValues = localStorage.getItem("searchActivities");
     if (storedValues) {
       const parsedValues = JSON.parse(storedValues);
       form.setValue("location", parsedValues.location || "");
@@ -60,7 +60,7 @@ function SearchForm() {
     }
 
     const subscription = form.watch((value) => {
-      localStorage.setItem("searchFormValues", JSON.stringify(value));
+      localStorage.setItem("searchActivities", JSON.stringify(value));
     });
 
     return () => subscription.unsubscribe();
@@ -68,7 +68,7 @@ function SearchForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const currentPath = window.location.pathname;
-    localStorage.setItem("defaultValues", JSON.stringify(values));
+    localStorage.setItem("searchActivities", JSON.stringify(values));
 
     const url = new URL("https://searchresults.html");
     url.searchParams.set("ss", "true");
