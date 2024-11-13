@@ -28,8 +28,8 @@ const Header = () => {
   const [activeItem, setActiveItem] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   
-  const { isLoggedIn, email, logout } = useAuth();
-  const username = email ? email.split("@")[0] : "User";
+  const { isLoggedIn, user, logout } = useAuth();
+  const username = user?.name;
 
   const handleLinkClick = (name: SetStateAction<string>, href: string) => {
     if (!isLoggedIn) {
@@ -117,7 +117,10 @@ const Header = () => {
                   <Link
                     href="/settings/personal"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
-                    onClick={() => setActiveItem("")}
+                    onClick={() => {
+                      setActiveItem("");
+                      setDropdownOpen(false);
+                    }}
                   >
                     <FontAwesomeIcon icon={faUser} className="mr-2" />
                     Quản lý tài khoản

@@ -1,43 +1,76 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { fakeUser } from "@/data/fakeData";
 import React, { useEffect, useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { storage } from "@/lib/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTimes } from "@fortawesome/free-solid-svg-icons";
+import countries from "@/data/listCountry.json";
 import Image from "next/image";
 
-type UserInfoKeys = keyof typeof fakeUser;
+type UserInfoKeys = keyof UserData;
+
+interface UserData {
+  id: number;
+  first_name: string | null;
+  last_name: string | null;
+  name: string;
+  email: string;
+  phone_number: string | null;
+  date_of_birth: string | null;
+  address: string | null;
+}
 
 const PersonalInfoPage = () => {
-  const user = fakeUser;
+  const [user, setUser] = useState<UserData | null>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [values, setValues] = useState<typeof fakeUser>(user);
-  const [avatar, setAvatar] = useState(user.avatar);
+  const [values, setValues] = useState<UserData | null>(null);
+  const [avatar, setAvatar] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [newAvatarFile, setNewAvatarFile] = useState<File | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const personalInfo = [
-    { label: "Họ", key: "lastName" as UserInfoKeys },
-    { label: "Tên", key: "firstName" as UserInfoKeys },
-    { label: "Tên hiển thị", key: "displayName" as UserInfoKeys },
-    { label: "Địa chỉ email", key: "email" as UserInfoKeys, verified: true },
-    { label: "Số điện thoại", key: "phone" as UserInfoKeys },
-    { label: "Ngày sinh", key: "birthDate" as UserInfoKeys },
-    { label: "Quốc tịch", key: "nationality" as UserInfoKeys },
-    { label: "Giới tính", key: "gender" as UserInfoKeys },
+    { label: "Họ", key: "last_name" as UserInfoKeys },
+    { label: "Tên", key: "first_name" as UserInfoKeys },
+    { label: "Username", key: "name" as UserInfoKeys},
+    { label: "Email", key: "email" as UserInfoKeys, verified: true },
+    { label: "Điện thoại", key: "phone_number" as UserInfoKeys },
+    { label: "Ngày sinh", key: "date_of_birth" as UserInfoKeys },
     { label: "Địa chỉ", key: "address" as UserInfoKeys },
   ];
 
   useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    const bearerToken = localStorage.getItem("token");
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/users/details?id=${userId}`, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+
+        if (response.ok) {
+          const userData: UserData = await response.json();
+          setUser(userData);
+          setValues(userData);
+        } else {
+          console.error("Failed to fetch user data");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       setIsAuthenticated(!!user);
     });
+
+    fetchUserData();
   }, []);
 
   const handleUpload = async (file: File) => {
@@ -73,15 +106,49 @@ const PersonalInfoPage = () => {
   };
 
   const handleInputChange = (key: UserInfoKeys, value: string) => {
-    setValues({ ...values, [key]: value });
+    if (values) {
+      setValues({ ...values, [key]: value });
+    }
   };
 
   const handleSaveClick = async () => {
     if (newAvatarFile) {
       await uploadAvatarToFirebase(newAvatarFile);
     }
-    console.log("Saved values:", values);
-    setEditingIndex(null);
+  
+    const updatedData = {
+      name: values?.name || null,
+      first_name: values?.first_name || null,
+      last_name: values?.last_name || null,
+      phone_number: values?.phone_number || null,
+      address: values?.address || null,
+      date_of_birth: values?.date_of_birth || null,
+    };
+  
+    const bearerToken = localStorage.getItem("token");
+  
+    try {
+      const response = await fetch(`http://localhost:8080/users`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${bearerToken}`,
+        },
+        body: JSON.stringify(updatedData),
+      });
+  
+      if (response.ok) {
+        const updatedUserData = await response.json();
+        console.log("Thông tin người dùng đã được cập nhật.");
+        localStorage.setItem("user", JSON.stringify(updatedUserData));
+        setUser(updatedUserData);
+        setEditingIndex(null);
+      } else {
+        console.error("Cập nhật thất bại:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Lỗi khi cập nhật thông tin:", error);
+    }
   };
 
   const uploadAvatarToFirebase = async (file: File) => {
@@ -126,33 +193,29 @@ const PersonalInfoPage = () => {
         <div className="divide-y">
           <div className="py-4 flex items-center justify-between">
             <div className="grid grid-cols-11 gap-2 items-center w-full">
-              <div className="col-span-2 font-semibold">Họ và Tên</div>
+              <div className="col-span-2 font-semibold">Họ Tên</div>
               {editingIndex === 0 ? (
-                <>
-                  <div className="col-span-4">
-                    <input
-                      type="text"
-                      value={values.lastName}
-                      onChange={(e) => handleInputChange("lastName", e.target.value)}
-                      className="mt-1 p-1 border rounded w-full"
-                      aria-label="Họ"
-                    />
-                  </div>
-                  <div className="col-span-4">
-                    <input
-                      type="text"
-                      value={values.firstName}
-                      onChange={(e) => handleInputChange("firstName", e.target.value)}
-                      className="mt-1 p-1 border rounded w-full"
-                      aria-label="Tên"
-                    />
-                  </div>
-                </>
+                <div className="col-span-8 flex gap-2 w-full">
+                  <input
+                    type="text"
+                    value={values?.first_name || ""}
+                    onChange={(e) => handleInputChange("first_name", e.target.value)}
+                    className="mt-1 p-1 border rounded w-full"
+                    aria-label="Tên"
+                  />
+                  <input
+                    type="text"
+                    value={values?.last_name || ""}
+                    onChange={(e) => handleInputChange("last_name", e.target.value)}
+                    className="mt-1 p-1 border rounded w-full"
+                    aria-label="Họ"
+                  />
+                </div>
               ) : (
                 <div className="col-span-8">
                   <input
                     type="text"
-                    value={`${values.lastName} ${values.firstName}`}
+                    value={`${values?.first_name} ${values?.last_name}`}
                     readOnly
                     className="mt-1 p-1 border rounded w-full bg-gray-100 cursor-not-allowed"
                   />
@@ -187,7 +250,7 @@ const PersonalInfoPage = () => {
                 <div className="col-span-8">
                   <input
                     type="text"
-                    value={values[info.key]}
+                    value={values?.[info.key] || ""}
                     readOnly={editingIndex !== index + 1}
                     onChange={(e) => handleInputChange(info.key, e.target.value)}
                     className={`mt-1 p-1 border rounded w-full ${
@@ -220,14 +283,14 @@ const PersonalInfoPage = () => {
           ))}
         </div>
         <div className="mt-4 text-right">
-          <button
-            onClick={handleSaveClick}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            disabled={loading}
-          >
-            {loading ? "Đang lưu..." : "Lưu Thông Tin"}
-          </button>
-        </div>
+            <button
+              onClick={handleSaveClick}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              disabled={loading}
+            >
+              {loading ? "Đang lưu..." : "Lưu Thông Tin"}
+            </button>
+          </div>
       </div>
     </div>
   );

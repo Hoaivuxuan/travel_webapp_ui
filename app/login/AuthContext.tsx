@@ -2,10 +2,23 @@
 
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
+type User = {
+  name: string;
+  first_name: string | null;
+  last_name: string | null;
+  phone_number: string | null;
+  email: string;
+  avatar: string | null;
+  address: string | null;
+  date_of_birth: string | null;
+  active: boolean;
+  role: string;
+};
+
 type AuthContextType = {
   isLoggedIn: boolean;
-  email: string | null;
-  login: (userEmail: string) => void;
+  user: User | null;
+  login: (userId: string, token: string) => void;
   logout: () => void;
 };
 
@@ -13,33 +26,53 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [email, setEmail] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const loggedInStatus = localStorage.getItem("isLoggedIn");
-    const storedEmail = localStorage.getItem("email");
-    if (loggedInStatus === "true" && storedEmail) {
+    const storedUser = localStorage.getItem("user");
+    if (loggedInStatus === "true" && storedUser) {
       setIsLoggedIn(true);
-      setEmail(storedEmail);
+      setUser(JSON.parse(storedUser));
     }
   }, []);
 
-  const login = (userEmail: string) => {
-    setIsLoggedIn(true);
-    setEmail(userEmail);
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("email", userEmail);
+  const login = async (userId: string, token: string) => {
+    try {
+      const response = await fetch(`http://localhost:8080/users/details?id=${userId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const userData: User = await response.json();
+        setIsLoggedIn(true);
+        setUser(userData);
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(userData));
+      } else {
+        throw new Error("Failed to fetch user details");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+    }
   };
 
   const logout = () => {
     setIsLoggedIn(false);
-    setEmail(null);
+    setUser(null);
     localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("email");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, email, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

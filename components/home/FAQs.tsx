@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { listings } from "@/data/fakeData";
+import { listHotels } from "@/data/typeHotel";
 
 interface FAQSectionProps {
   hotelId: number;
@@ -9,7 +10,7 @@ interface FAQSectionProps {
 
 const FAQSection: React.FC<FAQSectionProps> = ({ hotelId }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const hotel = listings.content.listHotels.find(
+  const hotel = listHotels.find(
     (hotel) => hotel.id === hotelId,
   );
 
@@ -20,7 +21,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({ hotelId }) => {
     },
     {
       question: `${hotel?.name} cách trung tâm ${hotel?.city} bao xa?`,
-      answer: `${hotel?.name} nằm cách trung tâm ${hotel?.city} khoảng ${hotel?.distanceToCenter} km.`,
+      answer: `${hotel?.name} nằm cách trung tâm ${hotel?.city} khoảng 10 km.`,
     },
     {
       question: `Tôi có thể đặt loại phòng nào tại ${hotel?.name}?`,
@@ -32,7 +33,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({ hotelId }) => {
     },
     {
       question: `Thời gian check-in và check-out tại ${hotel?.name} là khi nào?`,
-      answer: `Thời gian check-in tại ${hotel?.name} bắt đầu từ ${hotel?.checkInTime} và thời gian check-out là trước ${hotel?.checkOutTime}.`,
+      answer: `Thời gian check-in tại ${hotel?.name} bắt đầu từ ${hotel?.checkIn_time} và thời gian check-out là trước ${hotel?.checkOut_time}.`,
     },
   ];
 

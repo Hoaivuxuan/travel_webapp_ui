@@ -10,6 +10,7 @@ const nextConfig = {
       "q-xx.bstatic.com",
       "firebasestorage.googleapis.com",
       "www.shutterstock.com",
+      "example.com",
     ],
   },
 };

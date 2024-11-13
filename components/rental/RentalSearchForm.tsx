@@ -58,7 +58,7 @@ function RentalSearchForm() {
   });
 
   useEffect(() => {
-    const storedValues = localStorage.getItem("rentalSearchFormValues");
+    const storedValues = localStorage.getItem("searchRental");
     if (storedValues) {
       const parsedValues = JSON.parse(storedValues);
       form.setValue("type", parsedValues.type || "cars");
@@ -71,7 +71,7 @@ function RentalSearchForm() {
     }
 
     const subscription = form.watch((value) => {
-      localStorage.setItem("rentalSearchFormValues", JSON.stringify(value));
+      localStorage.setItem("searchRental", JSON.stringify(value));
     });
 
     return () => subscription.unsubscribe();
@@ -81,6 +81,7 @@ function RentalSearchForm() {
     const checkin = format(values.dates.startDate, "dd-MM-yyyy");
     const checkout = format(values.dates.endDate, "dd-MM-yyyy");
     const currentPath = window.location.pathname;
+    localStorage.setItem("searchRental", JSON.stringify(values));
 
     const url = new URL("https://searchresults.html");
     url.searchParams.set("ss", "false");
