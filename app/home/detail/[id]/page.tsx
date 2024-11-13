@@ -2,20 +2,19 @@
 
 import React, { useState } from "react";
 import { useParams, notFound, useRouter } from "next/navigation";
-import { listings } from "@/data/fakeData";
-import { ratingLabel } from "@/data/typeHotel";
+import { listHotels, ratingLabel } from "@/data/typeHotel";
 import FAQSection from "@/components/home/FAQs";
 import Modal from "@/components/Modal";
 import AvailableRoomsTable from "./AvailableRoomsTable";
-import Image from "next/image"; // Import Image component
+import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/swiper-bundle.css"; // Import Swiper styles
+import "swiper/swiper-bundle.css";
 
 const HotelDetailPage = () => {
   const { id } = useParams();
   const router = useRouter();
   const hotelItem =
-    listings.content.listHotels.find((item) => item.id === Number(id)) ||
+    listHotels.find((item) => item.id === Number(id)) ||
     undefined;
 
   const availableRooms = [
@@ -65,6 +64,8 @@ const HotelDetailPage = () => {
     },
   ];
 
+  const minPrice = Math.min(...(hotelItem?.rooms ?? []).map(room => room.price));
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [directionsUrl, setDirectionsUrl] = useState("");
 
@@ -87,12 +88,19 @@ const HotelDetailPage = () => {
       </div>
 
       <div className="px-6 pt-2 mx-auto -mb-4 max-w-7xl">
-        <Swiper spaceBetween={10} slidesPerView={1}>
-          {Array.from({ length: 6 }).map((_, index) => (
+        <Swiper
+          spaceBetween={10}
+          slidesPerView={1}
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
+        >
+          {hotelItem.images.map((image, index) => (
             <SwiperSlide key={index}>
-              <div className="h-[418px] relative round-lg">
+              <div className="h-[418px] relative rounded-lg">
                 <Image
-                  src={hotelItem.url}
+                  src={image}
                   alt={`Gallery ${index}`}
                   className="object-cover"
                   layout="fill"
@@ -119,7 +127,7 @@ const HotelDetailPage = () => {
             <div className="flex flex-row justify-end col-span-2 h-full">
               <div className="flex flex-col justify-end items-end mt-2">
                 <p className="text-xl font-bold text-blue-600 text-right">
-                  {hotelItem.price} VNĐ/đêm
+                   từ {minPrice} VNĐ/đêm
                 </p>
                 <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-green-400 text-sm font-semibold mt-2">
                   Chọn phòng
@@ -132,14 +140,14 @@ const HotelDetailPage = () => {
                 <div className="border p-4 rounded-lg">
                   <div className="flex items-center mb-4">
                     <p className="flex items-center justify-center flex-shrink-0 w-12 h-12 font-bold text-white bg-blue-600 rounded-lg">
-                      {hotelItem.rating.toFixed(1) || "N/A"}
+                      {hotelItem.reviews.average_rating.toFixed(1) || "N/A"}
                     </p>
                     <div className="ml-4">
                       <h3 className="text-lg font-semibold">
-                        {ratingLabel.find((r) => hotelItem.rating >= r.min)?.label || "Đánh giá"}
+                        {ratingLabel.find((r) => hotelItem.reviews.average_rating >= r.min)?.label || "Đánh giá"}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        {hotelItem.reviewCount} đánh giá
+                        {hotelItem.reviews.total_reviews} đánh giá
                       </p>
                     </div>
                   </div>
