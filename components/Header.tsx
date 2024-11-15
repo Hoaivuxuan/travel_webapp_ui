@@ -30,6 +30,7 @@ const Header = () => {
   
   const { isLoggedIn, user, logout } = useAuth();
   const username = user?.name;
+  const avatar = user?.avatar;
 
   const handleLinkClick = (name: SetStateAction<string>, href: string) => {
     if (!isLoggedIn) {
@@ -98,7 +99,7 @@ const Header = () => {
           {isLoggedIn ? (
             <>
               <Image
-                src="https://bizweb.dktcdn.net/100/438/408/files/anh-luffy-yody-vn-67.jpg?v=1688806271889"
+                src={avatar || ""}
                 alt={`${username}'s avatar`}
                 width={40}
                 height={40}
