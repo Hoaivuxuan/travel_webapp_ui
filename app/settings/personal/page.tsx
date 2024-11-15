@@ -2,12 +2,9 @@
 
 import { Input } from "@/components/ui/input";
 import React, { useEffect, useState } from "react";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { storage } from "@/lib/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTimes } from "@fortawesome/free-solid-svg-icons";
-import countries from "@/data/listCountry.json";
+import axios from "axios";
 import Image from "next/image";
 
 type UserInfoKeys = keyof UserData;
@@ -21,21 +18,21 @@ interface UserData {
   phone_number: string | null;
   date_of_birth: string | null;
   address: string | null;
+  avatar: string | null;
 }
 
 const PersonalInfoPage = () => {
   const [user, setUser] = useState<UserData | null>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [values, setValues] = useState<UserData | null>(null);
-  const [avatar, setAvatar] = useState<string>("");
+  const [avatar, setAvatar] = useState<string | null>("");
   const [loading, setLoading] = useState(false);
   const [newAvatarFile, setNewAvatarFile] = useState<File | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const personalInfo = [
     { label: "Họ", key: "last_name" as UserInfoKeys },
     { label: "Tên", key: "first_name" as UserInfoKeys },
-    { label: "Username", key: "name" as UserInfoKeys},
+    { label: "Username", key: "name" as UserInfoKeys },
     { label: "Email", key: "email" as UserInfoKeys, verified: true },
     { label: "Điện thoại", key: "phone_number" as UserInfoKeys },
     { label: "Ngày sinh", key: "date_of_birth" as UserInfoKeys },
@@ -46,6 +43,7 @@ const PersonalInfoPage = () => {
     const userId = localStorage.getItem("userId");
     const bearerToken = localStorage.getItem("token");
     const fetchUserData = async () => {
+      if (!userId || !bearerToken) return;
       try {
         const response = await fetch(`http://localhost:8080/users/details?id=${userId}`, {
           headers: {
@@ -57,6 +55,7 @@ const PersonalInfoPage = () => {
           const userData: UserData = await response.json();
           setUser(userData);
           setValues(userData);
+          setAvatar(userData.avatar);
         } else {
           console.error("Failed to fetch user data");
         }
@@ -65,29 +64,31 @@ const PersonalInfoPage = () => {
       }
     };
 
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      setIsAuthenticated(!!user);
-    });
-
     fetchUserData();
   }, []);
 
-  const handleUpload = async (file: File) => {
-    if (!isAuthenticated) {
-      alert("Vui lòng đăng nhập để tải lên.");
-      return;
-    }
-
+  const handleUploadToCloudinary = async (file: File) => {
+    if (!file) return;
+  
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
+    formData.append("cloud_name", process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!);
+  
     try {
-      const storageRef = ref(storage, `user/${file.name}`);
-      await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(storageRef);
-      console.log("Upload thành công:", downloadURL);
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        formData
+      );
+      setAvatar(response.data.secure_url);
+      return response.data.secure_url;
     } catch (error) {
-      console.error("Lỗi khi tải lên:", error);
+      console.error("Error uploading to Cloudinary:", error);
+    } finally {
+      setLoading(false);
     }
-  };
+  };  
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -112,59 +113,66 @@ const PersonalInfoPage = () => {
   };
 
   const handleSaveClick = async () => {
+    let isAvatarChanged = false;
+    let isUserDataChanged = false;
+  
     if (newAvatarFile) {
-      await uploadAvatarToFirebase(newAvatarFile);
+      isAvatarChanged = true;
     }
   
-    const updatedData = {
-      name: values?.name || null,
-      first_name: values?.first_name || null,
-      last_name: values?.last_name || null,
-      phone_number: values?.phone_number || null,
-      address: values?.address || null,
-      date_of_birth: values?.date_of_birth || null,
+    const updatedData: Partial<UserData> = {
+      name: values?.name,
+      first_name: values?.first_name,
+      last_name: values?.last_name,
+      phone_number: values?.phone_number,
+      address: values?.address,
+      date_of_birth: values?.date_of_birth,
     };
+    
+    if (isAvatarChanged || isUserDataChanged) {
+      setLoading(true);
+    }
   
-    const bearerToken = localStorage.getItem("token");
-  
-    try {
-      const response = await fetch(`http://localhost:8080/users`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${bearerToken}`,
-        },
-        body: JSON.stringify(updatedData),
-      });
-  
-      if (response.ok) {
-        const updatedUserData = await response.json();
-        console.log("Thông tin người dùng đã được cập nhật.");
-        localStorage.setItem("user", JSON.stringify(updatedUserData));
-        setUser(updatedUserData);
-        setEditingIndex(null);
-      } else {
-        console.error("Cập nhật thất bại:", response.statusText);
+    if (newAvatarFile && isAvatarChanged) {
+      const avatarUrl = await handleUploadToCloudinary(newAvatarFile);
+      if (avatarUrl) {
+        updatedData.avatar = avatarUrl;
+        window.location.reload();
       }
-    } catch (error) {
-      console.error("Lỗi khi cập nhật thông tin:", error);
     }
-  };
 
-  const uploadAvatarToFirebase = async (file: File) => {
-    const safeFileName = file.name.replace(/\s+/g, '_');
-    const storageRef = ref(storage, `user/${safeFileName}`);
-    setLoading(true);
-    try {
-      await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(storageRef);
-      console.log("Avatar uploaded to Firebase:", downloadURL);
-      setAvatar(downloadURL);
-    } catch (error) {
-      console.error("Error uploading avatar:", error);
-    } finally {
-      setLoading(false);
+    isUserDataChanged = Object.keys(updatedData).some(
+      (key) => updatedData[key as keyof UserData] !== user?.[key as keyof UserData]
+    );
+  
+    if (isUserDataChanged) {
+      const bearerToken = localStorage.getItem("token");
+      if (!bearerToken) return;
+  
+      try {
+        const response = await fetch(`http://localhost:8080/users`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken}`,
+          },
+          body: JSON.stringify(updatedData),
+        });
+  
+        if (response.ok) {
+          const updatedUserData = await response.json();
+          console.log("Thông tin người dùng đã được cập nhật.");
+          localStorage.setItem("user", JSON.stringify(updatedUserData));
+          setUser(updatedUserData);
+          setEditingIndex(null);
+        } else {
+          console.error("Cập nhật thất bại:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error updating user data:", error);
+      }
     }
+    setLoading(false);
   };
 
   return (
@@ -174,7 +182,7 @@ const PersonalInfoPage = () => {
           <h1 className="text-2xl font-bold flex-grow">Thông tin cá nhân</h1>
           <div className="relative">
             <Image
-              src={avatar}
+              src={avatar || ""}
               alt="Profile"
               className="rounded-full max-w-[100px] max-h-[100px] object-cover cursor-pointer"
               onClick={() => document.getElementById("avatar-upload")?.click()}
@@ -254,7 +262,7 @@ const PersonalInfoPage = () => {
                     readOnly={editingIndex !== index + 1}
                     onChange={(e) => handleInputChange(info.key, e.target.value)}
                     className={`mt-1 p-1 border rounded w-full ${
-                      editingIndex === index + 1 ? "" : "bg-gray-100 cursor-not-allowed"
+                      editingIndex === (index + 1) ? "" : "bg-gray-100 cursor-not-allowed"
                     }`}
                     aria-label={info.label}
                   />
@@ -264,7 +272,6 @@ const PersonalInfoPage = () => {
                     <button
                       onClick={() => setEditingIndex(null)}
                       className="text-gray-500 hover:text-blue-500"
-                      aria-label="Hủy chỉnh sửa"
                     >
                       <FontAwesomeIcon icon={faTimes} size="lg" />
                     </button>
@@ -272,7 +279,6 @@ const PersonalInfoPage = () => {
                     <button
                       onClick={() => handleEditClick(index + 1)}
                       className="text-blue-500 hover:text-blue-700"
-                      aria-label={`Chỉnh sửa ${info.label}`}
                     >
                       <FontAwesomeIcon icon={faEdit} size="lg" />
                     </button>
@@ -283,14 +289,14 @@ const PersonalInfoPage = () => {
           ))}
         </div>
         <div className="mt-4 text-right">
-            <button
-              onClick={handleSaveClick}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-              disabled={loading}
-            >
-              {loading ? "Đang lưu..." : "Lưu Thông Tin"}
-            </button>
-          </div>
+          <button
+            onClick={handleSaveClick}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            disabled={loading}
+          >
+            {loading ? "Đang lưu..." : "Lưu Thông Tin"}
+          </button>
+        </div>
       </div>
     </div>
   );

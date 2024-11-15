@@ -11,6 +11,7 @@ const nextConfig = {
       "firebasestorage.googleapis.com",
       "www.shutterstock.com",
       "example.com",
+      "res.cloudinary.com",
     ],
   },
 };
