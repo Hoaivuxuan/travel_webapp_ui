@@ -10,7 +10,7 @@ npm run dev
 
 ```
 
-2. Tạo file .env (hoặc .env.local) rồi thêm:
+2. Create file .env and edit:
 
 ```bash
 NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=df42yelwi
