@@ -63,7 +63,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
     );
 };
 
-export default function OrderAdmin() {
+export default function RentelAdmin() {
     const [form] = Form.useForm();
     const [data, setData] = useState<DataType[]>(originData);
     const [editingKey, setEditingKey] = useState('');
@@ -165,7 +165,7 @@ export default function OrderAdmin() {
         <main className="bg-white">
             <section className="p-6 bg-white rounded-t-lg max-w-7xl">
                 <div className="pt-5">
-                    <h3 className="text-xl font-bold">Quản trị đơn đã đặt</h3>
+                    <h3 className="text-xl font-bold">Quản trị phương tiện cho thuê</h3>
                 </div>
             </section>
             <Form form={form} component={false}>

@@ -9,14 +9,14 @@ import Image from "next/image";
 interface DataType {
     key: string;
     name: string;
-    age: number;
+    type: number;
     address: string;
 }
 
 const originData = Array.from({ length: 100 }).map<DataType>((_, i) => ({
     key: i.toString(),
     name: `Hoai ${i}`,
-    age: 32,
+    type: 32,
     address: `ThaiBinh City no. ${i}`,
 }));
 
@@ -63,7 +63,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
     );
 };
 
-export default function CustomerAdmin() {
+export default function BookingRentalAdmin() {
     const [form] = Form.useForm();
     const [data, setData] = useState<DataType[]>(originData);
     const [editingKey, setEditingKey] = useState('');
@@ -71,7 +71,7 @@ export default function CustomerAdmin() {
     const isEditing = (record: DataType) => record.key === editingKey;
 
     const edit = (record: Partial<DataType> & { key: React.Key }) => {
-        form.setFieldsValue({ name: '', age: '', address: '', ...record });
+        form.setFieldsValue({ name: '', type: '', address: '', ...record });
         setEditingKey(record.key);
     };
 
@@ -111,8 +111,8 @@ export default function CustomerAdmin() {
             editable: true,
         },
         {
-            title: 'age',
-            dataIndex: 'age',
+            title: 'type',
+            dataIndex: 'type',
             width: '15%',
             editable: true,
         },
@@ -153,7 +153,7 @@ export default function CustomerAdmin() {
             ...col,
             onCell: (record: DataType) => ({
                 record,
-                inputType: col.dataIndex === 'age' ? 'number' : 'text',
+                inputType: col.dataIndex === 'type' ? 'number' : 'text',
                 dataIndex: col.dataIndex,
                 title: col.title,
                 editing: isEditing(record),
@@ -165,10 +165,10 @@ export default function CustomerAdmin() {
         <main className="bg-white">
             <section className="p-6 bg-white rounded-t-lg max-w-7xl">
                 <div className="pt-5">
-                    <h3 className="text-xl font-bold">Quản trị người dùng</h3>
+                    <h3 className="text-xl font-bold">Quản trị đơn đặt xe</h3>
                 </div>
             </section>
-            <Form form={form} component={false}>
+            {/* <Form form={form} component={false}>
                 <Table<DataType>
                     components={{
                         body: { cell: EditableCell },
@@ -179,7 +179,7 @@ export default function CustomerAdmin() {
                     rowClassName="editable-row"
                     pagination={{ onChange: cancel }}
                 />
-            </Form>
+            </Form> */}
         </main>
     );
 }
