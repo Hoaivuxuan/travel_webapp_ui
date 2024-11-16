@@ -937,16 +937,3 @@ export const listings = {
     ],
   },
 };
-
-export const fakeUser = {
-  lastName: "Nguyễn",
-  firstName: "Văn A",
-  displayName: "nguyena",
-  email: "nguyena@example.com",
-  phone: "123456789",
-  birthDate: "01/01/1990",
-  nationality: "Việt Nam",
-  gender: "Nam",
-  address: "Địa chỉ giả",
-  avatar: "https://bizweb.dktcdn.net/100/438/408/files/anh-luffy-yody-vn-67.jpg?v=1688806271889",
-};

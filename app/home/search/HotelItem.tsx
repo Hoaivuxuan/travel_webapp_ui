@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { ratingLabel } from "@/data/typeHotel";
-import { listings } from "@/data/fakeData";
+import { listHotels, ratingLabel } from "@/data/typeHotel";
 import { useRouter } from "next/navigation";
-import Image from "next/image"; // Import Next.js Image component
+import Image from "next/image";
 
 type HotelItemProps = {
   id: string;
@@ -12,13 +11,15 @@ type HotelItemProps = {
 
 const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
   const router = useRouter();
-  const item = listings.content.listHotels.find(
+  const item = listHotels.find(
     (hotel) => hotel.id.toString() === id
   );
 
   if (!item) {
     return <div>Không tìm thấy thông tin khách sạn.</div>;
   }
+
+  const minPrice = Math.min(...item.rooms.map(room => room.price));
 
   const handleDetailClick = () => {
     router.push(`/home/detail/${item.id.toString().padStart(6, "0")}`);
@@ -28,7 +29,7 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
     <div className="grid grid-cols-5 gap-4 border rounded-lg hover:shadow-lg transition-shadow duration-200">
       <div className="col-span-1 flex justify-center items-center">
         <Image 
-          src={item.url}
+          src={item.images[0]}
           alt={`Image of ${item.name}`}
           className="rounded-l-lg h-full w-auto" 
           width={300} 
@@ -55,12 +56,12 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
             <div className="flex items-center space-x-2 text-right mt-2">
               <div>
                 <p className="text-blue-600 text-sm font-bold">
-                  {ratingLabel.find((r) => item.rating >= r.min)?.label || "Đánh giá"}
+                  {ratingLabel.find((r) => item.reviews.average_rating >= r.min)?.label || "Đánh giá"}
                 </p>
-                <p className="text-xs">{item.reviewCount} lượt đánh giá</p>
+                <p className="text-xs">{item.reviews.total_reviews} lượt đánh giá</p>
               </div>
               <p className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold text-white bg-blue-600 rounded-lg">
-                {item.rating.toFixed(1) || "N/A"}
+                {item.reviews.average_rating.toFixed(1) || "N/A"}
               </p>
             </div>
           </div>
@@ -105,8 +106,9 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
           <div className="flex flex-row justify-between col-span-1 h-full">
             <div className="border-l border-gray-300 h-full mx-2"></div>
             <div className="flex flex-col justify-end items-end mt-2">
+              từ
               <p className="text-lg font-bold text-blue-600 text-right">
-                {item.price.toLocaleString("vi-VN")} VNĐ/đêm
+                {minPrice.toLocaleString("vi-VN")} VNĐ/đêm
               </p>
               <button
                 onClick={handleDetailClick}

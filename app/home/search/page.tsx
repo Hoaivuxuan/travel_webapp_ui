@@ -3,11 +3,10 @@
 import React, { useState, useEffect } from "react";
 import SearchForm from "@/components/home/SearchForm";
 import { notFound } from "next/navigation";
-import { listings } from "@/data/fakeData";
-import { type_hotel } from "@/data/typeHotel";
-import "rc-slider/assets/index.css";
+import { listHotels, type_hotel } from "@/data/typeHotel";
 import Slider from "rc-slider";
 import HotelItem from "./HotelItem";
+import "rc-slider/assets/index.css";
 
 type Props = {
   searchParams: SearchParams;
@@ -48,8 +47,8 @@ function SearchPage({ searchParams }: Props) {
     fetchCoordinates();
   }, [searchParams.location]);
 
-  const minPrice = Math.min(...listings.content.listHotels.map((hotel) => hotel.price));
-  const maxPrice = Math.max(...listings.content.listHotels.map((hotel) => hotel.price));
+  const minPrice = Math.min(...listHotels.map((hotel) => Math.min(...hotel.rooms.map((room) => room.price))));
+  const maxPrice = Math.max(...listHotels.map((hotel) => Math.max(...hotel.rooms.map((room) => room.price))));
   
   const [selectedTypes, setSelectedTypes] = useState<number[]>([]);
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
@@ -78,7 +77,7 @@ function SearchPage({ searchParams }: Props) {
     }
   };
 
-  const filteredResults = listings.content.listHotels.filter((item) => {
+  const filteredResults = listHotels.filter((item) => {
     const matchesType =
       selectedTypes.length === 0 ||
       selectedTypes.some((typeId) =>
@@ -88,14 +87,17 @@ function SearchPage({ searchParams }: Props) {
     const matchesRating =
       selectedRatings.length === 0 ||
       selectedRatings.some((rating) => {
-        if (rating === 9) return item.rating >= 9.0;
-        if (rating === 8) return item.rating >= 8.0;
-        if (rating === 7) return item.rating >= 7.0;
-        if (rating === 6) return item.rating >= 6.0;
+        if (rating === 9) return item.reviews.average_rating >= 9.0;
+        if (rating === 8) return item.reviews.average_rating >= 8.0;
+        if (rating === 7) return item.reviews.average_rating >= 7.0;
+        if (rating === 6) return item.reviews.average_rating >= 6.0;
         return false;
       });
 
-    const matchesPrice = item.price >= priceRange[0] && item.price <= priceRange[1];
+    const hotelMinPrice = Math.min(...item.rooms.map((room) => room.price));
+
+    const matchesPrice =
+      hotelMinPrice >= priceRange[0] && hotelMinPrice <= priceRange[1];
 
     return matchesType && matchesRating && matchesPrice;
   });

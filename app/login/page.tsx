@@ -5,7 +5,7 @@ import { useAuth } from "@/app/login/AuthContext";
 import { ToastContainer } from "react-toastify";
 import Notification from "@/components/Notification";
 import "react-toastify/dist/ReactToastify.css";
-import { decodeJwt } from "jose"; // Import the decode function from jose
+import { decodeJwt } from "jose";
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -29,12 +29,10 @@ const LoginPage = () => {
   
         if (response.ok) {
           const data = await response.json();
-          const decodedToken = decodeJwt(data.token);
-          const email = decodedToken.sub;
-
-          if (email) {
+          
+          if (data) {
             notifySuccess("Đăng nhập thành công!");
-            login(email.toLowerCase());
+            login(data.id, data.token);
             setTimeout(() => {
               window.location.href = "/home";
             }, 3000);
@@ -50,7 +48,7 @@ const LoginPage = () => {
     } else {
       notifyWarning("Email hoặc mật khẩu không đúng!");
     }
-  };  
+  };
 
   return (
     <div className="flex justify-center items-center h-screen bg-[#f0f4f8]">
