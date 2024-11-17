@@ -8,8 +8,6 @@ import { useRouter } from 'next/navigation';
 import { activitiesSearch } from "@/data/fakeData";
 import "./style.css";
 
-const AnyReactComponent = ({ text }: any) => <div>{text}</div>;
-
 export default function Search({ params }: { params: { id: string } }) {
   const router = useRouter();
 
