@@ -3,20 +3,27 @@
 import { useState } from "react";
 import { useAuth } from "@/app/login/AuthContext";
 import { ToastContainer } from "react-toastify";
-import Notification from "@/components/Notification";
 import "react-toastify/dist/ReactToastify.css";
+import Notification from "@/components/Notification";
 import { decodeJwt } from "jose";
+
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const LoginPage = () => {
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const { notifySuccess, notifyWarning } = Notification();
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-  
+
     if (email && password) {
       try {
         const response = await fetch("http://localhost:8080/users/login", {
@@ -26,18 +33,17 @@ const LoginPage = () => {
           },
           body: JSON.stringify({ email, password }),
         });
-  
+
         if (response.ok) {
           const data = await response.json();
-          
+
           if (data) {
             notifySuccess("Đăng nhập thành công!");
             login(data.id, data.token);
             setTimeout(() => {
-              window.location.href = "/home";
+              if (data.role === "USER") window.location.href = "/home";
+              if (data.role === "ADMIN") window.location.href = "/admin/demo";
             }, 3000);
-          } else {
-            notifyWarning("Đã xảy ra lỗi trong quá trình đăng nhập!");
           }
         } else {
           notifyWarning("Email hoặc mật khẩu không đúng!");
@@ -67,15 +73,22 @@ const LoginPage = () => {
             className="w-full p-2 border border-gray-300 rounded"
           />
         </div>
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <label className="block mb-2">Mật Khẩu</label>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border border-gray-300 rounded pr-10"
           />
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="absolute right-2 py-auto top-[60%] transform text-gray-500"
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </button>
         </div>
         <div className="mt-4">
           <button

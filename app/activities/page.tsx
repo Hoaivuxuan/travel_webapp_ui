@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import SearchForm from "@/components/activities/SearchForm";
 import { useEffect } from "react";
 import { activities } from "@/data/fakeData";

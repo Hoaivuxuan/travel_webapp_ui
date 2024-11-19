@@ -99,7 +99,7 @@ const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
                 folder="motor"
                 id={item.id}
                 token={item.token}
-                className="rounded-lg w-full h-auto max-h-[280px] mx-auto"  
+                className="rounded-lg w-full h-auto max-h-[280px] mx-auto"
               />
             </div>
             <div>
@@ -433,7 +433,10 @@ const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
       </div>
 
       <div className="col-span-1">
-        <button className="bg-[#018DF3] text-white py-2 rounded mt-4 w-full" onClick={onBack}>
+        <button
+          className="bg-[#018DF3] text-white py-2 rounded mt-4 w-full"
+          onClick={onBack}
+        >
           QUAY LẠI
         </button>
       </div>

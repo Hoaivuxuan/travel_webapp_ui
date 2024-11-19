@@ -27,10 +27,11 @@ const products = [
 const Header = () => {
   const [activeItem, setActiveItem] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  
+
   const { isLoggedIn, user, logout } = useAuth();
   const username = user?.name;
   const avatar = user?.avatar;
+  const role = user?.role;
 
   const handleLinkClick = (name: SetStateAction<string>, href: string) => {
     if (!isLoggedIn) {
@@ -42,7 +43,7 @@ const Header = () => {
   };
 
   const handleLogoClick = () => {
-    setActiveItem("hotel");
+    // setActiveItem("hotel");
     setDropdownOpen(false);
   };
 
@@ -73,25 +74,27 @@ const Header = () => {
 
         <div className="col-span-4 flex justify-center">
           <div className="flex justify-center flex-grow">
-            {products.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => handleLinkClick(item.name, item.href)}
-                className={`flex items-center text-sm font-semibold text-white mx-4 ${
-                  item.href !== "#" && item.name === activeItem
-                    ? "bg-blue-600 rounded-lg p-2"
-                    : ""
-                }`}
-              >
-                <FontAwesomeIcon
-                  icon={item.icon}
-                  className="h-5 w-5 mr-2"
-                  aria-hidden="true"
-                />
-                {item.title}
-              </Link>
-            ))}
+            {isLoggedIn &&
+              role !== "ADMIN" &&
+              products.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => handleLinkClick(item.name, item.href)}
+                  className={`flex items-center text-sm font-semibold text-white mx-4 ${
+                    item.href !== "#" && item.name === activeItem
+                      ? "bg-blue-600 rounded-lg p-2"
+                      : ""
+                  }`}
+                >
+                  <FontAwesomeIcon
+                    icon={item.icon}
+                    className="h-5 w-5 mr-2"
+                    aria-hidden="true"
+                  />
+                  {item.title}
+                </Link>
+              ))}
           </div>
         </div>
 

@@ -4,10 +4,9 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 interface Room {
   type: string;
-  guests: number;
+  max_guests: number;
   price: number;
-  options: string[];
-  bedChoice: string;
+  amenities: string[];
 }
 
 interface AvailableRoomsTableProps {
@@ -15,7 +14,9 @@ interface AvailableRoomsTableProps {
 }
 
 const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ rooms }) => {
-  const [selectedRooms, setSelectedRooms] = useState<number[]>(Array(rooms.length).fill(0));
+  const [selectedRooms, setSelectedRooms] = useState<number[]>(
+    Array(rooms.length).fill(0),
+  );
 
   const handleRoomSelect = (index: number, value: number) => {
     const updatedSelection = [...selectedRooms];
@@ -38,13 +39,15 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ rooms }) => {
             <div className="grid grid-cols-5 text-gray-700 border-b">
               <div className="px-6 py-4">{room.type}</div>
               <div className="px-6 py-4">
-                {room.guests} x 
+                {room.max_guests} x
                 <FontAwesomeIcon icon={faUser} className="mx-2" />
               </div>
-              <div className="px-6 py-4">{room.price.toLocaleString("en-GB")} VNĐ</div>
+              <div className="px-6 py-4">
+                {room.price.toLocaleString("en-GB")} VNĐ
+              </div>
               <div className="px-6 py-4">
                 <ul className="list-disc pl-5">
-                  {room.options.map((option, i) => (
+                  {room.amenities.map((option, i) => (
                     <li key={i} className="text-green-600 text-sm">
                       {option}
                     </li>
@@ -54,7 +57,9 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ rooms }) => {
               <div className="px-6 py-4">
                 <select
                   value={selectedRooms[index]}
-                  onChange={(e) => handleRoomSelect(index, Number(e.target.value))}
+                  onChange={(e) =>
+                    handleRoomSelect(index, Number(e.target.value))
+                  }
                   className="border border-gray-300 rounded px-2 py-1"
                 >
                   {Array.from({ length: 11 }, (_, i) => (
@@ -68,6 +73,9 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ rooms }) => {
           </React.Fragment>
         ))}
       </div>
+      <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-green-400 text-sm font-semibold mt-2">
+        Chọn phòng
+      </button>
     </div>
   );
 };

@@ -11,15 +11,13 @@ type HotelItemProps = {
 
 const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
   const router = useRouter();
-  const item = listHotels.find(
-    (hotel) => hotel.id.toString() === id
-  );
+  const item = listHotels.find((hotel) => hotel.id.toString() === id);
 
   if (!item) {
     return <div>Không tìm thấy thông tin khách sạn.</div>;
   }
 
-  const minPrice = Math.min(...item.rooms.map(room => room.price));
+  const minPrice = Math.min(...item.rooms.map((room) => room.price));
 
   const handleDetailClick = () => {
     router.push(`/home/detail/${item.id.toString().padStart(6, "0")}`);
@@ -28,12 +26,12 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
   return (
     <div className="grid grid-cols-5 gap-4 border rounded-lg hover:shadow-lg transition-shadow duration-200">
       <div className="col-span-1 flex justify-center items-center">
-        <Image 
+        <Image
           src={item.images[0]}
           alt={`Image of ${item.name}`}
-          className="rounded-l-lg h-full w-auto" 
-          width={300} 
-          height={300} 
+          className="rounded-l-lg h-full w-auto"
+          width={300}
+          height={300}
         />
       </div>
 
@@ -56,9 +54,12 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
             <div className="flex items-center space-x-2 text-right mt-2">
               <div>
                 <p className="text-blue-600 text-sm font-bold">
-                  {ratingLabel.find((r) => item.reviews.average_rating >= r.min)?.label || "Đánh giá"}
+                  {ratingLabel.find((r) => item.reviews.average_rating >= r.min)
+                    ?.label || "Đánh giá"}
                 </p>
-                <p className="text-xs">{item.reviews.total_reviews} lượt đánh giá</p>
+                <p className="text-xs">
+                  {item.reviews.total_reviews} lượt đánh giá
+                </p>
               </div>
               <p className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold text-white bg-blue-600 rounded-lg">
                 {item.reviews.average_rating.toFixed(1) || "N/A"}
