@@ -10,9 +10,7 @@ interface FAQSectionProps {
 
 const FAQSection: React.FC<FAQSectionProps> = ({ hotelId }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const hotel = listHotels.find(
-    (hotel) => hotel.id === hotelId,
-  );
+  const hotel = listHotels.find((hotel) => hotel.id === hotelId);
 
   const faqs = [
     {

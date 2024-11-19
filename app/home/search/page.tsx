@@ -23,7 +23,10 @@ export type SearchParams = {
 };
 
 function SearchPage({ searchParams }: Props) {
-  const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+  const [coordinates, setCoordinates] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
 
   useEffect(() => {
     const fetchCoordinates = async () => {
@@ -31,8 +34,8 @@ function SearchPage({ searchParams }: Props) {
         try {
           const response = await fetch(
             `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-              searchParams.location
-            )}`
+              searchParams.location,
+            )}`,
           );
           const data = await response.json();
           if (data && data.length > 0) {
@@ -47,19 +50,30 @@ function SearchPage({ searchParams }: Props) {
     fetchCoordinates();
   }, [searchParams.location]);
 
-  const minPrice = Math.min(...listHotels.map((hotel) => Math.min(...hotel.rooms.map((room) => room.price))));
-  const maxPrice = Math.max(...listHotels.map((hotel) => Math.max(...hotel.rooms.map((room) => room.price))));
-  
+  const minPrice = Math.min(
+    ...listHotels.map((hotel) =>
+      Math.min(...hotel.rooms.map((room) => room.price)),
+    ),
+  );
+  const maxPrice = Math.max(
+    ...listHotels.map((hotel) =>
+      Math.max(...hotel.rooms.map((room) => room.price)),
+    ),
+  );
+
   const [selectedTypes, setSelectedTypes] = useState<number[]>([]);
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([minPrice, maxPrice]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([
+    minPrice,
+    maxPrice,
+  ]);
   const [itemsToShow, setItemsToShow] = useState(10);
 
   const handleTypeSelection = (id: number) => {
     setSelectedTypes((prevSelected) =>
       prevSelected.includes(id)
         ? prevSelected.filter((itemId) => itemId !== id)
-        : [...prevSelected, id]
+        : [...prevSelected, id],
     );
   };
 
@@ -67,7 +81,7 @@ function SearchPage({ searchParams }: Props) {
     setSelectedRatings((prevSelected) =>
       prevSelected.includes(rating)
         ? prevSelected.filter((rat) => rat !== rating)
-        : [...prevSelected, rating]
+        : [...prevSelected, rating],
     );
   };
 
@@ -81,7 +95,9 @@ function SearchPage({ searchParams }: Props) {
     const matchesType =
       selectedTypes.length === 0 ||
       selectedTypes.some((typeId) =>
-        type_hotel.find((hotel) => hotel.id === typeId && hotel.name === item.type)
+        type_hotel.find(
+          (hotel) => hotel.id === typeId && hotel.name === item.type,
+        ),
       );
 
     const matchesRating =
@@ -116,7 +132,8 @@ function SearchPage({ searchParams }: Props) {
 
           <h2 className="py-4">
             <p className="ml-2">
-              {searchParams.location}, từ {searchParams.checkin} đến {searchParams.checkout} ({filteredResults.length} kết quả)
+              {searchParams.location}, từ {searchParams.checkin} đến{" "}
+              {searchParams.checkout} ({filteredResults.length} kết quả)
             </p>
             {coordinates && (
               <p className="ml-2">

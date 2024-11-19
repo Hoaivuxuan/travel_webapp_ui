@@ -8,66 +8,185 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { format } from "date-fns";
 import "./index.css";
-
+import locations from "@/data/location.json";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Calendar } from "../ui/calendar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar, faMapLocation } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCalendar,
+  faMapLocation,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 
-export const formSchema = z.object({
-  type: z.string(),
-  location: z
-    .string()
-    .min(1, "Vui lòng nhập điểm đến để bắt đầu tìm kiếm!")
-    .max(50),
-  dates: z
-    .object({
-      startDate: z.date(),
-      endDate: z.date(),
-    })
-    .refine((data) => data.startDate < data.endDate, {
-      message: "Ngày kết thúc phải sau ngày bắt đầu",
-    }),
-  startTime: z.string(),
-  endTime: z.string(),
-});
+interface Location {
+  id: number;
+  name: string;
+  type: string;
+  parent_id: number | null;
+}
+
+function combineDateTime(date: Date, time: string): Date {
+  const timeParts = time.split(":");
+  if (
+    timeParts.length !== 2 ||
+    isNaN(Number(timeParts[0])) ||
+    isNaN(Number(timeParts[1]))
+  ) {
+    throw new Error("Invalid time format");
+  }
+
+  const newDate = new Date(date);
+
+  if (isNaN(newDate.getTime())) {
+    throw new Error("Invalid date");
+  }
+
+  newDate.setHours(Number(timeParts[0]));
+  newDate.setMinutes(Number(timeParts[1]));
+
+  if (isNaN(newDate.getTime())) {
+    throw new Error("Invalid time value");
+  }
+
+  return newDate;
+}
+
+export const formSchema = z
+  .object({
+    location: z
+      .string()
+      .min(1, "Vui lòng nhập điểm đến để bắt đầu tìm kiếm!")
+      .max(50),
+
+    checkin: z
+      .object({
+        date: z.date(),
+        time: z
+          .string()
+          .regex(
+            /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/,
+            "Thời gian phải có định dạng HH:mm",
+          ),
+      })
+      .refine(
+        (data) => {
+          try {
+            const checkinDateTime = combineDateTime(data.date, data.time);
+            return !isNaN(checkinDateTime.getTime());
+          } catch (error) {
+            return false;
+          }
+        },
+        {
+          message: "Ngày và thời gian checkin không hợp lệ",
+        },
+      ),
+
+    checkout: z
+      .object({
+        date: z.date(),
+        time: z
+          .string()
+          .regex(
+            /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/,
+            "Thời gian phải có định dạng HH:mm",
+          ),
+      })
+      .refine(
+        (data) => {
+          try {
+            const checkoutDateTime = combineDateTime(data.date, data.time);
+            return !isNaN(checkoutDateTime.getTime());
+          } catch (error) {
+            return false;
+          }
+        },
+        {
+          message: "Ngày và thời gian checkin không hợp lệ",
+        },
+      ),
+  })
+  .refine(
+    (data) => {
+      const checkinDateTime = combineDateTime(
+        data.checkin.date,
+        data.checkin.time,
+      );
+      const checkoutDateTime = combineDateTime(
+        data.checkout.date,
+        data.checkout.time,
+      );
+
+      return checkinDateTime < checkoutDateTime;
+    },
+    {
+      message: "Ngày và thời gian kết thúc phải sau ngày và thời gian bắt đầu",
+    },
+  );
 
 function RentalSearchForm() {
   const router = useRouter();
+  const [keyword, setKeyword] = useState("");
+  const [suggestions, setSuggestions] = useState<Location[]>([]);
   const today = new Date();
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1);
 
-  const [selectedType, setSelectedType] = useState("cars");
+  const normalizeString = (str: string) => {
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, "")
+      .toLowerCase();
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      type: "cars",
       location: "",
-      dates: {
-        startDate: today,
-        endDate: tomorrow,
+      checkin: {
+        date: today,
+        time: "09:00",
       },
-      startTime: "09:00",
-      endTime: "09:00",
+      checkout: {
+        date: tomorrow,
+        time: "09:00",
+      },
     },
   });
+
+  useEffect(() => {
+    if (keyword.trim()) {
+      const normalizedKeyword = normalizeString(keyword);
+      const filtered = locations.filter((loc) => {
+        const normalizedLocationName = normalizeString(loc.name);
+        return normalizedLocationName.includes(normalizedKeyword);
+      });
+
+      setSuggestions(filtered);
+    } else {
+      setSuggestions([]);
+    }
+  }, [keyword]);
+
+  const handleSuggestionClick = (name: string) => {
+    setKeyword(name);
+    form.setValue("location", name);
+    setSuggestions([]);
+  };
 
   useEffect(() => {
     const storedValues = localStorage.getItem("searchRental");
     if (storedValues) {
       const parsedValues = JSON.parse(storedValues);
-      form.setValue("type", parsedValues.type || "cars");
       form.setValue("location", parsedValues.location || "");
-      form.setValue("dates.startDate", new Date(parsedValues.dates.startDate));
-      form.setValue("dates.endDate", new Date(parsedValues.dates.endDate));
-      form.setValue("startTime", parsedValues.startTime || "09:00");
-      form.setValue("endTime", parsedValues.endTime || "09:00");
-      setSelectedType(parsedValues.type || "cars");
+      form.setValue("checkin.date", new Date(parsedValues.checkin?.date));
+      form.setValue("checkout.date", new Date(parsedValues.checkout?.date));
+      form.setValue("checkin.time", parsedValues.checkin?.time || "09:00");
+      form.setValue("checkout.time", parsedValues.checkout?.time || "09:00");
     }
 
     const subscription = form.watch((value) => {
@@ -78,19 +197,16 @@ function RentalSearchForm() {
   }, [form]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const checkin = format(values.dates.startDate, "dd-MM-yyyy");
-    const checkout = format(values.dates.endDate, "dd-MM-yyyy");
+    const startDate = `${format(values.checkin.date, "yyyy-MM-dd")}T${values.checkin.time}`;
+    const endDate = `${format(values.checkout.date, "yyyy-MM-dd")}T${values.checkout.time}`;
     const currentPath = window.location.pathname;
     localStorage.setItem("searchRental", JSON.stringify(values));
 
     const url = new URL("https://searchresults.html");
-    url.searchParams.set("ss", "false");
-    url.searchParams.set("type", selectedType);
+    url.searchParams.set("ss", "true");
     url.searchParams.set("location", values.location);
-    url.searchParams.set("checkin", checkin);
-    url.searchParams.set("checkout", checkout);
-    url.searchParams.set("start_time", values.startTime);
-    url.searchParams.set("end_time", values.endTime);
+    url.searchParams.set("checkin", startDate);
+    url.searchParams.set("checkout", endDate);
 
     console.log(url.href);
 
@@ -117,16 +233,52 @@ function RentalSearchForm() {
                   <FormControl>
                     <div className="relative h-[65px]">
                       <Input
-                        placeholder="Bạn muốn đến đâu?"
+                        placeholder="Bạn đang ở đâu?"
                         {...field}
+                        onChange={(e) => {
+                          setKeyword(e.target.value);
+                          field.onChange(e);
+                        }}
+                        value={keyword || field.value}
                         className="pl-12 h-[65px]"
                       />
                       <span className="absolute left-4 top-1/2 transform -translate-y-1/2">
                         <FontAwesomeIcon
                           icon={faMapLocation}
-                          className="mr-2 h-5 text-gray-400"
+                          className="mr-2 text-gray-400"
                         />
                       </span>
+                      <button
+                        type="button"
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                        onClick={() => {
+                          setKeyword("");
+                          form.setValue("location", "");
+                          setSuggestions([]);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTimes} className="w-4" />
+                      </button>
+                      {suggestions.length > 0 && (
+                        <ul className="absolute z-10 bg-white border border-gray-300 rounded shadow-md w-full mt-1 max-h-48 overflow-y-auto">
+                          {suggestions.map((suggestion) => (
+                            <li
+                              key={suggestion.id}
+                              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                              onClick={() =>
+                                handleSuggestionClick(suggestion.name)
+                              }
+                            >
+                              <div className="flex justify-between">
+                                <span>{suggestion.name}</span>
+                                <span className="text-gray-400 text-sm">
+                                  {suggestion.type}
+                                </span>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
                   </FormControl>
                   {form.formState.errors.location && (
@@ -142,7 +294,7 @@ function RentalSearchForm() {
           <div className="col-span-2 bg-white border border-gray-300 rounded-lg px-4 py-2">
             <FormField
               control={form.control}
-              name="dates.startDate"
+              name="checkin.date"
               render={({ field }) => (
                 <FormItem>
                   <label className="block text-xs">Ngày nhận xe</label>
@@ -160,7 +312,9 @@ function RentalSearchForm() {
                             icon={faCalendar}
                             className="mr-2 w-4 text-gray-400"
                           />
-                          {field.value
+                          {field.value &&
+                          field.value instanceof Date &&
+                          !isNaN(field.value.getTime())
                             ? format(field.value, "dd/MM/yyyy")
                             : "Ngày nhận xe"}
                         </Button>
@@ -187,7 +341,7 @@ function RentalSearchForm() {
           <div className="col-span-1 bg-white border border-gray-300 rounded-lg px-4 py-2">
             <FormField
               control={form.control}
-              name="startTime"
+              name="checkin.time"
               render={({ field }) => (
                 <FormItem>
                   <label className="block text-xs">Thời gian</label>
@@ -226,7 +380,7 @@ function RentalSearchForm() {
           <div className="col-span-2 bg-white border border-gray-300 rounded-lg px-4 py-2">
             <FormField
               control={form.control}
-              name="dates.endDate"
+              name="checkout.date"
               render={({ field }) => (
                 <FormItem>
                   <label className="block text-xs">Ngày trả xe</label>
@@ -244,7 +398,9 @@ function RentalSearchForm() {
                             icon={faCalendar}
                             className="mr-2 w-4 text-gray-400"
                           />
-                          {field.value
+                          {field.value &&
+                          field.value instanceof Date &&
+                          !isNaN(field.value.getTime())
                             ? format(field.value, "dd/MM/yyyy")
                             : "Ngày trả xe"}
                         </Button>
@@ -258,7 +414,7 @@ function RentalSearchForm() {
                         onSelect={field.onChange}
                         numberOfMonths={2}
                         disabled={(date) =>
-                          date <= form.getValues("dates.startDate")
+                          date <= form.getValues("checkin.date")
                         }
                       />
                     </PopoverContent>
@@ -271,7 +427,7 @@ function RentalSearchForm() {
           <div className="col-span-1 bg-white border border-gray-300 rounded-lg px-4 py-2">
             <FormField
               control={form.control}
-              name="endTime"
+              name="checkout.time"
               render={({ field }) => (
                 <FormItem>
                   <label className="block text-xs">Thời gian</label>
@@ -317,13 +473,6 @@ function RentalSearchForm() {
           </div>
         </div>
       </form>
-      {/* <div className="max-w-7xl mt-4 lg:mx-auto">
-        <div className="flex space-x-4 text-base ml-2">
-          <span>
-            <strong>Chọn loại phương tiện: </strong>
-          </span>
-        </div>
-      </div> */}
     </Form>
   );
 }

@@ -18,7 +18,7 @@ export type RentalItemProps = {
 export function CarItem({ id }: RentalItemProps) {
   const router = useRouter();
   const item = listings.content.listCars.find(
-    (car) => car.id.toString() === id
+    (car) => car.id.toString() === id,
   );
 
   if (!item) {
@@ -36,7 +36,7 @@ export function CarItem({ id }: RentalItemProps) {
           folder="car"
           id={item.id}
           token={item.token}
-          className="rounded-lg w-full h-auto max-h-[280px] mx-auto"  
+          className="rounded-lg w-full h-auto max-h-[280px] mx-auto"
         />
       </div>
       <div className="flex flex-col justify-between col-span-3">
@@ -76,7 +76,7 @@ export function CarItem({ id }: RentalItemProps) {
 export function MotorItem({ id }: RentalItemProps) {
   const router = useRouter();
   const item = listings.content.listMotors.find(
-    (motor) => motor.id.toString() === id
+    (motor) => motor.id.toString() === id,
   );
 
   if (!item) {
@@ -94,7 +94,7 @@ export function MotorItem({ id }: RentalItemProps) {
           folder="motor"
           id={item.id}
           token={item.token}
-          className="rounded-lg w-full h-auto max-h-[280px] mx-auto"  
+          className="rounded-lg w-full h-auto max-h-[280px] mx-auto"
         />
       </div>
       <div className="flex flex-col justify-between col-span-3">

@@ -12,7 +12,9 @@ const RentalDetailPage = () => {
 
   const [isPaymentVisible, setIsPaymentVisible] = useState(false);
 
-  const rentalItem = listings.content.listMotors.find((item) => item.id === Number(id));
+  const rentalItem = listings.content.listMotors.find(
+    (item) => item.id === Number(id),
+  );
   if (!rentalItem) {
     return notFound();
   }

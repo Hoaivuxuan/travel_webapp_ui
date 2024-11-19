@@ -28,7 +28,7 @@ async function RentalSearchPage({ searchParams }: Props) {
 
   const searchResult = useMemo(() => {
     return [
-      ...listings.content.listCars.map((item) => ({ 
+      ...listings.content.listCars.map((item) => ({
         ...item,
         type: "car",
       })),

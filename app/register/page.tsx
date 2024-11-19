@@ -53,7 +53,9 @@ const RegisterPage = () => {
         }, 3000);
       } else {
         const errorResponse = await response.json();
-        notifyWarning(errorResponse.message || "Đã xảy ra lỗi trong quá trình đăng ký!");
+        notifyWarning(
+          errorResponse.message || "Đã xảy ra lỗi trong quá trình đăng ký!",
+        );
       }
     } catch (error) {
       notifyWarning("Đã xảy ra lỗi trong quá trình đăng ký!");

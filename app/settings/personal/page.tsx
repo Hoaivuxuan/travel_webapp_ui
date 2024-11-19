@@ -45,11 +45,14 @@ const PersonalInfoPage = () => {
     const fetchUserData = async () => {
       if (!userId || !bearerToken) return;
       try {
-        const response = await fetch(`http://localhost:8080/users/details?id=${userId}`, {
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
+        const response = await fetch(
+          `http://localhost:8080/users/details?id=${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${bearerToken}`,
+            },
           },
-        });
+        );
 
         if (response.ok) {
           const userData: UserData = await response.json();
@@ -69,17 +72,23 @@ const PersonalInfoPage = () => {
 
   const handleUploadToCloudinary = async (file: File) => {
     if (!file) return;
-  
+
     setLoading(true);
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
-    formData.append("cloud_name", process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!);
-  
+    formData.append(
+      "upload_preset",
+      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!,
+    );
+    formData.append(
+      "cloud_name",
+      process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!,
+    );
+
     try {
       const response = await axios.post(
         `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-        formData
+        formData,
       );
       setAvatar(response.data.secure_url);
       return response.data.secure_url;
@@ -88,7 +97,7 @@ const PersonalInfoPage = () => {
     } finally {
       setLoading(false);
     }
-  };  
+  };
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -115,11 +124,11 @@ const PersonalInfoPage = () => {
   const handleSaveClick = async () => {
     let isAvatarChanged = false;
     let isUserDataChanged = false;
-  
+
     if (newAvatarFile) {
       isAvatarChanged = true;
     }
-  
+
     const updatedData: Partial<UserData> = {
       name: values?.name,
       first_name: values?.first_name,
@@ -128,11 +137,11 @@ const PersonalInfoPage = () => {
       address: values?.address,
       date_of_birth: values?.date_of_birth,
     };
-    
+
     if (isAvatarChanged || isUserDataChanged) {
       setLoading(true);
     }
-  
+
     if (newAvatarFile && isAvatarChanged) {
       const avatarUrl = await handleUploadToCloudinary(newAvatarFile);
       if (avatarUrl) {
@@ -142,13 +151,14 @@ const PersonalInfoPage = () => {
     }
 
     isUserDataChanged = Object.keys(updatedData).some(
-      (key) => updatedData[key as keyof UserData] !== user?.[key as keyof UserData]
+      (key) =>
+        updatedData[key as keyof UserData] !== user?.[key as keyof UserData],
     );
-  
+
     if (isUserDataChanged) {
       const bearerToken = localStorage.getItem("token");
       if (!bearerToken) return;
-  
+
       try {
         const response = await fetch(`http://localhost:8080/users`, {
           method: "PUT",
@@ -158,7 +168,7 @@ const PersonalInfoPage = () => {
           },
           body: JSON.stringify(updatedData),
         });
-  
+
         if (response.ok) {
           const updatedUserData = await response.json();
           console.log("Thông tin người dùng đã được cập nhật.");
@@ -207,14 +217,18 @@ const PersonalInfoPage = () => {
                   <input
                     type="text"
                     value={values?.first_name || ""}
-                    onChange={(e) => handleInputChange("first_name", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("first_name", e.target.value)
+                    }
                     className="mt-1 p-1 border rounded w-full"
                     aria-label="Tên"
                   />
                   <input
                     type="text"
                     value={values?.last_name || ""}
-                    onChange={(e) => handleInputChange("last_name", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("last_name", e.target.value)
+                    }
                     className="mt-1 p-1 border rounded w-full"
                     aria-label="Họ"
                   />
@@ -260,9 +274,13 @@ const PersonalInfoPage = () => {
                     type="text"
                     value={values?.[info.key] || ""}
                     readOnly={editingIndex !== index + 1}
-                    onChange={(e) => handleInputChange(info.key, e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange(info.key, e.target.value)
+                    }
                     className={`mt-1 p-1 border rounded w-full ${
-                      editingIndex === (index + 1) ? "" : "bg-gray-100 cursor-not-allowed"
+                      editingIndex === index + 1
+                        ? ""
+                        : "bg-gray-100 cursor-not-allowed"
                     }`}
                     aria-label={info.label}
                   />

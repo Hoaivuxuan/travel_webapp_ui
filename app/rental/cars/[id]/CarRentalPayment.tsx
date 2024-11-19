@@ -118,7 +118,7 @@ const CarRentalPayment = ({ id, onBack }: CarRentalPaymentProps) => {
                 folder="car"
                 id={item.id}
                 token={item.token}
-                className="rounded-lg w-full h-auto max-h-[280px] mx-auto"  
+                className="rounded-lg w-full h-auto max-h-[280px] mx-auto"
               />
             </div>
             <div>
