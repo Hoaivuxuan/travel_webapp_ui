@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useParams, notFound, useRouter } from "next/navigation";
+import { useParams, notFound, useRouter, useSearchParams } from "next/navigation";
 import { listHotels, ratingLabel } from "@/data/typeHotel";
 import FAQSection from "@/components/home/FAQs";
 import Modal from "@/components/Modal";
@@ -10,11 +10,18 @@ import Image from "next/image";
 import { Carousel } from "antd";
 import { StarFilled, StarOutlined } from "@ant-design/icons";
 
+type DetailsParams = {
+  id: string;
+};
+
 const HotelDetailPage = () => {
-  const { id } = useParams();
   const router = useRouter();
+  const detailsParams = useSearchParams();
+  const params: DetailsParams = {
+    id: detailsParams.get("id") || "",
+  };
   const hotelItem =
-    listHotels.find((item) => item.id === Number(id)) || undefined;
+    listHotels.find((item) => item.id === Number(params.id)) || undefined;
 
   const minPrice = Math.min(
     ...(hotelItem?.rooms ?? []).map((room) => room.price),
@@ -197,7 +204,7 @@ const HotelDetailPage = () => {
           Những phòng còn trống tại {hotelItem.name}
         </h2>
         <div className="bg-white p-4 w-full border rounded-lg hover:shadow-lg transition-shadow duration-200">
-          <AvailableRoomsTable rooms={hotelItem?.rooms} />
+          <AvailableRoomsTable id={hotelItem?.id} rooms={hotelItem?.rooms} />
         </div>
       </div>
       <div className="px-6 py-2 mx-auto max-w-7xl">

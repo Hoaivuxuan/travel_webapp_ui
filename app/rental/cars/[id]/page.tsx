@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, notFound, useRouter } from "next/navigation";
-import { listings } from "@/data/fakeData";
+import { vehicles } from "@/data/fakeData";
 import { useState } from "react";
 import CarRentalDetail from "./CarRentalDetail";
 import CarRentalPayment from "./CarRentalPayment";
@@ -12,9 +12,7 @@ const CarRentalDetailPage = () => {
 
   const [isPaymentVisible, setIsPaymentVisible] = useState(false);
 
-  const rentalItem = listings.content.listCars.find(
-    (item) => item.id === Number(id),
-  );
+  const rentalItem = vehicles.find((item) => item.id === Number(id));
   if (!rentalItem) {
     return notFound();
   }

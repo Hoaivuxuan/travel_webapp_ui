@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGasPump,
-  faLocationDot,
   faMotorcycle,
 } from "@fortawesome/free-solid-svg-icons";
-import { listings } from "@/data/fakeData";
+import { vehicles } from "@/data/fakeData";
 import countries from "@/data/listCountry.json";
-import ImageComponent from "@/components/GetImage";
+import Image from "next/image";
 import NotFound from "@/components/NotFound";
 
 export type RentalItemProps = {
@@ -81,10 +80,7 @@ const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
     setPaymentAddress((prevAddress) => ({ ...prevAddress, [name]: value }));
   };
 
-  const item = listings.content.listMotors.find(
-    (motor) => motor.id.toString() === id,
-  );
-
+  const item = vehicles.find((vehicle) => vehicle.id.toString() === id);
   if (!item) {
     return <NotFound />;
   }
@@ -95,11 +91,12 @@ const MotorRentalPayment = ({ id, onBack }: MotorRentalPaymentProps) => {
         <div className="p-4 bg-white">
           <div className="grid grid-cols-2 gap-4 my-4 pb-4">
             <div className="h-[300px] mx-4">
-              <ImageComponent
-                folder="motor"
-                id={item.id}
-                token={item.token}
-                className="rounded-lg w-full h-auto max-h-[280px] mx-auto"
+              <Image
+                src={`https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg`}
+                alt={`Image of ${item.id}`}
+                className="rounded-l-lg h-full w-auto"
+                width={300}
+                height={300}
               />
             </div>
             <div>

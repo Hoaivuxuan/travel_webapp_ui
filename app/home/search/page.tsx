@@ -4,9 +4,10 @@ import React, { useState, useEffect } from "react";
 import SearchForm from "@/components/home/SearchForm";
 import { notFound } from "next/navigation";
 import { listHotels, type_hotel } from "@/data/typeHotel";
-import Slider from "rc-slider";
 import HotelItem from "./HotelItem";
+import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import { StarFilled, StarOutlined } from "@ant-design/icons";
 
 type Props = {
   searchParams: SearchParams;
@@ -62,7 +63,7 @@ function SearchPage({ searchParams }: Props) {
   );
 
   const [selectedTypes, setSelectedTypes] = useState<number[]>([]);
-  const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
+  const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [priceRange, setPriceRange] = useState<[number, number]>([
     minPrice,
     maxPrice,
@@ -77,12 +78,12 @@ function SearchPage({ searchParams }: Props) {
     );
   };
 
-  const handleRatingSelection = (rating: number) => {
-    setSelectedRatings((prevSelected) =>
-      prevSelected.includes(rating)
-        ? prevSelected.filter((rat) => rat !== rating)
-        : [...prevSelected, rating],
-    );
+  const handleStarClick = (star: number) => {
+    if (selectedRating === star - 0.5) {
+      setSelectedRating(star);
+    } else {
+      setSelectedRating(star - 0.5);
+    }
   };
 
   const handlePriceChange = (value: number | number[]) => {
@@ -101,14 +102,7 @@ function SearchPage({ searchParams }: Props) {
       );
 
     const matchesRating =
-      selectedRatings.length === 0 ||
-      selectedRatings.some((rating) => {
-        if (rating === 9) return item.reviews.average_rating >= 9.0;
-        if (rating === 8) return item.reviews.average_rating >= 8.0;
-        if (rating === 7) return item.reviews.average_rating >= 7.0;
-        if (rating === 6) return item.reviews.average_rating >= 6.0;
-        return false;
-      });
+      selectedRating === null || item.reviews.average_rating >= selectedRating;
 
     const hotelMinPrice = Math.min(...item.rooms.map((room) => room.price));
 
@@ -135,11 +129,6 @@ function SearchPage({ searchParams }: Props) {
               {searchParams.location}, từ {searchParams.checkin} đến{" "}
               {searchParams.checkout} ({filteredResults.length} kết quả)
             </p>
-            {coordinates && (
-              <p className="ml-2">
-                Kinh độ: {coordinates.lng}, Vĩ độ: {coordinates.lat}
-              </p>
-            )}
           </h2>
 
           <hr className="mb-5" />
@@ -170,57 +159,27 @@ function SearchPage({ searchParams }: Props) {
 
               <hr className="my-2" />
               <div className="mb-6 text-sm">
-                <h4 className="font-semibold mb-2">Điểm đánh giá của khách</h4>
-                <ul>
-                  <li className="mb-1 flex items-center">
-                    <input
-                      type="checkbox"
-                      className="mr-2"
-                      id="rating1"
-                      checked={selectedRatings.includes(9)}
-                      onChange={() => handleRatingSelection(9)}
-                    />
-                    <label htmlFor="rating1" className="flex-grow">
-                      Tuyệt hảo: ≥ 9.0
-                    </label>
-                  </li>
-                  <li className="mb-1 flex items-center">
-                    <input
-                      type="checkbox"
-                      className="mr-2"
-                      id="rating2"
-                      checked={selectedRatings.includes(8)}
-                      onChange={() => handleRatingSelection(8)}
-                    />
-                    <label htmlFor="rating2" className="flex-grow">
-                      Rất tốt: ≥ 8.0
-                    </label>
-                  </li>
-                  <li className="mb-1 flex items-center">
-                    <input
-                      type="checkbox"
-                      className="mr-2"
-                      id="rating3"
-                      checked={selectedRatings.includes(7)}
-                      onChange={() => handleRatingSelection(7)}
-                    />
-                    <label htmlFor="rating3" className="flex-grow">
-                      Tốt: ≥ 7.0
-                    </label>
-                  </li>
-                  <li className="mb-1 flex items-center">
-                    <input
-                      type="checkbox"
-                      className="mr-2"
-                      id="rating4"
-                      checked={selectedRatings.includes(6)}
-                      onChange={() => handleRatingSelection(6)}
-                    />
-                    <label htmlFor="rating4" className="flex-grow">
-                      Dễ chịu: ≥ 6.0
-                    </label>
-                  </li>
-                </ul>
+                <h4 className="font-semibold mb-2">Đánh giá của khách hàng</h4>
+                <div className="flex items-center space-x-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <div key={star} className="relative cursor-pointer">
+                      <StarOutlined
+                        className={`text-2xl ${
+                          selectedRating && selectedRating >= star - 0.5
+                            ? "text-yellow-400"
+                            : "text-gray-400"
+                        }`}
+                        onClick={() => handleStarClick(star)}
+                      />
+                      {selectedRating && selectedRating >= star && (
+                        <StarFilled
+                          className="absolute top-0 left-0 text-yellow-400 text-2xl"
+                          onClick={() => handleStarClick(star)}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <hr className="my-2" />

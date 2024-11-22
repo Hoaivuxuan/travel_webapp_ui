@@ -1,10 +1,12 @@
 "use client";
 
 import { notFound } from "next/navigation";
-import { useState, useMemo } from "react";
-import { listings } from "@/data/fakeData";
+import { useState, useEffect ,useMemo } from "react";
+import { vehicles } from "@/data/fakeData";
 import { CarItem, MotorItem } from "./RentalItem";
 import RentalSearchForm from "@/components/rental/RentalSearchForm";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 
 type Props = {
   searchParams: RentalSearchParams;
@@ -18,32 +20,36 @@ export type RentalSearchParams = {
   type: string;
 };
 
-async function RentalSearchPage({ searchParams }: Props) {
-  if (!searchParams.url) return notFound();
 
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([
-    "car",
-    "motor",
-  ]);
-
-  const searchResult = useMemo(() => {
-    return [
-      ...listings.content.listCars.map((item) => ({
-        ...item,
-        type: "car",
-      })),
-      ...listings.content.listMotors.map((item) => ({
-        ...item,
-        type: "motor",
-      })),
-    ].sort((a, b) => a.model.localeCompare(b.model));
-  }, []);
-
+const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
+  const [selectedTypes, setSelectedTypes] = useState<string[]>(["car", "motor"]);
   const [itemsToShow, setItemsToShow] = useState(10);
 
+  const searchResult = useMemo(() => {
+    return vehicles.sort((a, b) => a.model.localeCompare(b.model));
+  }, []);
+
+  const minPrice = Math.min(...vehicles.map((item) => item.price));
+  const maxPrice = Math.max(...vehicles.map((item) => item.price));
+  const [priceRange, setPriceRange] = useState<[number, number]>([
+    minPrice,
+    maxPrice,
+  ]);
+
+  const handlePriceChange = (value: number | number[]) => {
+    if (Array.isArray(value)) {
+      setPriceRange([value[0], value[1]]);
+    }
+  };
+
   const filteredResults = useMemo(() => {
-    return searchResult.filter((item) => selectedTypes.includes(item.type));
-  }, [searchResult, selectedTypes]);
+    return searchResult.filter(
+      (item) =>
+        selectedTypes.includes(item.type) &&
+        item.price >= priceRange[0] &&
+        item.price <= priceRange[1]
+    );
+  }, [searchResult, selectedTypes, priceRange]);
 
   const displayedResults = filteredResults.slice(0, itemsToShow);
 
@@ -53,7 +59,13 @@ async function RentalSearchPage({ searchParams }: Props) {
     );
   };
 
-  if (searchResult.length === 0) {
+  useEffect(() => {
+    if (!searchParams.url) {
+      notFound();
+    }
+  }, [searchParams.url]);
+
+  if (!searchParams.url) {
     return (
       <div className="text-center py-4">
         <h2 className="text-xl font-semibold">
@@ -83,7 +95,27 @@ async function RentalSearchPage({ searchParams }: Props) {
           <aside className="col-span-1 p-4 border rounded-lg sticky top-6 h-fit">
             <h3 className="font-bold text-sm mb-3">Chọn lọc theo:</h3>
             <hr className="my-2" />
+            <div className="mb-6 text-sm">
+              <h4 className="font-semibold mb-2">Giá mỗi đêm (VNĐ)</h4>
+              <Slider
+                range
+                value={priceRange}
+                min={minPrice}
+                max={maxPrice}
+                onChange={handlePriceChange}
+                trackStyle={[{ backgroundColor: "#1D4ED8" }]} // Màu sắc thanh trượt
+                handleStyle={[
+                  { borderColor: "#1D4ED8" }, // Màu nút trượt trái
+                  { borderColor: "#1D4ED8" }, // Màu nút trượt phải
+                ]}
+              />
+              <div className="flex justify-between mt-2 text-xs">
+                <span>{priceRange[0].toLocaleString("vi-VN")} VNĐ</span>
+                <span>{priceRange[1].toLocaleString("vi-VN")} VNĐ</span>
+              </div>
+            </div>
 
+            <hr className="my-2" />
             <div className="mb-6 text-sm">
               <h4 className="font-semibold mb-2">Loại phương tiện</h4>
               <ul>

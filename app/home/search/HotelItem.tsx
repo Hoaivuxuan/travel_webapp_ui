@@ -20,7 +20,7 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
   const minPrice = Math.min(...item.rooms.map((room) => room.price));
 
   const handleDetailClick = () => {
-    router.push(`/home/detail/${item.id.toString().padStart(6, "0")}`);
+    router.push(`/home/detail?id=${item.id.toString().padStart(6, "0")}`);
   };
 
   return (

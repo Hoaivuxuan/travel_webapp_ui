@@ -1,10 +1,11 @@
 "use client";
 
-import { useParams, notFound, useRouter } from "next/navigation";
-import { listings } from "@/data/fakeData";
+import { notFound, useParams, useRouter } from "next/navigation";
+import { vehicles } from "@/data/fakeData";
 import { useState } from "react";
 import MotorRentalDetail from "./MotorRentalDetail";
 import MotorRentalPayment from "./MotorRentalPayment";
+import NotFound from "@/components/NotFound";
 
 const RentalDetailPage = () => {
   const { id } = useParams();
@@ -12,9 +13,7 @@ const RentalDetailPage = () => {
 
   const [isPaymentVisible, setIsPaymentVisible] = useState(false);
 
-  const rentalItem = listings.content.listMotors.find(
-    (item) => item.id === Number(id),
-  );
+  const rentalItem = vehicles.find((item) => item.id === Number(id));
   if (!rentalItem) {
     return notFound();
   }
@@ -22,8 +21,7 @@ const RentalDetailPage = () => {
   return (
     <div>
       <div className="p-6 !pb-2 mx-auto max-w-7xl">
-        <a
-          href="#"
+        <button
           className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-gray-400 transition duration-150"
           onClick={(e) => {
             e.preventDefault();
@@ -31,7 +29,7 @@ const RentalDetailPage = () => {
           }}
         >
           Quay lại trang trước
-        </a>
+        </button>
       </div>
 
       <div>

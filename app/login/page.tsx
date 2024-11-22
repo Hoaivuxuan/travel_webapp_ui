@@ -5,8 +5,6 @@ import { useAuth } from "@/app/login/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
-import { decodeJwt } from "jose";
-
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const LoginPage = () => {
@@ -42,7 +40,7 @@ const LoginPage = () => {
             login(data.id, data.token);
             setTimeout(() => {
               if (data.role === "USER") window.location.href = "/home";
-              if (data.role === "ADMIN") window.location.href = "/admin/demo";
+              if (data.role === "ADMIN") window.location.href = "/admin";
             }, 3000);
           }
         } else {
@@ -85,7 +83,7 @@ const LoginPage = () => {
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className="absolute right-2 py-auto top-[60%] transform text-gray-500"
+            className="absolute right-3 py-auto top-[60%] transform text-gray-500"
           >
             {showPassword ? <FaEyeSlash /> : <FaEye />}
           </button>

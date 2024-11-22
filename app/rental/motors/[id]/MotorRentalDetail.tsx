@@ -1,13 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faGasPump,
-  faLocationDot,
-  faMotorcycle,
-} from "@fortawesome/free-solid-svg-icons";
-import { listings } from "@/data/fakeData";
+import { faGasPump, faLocationDot, faMotorcycle } from "@fortawesome/free-solid-svg-icons";
+import { vehicles } from "@/data/fakeData";
 import { useEffect, useState } from "react";
-import ImageComponent from "@/components/GetImage";
+import Image from "next/image";
 import NotFound from "@/components/NotFound";
+import { notFound } from "next/navigation";
 
 export type RentalItemProps = {
   id: string;
@@ -24,9 +21,21 @@ const MotorRentalDetail: React.FC<MotorRentalDetailProps> = ({
   const [pickupInfo, setPickupInfo] = useState({ date: "", location: "" });
   const [dropoffInfo, setDropoffInfo] = useState({ date: "", location: "" });
 
-  const item = listings.content.listMotors.find(
-    (motor) => motor.id.toString() === id,
-  );
+  const item = vehicles.find((vehicle) => vehicle.id.toString() === id);
+  const services = [
+    "Đánh giá của khách hàng: 8,6 / 10",
+    "Chính sách nhiên liệu phổ biến nhất",
+    "Không phải chờ đợi lâu",
+    "Quầy thanh toán dễ tìm",
+    "Nhân viên quầy thanh toán sẵn sàng hỗ trợ",
+    "Hủy đặt thuê miễn phí"
+  ];
+  const policy = [
+    "Miễn phí hủy tối đa 48 giờ trước khi nhận xe",
+    "Bảo hiểm hư hại do va chạm với mức miễn thường bằng 0 VNĐ",
+    "Bảo hiểm Mất trộm với mức miễn thường bằng 0 VNĐ",
+    "Số kilômét không giới hạn",
+  ];
 
   useEffect(() => {
     const storedValues = localStorage.getItem("rentalSearchFormValues");
@@ -44,7 +53,7 @@ const MotorRentalDetail: React.FC<MotorRentalDetailProps> = ({
   }, []);
 
   if (!item) {
-    return <NotFound />;
+    return notFound();
   }
 
   return (
@@ -53,19 +62,18 @@ const MotorRentalDetail: React.FC<MotorRentalDetailProps> = ({
         <div className="p-4 bg-white">
           <div className="grid grid-cols-2 gap-4 my-4 pb-4">
             <div className="h-[300px]">
-              <ImageComponent
-                folder="motor"
-                id={item.id}
-                token={item.token}
-                className="rounded-lg w-full h-auto max-h-[280px] mx-auto"
+              <Image
+                src={`https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg`}
+                alt={`Image of ${item.model}`}
+                className="rounded-l-lg h-full w-auto"
+                width={300}
+                height={300}
               />
             </div>
             <div>
               <div className="pb-4">
                 <h1 className="text-2xl font-bold">{item.model}</h1>
-                <p className="text-gray-500 text-sm">
-                  Cung cấp bởi Motor Hanoi
-                </p>
+                <p className="text-gray-500 text-sm">Cung cấp bởi Motor Hanoi</p>
               </div>
               <div className="px-2 space-y-2">
                 <div className="flex items-center">
@@ -85,30 +93,12 @@ const MotorRentalDetail: React.FC<MotorRentalDetailProps> = ({
         <div className="p-4">
           <h3 className="text-lg font-bold mb-4">Lựa chọn tuyệt vời!</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>Đánh giá của khách hàng: 8,6 / 10</span>
-            </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>Chính sách nhiên liệu phổ biến nhất</span>
-            </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>Không phải chờ đợi lâu</span>
-            </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>Quầy thanh toán dễ tìm</span>
-            </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>Nhân viên quầy thanh toán sẵn sàng hỗ trợ</span>
-            </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>Hủy đặt thuê miễn phí</span>
-            </div>
+            {services.map((text, index) => (
+              <div className="flex items-start space-x-2" key={index}>
+                <span className="text-green-600">✔</span>
+                <span>{text}</span>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -116,24 +106,12 @@ const MotorRentalDetail: React.FC<MotorRentalDetailProps> = ({
         <div className="p-4">
           <h3 className="text-lg font-bold mb-4">Giá đã bao gồm:</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>Miễn phí hủy tối đa 48 giờ trước khi nhận xe</span>
-            </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>
-                Bảo hiểm hư hại do va chạm với mức miễn thường bằng 0 VNĐ
-              </span>
-            </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>Bảo hiểm Mất trộm với mức miễn thường bằng 0 VNĐ</span>
-            </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✔</span>
-              <span>Số kilômét không giới hạn</span>
-            </div>
+            {policy.map((text, index) => (
+              <div className="flex items-start space-x-2" key={index}>
+                <span className="text-green-600">✔</span>
+                <span>{text}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -143,36 +121,20 @@ const MotorRentalDetail: React.FC<MotorRentalDetailProps> = ({
           <h3 className="text-lg font-bold mb-4">Nhận xe và trả xe</h3>
           <div className="space-y-6 relative">
             <div className="h-[74px] absolute left-2 top-6 bottom-6 border border-blue-300"></div>
-            <div className="flex items-start space-x-2">
-              <div className="flex-none">
-                <FontAwesomeIcon
-                  icon={faLocationDot}
-                  className="w-5 text-blue-600"
-                />
+            {[pickupInfo, dropoffInfo].map((info, index) => (
+              <div className="flex items-start space-x-2" key={index}>
+                <div className="flex-none">
+                  <FontAwesomeIcon icon={faLocationDot} className="w-5 text-blue-600" />
+                </div>
+                <div className="flex-grow px-1">
+                  <div className="mb-1 text-gray-700">{info.date}</div>
+                  <div className="font-bold">{info.location}</div>
+                  <a href="#" className="text-blue-600 hover:underline">
+                    {index === 0 ? "Xem hướng dẫn nhận xe" : "Xem hướng dẫn trả xe"}
+                  </a>
+                </div>
               </div>
-              <div className="flex-grow px-1">
-                <div className="mb-1 text-gray-700">{pickupInfo.date}</div>
-                <div className="font-bold">{pickupInfo.location}</div>
-                <a href="#" className="text-blue-600 hover:underline">
-                  Xem hướng dẫn nhận xe
-                </a>
-              </div>
-            </div>
-            <div className="flex items-start space-x-2">
-              <div className="flex-none">
-                <FontAwesomeIcon
-                  icon={faLocationDot}
-                  className="w-5 text-blue-600"
-                />
-              </div>
-              <div className="flex-grow px-1">
-                <div className="mb-1 text-gray-700">{dropoffInfo.date}</div>
-                <div className="font-bold">{dropoffInfo.location}</div>
-                <a href="#" className="text-blue-600 hover:underline">
-                  Xem hướng dẫn trả xe
-                </a>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 

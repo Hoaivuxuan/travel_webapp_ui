@@ -67,7 +67,6 @@ function SearchForm() {
   }, [form]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const currentPath = window.location.pathname;
     localStorage.setItem("searchActivities", JSON.stringify(values));
 
     const url = new URL("https://searchresults.html");
@@ -79,11 +78,7 @@ function SearchForm() {
     );
     url.searchParams.set("checkout", format(values.dateRange.to, "yyyy-MM-dd"));
 
-    if (currentPath.includes("/search")) {
-      router.push(`search?url=${url.href}`);
-    } else {
-      router.push(`activities/search`);
-    }
+    router.push(`/activities/search?url=${url.href}`);
   }
 
   return (

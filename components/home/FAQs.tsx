@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { listings } from "@/data/fakeData";
 import { listHotels } from "@/data/typeHotel";
 
 interface FAQSectionProps {

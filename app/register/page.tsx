@@ -4,18 +4,15 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ToastContainer } from "react-toastify";
 import Notification from "@/components/Notification";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 
 const RegisterPage = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // For password visibility
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // For confirm password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
 
   const { notifySuccess, notifyWarning } = Notification();
@@ -29,12 +26,9 @@ const RegisterPage = () => {
     }
 
     const registrationData = {
-      first_name: firstName,
-      last_name: lastName,
-      phone_number: phoneNumber,
       email: email,
-      date_of_birth: dateOfBirth,
       password: password,
+      confirm_password: confirmPassword,
     };
 
     try {
@@ -66,74 +60,56 @@ const RegisterPage = () => {
     <div className="flex justify-center items-center h-screen bg-[#f0f4f8]">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded shadow-md w-100"
+        className="bg-white p-8 rounded shadow-md w-[20%]"
       >
         <h2 className="text-2xl mb-6 text-center">Đăng Ký</h2>
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="mb-4">
-            <label className="block mb-2">Họ</label>
-            <input
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block mb-2">Tên</label>
-            <input
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
-          <div className="col-span-2 mb-4">
-            <label className="block mb-2">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
-          <div className="col-span-2 mb-4 relative">
-            <label className="block mb-2">Mật Khẩu</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-2 text-gray-500"
-            >
-              {showPassword ? "Ẩn" : "Hiện"}
-            </button>
-          </div>
-          <div className="col-span-2 mb-4 relative">
-            <label className="block mb-2">Xác Nhận Mật Khẩu</label>
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-2 top-2 text-gray-500"
-            >
-              {showConfirmPassword ? "Ẩn" : "Hiện"}
-            </button>
-          </div>
+        <div className="col-span-2 mb-4">
+          <label className="block mb-2">Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+        <div className="col-span-2 mb-4 relative">
+          <label className="block mb-2">Mật Khẩu</label>
+          <input
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-[60%] transform text-gray-500"
+          >
+            {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+          </button>
+        </div>
+        <div className="col-span-2 mb-4 relative">
+          <label className="block mb-2">Xác Nhận Mật Khẩu</label>
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            className="absolute right-3 top-[60%] transform text-gray-500"
+          >
+            {showConfirmPassword ? (
+              <FaEyeSlash size={20} />
+            ) : (
+              <FaEye size={20} />
+            )}
+          </button>
         </div>
         <div className="mt-4">
           <button

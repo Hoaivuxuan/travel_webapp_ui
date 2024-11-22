@@ -199,7 +199,6 @@ function RentalSearchForm() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     const startDate = `${format(values.checkin.date, "yyyy-MM-dd")}T${values.checkin.time}`;
     const endDate = `${format(values.checkout.date, "yyyy-MM-dd")}T${values.checkout.time}`;
-    const currentPath = window.location.pathname;
     localStorage.setItem("searchRental", JSON.stringify(values));
 
     const url = new URL("https://searchresults.html");
@@ -208,13 +207,7 @@ function RentalSearchForm() {
     url.searchParams.set("checkin", startDate);
     url.searchParams.set("checkout", endDate);
 
-    console.log(url.href);
-
-    if (currentPath.includes("/search")) {
-      router.push(`search?url=${url.href}`);
-    } else {
-      router.push(`rental/search?url=${url.href}`);
-    }
+    router.push(`/rental/search?url=${url.href}`);
   }
 
   return (

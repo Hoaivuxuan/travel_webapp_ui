@@ -24,10 +24,9 @@ export const type_hotel: TypeHotel[] = [
 ];
 
 export const ratingLabel = [
-  { label: "Tuyệt hảo", min: 9 },
-  { label: "Rất tốt", min: 8 },
-  { label: "Tốt", min: 7 },
-  { label: "Dễ chịu", min: 6 },
+  { label: "Tuyệt hảo", min: 5 },
+  { label: "Rất tốt", min: 4 },
+  { label: "Tốt", min: 3 },
 ];
 
 export const listHotels = [

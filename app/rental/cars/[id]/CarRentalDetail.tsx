@@ -2,15 +2,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCar,
   faGasPump,
-  faLocationDot,
   faSuitcase,
   faUserFriends,
   faPlus,
   faMinus,
 } from "@fortawesome/free-solid-svg-icons";
-import { listings } from "@/data/fakeData";
+import { vehicles } from "@/data/fakeData";
 import { useEffect, useState } from "react";
-import ImageComponent from "@/components/GetImage";
+import Image from "next/image";
 import NotFound from "@/components/NotFound";
 
 export type RentalItemProps = {
@@ -25,14 +24,6 @@ const CarRentalDetail: React.FC<CarRentalDetailProps> = ({
   id,
   onContinue,
 }) => {
-  const item = listings.content.listCars.find(
-    (car) => car.id.toString() === id,
-  );
-
-  if (!item) {
-    return <NotFound />;
-  }
-
   const [pickupInfo, setPickupInfo] = useState({ date: "", location: "" });
   const [dropoffInfo, setDropoffInfo] = useState({ date: "", location: "" });
   const [services, setServices] = useState({
@@ -63,6 +54,12 @@ const CarRentalDetail: React.FC<CarRentalDetailProps> = ({
   useEffect(() => {
     localStorage.setItem("rentalServices", JSON.stringify(services));
   }, [services]);
+
+  const item = vehicles.find((vehicle) => vehicle.id.toString() === id);
+
+  if (!item) {
+    return <NotFound />;
+  }
 
   const MAX_SERVICES = {
     childSeat: 2,
@@ -95,15 +92,16 @@ const CarRentalDetail: React.FC<CarRentalDetailProps> = ({
 
   return (
     <section className="p-6 !pt-2 mx-auto max-w-7xl grid grid-cols-3 gap-4 mb-6">
-      <div className="col-span-2">
+      <div className="col-span-2 p-4 bg-white border rounded-lg">
         <div className="p-4 bg-white">
           <div className="grid grid-cols-2 gap-4 my-4 pb-4">
             <div className="h-[300px]">
-              <ImageComponent
-                folder="car"
-                id={item.id}
-                token={item.token}
-                className="rounded-lg w-full h-auto max-h-[280px] mx-auto"
+              <Image
+                src={`https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg`}
+                alt={`Image of ${item.id}`}
+                className="rounded-l-lg h-full w-auto"
+                width={300}
+                height={300}
               />
             </div>
             <div>
@@ -234,81 +232,42 @@ const CarRentalDetail: React.FC<CarRentalDetailProps> = ({
       </div>
 
       <div className="col-span-1">
-        <div className="space-y-4">
-          <div className="p-4 bg-white border rounded-lg">
-            <h3 className="text-lg font-bold mb-4">Nhận xe và trả xe</h3>
-            <div className="space-y-6 relative">
-              <div className="h-[74px] absolute left-2 top-6 bottom-6 border border-blue-300"></div>
-              <div className="flex items-start space-x-2">
-                <div className="flex-none">
-                  <FontAwesomeIcon
-                    icon={faLocationDot}
-                    className="w-5 text-blue-600"
-                  />
-                </div>
-                <div className="flex-grow px-1">
-                  <div className="mb-1 text-gray-700">{pickupInfo.date}</div>
-                  <div className="font-bold">{pickupInfo.location}</div>
-                  <a href="#" className="text-blue-600 hover:underline">
-                    Xem hướng dẫn nhận xe
-                  </a>
-                </div>
-              </div>
-              <div className="flex items-start space-x-2">
-                <div className="flex-none">
-                  <FontAwesomeIcon
-                    icon={faLocationDot}
-                    className="w-5 text-blue-600"
-                  />
-                </div>
-                <div className="flex-grow px-1">
-                  <div className="mb-1 text-gray-700">{dropoffInfo.date}</div>
-                  <div className="font-bold">{dropoffInfo.location}</div>
-                  <a href="#" className="text-blue-600 hover:underline">
-                    Xem hướng dẫn trả xe
-                  </a>
-                </div>
-              </div>
-            </div>
+        <div className="space-y-4 sticky top-10 p-4 bg-white border rounded-lg">
+          <div className="flex justify-between">
+            <span className="text-lg font-bold">Tổng tiền</span>
+            <span className="text-xl font-semibold">
+              {item.price} VND
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-sm">Dịch vụ phụ</span>
+            <span className="text-sm">
+              {totalServiceCost} VND
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-sm">Thuế</span>
+            <span className="text-sm">0 VNĐ</span>
           </div>
 
-          <div className="p-4 bg-white border rounded-lg">
-            <h3 className="text-lg font-bold mb-4">Chi tiết giá cả</h3>
-            <div className="space-y-2 mt-4">
-              <div className="flex justify-between">
-                <span className="text-gray-700">Phí thuê xe</span>
-                <span className="text-gray-700">{item.price} VNĐ</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-700">Dịch vụ khác</span>
-                <span className="text-gray-700">{totalServiceCost} VNĐ</span>
-              </div>
-
-              <hr className="my-2" />
-              <div className="flex justify-between font-bold">
-                <span className="text-gray-700">Giá cho 4 ngày</span>
-                <span className="text-gray-700">{item.price} VNĐ</span>
-              </div>
-            </div>
+          <div className="flex justify-between border-t pt-4">
+            <span className="text-lg font-bold">Tổng cộng</span>
+            <span className="text-xl font-semibold">
+              {(item.price + totalServiceCost)} VND
+            </span>
           </div>
 
-          <div className="p-4 bg-white border rounded-lg">
-            <h3 className="text-lg font-bold mb-4">Thông tin thêm</h3>
-          </div>
+          <button
+            onClick={handleContinue}
+            className="w-full py-3 bg-blue-500 text-white font-semibold rounded-lg"
+          >
+            Tiếp tục
+          </button>
         </div>
-      </div>
-
-      <div className="col-span-1"></div>
-      <div className="col-span-1">
-        <button
-          className="bg-[#018DF3] text-white py-2 rounded mt-4 w-full"
-          onClick={handleContinue}
-        >
-          ĐẾN BƯỚC THANH TOÁN
-        </button>
       </div>
     </section>
   );
 };
 
 export default CarRentalDetail;
+

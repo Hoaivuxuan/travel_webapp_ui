@@ -6,9 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTimes } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import Image from "next/image";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Notification from "@/components/Notification";
 
 type UserInfoKeys = keyof UserData;
-
 interface UserData {
   id: number;
   first_name: string | null;
@@ -20,6 +22,8 @@ interface UserData {
   address: string | null;
   avatar: string | null;
 }
+
+const { notifySuccess, notifyWarning } = Notification();
 
 const PersonalInfoPage = () => {
   const [user, setUser] = useState<UserData | null>(null);
@@ -136,6 +140,7 @@ const PersonalInfoPage = () => {
       phone_number: values?.phone_number,
       address: values?.address,
       date_of_birth: values?.date_of_birth,
+      avatar: values?.avatar,
     };
 
     if (isAvatarChanged || isUserDataChanged) {
@@ -158,7 +163,7 @@ const PersonalInfoPage = () => {
     if (isUserDataChanged) {
       const bearerToken = localStorage.getItem("token");
       if (!bearerToken) return;
-
+      // console.log(updatedData);
       try {
         const response = await fetch(`http://localhost:8080/users`, {
           method: "PUT",
@@ -171,15 +176,15 @@ const PersonalInfoPage = () => {
 
         if (response.ok) {
           const updatedUserData = await response.json();
-          console.log("Thông tin người dùng đã được cập nhật.");
+          notifySuccess("Thông tin người dùng đã được cập nhật.");
           localStorage.setItem("user", JSON.stringify(updatedUserData));
           setUser(updatedUserData);
           setEditingIndex(null);
         } else {
-          console.error("Cập nhật thất bại:", response.statusText);
+          notifyWarning("Cập nhật thất bại");
         }
       } catch (error) {
-        console.error("Error updating user data:", error);
+        notifyWarning("Error updating user data");
       }
     }
     setLoading(false);
@@ -316,6 +321,7 @@ const PersonalInfoPage = () => {
           </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
