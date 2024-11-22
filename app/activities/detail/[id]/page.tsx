@@ -1,14 +1,22 @@
 "use client";
 
 import React, { useState } from "react";
+import Modal from "@/components/Modal";
+import { listHotels, ratingLabel } from "@/data/typeHotel";
 import { useParams, notFound, useRouter } from "next/navigation";
 import Image from "next/image";
 
 const ActivitiesDetailPage = () => {
     const { id } = useParams();
     const router = useRouter();
+    const hotelItem =
+        listHotels?.find((item: any) => item.id === Number(id)) || undefined;
     const [selectedDate, setSelectedDate] = useState("CN 3 Tháng 11");
     const [selectedTime, setSelectedTime] = useState("16:10");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [directionsUrl, setDirectionsUrl] = useState("");
+    if (!hotelItem) return notFound();
+    const hotelAddress = encodeURIComponent(`${hotelItem.address}`);
     const tickets = [
         {
             type: "Deluxe Ticket",
@@ -67,6 +75,8 @@ const ActivitiesDetailPage = () => {
                         <Image
                             src="https://r-xx.bstatic.com/xdata/images/xphoto/max1200/153554304.jpg?k=c4f7d09fa35799ed21178297bd8c6c0bf349d0002eefaec21aff476e3b8012f3&o="
                             alt="Water Puppet Show"
+                            width={800}
+                            height={600}
                             className="w-full rounded"
                         />
                     </div>
@@ -75,23 +85,29 @@ const ActivitiesDetailPage = () => {
                         <Image
                             src="https://r-xx.bstatic.com/xdata/images/xphoto/max1200/153554304.jpg?k=c4f7d09fa35799ed21178297bd8c6c0bf349d0002eefaec21aff476e3b8012f3&o="
                             alt="Thumbnail 1"
+                            width={800}
+                            height={600}
                             className="w-full rounded"
                         />
                         <Image
                             src="https://r-xx.bstatic.com/xdata/images/xphoto/max1200/153554304.jpg?k=c4f7d09fa35799ed21178297bd8c6c0bf349d0002eefaec21aff476e3b8012f3&o="
                             alt="Thumbnail 2"
+                            width={800}
+                            height={600}
                             className="w-full rounded"
                         />
                         <Image
                             src="https://r-xx.bstatic.com/xdata/images/xphoto/max1200/153554304.jpg?k=c4f7d09fa35799ed21178297bd8c6c0bf349d0002eefaec21aff476e3b8012f3&o="
                             alt="Thumbnail 3"
+                            width={800}
+                            height={600}
                             className="w-full rounded"
                         />
                     </div>
                 </div>
                 <div className="text-sm col-span-8 bg-white rounded-lg mt-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-white p-4 rounded shadow">
+                    <div className="grid grid-cols-3 gap-4">
+                        <div className="bg-white p-4 rounded shadow col-span-2">
                             <h2 className="text-xl font-semibold">Bạn cần đến nhận vé</h2>
                             <p className="text-gray-700 mt-2">
                                 Trải nghiệm này sẽ mang đến cho bạn cơ hội khám phá nghệ thuật
@@ -172,6 +188,52 @@ const ActivitiesDetailPage = () => {
                                 <li>Bạn cần phải từ 18 tuổi trở lên để đặt chỗ.</li>
                                 <li>Điều hành bởi Klook.</li>
                             </ul>
+                            {/*  */}
+                            <h2 className="text-xl font-semibold mt-10">Vị trí</h2>
+                            <div
+                                className="relative group"
+                                style={{ height: "300px", overflow: "hidden" }}
+                            >
+                                <iframe
+                                    src={`https://www.google.com/maps?q=${hotelAddress}&output=embed`}
+                                    width="100%"
+                                    height="100%"
+                                    style={{ border: 0 }}
+                                    allowFullScreen
+                                    loading="lazy"
+                                    title="Hotel Location"
+                                />
+                                <button className="absolute bottom-4 right-4 bg-blue-600 text-white py-2 px-4 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                    Tìm đường đi
+                                </button>
+                                <Modal
+                                    isOpen={isModalOpen}
+                                    onClose={() => setIsModalOpen(false)}
+                                >
+                                    <h2 className="text-lg font-semibold">
+                                        Chỉ đường đến khách sạn
+                                    </h2>
+                                    <div className="mt-4">
+                                        <iframe
+                                            width="600"
+                                            height="450"
+                                            src={directionsUrl}
+                                            frameBorder="0"
+                                            style={{ border: 0 }}
+                                            allowFullScreen
+                                            title="Google Maps Directions"
+                                        />
+                                    </div>
+                                    <div className="mt-4 flex justify-end">
+                                        <button
+                                            onClick={() => setIsModalOpen(false)}
+                                            className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-600"
+                                        >
+                                            Đóng
+                                        </button>
+                                    </div>
+                                </Modal>
+                            </div>
                         </div>
                         {/*  */}
                         <div className="bg-white p-4 rounded shadow">
