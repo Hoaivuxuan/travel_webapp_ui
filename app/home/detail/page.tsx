@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useParams, notFound, useRouter, useSearchParams } from "next/navigation";
+import { notFound, useRouter, useSearchParams } from "next/navigation";
 import { listHotels, ratingLabel } from "@/data/typeHotel";
 import FAQSection from "@/components/home/FAQs";
 import Modal from "@/components/Modal";
@@ -34,7 +34,7 @@ const HotelDetailPage = () => {
   const hotelAddress = encodeURIComponent(`${hotelItem.address}`);
 
   return (
-    <div className="bg-gray-100 pb-6">
+    <div className="pb-6">
       <div className="p-6 !pb-3 mx-auto max-w-7xl">
         <a
           href="#"
@@ -81,7 +81,7 @@ const HotelDetailPage = () => {
             <div className="flex flex-row justify-end col-span-2 h-full">
               <div className="flex flex-col justify-end items-end mt-2">
                 <p className="text-xl font-bold text-blue-600 text-right">
-                  từ {minPrice} VNĐ/đêm
+                  từ {minPrice} ₫/đêm
                 </p>
               </div>
             </div>

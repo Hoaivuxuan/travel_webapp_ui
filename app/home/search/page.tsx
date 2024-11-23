@@ -5,8 +5,7 @@ import SearchForm from "@/components/home/SearchForm";
 import { notFound } from "next/navigation";
 import { listHotels, type_hotel } from "@/data/typeHotel";
 import HotelItem from "./HotelItem";
-import Slider from "rc-slider";
-import "rc-slider/assets/index.css";
+import { Slider, Rate, Checkbox, Button } from "antd";
 import { StarFilled, StarOutlined } from "@ant-design/icons";
 
 type Props = {
@@ -64,18 +63,11 @@ function SearchPage({ searchParams }: Props) {
 
   const [selectedTypes, setSelectedTypes] = useState<number[]>([]);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
-  const [priceRange, setPriceRange] = useState<[number, number]>([
-    minPrice,
-    maxPrice,
-  ]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([minPrice, maxPrice]);
   const [itemsToShow, setItemsToShow] = useState(10);
 
-  const handleTypeSelection = (id: number) => {
-    setSelectedTypes((prevSelected) =>
-      prevSelected.includes(id)
-        ? prevSelected.filter((itemId) => itemId !== id)
-        : [...prevSelected, id],
-    );
+  const handleTypeSelection = (checkedValues: number[]) => {
+    setSelectedTypes(checkedValues);
   };
 
   const handleStarClick = (star: number) => {
@@ -138,7 +130,7 @@ function SearchPage({ searchParams }: Props) {
 
               <hr className="my-2" />
               <div className="mb-6 text-sm">
-                <h4 className="font-semibold mb-2">Giá mỗi đêm (VNĐ)</h4>
+                <h4 className="font-semibold mb-2">Giá mỗi đêm (₫)</h4>
                 <Slider
                   range
                   min={minPrice}
@@ -146,61 +138,42 @@ function SearchPage({ searchParams }: Props) {
                   defaultValue={priceRange}
                   onChange={handlePriceChange}
                   trackStyle={[{ backgroundColor: "#1D4ED8" }]}
-                  handleStyle={[
-                    { borderColor: "#1D4ED8" },
-                    { borderColor: "#1D4ED8" },
-                  ]}
+                  handleStyle={[{ borderColor: "#1D4ED8" }, { borderColor: "#1D4ED8" }]}
                 />
                 <div className="flex justify-between mt-2 text-xs">
-                  <span>{priceRange[0].toLocaleString("vi-VN")} VNĐ</span>
-                  <span>{priceRange[1].toLocaleString("vi-VN")} VNĐ</span>
+                  <span>{priceRange[0].toLocaleString("vi-VN")} ₫</span>
+                  <span>{priceRange[1].toLocaleString("vi-VN")} ₫</span>
                 </div>
               </div>
 
               <hr className="my-2" />
               <div className="mb-6 text-sm">
                 <h4 className="font-semibold mb-2">Đánh giá của khách hàng</h4>
-                <div className="flex items-center space-x-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <div key={star} className="relative cursor-pointer">
-                      <StarOutlined
-                        className={`text-2xl ${
-                          selectedRating && selectedRating >= star - 0.5
-                            ? "text-yellow-400"
-                            : "text-gray-400"
-                        }`}
-                        onClick={() => handleStarClick(star)}
-                      />
-                      {selectedRating && selectedRating >= star && (
-                        <StarFilled
-                          className="absolute top-0 left-0 text-yellow-400 text-2xl"
-                          onClick={() => handleStarClick(star)}
-                        />
-                      )}
-                    </div>
-                  ))}
-                </div>
+                <Rate
+                  value={selectedRating || 0}
+                  onChange={setSelectedRating}
+                  count={5}
+                  character={({ index }) =>
+                    selectedRating && selectedRating >= (index ?? 0) + 1
+                      ? <StarFilled />
+                      : <StarOutlined />
+                  }
+                />
               </div>
 
               <hr className="my-2" />
               <div className="mb-6 text-sm">
                 <h4 className="font-semibold mb-2">Loại chỗ ở</h4>
-                <ul>
+                <Checkbox.Group
+                  value={selectedTypes}
+                  onChange={handleTypeSelection}
+                >
                   {type_hotel.map((type) => (
-                    <li key={type.id} className="mb-1 flex items-center">
-                      <input
-                        type="checkbox"
-                        className="mr-2"
-                        id={`type-${type.id}`}
-                        checked={selectedTypes.includes(type.id)}
-                        onChange={() => handleTypeSelection(type.id)}
-                      />
-                      <label htmlFor={`type-${type.id}`} className="flex-grow">
-                        {type.name}
-                      </label>
-                    </li>
+                    <Checkbox key={type.id} value={type.id} className="mb-1 w-full">
+                      {type.name}
+                    </Checkbox>
                   ))}
-                </ul>
+                </Checkbox.Group>
               </div>
             </aside>
 
@@ -213,12 +186,13 @@ function SearchPage({ searchParams }: Props) {
 
               {filteredResults.length > itemsToShow && (
                 <div className="mt-4 text-center">
-                  <button
+                  <Button
+                    type="primary"
                     onClick={() => setItemsToShow(itemsToShow + 10)}
                     className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-600 transition-colors duration-200"
                   >
                     Xem thêm
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>

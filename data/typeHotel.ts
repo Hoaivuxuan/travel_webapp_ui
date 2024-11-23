@@ -167,10 +167,10 @@ export const listHotels = [
     checkOut_time: "12:00",
     hotel_policies: {
       cancellation_policy: "Hủy phòng miễn phí trước 48 giờ.",
-      deposit_required: "Cần đặt cọc 2.000.000 VND.",
+      deposit_required: "Cần đặt cọc 2.000.000 ₫.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 29 1234 5678",
@@ -271,10 +271,10 @@ export const listHotels = [
     checkOut_time: "12:00",
     hotel_policies: {
       cancellation_policy: "Hủy phòng miễn phí 24 giờ trước khi nhận phòng.",
-      deposit_required: "Cần đặt cọc 1.000.000 VND.",
+      deposit_required: "Cần đặt cọc 1.000.000 ₫.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 300.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 300.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 28 1234 5678",
@@ -483,10 +483,10 @@ export const listHotels = [
     checkOut_time: "12:00",
     hotel_policies: {
       cancellation_policy: "Hủy phòng miễn phí 48 giờ trước khi nhận phòng.",
-      deposit_required: "Cần đặt cọc 2.000.000 VND.",
+      deposit_required: "Cần đặt cọc 2.000.000 ₫.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 600.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 600.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 24 1234 5678",
@@ -597,7 +597,7 @@ export const listHotels = [
       deposit_required: "Không cần đặt cọc.",
       pets_allowed: true,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 400.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 400.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 62 1234 5678",
@@ -707,7 +707,7 @@ export const listHotels = [
       deposit_required: "Không cần đặt cọc.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 28 1234 5678",
@@ -815,7 +815,7 @@ export const listHotels = [
       deposit_required: "Cần đặt cọc 50% giá trị đặt phòng.",
       pets_allowed: true,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 77 1234 5678",
@@ -925,7 +925,7 @@ export const listHotels = [
       deposit_required: "Không cần đặt cọc.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 263 1234 5678",
@@ -1035,7 +1035,7 @@ export const listHotels = [
       deposit_required: "Cần đặt cọc 30% giá trị đặt phòng.",
       pets_allowed: true,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 600.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 600.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 258 1234 5678",
@@ -1145,7 +1145,7 @@ export const listHotels = [
       deposit_required: "Không cần đặt cọc.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 400.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 400.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 235 1234 5678",
@@ -1255,7 +1255,7 @@ export const listHotels = [
       deposit_required: "Không cần đặt cọc.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 700.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 700.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 28 1234 5678",
@@ -1366,7 +1366,7 @@ export const listHotels = [
       deposit_required: "Cần đặt cọc 30% giá trị đặt phòng.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 252 1234 5678",
@@ -1478,7 +1478,7 @@ export const listHotels = [
       deposit_required: "Không cần đặt cọc.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 400.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 400.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 24 1234 5678",
@@ -1588,7 +1588,7 @@ export const listHotels = [
       deposit_required: "Cần đặt cọc 20% giá trị đặt phòng.",
       pets_allowed: true,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 600.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 600.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 236 1234 5678",
@@ -1697,7 +1697,7 @@ export const listHotels = [
       deposit_required: "Cần đặt cọc 50% giá trị đặt phòng.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 300.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 300.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 24 1234 5678",

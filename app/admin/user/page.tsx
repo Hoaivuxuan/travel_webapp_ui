@@ -72,7 +72,9 @@ export default function UserAdmin() {
     {
       title: "Full Name",
       render: (text: any, record: DataType) =>
-        `${record.first_name} ${record.last_name}` || "",
+        (record.first_name && record.last_name)
+          ? `${record.first_name} ${record.last_name}`
+          : `USER ${record.id}`,
     },
     {
       title: "Phone Number",

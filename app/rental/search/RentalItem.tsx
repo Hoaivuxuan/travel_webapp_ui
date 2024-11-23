@@ -57,7 +57,7 @@ export function CarItem({ id }: RentalItemProps) {
       <div className="flex flex-col justify-end col-span-1 h-full">
         <div className="flex flex-col justify-end items-end mt-2">
           <p className="text-lg font-bold text-blue-600 text-right">
-            {item.price.toLocaleString("vi-VN")} VNĐ
+            {item.price.toLocaleString("vi-VN")} ₫
           </p>
           <button
             onClick={() => handleDetailClick(router, item.id)}
@@ -95,7 +95,7 @@ export function MotorItem({ id }: RentalItemProps) {
           <p className="mb-4 font-bold text-blue-600 text-lg">{item.model}</p>
           <p className="text-sm text-gray-700 flex items-center">
             <FontAwesomeIcon icon={faMotorcycle} className="mx-2 w-4" />
-            {item.details.engine} phân khối
+            {item.details.engine} cc
           </p>
           <p className="text-sm flex items-center text-gray-600">
             <FontAwesomeIcon icon={faGasPump} className="mx-2 w-4" />
@@ -106,7 +106,7 @@ export function MotorItem({ id }: RentalItemProps) {
       <div className="flex flex-col justify-end col-span-1 h-full">
         <div className="flex flex-col justify-end items-end mt-2">
           <p className="text-lg font-bold text-blue-600 text-right">
-            {item.price.toLocaleString("vi-VN")} VNĐ
+            {item.price.toLocaleString("vi-VN")} ₫
           </p>
           <button
             onClick={() => handleDetailClick(router, item.id)}

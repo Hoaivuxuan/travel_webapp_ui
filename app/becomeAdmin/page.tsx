@@ -8,7 +8,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 import { Input, Button } from "antd";
 
-const RegisterPage = () => {
+const BecomeAdminPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -33,7 +33,7 @@ const RegisterPage = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/users/register", {
+      const response = await fetch("http://localhost:8080/users/createAdmin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -132,4 +132,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default BecomeAdminPage;

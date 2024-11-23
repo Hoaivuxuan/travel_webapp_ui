@@ -197,17 +197,17 @@ function RentalSearchForm() {
   }, [form]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const startDate = `${format(values.checkin.date, "yyyy-MM-dd")}T${values.checkin.time}`;
-    const endDate = `${format(values.checkout.date, "yyyy-MM-dd")}T${values.checkout.time}`;
+    const startDate = `${format(values.checkin.date, "yyyy-MM-dd")}`;
+    const endDate = `${format(values.checkout.date, "yyyy-MM-dd")}`;
     localStorage.setItem("searchRental", JSON.stringify(values));
 
-    const url = new URL("https://searchresults.html");
-    url.searchParams.set("ss", "true");
+    const url = new URL("https://booking.html");
+    url.searchParams.set("rental", "true");
     url.searchParams.set("location", values.location);
     url.searchParams.set("checkin", startDate);
     url.searchParams.set("checkout", endDate);
 
-    router.push(`/rental/search?url=${url.href}`);
+    router.push(`/rental/search?url=${url.search}`);
   }
 
   return (

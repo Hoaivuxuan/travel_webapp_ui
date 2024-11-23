@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Input, Button } from "antd";
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -19,7 +20,7 @@ const LoginPage = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (email && password) {
@@ -63,7 +64,7 @@ const LoginPage = () => {
         <h2 className="text-2xl mb-6 text-center">Đăng Nhập</h2>
         <div className="mb-4">
           <label className="block mb-2">Email</label>
-          <input
+          <Input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -73,7 +74,7 @@ const LoginPage = () => {
         </div>
         <div className="mb-4 relative">
           <label className="block mb-2">Mật Khẩu</label>
-          <input
+          <Input
             type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -85,16 +86,18 @@ const LoginPage = () => {
             onClick={togglePasswordVisibility}
             className="absolute right-3 py-auto top-[60%] transform text-gray-500"
           >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
+            {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
           </button>
         </div>
+
         <div className="mt-4">
-          <button
-            type="submit"
+          <Button
+            type="primary"
+            htmlType="submit"
             className="w-full bg-[#013B94] text-white p-2 rounded"
           >
             Đăng Nhập
-          </button>
+          </Button>
           <p className="mt-2 text-center">
             Chưa có tài khoản?{" "}
             <a href="/register" className="text-blue-600">

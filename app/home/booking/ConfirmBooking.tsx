@@ -1,5 +1,6 @@
 import { listHotels } from "@/data/typeHotel";
 import React, { useState } from "react";
+import { Checkbox, Button } from "antd";
 
 interface ConfirmBookingProps {
   id: number;
@@ -7,12 +8,17 @@ interface ConfirmBookingProps {
 
 const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ id }) => {
   const [isChecked, setIsChecked] = useState(false);
-  
+
   const hotel = listHotels.find((item) => item.id === id) || undefined;
   if (!hotel) return null;
 
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
+  const handleCheckboxChange = (e: any) => {
+    setIsChecked(e.target.checked);
+  };
+
+  const handleConfirm = () => {
+    const invoice = localStorage.getItem("bookingHotel");
+    console.log(JSON.parse(invoice || ""));
   };
 
   return (
@@ -28,16 +34,13 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ id }) => {
         </div>
       </div>
       <div className="flex items-start my-4">
-        <input
-          type="checkbox"
-          id="marketing"
+        <Checkbox
           checked={isChecked}
           onChange={handleCheckboxChange}
-          className="h-5 w-5 text-blue-600 border-gray-300 rounded"
-        />
-        <label htmlFor="marketing" className="ml-2 text-sm text-gray-700">
+          className="text-blue-600"
+        >
           Tôi đồng ý nhận email marketing từ Booking.com, bao gồm khuyến mãi, đề xuất được cá nhân hóa, tặng thưởng, trải nghiệm du lịch và cập nhật về các sản phẩm và dịch vụ của Booking.com.
-        </label>
+        </Checkbox>
       </div>
       <div className="space-y-4">
         <p className="text-sm text-gray-500">
@@ -45,12 +48,13 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ id }) => {
         </p>
       </div>
       <div className="mt-4 flex justify-end">
-        <button
-          type="button"
+        <Button
+          type="primary"
           className="bg-blue-600 text-white w-1/2 py-2 rounded"
+          onClick={handleConfirm}
         >
           Hoàn tất đặt chỗ
-        </button>
+        </Button>
       </div>
     </div>
   );

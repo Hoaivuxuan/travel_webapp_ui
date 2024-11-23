@@ -47,7 +47,6 @@ const BookingHotel = () => {
   }, []);
 
   const searchParams = useSearchParams();
-
   const params: BookingParams = {
     url: windowLoaded ? window.location.href : "",
     id: searchParams.get("id") || "",
@@ -60,8 +59,9 @@ const BookingHotel = () => {
   };
 
   const hotel = listHotels.find((item) => item.id === Number(params.id)) || undefined;
-
-  if (!hotel) return <NotFound />;
+  if (!hotel){
+    return <NotFound />;
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -128,20 +128,20 @@ const BookingHotel = () => {
             <div className="grid grid-cols-3 gap-2 my-2">
               <p className="col-span-2 font-bold">Giá phòng</p>
               <p>
-                {`${params.roomSelection.totalPrice.toLocaleString("vi-VN")} VND`}
+                {`${params.roomSelection.totalPrice.toLocaleString("vi-VN")} ₫`}
               </p>
             </div>
             <div className="grid grid-cols-3 gap-2 my-2">
               <p className="col-span-2 font-bold">Thuế và phí</p>
               <p>
-                {`${params.roomSelection.totalPrice.toLocaleString("vi-VN")} VND`}
+                {`${params.roomSelection.totalPrice.toLocaleString("vi-VN")} ₫`}
               </p>
             </div>
             <hr className="my-1 border border-gray-200" />
             <div className="grid grid-cols-3 gap-2 my-2">
               <p className="col-span-2 font-bold">Tổng cộng</p>
               <p>
-                {`${params.roomSelection.totalPrice.toLocaleString("vi-VN")} VND`}
+                {`${params.roomSelection.totalPrice.toLocaleString("vi-VN")} ₫`}
               </p>
             </div>
           </div>

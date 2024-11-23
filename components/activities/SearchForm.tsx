@@ -69,8 +69,8 @@ function SearchForm() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     localStorage.setItem("searchActivities", JSON.stringify(values));
 
-    const url = new URL("https://searchresults.html");
-    url.searchParams.set("ss", "true");
+    const url = new URL("https://booking.html");
+    url.searchParams.set("attraction", "true");
     url.searchParams.set("location", values.location);
     url.searchParams.set(
       "checkin",
@@ -78,7 +78,7 @@ function SearchForm() {
     );
     url.searchParams.set("checkout", format(values.dateRange.to, "yyyy-MM-dd"));
 
-    router.push(`/activities/search?url=${url.href}`);
+    router.push(`/activities/search${url.search}`);
   }
 
   return (

@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import countries from "@/data/listCountry.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faHeadset } from "@fortawesome/free-solid-svg-icons";
-import { BookingParams } from "./page";
+import { Input, Select, Radio, Checkbox, Button, RadioChangeEvent } from "antd";
+
+const { Option } = Select;
+const { TextArea } = Input;
 
 type BookingFormProps = {
-  params: BookingParams;
+  params: any;
   step: number;
   setStep: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const BookingForm: React.FC<BookingFormProps> = ({params, step, setStep}) => {
+const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
   const [userInfo, setUserInfo] = useState({
     firstName: "",
     lastName: "",
@@ -23,13 +26,12 @@ const BookingForm: React.FC<BookingFormProps> = ({params, step, setStep}) => {
 
   const saveBookingHotel = () => {
     const bookingHotel = {
-      hotel: params.id,
+      hotel: Number(params.id),
       checkinDate: params.checkin,
       checkoutDate: params.checkout,
-      adults: params.adults,
-      children: params.children,
+      adults: Number(params.adults),
+      children: Number(params.children),
       roomSelection: params.roomSelection,
-      totalPrice: params.roomSelection.totalPrice,
       customerInfo: {
         fullName: `${userInfo.firstName} ${userInfo.lastName}`,
         email: userInfo.email,
@@ -37,19 +39,21 @@ const BookingForm: React.FC<BookingFormProps> = ({params, step, setStep}) => {
         country: userInfo.country || "Vietnam",
       },
     };
-  
-    localStorage.setItem("bookingDetails", JSON.stringify(bookingHotel));
+
+    localStorage.setItem("bookingHotel", JSON.stringify(bookingHotel));
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     const updatedUserInfo = { ...userInfo, [name]: value };
     setUserInfo(updatedUserInfo);
   };
 
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRadioChange = (e: RadioChangeEvent) => {
     const { name, value } = e.target;
-    const updatedRadioStates = { ...radioStates, [name]: value };
+    const updatedRadioStates = { ...radioStates, [String(name)]: value };
     setRadioStates(updatedRadioStates);
   };
 
@@ -68,62 +72,60 @@ const BookingForm: React.FC<BookingFormProps> = ({params, step, setStep}) => {
         <div className="grid grid-cols-2 gap-2">
           <div className="mb-4">
             <label className="block mb-2 font-medium">Họ</label>
-            <input
+            <Input
               type="text"
               name="firstName"
               value={userInfo.firstName}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded"
               placeholder="ví dụ: Nguyễn"
             />
           </div>
           <div className="mb-4">
             <label className="block mb-2 font-medium">Tên</label>
-            <input
+            <Input
               type="text"
               name="lastName"
               value={userInfo.lastName}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded"
               placeholder="ví dụ: Văn A"
             />
           </div>
           <div className="mb-4">
             <label className="block mb-2 font-medium">Email</label>
-            <input
+            <Input
               type="email"
               name="email"
               value={userInfo.email}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded"
               placeholder="email@example.com"
             />
           </div>
           <div className="mb-4">
             <label className="block mb-2 font-medium">Số điện thoại</label>
-            <input
+            <Input
               type="text"
               name="phone"
               value={userInfo.phone}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded"
               placeholder="Số điện thoại"
             />
           </div>
           <div className="mb-4">
             <label className="block mb-2 font-medium">Quốc gia</label>
-            <select
-              name="country"
+            <Select
               value={userInfo.country}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded"
+              onChange={(value) => {
+                const updatedUserInfo = { ...userInfo, country: value };
+                setUserInfo(updatedUserInfo);
+              }}
+              className="w-full"
             >
               {countries.map((country, index) => (
-                <option key={index} value={country.name}>
+                <Option key={index} value={country.name}>
                   {country.name}
-                </option>
+                </Option>
               ))}
-            </select>
+            </Select>
           </div>
         </div>
         <hr className="my-4 border border-gray-200" />
@@ -134,24 +136,20 @@ const BookingForm: React.FC<BookingFormProps> = ({params, step, setStep}) => {
           </p>
           <div className="flex flex-col space-y-2 mt-2">
             <label className="flex items-center space-x-2">
-              <input
-                type="radio"
+              <Radio
                 name="whoBooking"
                 value="self"
                 checked={radioStates.whoBooking === "self"}
                 onChange={handleRadioChange}
-                className="form-radio text-blue-600"
               />
               <span>Tôi là khách lưu trú chính</span>
             </label>
             <label className="flex items-center space-x-2">
-              <input
-                type="radio"
+              <Radio
                 name="whoBooking"
                 value="other"
                 checked={radioStates.whoBooking === "other"}
                 onChange={handleRadioChange}
-                className="form-radio text-blue-600"
               />
               <span>Đặt phòng này là cho người khác</span>
             </label>
@@ -167,18 +165,13 @@ const BookingForm: React.FC<BookingFormProps> = ({params, step, setStep}) => {
         <label className="block mb-2 font-medium">
           Vui lòng ghi yêu cầu của bạn tại đây. <span className="text-gray-500">(không bắt buộc)</span>
         </label>
-        <textarea
+        <TextArea
           name="specialRequest"
           rows={3}
-          className="w-full p-2 border rounded"
           placeholder="Ví dụ: Yêu cầu phòng gần nhau, ăn chay..."
-        ></textarea>
+        />
         <label className="flex items-center mt-4 space-x-2">
-          <input
-            type="checkbox"
-            name="nearbyRooms"
-            className="form-checkbox text-blue-600"
-          />
+          <Checkbox name="nearbyRooms" className="form-checkbox text-blue-600" />
           <span>Tôi muốn các phòng ở gần nhau (nếu có thể)</span>
         </label>
       </div>
@@ -195,24 +188,23 @@ const BookingForm: React.FC<BookingFormProps> = ({params, step, setStep}) => {
         <label className="block mb-2 font-medium">
           Thêm thời gian đến dự kiến của bạn <span className="text-gray-500">(không bắt buộc)</span>
         </label>
-        <select
-          name="arrivalTime"
+        <Select
           className="w-full p-2 border rounded bg-gray-50"
+          placeholder="Vui lòng chọn"
         >
-          <option value="">Vui lòng chọn</option>
-          <option value="14:00-15:00">14:00 - 15:00</option>
-          <option value="15:00-16:00">15:00 - 16:00</option>
-          <option value="16:00-17:00">16:00 - 17:00</option>
-          <option value="17:00-18:00">17:00 - 18:00</option>
-          <option value="18:00-19:00">18:00 - 19:00</option>
-          <option value="19:00-20:00">19:00 - 20:00</option>
-          <option value="20:00-21:00">20:00 - 21:00</option>
-        </select>
+          <Option value="14:00-15:00">14:00 - 15:00</Option>
+          <Option value="15:00-16:00">15:00 - 16:00</Option>
+          <Option value="16:00-17:00">16:00 - 17:00</Option>
+          <Option value="17:00-18:00">17:00 - 18:00</Option>
+          <Option value="18:00-19:00">18:00 - 19:00</Option>
+          <Option value="19:00-20:00">19:00 - 20:00</Option>
+          <Option value="20:00-21:00">20:00 - 21:00</Option>
+        </Select>
         <p className="text-sm text-gray-500 mt-2">Thời gian theo múi giờ của Hà Nội</p>
       </div>
       <div className="mt-4 flex justify-end">
-        <button
-          type="button"
+        <Button
+          type="primary"
           onClick={() => {
             handleConfirm();
             handleNextStep();
@@ -220,7 +212,7 @@ const BookingForm: React.FC<BookingFormProps> = ({params, step, setStep}) => {
           className="bg-blue-600 text-white w-1/2 py-2 rounded"
         >
           Tiếp theo
-        </button>
+        </Button>
       </div>
     </form>
   );
