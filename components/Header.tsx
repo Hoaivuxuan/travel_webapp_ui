@@ -43,7 +43,6 @@ const Header = () => {
   };
 
   const handleLogoClick = () => {
-    // setActiveItem("hotel");
     setDropdownOpen(false);
   };
 

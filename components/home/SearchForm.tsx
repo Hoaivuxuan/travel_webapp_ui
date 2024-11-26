@@ -114,11 +114,10 @@ function SearchForm() {
   }, [form]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const currentPath = window.location.pathname;
     localStorage.setItem("searchHotel", JSON.stringify(values));
 
-    const url = new URL("https://searchresults.html");
-    url.searchParams.set("ss", "true");
+    const url = new URL("https://booking.html");
+    url.searchParams.set("hotel", "true");
     url.searchParams.set("location", values.location);
     url.searchParams.set(
       "checkin",
@@ -129,11 +128,7 @@ function SearchForm() {
     url.searchParams.set("children", values.children.toString());
     url.searchParams.set("rooms", values.rooms.toString());
 
-    if (currentPath.includes("/search")) {
-      router.push(`search?url=${url.href}`);
-    } else {
-      router.push(`home/search?url=${url.href}`);
-    }
+    router.push(`/home/search?url=${url.search}`);
   }
 
   return (

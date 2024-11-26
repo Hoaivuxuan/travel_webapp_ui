@@ -3,14 +3,17 @@
 import React, { useRef } from "react";
 import SearchForm from "@/components/home/SearchForm";
 import { destination } from "@/data/fakeData";
+import { listHotels } from "@/data/typeHotel";
 import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const trendingDestinations = destination.slice(0, 5);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -52,7 +55,6 @@ export default function Home() {
             Du khách tìm kiếm về Việt Nam cũng đặt chỗ ở những nơi này
           </p>
         </div>
-
         <div className="py-5 grid grid-cols-5 gap-4">
           {trendingDestinations.map((item) => (
             <div key={item.id} className="cursor-pointer">
@@ -78,7 +80,6 @@ export default function Home() {
             Các điểm đến phổ biến này có nhiều điều chờ đón bạn
           </p>
         </div>
-
         <div className="relative flex items-center">
           <button
             onClick={scrollLeft}
@@ -116,6 +117,43 @@ export default function Home() {
           >
             <FontAwesomeIcon icon={faChevronRight} />
           </button>
+        </div>
+
+        <div className="pt-5">
+          <h3 className="text-xl font-bold">Top Nơi Lưu Trú Nổi Bật</h3>
+          <p className="font-light">
+            Top 5 nơi lưu trú được đánh giá nhiều nhất
+          </p>
+        </div>
+        <div className="py-5 grid grid-cols-5 gap-4">
+        {[...listHotels]
+          .sort((a, b) => b.reviews.total_reviews - a.reviews.total_reviews)
+          .slice(0, 5)
+          .map((item) => (
+            <div
+              key={item.id}
+              className="cursor-pointer"
+              onClick={() =>
+                router.push(
+                  `/home/detail?id=${item.id.toString().padStart(6, "0")}`
+                )
+              }
+            >
+              <Image
+                className="object-cover rounded-lg w-full h-72"
+                src={item.images[0]}
+                alt={`Hotel ${item.id}`}
+                width={540}
+                height={405}
+              />
+              <div className="pt-3">
+                <p className="font-bold text-blue-500 hover:underline">
+                  {item.name}
+                </p>
+                <p className="text-sm font-light">{item.city}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
     </main>

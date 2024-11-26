@@ -20,7 +20,7 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
   const minPrice = Math.min(...item.rooms.map((room) => room.price));
 
   const handleDetailClick = () => {
-    router.push(`/home/detail/${item.id.toString().padStart(6, "0")}`);
+    router.push(`/home/detail?id=${item.id.toString().padStart(6, "0")}`);
   };
 
   return (
@@ -109,7 +109,7 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
             <div className="flex flex-col justify-end items-end mt-2">
               từ
               <p className="text-lg font-bold text-blue-600 text-right">
-                {minPrice.toLocaleString("vi-VN")} VNĐ/đêm
+                {minPrice.toLocaleString("vi-VN")} ₫/đêm
               </p>
               <button
                 onClick={handleDetailClick}

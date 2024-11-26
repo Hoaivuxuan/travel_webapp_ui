@@ -1,14 +1,16 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
+import { Input, Button, Avatar, Form, Row, Col } from "antd";
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTimes } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import Image from "next/image";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Notification from "@/components/Notification";
 
 type UserInfoKeys = keyof UserData;
-
 interface UserData {
   id: number;
   first_name: string | null;
@@ -20,6 +22,8 @@ interface UserData {
   address: string | null;
   avatar: string | null;
 }
+
+const { notifySuccess, notifyWarning } = Notification();
 
 const PersonalInfoPage = () => {
   const [user, setUser] = useState<UserData | null>(null);
@@ -136,6 +140,7 @@ const PersonalInfoPage = () => {
       phone_number: values?.phone_number,
       address: values?.address,
       date_of_birth: values?.date_of_birth,
+      avatar: values?.avatar,
     };
 
     if (isAvatarChanged || isUserDataChanged) {
@@ -171,15 +176,15 @@ const PersonalInfoPage = () => {
 
         if (response.ok) {
           const updatedUserData = await response.json();
-          console.log("Thông tin người dùng đã được cập nhật.");
+          notifySuccess("Thông tin người dùng đã được cập nhật.");
           localStorage.setItem("user", JSON.stringify(updatedUserData));
           setUser(updatedUserData);
           setEditingIndex(null);
         } else {
-          console.error("Cập nhật thất bại:", response.statusText);
+          notifyWarning("Cập nhật thất bại");
         }
       } catch (error) {
-        console.error("Error updating user data:", error);
+        notifyWarning("Error updating user data");
       }
     }
     setLoading(false);
@@ -191,20 +196,18 @@ const PersonalInfoPage = () => {
         <div className="flex items-center mb-8">
           <h1 className="text-2xl font-bold flex-grow">Thông tin cá nhân</h1>
           <div className="relative">
-            <Image
+            <Avatar
               src={avatar || ""}
-              alt="Profile"
-              className="rounded-full max-w-[100px] max-h-[100px] object-cover cursor-pointer"
+              size={100}
               onClick={() => document.getElementById("avatar-upload")?.click()}
-              width={100}
-              height={100}
+              className="cursor-pointer"
             />
-            <Input
+            <input
               id="avatar-upload"
               type="file"
               accept="image/*"
               onChange={handleAvatarChange}
-              className="!top-[30px] absolute inset-0 opacity-0 cursor-pointer hover:opacity-100 transition-opacity duration-200 bg-whites bg-opacity-50 rounded-full"
+              className="absolute opacity-0 cursor-pointer inset-0"
             />
           </div>
         </div>
@@ -214,108 +217,112 @@ const PersonalInfoPage = () => {
               <div className="col-span-2 font-semibold">Họ Tên</div>
               {editingIndex === 0 ? (
                 <div className="col-span-8 flex gap-2 w-full">
-                  <input
-                    type="text"
+                  <Input
                     value={values?.first_name || ""}
                     onChange={(e) =>
                       handleInputChange("first_name", e.target.value)
                     }
-                    className="mt-1 p-1 border rounded w-full"
-                    aria-label="Tên"
+                    className="mt-1 border rounded w-full"
+                    placeholder="Tên"
                   />
-                  <input
-                    type="text"
+                  <Input
                     value={values?.last_name || ""}
                     onChange={(e) =>
                       handleInputChange("last_name", e.target.value)
                     }
-                    className="mt-1 p-1 border rounded w-full"
-                    aria-label="Họ"
+                    className="mt-1 border rounded w-full"
+                    placeholder="Họ"
                   />
                 </div>
               ) : (
                 <div className="col-span-8">
-                  <input
-                    type="text"
-                    value={`${values?.first_name} ${values?.last_name}`}
+                  <Input
+                    value={
+                      (values?.first_name && values?.last_name)
+                        ? `${values?.first_name} ${values?.last_name}`
+                        : `USER ${values?.id}`
+                    }
                     readOnly
-                    className="mt-1 p-1 border rounded w-full bg-gray-100 cursor-not-allowed"
+                    className="mt-1 border rounded w-full cursor-not-allowed"
                   />
                 </div>
               )}
               <div className="text-center col-span-1">
                 {editingIndex === 0 ? (
-                  <button
+                  <Button
+                    icon={<FontAwesomeIcon icon={faTimes} />}
                     onClick={() => setEditingIndex(null)}
-                    className="text-gray-500 hover:text-blue-500"
-                    aria-label="Hủy chỉnh sửa"
-                  >
-                    <FontAwesomeIcon icon={faTimes} size="lg" />
-                  </button>
+                    type="link"
+                  />
                 ) : (
-                  <button
+                  <Button
+                    icon={<FontAwesomeIcon icon={faEdit} />}
                     onClick={() => handleEditClick(0)}
-                    className="text-blue-500 hover:text-blue-700"
-                    aria-label="Chỉnh sửa tên"
-                  >
-                    <FontAwesomeIcon icon={faEdit} size="lg" />
-                  </button>
+                    type="link"
+                  />
                 )}
               </div>
             </div>
           </div>
 
-          {personalInfo.slice(2).map((info, index) => (
-            <div key={index} className="py-4 flex items-center justify-between">
+          {personalInfo.slice(2).map((field, index) => (
+            <div key={field.key} className="py-4 flex items-center justify-between">
               <div className="grid grid-cols-11 gap-2 items-center w-full">
-                <div className="col-span-2 font-semibold">{info.label}</div>
-                <div className="col-span-8">
-                  <input
-                    type="text"
-                    value={values?.[info.key] || ""}
-                    readOnly={editingIndex !== index + 1}
-                    onChange={(e) =>
-                      handleInputChange(info.key, e.target.value)
-                    }
-                    className={`mt-1 p-1 border rounded w-full ${
-                      editingIndex === index + 1
-                        ? ""
-                        : "bg-gray-100 cursor-not-allowed"
-                    }`}
-                    aria-label={info.label}
-                  />
-                </div>
-                <div className="text-center">
+                <div className="col-span-2 font-semibold">{field.label}</div>
+                {editingIndex === index + 1 ? (
+                  <div className="col-span-8">
+                    <Input
+                      value={values?.[field.key] || ""}
+                      onChange={(e) =>
+                        handleInputChange(field.key, e.target.value)
+                      }
+                      className="mt-1"
+                      placeholder={field.label}
+                    />
+                  </div>
+                ) : (
+                  <div className="col-span-8">
+                    <Input
+                      value={values?.[field.key] || ""}
+                      readOnly
+                      className="mt-1"
+                    />
+                  </div>
+                )}
+                <div className="text-center col-span-1">
                   {editingIndex === index + 1 ? (
-                    <button
+                    <Button
+                      icon={<FontAwesomeIcon icon={faTimes} />}
                       onClick={() => setEditingIndex(null)}
-                      className="text-gray-500 hover:text-blue-500"
-                    >
-                      <FontAwesomeIcon icon={faTimes} size="lg" />
-                    </button>
+                      type="link"
+                    />
                   ) : (
-                    <button
+                    <Button
+                      icon={<FontAwesomeIcon icon={faEdit} />}
                       onClick={() => handleEditClick(index + 1)}
-                      className="text-blue-500 hover:text-blue-700"
-                    >
-                      <FontAwesomeIcon icon={faEdit} size="lg" />
-                    </button>
+                      type="link"
+                    />
                   )}
                 </div>
               </div>
             </div>
           ))}
-        </div>
-        <div className="mt-4 text-right">
-          <button
-            onClick={handleSaveClick}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            disabled={loading}
-          >
-            {loading ? "Đang lưu..." : "Lưu Thông Tin"}
-          </button>
+
+          <div className="py-4 flex items-center justify-between">
+            <div className="w-full flex justify-end">
+              <Button
+                type="primary"
+                onClick={handleSaveClick}
+                loading={loading}
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Lưu
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
