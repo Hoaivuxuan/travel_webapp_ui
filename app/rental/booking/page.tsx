@@ -10,6 +10,7 @@ import { Input, Select } from "antd";
 export type BookingParams = {
   url: string;
   id: string;
+  facilityId: string;
   location: string;
   checkin: string;
   checkout: string;
@@ -45,6 +46,7 @@ const BookingVehicle = () => {
   const params: BookingParams = {
     url: windowLoaded ? window.location.href : "",
     id: searchParams.get("id") || "",
+    facilityId: searchParams.get("facility") || "",
     location: searchParams.get("location") || "",
     checkin: searchParams.get("checkin") || "",
     checkout: searchParams.get("checkout") || "",
@@ -52,6 +54,7 @@ const BookingVehicle = () => {
 
   const item = vehicles.find((vehicle) => vehicle.id === Number(params.id));
   if (!item) return null;
+  const rentalFacility = item.rentalFacility.find((facility) => facility.id === Number(params.facilityId)) || undefined;
 
   return (
     <div className="p-6 !pt-2 mx-auto max-w-7xl ">
@@ -90,7 +93,7 @@ const BookingVehicle = () => {
               <div className="space-y-2 mt-4">
                 <div className="flex justify-between">
                   <span className="text-gray-700">Phí thuê xe</span>
-                  <span className="text-gray-700">{item.price} ₫</span>
+                  <span className="text-gray-700">{rentalFacility?.price} ₫</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-700">Dịch vụ khác</span>
@@ -100,12 +103,14 @@ const BookingVehicle = () => {
                 <hr className="my-2" />
                 <div className="flex justify-between font-bold">
                   <span className="text-gray-700">Giá cho 4 ngày</span>
-                  <span className="text-gray-700">0 ₫</span>
+                  <span className="text-gray-700">
+                    {(rentalFacility?.price || 0) + 0} ₫
+                  </span>
                 </div>
               </div>
             </div>
 
-            <div className="p-4">
+            <div className="p-4 bg-white border rounded-lg">
               <h3 className="text-lg font-bold mb-4">Lựa chọn tuyệt vời!</h3>
               <div>
                 {introduction.map((text, index) => (

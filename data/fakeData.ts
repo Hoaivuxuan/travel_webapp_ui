@@ -206,17 +206,111 @@ export const activities: Destination[] = [
   },
 ];
 
+export const rentalFacilities = [
+  { 
+    id: 1,
+    name: "Hanoi Auto",
+    reviews: {
+      total: 2,
+      average_rating: 4.5,
+      review_breakdown: {
+        "5_star": 1,
+        "4_star": 1,
+        "3_star": 0,
+        "2_star": 0,
+        "1_star": 0,
+      },
+      comments: [
+        {
+          user: "bruno08",
+          date: "2024-09-21",
+          text: "Chủ xe nhiệt tình hỗ trợ giao nhận xe tận nơi, xe mới và vận hành ổn",
+          rating: 5,
+        },
+        {
+          user: "ptht2012",
+          date: "2024-09-19",
+          text: "Chủ xe nhiệt tình hỗ trợ giao nhận xe tận nơi, xe mới và vận hành ổn",
+          rating: 4,
+        },
+      ],
+    },
+  },
+  { 
+    id: 2,
+    name: "Ho Chi Minh City Auto",
+    reviews: {
+      total: 2,
+      average_rating: 4.5,
+      review_breakdown: {
+        "5_star": 1,
+        "4_star": 1,
+        "3_star": 0,
+        "2_star": 0,
+        "1_star": 0,
+      },
+      comments: [
+        {
+          rating: 5,
+          user: "bruno08",
+          date: "2024-09-21",
+          text: "Chủ xe nhiệt tình hỗ trợ giao nhận xe tận nơi, xe mới và vận hành ổn",
+        },
+        {
+          rating: 4,
+          user: "ptht2012",
+          date: "2024-09-19",
+          text: "Chủ xe nhiệt tình hỗ trợ giao nhận xe tận nơi, xe mới và vận hành ổn",
+        },
+      ],
+    },
+  },
+  { 
+    id: 3,
+    name: "Da Nang Auto",
+    reviews: {
+      total: 2,
+      average_rating: 4.5,
+      review_breakdown: {
+        "5_star": 1,
+        "4_star": 1,
+        "3_star": 0,
+        "2_star": 0,
+        "1_star": 0,
+      },
+      comments: [
+        {
+          rating: 5,
+          user: "bruno08",
+          date: "2024-09-21",
+          text: "Chủ xe nhiệt tình hỗ trợ giao nhận xe tận nơi, xe mới và vận hành ổn",
+        },
+        {
+          rating: 4,
+          user: "ptht2012",
+          date: "2024-09-19",
+          text: "Chủ xe nhiệt tình hỗ trợ giao nhận xe tận nơi, xe mới và vận hành ổn",
+        },
+      ],
+    },
+  },
+];
+
 export const vehicles = [
   {
     id: 1,
     model: "Kia Morning",
-    price: 589280,
+    rentalFacility: [
+      { id: 1, price: 500000 },
+      { id: 2, price: 520000 },
+      { id: 3, price: 480000 },
+    ],
     type: "car",
     details: {
       transmission: "Automatic",
       baggage_capacity: 2,
       seats: 4,
-      fuel_type: "Petrol",
+      fuel: "Petrol",
       year: 2018,
       safety_features: ["Airbags", "ABS", "Rear Camera"],
       engine: null,
@@ -225,13 +319,17 @@ export const vehicles = [
   {
     id: 2,
     model: "Hyundai Grand i10",
-    price: 589280,
+    rentalFacility: [
+      { id: 1, price: 550000 },
+      { id: 2, price: 570000 },
+      { id: 3, price: 530000 },
+    ],
     type: "car",
     details: {
       transmission: "Automatic",
       baggage_capacity: 2,
       seats: 4,
-      fuel_type: "Petrol",
+      fuel: "Petrol",
       year: 2019,
       safety_features: ["Airbags", "ABS", "Parking Sensors"],
       engine: null,
@@ -240,13 +338,17 @@ export const vehicles = [
   {
     id: 3,
     model: "Toyota Yaris",
-    price: 620000,
+    rentalFacility: [
+      { id: 1, price: 700000 },
+      { id: 2, price: 750000 },
+      { id: 3, price: 690000 },
+    ],
     type: "car",
     details: {
       transmission: "Automatic",
       baggage_capacity: 3,
       seats: 5,
-      fuel_type: "Petrol",
+      fuel: "Petrol",
       year: 2021,
       safety_features: ["Airbags", "ABS", "Lane Departure Warning"],
       engine: null,
@@ -255,13 +357,17 @@ export const vehicles = [
   {
     id: 4,
     model: "Mazda 3",
-    price: 700000,
+    rentalFacility: [
+      { id: 1, price: 800000 },
+      { id: 2, price: 850000 },
+      { id: 3, price: 780000 },
+    ],
     type: "car",
     details: {
       transmission: "Automatic",
       baggage_capacity: 2,
       seats: 5,
-      fuel_type: "Petrol",
+      fuel: "Petrol",
       year: 2023,
       safety_features: [
         "Airbags",
@@ -275,13 +381,17 @@ export const vehicles = [
   {
     id: 5,
     model: "Honda City",
-    price: 650000,
+    rentalFacility: [
+      { id: 1, price: 650000 },
+      { id: 2, price: 680000 },
+      { id: 3, price: 620000 },
+    ],
     type: "car",
     details: {
       transmission: "Automatic",
       baggage_capacity: 3,
       seats: 5,
-      fuel_type: "Petrol",
+      fuel: "Petrol",
       year: 2021,
       safety_features: ["Airbags", "ABS", "Cruise Control"],
       engine: null,
@@ -290,11 +400,15 @@ export const vehicles = [
   {
     id: 6,
     model: "Yamaha Exciter 150",
-    price: 1000000,
+    rentalFacility: [
+      { id: 1, price: 200000 },
+      { id: 2, price: 220000 },
+      { id: 3, price: 190000 },
+    ],
     type: "motor",
     details: {
       engine: 150,
-      fuel_type: "Petrol",
+      fuel: "Petrol",
       features: ["LED Headlight", "Sporty Design", "Disc Brakes"],
       transmission: null,
       baggage_capacity: null,
@@ -306,11 +420,15 @@ export const vehicles = [
   {
     id: 7,
     model: "Honda Winner X",
-    price: 1200000,
+    rentalFacility: [
+      { id: 1, price: 250000 },
+      { id: 2, price: 270000 },
+      { id: 3, price: 240000 },
+    ],
     type: "motor",
     details: {
       engine: 150,
-      fuel_type: "Petrol",
+      fuel: "Petrol",
       features: ["ABS", "Full Digital Display", "LED Lights"],
       transmission: null,
       baggage_capacity: null,
@@ -322,11 +440,15 @@ export const vehicles = [
   {
     id: 8,
     model: "Suzuki Raider 150",
-    price: 950000,
+    rentalFacility: [
+      { id: 1, price: 180000 },
+      { id: 2, price: 200000 },
+      { id: 3, price: 170000 },
+    ],
     type: "motor",
     details: {
       engine: 150,
-      fuel_type: "Petrol",
+      fuel: "Petrol",
       features: ["Underbone Frame", "Sporty Design", "Fuel Injection"],
       transmission: null,
       baggage_capacity: null,
@@ -338,11 +460,15 @@ export const vehicles = [
   {
     id: 9,
     model: "Yamaha MT-15",
-    price: 1500000,
+    rentalFacility: [
+      { id: 1, price: 300000 },
+      { id: 2, price: 320000 },
+      { id: 3, price: 290000 },
+    ],
     type: "motor",
     details: {
       engine: 155,
-      fuel_type: "Petrol",
+      fuel: "Petrol",
       features: ["Variable Valve Actuation", "ABS", "LED Headlight"],
       transmission: null,
       baggage_capacity: null,
@@ -354,11 +480,15 @@ export const vehicles = [
   {
     id: 10,
     model: "Honda CBR150R",
-    price: 1800000,
+    rentalFacility: [
+      { id: 1, price: 350000 },
+      { id: 2, price: 370000 },
+      { id: 3, price: 340000 },
+    ],
     type: "motor",
     details: {
       engine: 150,
-      fuel_type: "Petrol",
+      fuel: "Petrol",
       features: [
         "Sporty Design",
         "LED Headlights",
@@ -398,229 +528,5 @@ export const listings = {
         url: "https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o=",
       },
     ],
-    // listCars: [
-    //   {
-    //     id: 1,
-    //     model: "Kia Morning",
-    //     price: 589280,
-    //     details: {
-    //       transmission: "Automatic",
-    //       baggage_capacity: 2,
-    //       seats: 4,
-    //       fuel_type: "Petrol",
-    //       year: 2018,
-    //       safety_features: ["Airbags", "ABS", "Rear Camera"],
-    //     },
-    //     token: "75b6e43e-65ff-42f7-a97d-4564d7576c51",
-    //   },
-    //   {
-    //     id: 2,
-    //     model: "Hyundai Grand i10",
-    //     price: 589280,
-    //     details: {
-    //       transmission: "Automatic",
-    //       baggage_capacity: 2,
-    //       seats: 4,
-    //       fuel_type: "Petrol",
-    //       year: 2019,
-    //       safety_features: ["Airbags", "ABS", "Parking Sensors"],
-    //     },
-    //     token: "6cb3dda4-0fb0-41df-a254-85a6f59b851f",
-    //   },
-    //   {
-    //     id: 3,
-    //     model: "VinFast Fadil",
-    //     price: 589280,
-    //     details: {
-    //       transmission: "Automatic",
-    //       baggage_capacity: 2,
-    //       seats: 4,
-    //       fuel_type: "Petrol",
-    //       year: 2020,
-    //       safety_features: ["Airbags", "ABS", "Electronic Stability Control"],
-    //     },
-    //     token: "89f21c14-e59c-469f-8937-88f70c6d06be",
-    //   },
-    //   {
-    //     id: 4,
-    //     model: "Toyota Yaris",
-    //     price: 620000,
-    //     details: {
-    //       transmission: "Automatic",
-    //       baggage_capacity: 3,
-    //       seats: 5,
-    //       fuel_type: "Petrol",
-    //       year: 2021,
-    //       safety_features: ["Airbags", "ABS", "Lane Departure Warning"],
-    //     },
-    //     token: "685ded43-563c-40c2-8910-ebb757fc5913",
-    //   },
-    //   {
-    //     id: 5,
-    //     model: "Mazda 3",
-    //     price: 700000,
-    //     details: {
-    //       transmission: "Automatic",
-    //       baggage_capacity: 2,
-    //       seats: 5,
-    //       fuel_type: "Petrol",
-    //       year: 2023,
-    //       safety_features: [
-    //         "Airbags",
-    //         "ABS",
-    //         "Blind Spot Monitoring",
-    //         "Lane Departure Warning",
-    //       ],
-    //     },
-    //     token: "bc42a5d2-0e44-4ec7-a241-66e9931b22b9",
-    //   },
-    //   {
-    //     id: 6,
-    //     model: "Honda City",
-    //     price: 650000,
-    //     details: {
-    //       transmission: "Automatic",
-    //       baggage_capacity: 3,
-    //       seats: 5,
-    //       fuel_type: "Petrol",
-    //       year: 2021,
-    //       safety_features: ["Airbags", "ABS", "Cruise Control"],
-    //     },
-    //     token: "2a4a1093-8e82-4f2e-9291-3c80bc1ba0a1",
-    //   },
-    //   {
-    //     id: 7,
-    //     model: "Mitsubishi Xpander",
-    //     price: 650000,
-    //     details: {
-    //       transmission: "Automatic",
-    //       baggage_capacity: 3,
-    //       seats: 7,
-    //       fuel_type: "Petrol",
-    //       year: 2022,
-    //       safety_features: [
-    //         "Airbags",
-    //         "ABS",
-    //         "Rear Parking Sensors",
-    //         "Stability Control",
-    //       ],
-    //     },
-    //     token: "c4726502-d882-49ba-b90a-14210f71dbe7",
-    //   },
-    //   {
-    //     id: 8,
-    //     model: "Kia Cerato",
-    //     price: 620000,
-    //     details: {
-    //       transmission: "Automatic",
-    //       baggage_capacity: 3,
-    //       seats: 5,
-    //       fuel_type: "Petrol",
-    //       year: 2022,
-    //       safety_features: [
-    //         "Airbags",
-    //         "ABS",
-    //         "Electronic Stability Control",
-    //         "Lane Departure Warning",
-    //       ],
-    //     },
-    //     token: "0d891b24-3838-4e65-9c58-4733d041bb1d",
-    //   },
-    // ],
-    // listMotors: [
-    //   {
-    //     id: 1,
-    //     model: "Yamaha Exciter 150",
-    //     price: 1000000,
-    //     details: {
-    //       engine: 150,
-    //       fuel_type: "Petrol",
-    //       features: ["LED Headlight", "Sporty Design", "Disc Brakes"],
-    //     },
-    //     token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
-    //   },
-    //   {
-    //     id: 2,
-    //     model: "Honda Winner X",
-    //     price: 1200000,
-    //     details: {
-    //       engine: 150,
-    //       fuel_type: "Petrol",
-    //       year: 2021,
-    //       features: ["ABS", "Full Digital Display", "LED Lights"],
-    //     },
-    //     token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
-    //   },
-    //   {
-    //     id: 3,
-    //     model: "Suzuki Raider 150",
-    //     price: 950000,
-    //     details: {
-    //       engine: 150,
-    //       fuel_type: "Petrol",
-    //       features: ["Underbone Frame", "Sporty Design", "Fuel Injection"],
-    //     },
-    //     token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
-    //   },
-    //   {
-    //     id: 4,
-    //     model: "SYM Star SR 125",
-    //     price: 1100000,
-    //     details: {
-    //       engine: 125,
-    //       fuel_type: "Petrol",
-    //       features: ["Advanced Suspension", "Fuel Injection", "LED Lights"],
-    //     },
-    //     token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
-    //   },
-    //   {
-    //     id: 5,
-    //     model: "Yamaha MT-15",
-    //     price: 1500000,
-    //     details: {
-    //       engine: 155,
-    //       fuel_type: "Petrol",
-    //       features: ["Variable Valve Actuation", "ABS", "LED Headlight"],
-    //     },
-    //     token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
-    //   },
-    //   {
-    //     id: 6,
-    //     model: "Honda CBR150R",
-    //     price: 1800000,
-    //     details: {
-    //       engine: 150,
-    //       fuel_type: "Petrol",
-    //       features: [
-    //         "Sporty Design",
-    //         "LED Headlights",
-    //         "Anti-lock Braking System",
-    //       ],
-    //     },
-    //     token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
-    //   },
-    //   {
-    //     id: 7,
-    //     model: "Kawasaki Z125 Pro",
-    //     price: 850000,
-    //     details: {
-    //       engine: 125,
-    //       fuel_type: "Petrol",
-    //       features: ["Compact Size", "LED Lights", "Disc Brakes"],
-    //     },
-    //     token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
-    //   },
-    //   {
-    //     id: 8,
-    //     model: "Yamaha XSR155",
-    //     price: 1400000,
-    //     details: {
-    //       engine: 155,
-    //       fuel_type: "Petrol",
-    //       features: ["Retro Design", "ABS", "LED Headlights"],
-    //     },
-    //     token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
-    //   },
-    // ],
   },
 };

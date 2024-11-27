@@ -1,14 +1,14 @@
 "use client";
 
-import { Input, Button, Avatar, Form, Row, Col } from "antd";
+import { Input, Button, Avatar, Form, Row, Col, DatePicker } from "antd";
 import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { EditOutlined, CloseOutlined } from "@ant-design/icons";
 import axios from "axios";
 import Image from "next/image";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
+import dayjs from "dayjs";
 
 type UserInfoKeys = keyof UserData;
 interface UserData {
@@ -30,8 +30,6 @@ const PersonalInfoPage = () => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [values, setValues] = useState<UserData | null>(null);
   const [avatar, setAvatar] = useState<string | null>("");
-  const [loading, setLoading] = useState(false);
-  const [newAvatarFile, setNewAvatarFile] = useState<File | null>(null);
 
   const personalInfo = [
     { label: "Họ", key: "last_name" as UserInfoKeys },
@@ -74,35 +72,6 @@ const PersonalInfoPage = () => {
     fetchUserData();
   }, []);
 
-  const handleUploadToCloudinary = async (file: File) => {
-    if (!file) return;
-
-    setLoading(true);
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append(
-      "upload_preset",
-      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!,
-    );
-    formData.append(
-      "cloud_name",
-      process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!,
-    );
-
-    try {
-      const response = await axios.post(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-        formData,
-      );
-      setAvatar(response.data.secure_url);
-      return response.data.secure_url;
-    } catch (error) {
-      console.error("Error uploading to Cloudinary:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -111,7 +80,6 @@ const PersonalInfoPage = () => {
         setAvatar(reader.result as string);
       };
       reader.readAsDataURL(file);
-      setNewAvatarFile(file);
     }
   };
 
@@ -126,13 +94,6 @@ const PersonalInfoPage = () => {
   };
 
   const handleSaveClick = async () => {
-    let isAvatarChanged = false;
-    let isUserDataChanged = false;
-
-    if (newAvatarFile) {
-      isAvatarChanged = true;
-    }
-
     const updatedData: Partial<UserData> = {
       name: values?.name,
       first_name: values?.first_name,
@@ -143,51 +104,28 @@ const PersonalInfoPage = () => {
       avatar: values?.avatar,
     };
 
-    if (isAvatarChanged || isUserDataChanged) {
-      setLoading(true);
-    }
+    try {
+      const response = await fetch(`http://localhost:8080/users`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(updatedData),
+      });
 
-    if (newAvatarFile && isAvatarChanged) {
-      const avatarUrl = await handleUploadToCloudinary(newAvatarFile);
-      if (avatarUrl) {
-        updatedData.avatar = avatarUrl;
-        window.location.reload();
+      if (response.ok) {
+        const updatedUserData = await response.json();
+        notifySuccess("Thông tin người dùng đã được cập nhật.");
+        localStorage.setItem("user", JSON.stringify(updatedUserData));
+        setUser(updatedUserData);
+        setEditingIndex(null);
+      } else {
+        notifyWarning("Cập nhật thất bại");
       }
+    } catch (error) {
+      notifyWarning("Error updating user data");
     }
-
-    isUserDataChanged = Object.keys(updatedData).some(
-      (key) =>
-        updatedData[key as keyof UserData] !== user?.[key as keyof UserData],
-    );
-
-    if (isUserDataChanged) {
-      const bearerToken = localStorage.getItem("token");
-      if (!bearerToken) return;
-
-      try {
-        const response = await fetch(`http://localhost:8080/users`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${bearerToken}`,
-          },
-          body: JSON.stringify(updatedData),
-        });
-
-        if (response.ok) {
-          const updatedUserData = await response.json();
-          notifySuccess("Thông tin người dùng đã được cập nhật.");
-          localStorage.setItem("user", JSON.stringify(updatedUserData));
-          setUser(updatedUserData);
-          setEditingIndex(null);
-        } else {
-          notifyWarning("Cập nhật thất bại");
-        }
-      } catch (error) {
-        notifyWarning("Error updating user data");
-      }
-    }
-    setLoading(false);
   };
 
   return (
@@ -214,7 +152,7 @@ const PersonalInfoPage = () => {
         <div className="divide-y">
           <div className="py-4 flex items-center justify-between">
             <div className="grid grid-cols-11 gap-2 items-center w-full">
-              <div className="col-span-2 font-semibold">Họ Tên</div>
+              <div className="col-span-2 font-semibold">Họ tên</div>
               {editingIndex === 0 ? (
                 <div className="col-span-8 flex gap-2 w-full">
                   <Input
@@ -237,26 +175,24 @@ const PersonalInfoPage = () => {
               ) : (
                 <div className="col-span-8">
                   <Input
-                    value={
-                      (values?.first_name && values?.last_name)
-                        ? `${values?.first_name} ${values?.last_name}`
-                        : `USER ${values?.id}`
-                    }
-                    readOnly
-                    className="mt-1 border rounded w-full cursor-not-allowed"
+                    value={values?.first_name && values?.last_name
+                      ? `${values?.first_name} ${values?.last_name}`
+                      : `USER ${values?.id}`}
+                    disabled
+                    className="mt-1 !text-[#000000] border rounded w-full cursor-not-allowed"
                   />
                 </div>
               )}
               <div className="text-center col-span-1">
                 {editingIndex === 0 ? (
                   <Button
-                    icon={<FontAwesomeIcon icon={faTimes} />}
+                    icon={<CloseOutlined />}
                     onClick={() => setEditingIndex(null)}
                     type="link"
                   />
                 ) : (
                   <Button
-                    icon={<FontAwesomeIcon icon={faEdit} />}
+                    icon={<EditOutlined />}
                     onClick={() => handleEditClick(0)}
                     type="link"
                   />
@@ -269,36 +205,38 @@ const PersonalInfoPage = () => {
             <div key={field.key} className="py-4 flex items-center justify-between">
               <div className="grid grid-cols-11 gap-2 items-center w-full">
                 <div className="col-span-2 font-semibold">{field.label}</div>
-                {editingIndex === index + 1 ? (
-                  <div className="col-span-8">
-                    <Input
-                      value={values?.[field.key] || ""}
-                      onChange={(e) =>
-                        handleInputChange(field.key, e.target.value)
+                <div className="col-span-8">
+                  {field.key === "date_of_birth" ? (
+                    <DatePicker
+                      className="w-full mt-1 custom-date-picker"
+                      value={values?.date_of_birth ? dayjs(values?.date_of_birth) : null}
+                      format="YYYY-MM-DD"
+                      onChange={(date, dateString) =>
+                        handleInputChange(field.key, String(dateString))
                       }
-                      className="mt-1"
-                      placeholder={field.label}
+                      disabled={editingIndex !== index + 1}
                     />
-                  </div>
-                ) : (
-                  <div className="col-span-8">
+                  ) : (
                     <Input
                       value={values?.[field.key] || ""}
-                      readOnly
-                      className="mt-1"
+                      onChange={(e) => handleInputChange(field.key, e.target.value)}
+                      className={`mt-1 ${
+                        editingIndex === index + 1 ? "" : "!text-[#000000]"
+                      }`}
+                      disabled={editingIndex !== index + 1}
                     />
-                  </div>
-                )}
+                  )}
+                </div>
                 <div className="text-center col-span-1">
                   {editingIndex === index + 1 ? (
                     <Button
-                      icon={<FontAwesomeIcon icon={faTimes} />}
+                      icon={<CloseOutlined />}
                       onClick={() => setEditingIndex(null)}
                       type="link"
                     />
                   ) : (
                     <Button
-                      icon={<FontAwesomeIcon icon={faEdit} />}
+                      icon={<EditOutlined />}
                       onClick={() => handleEditClick(index + 1)}
                       type="link"
                     />
@@ -307,22 +245,17 @@ const PersonalInfoPage = () => {
               </div>
             </div>
           ))}
-
-          <div className="py-4 flex items-center justify-between">
-            <div className="w-full flex justify-end">
-              <Button
-                type="primary"
-                onClick={handleSaveClick}
-                loading={loading}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-              >
-                Lưu
-              </Button>
-            </div>
-          </div>
+          {editingIndex === null && (
+            <Button
+              className="float-right mt-5"
+              type="primary"
+              onClick={handleSaveClick}
+            >
+              Lưu
+            </Button>
+          )}
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };

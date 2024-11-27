@@ -1,13 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
-import { vehicles } from "@/data/fakeData";
+import { rentalFacilities, vehicles } from "@/data/fakeData";
 import { notFound, useRouter, useSearchParams } from "next/navigation";
 import VehicleInfo from "./VehicleInfo";
 import { format } from "date-fns";
+import {
+  EnvironmentOutlined,
+  MinusOutlined,
+  PlusOutlined,
+  SearchOutlined,
+  StarFilled,
+  StarOutlined,
+} from "@ant-design/icons";
+import { Radio, Input, Space, Button } from "antd";
+import { importantInfo, policies, requirements } from "@/data/defaultValues";
 
 const availableServices = [
   { key: "bonusDriver", name: "Tài xế phụ", max: 2 },
@@ -22,37 +30,33 @@ const VehicleDetail = () => {
   const router = useRouter();
   const detailsParams = useSearchParams();
   const id = detailsParams.get("id") || "";
+  const facilityId = detailsParams.get("facility") || "";
 
   const [services, setServices] = useState<Services>(() =>
     Object.fromEntries(availableServices.map((service) => [service.key, 0])) as Services
   );
 
+  const [pickupLocation, setPickupLocation] = useState("office");
+  const [returnLocation, setReturnLocation] = useState("office");
+  const [pickupAddress, setPickupAddress] = useState("");
+  const [returnAddress, setReturnAddress] = useState("");
+
   const rentalItem = vehicles.find((item) => item.id === Number(id));
-  if (!rentalItem) {
+  const facilityItem = rentalFacilities.find((item) => item.id === Number(facilityId));
+  if (!rentalItem || !facilityItem) {
     return notFound();
   }
 
-  const introduction = [
-    "Đánh giá của khách hàng: 8,6 / 10",
-    "Chính sách nhiên liệu phổ biến nhất",
-    "Không phải chờ đợi lâu",
-    "Quầy thanh toán dễ tìm",
-    "Nhân viên quầy thanh toán sẵn sàng hỗ trợ",
-    "Hủy đặt thuê miễn phí",
-  ];
-
-  const policy = [
-    "Miễn phí hủy tối đa 48 giờ trước khi nhận xe",
-    "Bảo hiểm hư hại do va chạm với mức miễn thường bằng 0 ₫",
-    "Bảo hiểm Mất trộm với mức miễn thường bằng 0 ₫",
-    "Số kilômét không giới hạn",
-  ];
-
+  const rentalFacility = rentalItem.rentalFacility.find((facility) => facility.id === Number(facilityId)) || undefined;
   const serviceCost = 300000;
   const totalServiceCost = Object.values(services).reduce(
     (sum, count) => sum + count * serviceCost,
     0
   );
+
+  const handleLocationChange = (e: any) => {
+    setReturnLocation(e.target.value);
+  };
 
   const handleServiceChange = (service: ServiceKeys, amount: number) => {
     setServices((prev) => {
@@ -72,6 +76,7 @@ const VehicleDetail = () => {
       const searchObject = JSON.parse(search);
       url.searchParams.set("rental", "true");
       url.searchParams.set("id", id);
+      url.searchParams.set("facility", facilityId);
       url.searchParams.set("location", searchObject.location);
       url.searchParams.set("checkin", format(searchObject.checkin.date, "yyyy-MM-dd"));
       url.searchParams.set("checkout", format(searchObject.checkout.date, "yyyy-MM-dd"));
@@ -83,135 +88,251 @@ const VehicleDetail = () => {
   return (
     <div>
       <div className="p-6 !pb-2 mx-auto max-w-7xl">
-        <a
-          href="#"
-          className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-gray-400 transition duration-150"
-          onClick={(e) => {
-            e.preventDefault();
+        <Button
+          type="primary"
+          className="bg-blue-600"
+          onClick={() => {
             router.back();
           }}
         >
           Quay lại trang trước
-        </a>
+        </Button>
       </div>
       <section className="p-6 !pt-2 mx-auto max-w-7xl grid grid-cols-3 gap-4 mb-6">
-        <div className="col-span-2 p-4 bg-white border rounded-lg">
-          <div className="p-4 bg-white">
-            <div className="grid grid-cols-2 gap-4 my-4 pb-4">
-              <div className="h-[300px]">
-                <Image
-                  src={`https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg`}
-                  alt={`Image of ${rentalItem.id}`}
-                  className="rounded-l-lg h-full w-auto"
-                  width={300}
-                  height={300}
-                />
-              </div>
-              <div>
-                <div className="pb-4">
-                  <h1 className="text-2xl font-bold">{rentalItem.model}</h1>
-                  <p className="text-gray-500 text-sm">
-                    Cung cấp bởi Mioto Ho Chi Minh City
-                  </p>
+        <div className="col-span-2 space-y-4">
+          <div className="p-4 bg-white border rounded-lg space-y-4">
+            <div className="p-4 bg-white">
+              <div className="grid grid-cols-2 gap-4 my-4 pb-4">
+                <div className="h-[300px]">
+                  <Image
+                    src={`https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg`}
+                    alt={`Image of ${rentalItem.id}`}
+                    className="rounded-l-lg h-full w-auto"
+                    width={300}
+                    height={300}
+                  />
                 </div>
-                <div className="px-2 space-y-2">
+                <div>
+                  <div className="pb-4">
+                    <h1 className="text-2xl font-bold">{rentalItem.model}</h1>
+                    <p className="text-gray-500 text-sm">
+                      Cung cấp bởi Mioto Ho Chi Minh City
+                    </p>
+                  </div>
                   <VehicleInfo type={rentalItem.type} details={rentalItem.details} />
                 </div>
               </div>
             </div>
-          </div>
 
-          <hr className="my-2" />
-          <div className="p-4">
-            <h3 className="text-lg font-bold mb-4">Lựa chọn tuyệt vời!</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {introduction.map((text, index) => (
-                <div className="flex items-start space-x-2" key={index}>
-                  <span className="text-green-600">✔</span>
-                  <span>{text}</span>
-                </div>
-              ))}
+            <div className="p-4 bg-white border rounded-lg space-y-4">
+              <h3 className="text-lg font-bold mb-2">Chính sách thuê xe</h3>
+              <ul className="list-disc pl-5 text-sm space-y-1">
+                {policies.map((policy, index) => (
+                  <li key={index}>{policy}</li>
+                ))}
+              </ul>
             </div>
-          </div>
 
-          <hr className="my-2" />
-          <div className="p-4">
-            <h3 className="text-lg font-bold mb-4">Giá đã bao gồm:</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {policy.map((text, index) => (
-                <div className="flex items-start space-x-2" key={index}>
-                  <span className="text-green-600">✔</span>
-                  <span>{text}</span>
-                </div>
-              ))}
+            <div className="p-4 bg-white border rounded-lg space-y-4">
+              <h3 className="text-lg font-bold mb-2">Yêu cầu thuê xe</h3>
+              <ul className="list-disc pl-5 text-sm space-y-1">
+                {requirements.map((requirement, index) => (
+                  <li key={index}>{requirement}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="p-4 bg-white border rounded-lg space-y-4">
+              <h3 className="text-lg font-bold mb-2">Thông tin quan trọng</h3>
+              <div>
+                <h4 className="font-semibold mb-1">Trước khi đặt xe</h4>
+                <ul className="list-disc pl-5 text-sm space-y-1">
+                  {importantInfo.beforeBooking.map((info, index) => (
+                    <li key={index}>{info}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-1">Sau khi đặt xe</h4>
+                <ul className="list-disc pl-5 text-sm space-y-1">
+                  {importantInfo.afterBooking.map((info, index) => (
+                    <li key={index}>{info}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-1">Trong khi nhận xe</h4>
+                <ul className="list-disc pl-5 text-sm space-y-1">
+                  {importantInfo.duringRental.map((info, index) => (
+                    <li key={index}>{info}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
 
           {rentalItem.type === "car" && (
-            <>
-              <hr className="my-2" />
-              <div className="p-4">
-                <h3 className="text-lg font-bold mb-4">Dịch vụ phụ</h3>
-                <div className="space-y-1">
-                  {availableServices.map((service) => (
-                    <div
-                      key={service.key}
-                      className="flex justify-between items-center"
-                    >
-                      <span>{service.name}</span>
-                      <div className="flex items-center border border-gray-200">
-                        <button
-                          className={`p-2 ${services[service.key] === 0 ? "bg-gray-200" : "bg-blue-200"}`}
-                          onClick={() => handleServiceChange(service.key, -1)}
-                          disabled={services[service.key] === 0}
-                        >
-                          <FontAwesomeIcon icon={faMinus} />
-                        </button>
-                        <div className="w-[30px] text-center">{services[service.key]}</div>
-                        <button
-                          className={`p-2 ${services[service.key] >= service.max ? "bg-gray-200" : "bg-blue-200"}`}
-                          onClick={() => handleServiceChange(service.key, 1)}
-                          disabled={services[service.key] >= service.max}
-                        >
-                          <FontAwesomeIcon icon={faPlus} />
-                        </button>
-                      </div>
+            <div className="p-4 bg-white border rounded-lg">
+              <h3 className="text-lg font-bold mb-4">Dịch vụ phụ</h3>
+              <div className="space-y-2">
+                {availableServices.map((service) => (
+                  <div
+                    key={service.key}
+                    className="flex justify-between items-center"
+                  >
+                    <span className="text-sm">{service.name}</span>
+                    <div className="flex items-center">
+                      <Button
+                        icon={<MinusOutlined />}
+                        onClick={() => handleServiceChange(service.key, -1)}
+                        disabled={services[service.key] === 0}
+                      />
+                      <div className="w-[35px] text-center">{services[service.key]}</div>
+                      <Button
+                        icon={<PlusOutlined />}
+                        onClick={() => handleServiceChange(service.key, 1)}
+                        disabled={services[service.key] >= service.max}
+                      />
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
-            </>
+            </div>
           )}
+
+          <div className="p-4 bg-white border rounded-lg">
+            <div className="flex items-center space-x-2 mb-4">
+              <EnvironmentOutlined style={{ fontSize: "20px", color: "#1890ff" }} />
+              <h2 className="text-lg font-bold">Điểm nhận xe</h2>
+            </div>
+            <div className="mb-4">
+              <Radio.Group value={pickupLocation}>
+                <Space direction="vertical">
+                  <Radio value="office">Văn phòng thuê xe</Radio>
+                  <Radio value="other">Địa điểm khác</Radio>
+                </Space>
+              </Radio.Group>
+            </div>
+            <div className="mb-4">
+              <Input
+                value={returnAddress}
+                onChange={(e) => setPickupAddress(e.target.value)}
+                placeholder="Nhập địa chỉ"
+                prefix={<SearchOutlined />}
+              />
+            </div>
+          </div>
+
+          <div className="p-4 bg-white border rounded-lg">
+            <div className="flex items-center space-x-2 mb-4">
+              <EnvironmentOutlined style={{ fontSize: "20px", color: "#1890ff" }} />
+              <h2 className="text-lg font-bold">Điểm trả xe</h2>
+            </div>
+
+            <div className="mb-4">
+              <Radio.Group value={returnLocation}>
+                <Space direction="vertical">
+                  <Radio value="office">Văn phòng thuê xe</Radio>
+                  <Radio value="other">Địa điểm khác</Radio>
+                </Space>
+              </Radio.Group>
+            </div>
+            <div className="mb-4">
+              <Input
+                value={returnAddress}
+                onChange={(e) => setReturnAddress(e.target.value)}
+                placeholder="Nhập địa chỉ"
+                prefix={<SearchOutlined />}
+              />
+            </div>
+          </div>
+
+          <div className="p-4 bg-white border rounded-lg">
+            <div className="grid grid-cols-3 my-4">
+              <div className="flex justify-start items-center">
+                <p className="font-bold">Nhận xe</p>
+              </div>
+              
+              <div></div>
+              
+              <div className="flex justify-end items-center">
+                <p className="font-bold">Trả xe</p>
+              </div>
+            </div>
+          </div>
+
+          <Button
+            type="primary"
+            className="w-full bg-blue-600"
+            onClick={handleBookingClick}
+          >
+            Tiếp tục
+          </Button>
         </div>
 
         <div className="col-span-1">
-          <div className="space-y-4 sticky top-10 p-4 bg-white border rounded-lg">
-            <div className="flex justify-between">
-              <span className="text-lg font-bold">Tổng tiền</span>
-              <span className="text-xl font-semibold">{rentalItem.price} ₫</span>
+          <div className="space-y-4">
+            <div className="p-4 bg-white border rounded-lg">
+              {`Bởi ${facilityItem.name}`}
+              <div className="flex items-center space-x-2 my-2">
+                <p className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold text-white bg-blue-600 rounded-lg">
+                  {facilityItem.reviews.average_rating.toFixed(1) || "N/A"}
+                </p>
+                <p className="text-xs">{facilityItem.reviews.total} lượt đánh giá</p>
+              </div>
+              <h3 className="font-semibold mt-4 mb-2">Top Reviews</h3>
+              <div className="space-y-2">
+                {facilityItem.reviews.comments.slice(0, 2).map((comment, index) => (
+                  <div key={index} className="p-4 border rounded-lg">
+                    <div className="flex justify-between mb-2">
+                      <p className="font-semibold">{comment.user}</p>
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, starIndex) => (
+                          <span key={starIndex} className="mr-1">
+                            {starIndex < comment.rating ? (
+                              <StarFilled className="text-yellow-300" />
+                            ) : (
+                              <StarOutlined className="text-yellow-300" />
+                            )}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-sm">{comment.text}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="flex justify-between">
-              <span className="text-sm">Dịch vụ phụ</span>
-              <span className="text-sm">{totalServiceCost} ₫</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-sm">Thuế</span>
-              <span className="text-sm">0 ₫</span>
-            </div>
+            
+            <div className="space-y-4 p-4 bg-white border rounded-lg">
+              <div className="flex justify-between">
+                <span className="text-sm font-bold">Giá thuê cơ bản</span>
+                <span className="text-sm font-semibold">{rentalFacility?.price} ₫</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm">Dịch vụ phụ</span>
+                <span className="text-sm">{totalServiceCost} ₫</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm">Thuế</span>
+                <span className="text-sm">0 ₫</span>
+              </div>
 
-            <div className="flex justify-between border-t pt-4">
-              <span className="text-lg font-bold">Tổng cộng</span>
-              <span className="text-xl font-semibold">
-                {rentalItem.price + totalServiceCost} ₫
-              </span>
-            </div>
+              <div className="flex justify-between border-t pt-4">
+                <span className="text-lg font-bold">Tổng giá tiền</span>
+                <span className="text-xl font-semibold">
+                  {(rentalFacility?.price || 0) + totalServiceCost} ₫
+                </span>
+              </div>
 
-            <button
-              className="w-full py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-150"
-              onClick={handleBookingClick}
-            >
-              Tiếp tục
-            </button>
+              <Button
+                type="primary"
+                className="w-full bg-blue-600"
+                onClick={handleBookingClick}
+              >
+                Tiếp tục
+              </Button>
+            </div>
           </div>
         </div>
       </section>

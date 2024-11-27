@@ -1,24 +1,15 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { format } from "date-fns";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import { Calendar } from "../ui/calendar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCalendar,
-  faMapLocation,
-  faTimes,
-} from "@fortawesome/free-solid-svg-icons";
-import "./index.css";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { format } from "date-fns";
+import { Button, DatePicker, Input, Select } from "antd";
+import { useRouter } from "next/navigation";
+import { EnvironmentOutlined, CloseOutlined } from "@ant-design/icons";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import dayjs from "dayjs";
 import locations from "@/data/location.json";
 
 interface Location {
@@ -86,12 +77,6 @@ function SearchForm() {
     }
   }, [keyword]);
 
-  const handleSuggestionClick = (name: string) => {
-    setKeyword(name);
-    form.setValue("location", name);
-    setSuggestions([]);
-  };
-
   useEffect(() => {
     const storedValues = localStorage.getItem("searchHotel");
     if (storedValues) {
@@ -104,6 +89,11 @@ function SearchForm() {
       form.setValue("adults", parsedValues.adults || 2);
       form.setValue("children", parsedValues.children || 0);
       form.setValue("rooms", parsedValues.rooms || 1);
+
+      setDateRange([
+        dayjs(parsedValues.dateRange.from),
+        dayjs(parsedValues.dateRange.to),
+      ]);
     }
 
     const subscription = form.watch((value) => {
@@ -113,23 +103,39 @@ function SearchForm() {
     return () => subscription.unsubscribe();
   }, [form]);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+
+  const [dateRange, setDateRange] = useState<[dayjs.Dayjs | null, dayjs.Dayjs | null]>([null, null]);
+
+  const handleDateChange = (dates: [dayjs.Dayjs | null, dayjs.Dayjs | null] | null) => {
+    if (dates) {
+      setDateRange(dates);
+      form.setValue("dateRange", {
+        from: dates[0]?.toDate() ?? today,
+        to: dates[1]?.toDate() ?? tomorrow,
+      });
+    }
+  };
+
+  const handleSuggestionClick = (name: string) => {
+    setKeyword(name);
+    form.setValue("location", name);
+    setSuggestions([]);
+  };
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
     localStorage.setItem("searchHotel", JSON.stringify(values));
 
     const url = new URL("https://booking.html");
     url.searchParams.set("hotel", "true");
     url.searchParams.set("location", values.location);
-    url.searchParams.set(
-      "checkin",
-      format(values.dateRange.from, "yyyy-MM-dd"),
-    );
-    url.searchParams.set("checkout", format(values.dateRange.to, "yyyy-MM-dd"));
+    url.searchParams.set("checkin", format(values.dateRange.from, "dd-MM-yyyy"));
+    url.searchParams.set("checkout", format(values.dateRange.to, "dd-MM-yyyy"));
     url.searchParams.set("adults", values.adults.toString());
     url.searchParams.set("children", values.children.toString());
     url.searchParams.set("rooms", values.rooms.toString());
 
     router.push(`/home/search?url=${url.search}`);
-  }
+  };
 
   return (
     <Form {...form}>
@@ -159,10 +165,7 @@ function SearchForm() {
                             className="pl-10"
                           />
                           <span className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                            <FontAwesomeIcon
-                              icon={faMapLocation}
-                              className="mr-2 w-4 text-gray-400"
-                            />
+                            <EnvironmentOutlined className="text-gray-400" />
                           </span>
                           <button
                             type="button"
@@ -173,7 +176,7 @@ function SearchForm() {
                               setSuggestions([]);
                             }}
                           >
-                            <FontAwesomeIcon icon={faTimes} className="w-4" />
+                            <CloseOutlined />
                           </button>
                           {suggestions.length > 0 && (
                             <ul className="absolute z-10 bg-white border border-gray-300 rounded shadow-md w-full mt-1 max-h-48 overflow-y-auto">
@@ -197,65 +200,37 @@ function SearchForm() {
                           )}
                         </div>
                       </FormControl>
-                      {form.formState.errors.location && (
-                        <div className="form-error !-mt-3">
-                          {form.formState.errors.location.message}
-                        </div>
-                      )}
                     </FormItem>
                   )}
                 />
               </div>
 
-              {/* Date Range Field */}
               <div className="col-span-3">
                 <FormField
                   control={form.control}
                   name="dateRange"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <Popover>
-                        <PopoverTrigger asChild>
+                    <FormField
+                      control={form.control}
+                      name="dateRange"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
                           <FormControl>
-                            <Button
-                              variant="outline"
-                              className={cn(
-                                "w-full justify-start text-left font-normal",
-                                !field.value && "text-muted-foreground",
-                              )}
-                            >
-                              <FontAwesomeIcon
-                                icon={faCalendar}
-                                className="w-4 h-4 mr-2 text-gray-400"
-                              />
-                              {field.value?.from && field.value?.to
-                                ? `${format(field.value.from, "dd/MM/yyyy")} - ${format(field.value.to, "dd/MM/yyyy")}`
-                                : "Chọn khoảng thời gian lưu trú"}
-                            </Button>
+                            <DatePicker.RangePicker
+                              value={dateRange}
+                              onChange={handleDateChange}
+                              disabledDate={(current) => current && current < dayjs().startOf("day")}
+                              format="DD/MM/YYYY"
+                            />
                           </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            initialFocus
-                            mode="range"
-                            selected={field.value}
-                            onSelect={(range) => {
-                              field.onChange(range);
-                            }}
-                            numberOfMonths={2}
-                            disabled={(date) =>
-                              date < new Date(today.setHours(0, 0, 0, 0))
-                            }
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </FormItem>
+                        </FormItem>
+                      )}
+                    />
                   )}
                 />
               </div>
 
               <div className="col-span-5 grid grid-cols-3 gap-1">
-                {/* Adults Field */}
                 <div className="col-span-1">
                   <FormField
                     control={form.control}
@@ -263,27 +238,26 @@ function SearchForm() {
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
                         <FormControl>
-                          <select
-                            {...field}
-                            className="p-2 border border-gray-300 rounded w-full"
-                            onChange={(e) => {
-                              const newAdults = Number(e.target.value);
+                          <Select
+                            className="w-full h-full"
+                            value={field.value}
+                            onChange={(value) => {
+                              const newAdults = Number(value);
                               field.onChange(newAdults);
                             }}
                           >
-                            {[...Array(12)].map((_, index) => (
-                              <option key={index + 1} value={index + 1}>
-                                {index + 1} người lớn
-                              </option>
+                            {Array.from({ length: 13 }, (_, i) => i + 1).map((count) => (
+                              <Select.Option key={count} value={count}>
+                                {count} người lớn
+                              </Select.Option>
                             ))}
-                          </select>
+                          </Select>
                         </FormControl>
                       </FormItem>
                     )}
                   />
                 </div>
 
-                {/* Children Field */}
                 <div className="col-span-1">
                   <FormField
                     control={form.control}
@@ -291,27 +265,26 @@ function SearchForm() {
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
                         <FormControl>
-                          <select
-                            {...field}
-                            className="p-2 border border-gray-300 rounded w-full"
-                            onChange={(e) => {
-                              const newChildren = Number(e.target.value);
+                          <Select
+                            className="w-full h-full"
+                            value={field.value}
+                            onChange={(value) => {
+                              const newChildren = Number(value);
                               field.onChange(newChildren);
                             }}
                           >
-                            {[...Array(12)].map((_, index) => (
-                              <option key={index} value={index}>
-                                {index + 0} trẻ em
-                              </option>
+                            {Array.from({ length: 13 }, (_, i) => i).map((count) => (
+                              <Select.Option key={count} value={count}>
+                                {count} trẻ em
+                              </Select.Option>
                             ))}
-                          </select>
+                          </Select>
                         </FormControl>
                       </FormItem>
                     )}
                   />
                 </div>
 
-                {/* Rooms Field */}
                 <div className="col-span-1">
                   <FormField
                     control={form.control}
@@ -319,20 +292,20 @@ function SearchForm() {
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
                         <FormControl>
-                          <select
-                            {...field}
-                            className="p-2 border border-gray-300 rounded w-full"
-                            onChange={(e) => {
-                              const newRooms = Number(e.target.value);
+                          <Select
+                            className="w-full h-full"
+                            value={field.value}
+                            onChange={(value) => {
+                              const newRooms = Number(value);
                               field.onChange(newRooms);
                             }}
                           >
-                            {[...Array(12)].map((_, index) => (
-                              <option key={index + 1} value={index + 1}>
-                                {index + 1} phòng
-                              </option>
+                            {Array.from({ length: 11 }, (_, i) => i + 1).map((count) => (
+                              <Select.Option key={count} value={count}>
+                                {count} phòng
+                              </Select.Option>
                             ))}
-                          </select>
+                          </Select>
                         </FormControl>
                       </FormItem>
                     )}
@@ -342,12 +315,8 @@ function SearchForm() {
             </div>
           </div>
 
-          {/* Submit Button */}
-          <div className="col-span-1 flex items-start justify-center">
-            <Button
-              type="submit"
-              className="bg-[#013B94] text-base font-bold w-full"
-            >
+          <div className="col-span-1 flex justify-center items-center">
+            <Button type="primary" htmlType="submit" className="w-full border">
               Tìm kiếm
             </Button>
           </div>

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import countries from "@/data/listCountry.json";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faHeadset } from "@fortawesome/free-solid-svg-icons";
 import { Input, Select, Radio, Checkbox, Button, RadioChangeEvent } from "antd";
+import { CheckCircleOutlined, NotificationOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -69,8 +68,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
     <form className="space-y-4">
       <div className="p-4 bg-white border rounded-lg">
         <h2 className="text-xl font-bold mb-4">Nhập thông tin chi tiết của bạn</h2>
-        <div className="grid grid-cols-2 gap-2">
-          <div className="mb-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="mb-2">
             <label className="block mb-2 font-medium">Họ</label>
             <Input
               type="text"
@@ -80,7 +79,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
               placeholder="ví dụ: Nguyễn"
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-2">
             <label className="block mb-2 font-medium">Tên</label>
             <Input
               type="text"
@@ -90,7 +89,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
               placeholder="ví dụ: Văn A"
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-2">
             <label className="block mb-2 font-medium">Email</label>
             <Input
               type="email"
@@ -100,7 +99,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
               placeholder="email@example.com"
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-2">
             <label className="block mb-2 font-medium">Số điện thoại</label>
             <Input
               type="text"
@@ -110,7 +109,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
               placeholder="Số điện thoại"
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-2">
             <label className="block mb-2 font-medium">Quốc gia</label>
             <Select
               value={userInfo.country}
@@ -178,18 +177,18 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
       <div className="p-4 bg-white border rounded-lg">
         <h2 className="text-xl font-bold mb-4">Thời gian đến của bạn</h2>
         <div className="flex items-center mb-2">
-          <FontAwesomeIcon icon={faCheckCircle} className="text-green-600 mr-2" />
+          <CheckCircleOutlined className="text-green-600 mr-2" />
           <p className="text-gray-700">Các phòng của bạn sẽ sẵn sàng để nhận trong khoảng từ 14:00 đến 00:00</p>
         </div>
         <div className="flex items-center mb-4">
-          <FontAwesomeIcon icon={faHeadset} className="text-green-600 mr-2" />
+          <NotificationOutlined className="text-green-600 mr-2" />
           <p className="text-gray-700">Lễ tân 24 giờ - Luôn có trợ giúp mỗi khi bạn cần!</p>
         </div>
         <label className="block mb-2 font-medium">
           Thêm thời gian đến dự kiến của bạn <span className="text-gray-500">(không bắt buộc)</span>
         </label>
         <Select
-          className="w-full p-2 border rounded bg-gray-50"
+          className="w-full h-auto p-2"
           placeholder="Vui lòng chọn"
         >
           <Option value="14:00-15:00">14:00 - 15:00</Option>

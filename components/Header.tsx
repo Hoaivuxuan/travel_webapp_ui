@@ -2,25 +2,28 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHome,
-  faCar,
-  faTheaterMasks,
-  faUser,
-  faSignOutAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { UserOutlined, LogoutOutlined, HomeOutlined, CarOutlined, CameraOutlined } from "@ant-design/icons";
 import { useAuth } from "@/app/login/AuthContext";
 import { useState, SetStateAction } from "react";
 
 const products = [
-  { name: "hotel", title: "TÌM NƠI LƯU TRÚ", href: "/home", icon: faHome },
-  { name: "rental", title: "CHO THUÊ XE", href: "/rental", icon: faCar },
+  { 
+    name:"hotel",
+    title: "TÌM NƠI LƯU TRÚ",
+    href: "/home",
+    icon: <HomeOutlined className="text-lg" />
+  },
+  { 
+    name: "rental",
+    title: "CHO THUÊ XE",
+    href: "/rental",
+    icon: <CarOutlined className="text-lg" />
+  },
   {
     name: "activities",
     title: "HOẠT ĐỘNG & VUI CHƠI",
     href: "/activities",
-    icon: faTheaterMasks,
+    icon: <CameraOutlined className="text-lg" />,
   },
 ];
 
@@ -86,11 +89,7 @@ const Header = () => {
                       : ""
                   }`}
                 >
-                  <FontAwesomeIcon
-                    icon={item.icon}
-                    className="h-5 w-5 mr-2"
-                    aria-hidden="true"
-                  />
+                  <span className="mr-2">{item.icon}</span>
                   {item.title}
                 </Link>
               ))}
@@ -116,7 +115,7 @@ const Header = () => {
               </span>
 
               {dropdownOpen && (
-                <div className="absolute right-0 top-10 mt-2 w-48 bg-white rounded-lg shadow-lg">
+                <div className="absolute right-0 top-10 mt-2 w-48 bg-white shadow-lg">
                   <Link
                     href="/settings/personal"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
@@ -125,14 +124,14 @@ const Header = () => {
                       setDropdownOpen(false);
                     }}
                   >
-                    <FontAwesomeIcon icon={faUser} className="mr-2" />
+                    <UserOutlined className="mr-2" />
                     Quản lý tài khoản
                   </Link>
                   <button
                     onClick={handleLogoutClick}
                     className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
                   >
-                    <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
+                    <LogoutOutlined className="mr-2" />
                     Đăng xuất
                   </button>
                 </div>

@@ -1,0 +1,3 @@
+.ant-picker.ant-picker-disabled .ant-picker-input > input {
+  color: #000 !important;
+}

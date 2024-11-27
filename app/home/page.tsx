@@ -4,11 +4,7 @@ import React, { useRef } from "react";
 import SearchForm from "@/components/home/SearchForm";
 import { destination } from "@/data/fakeData";
 import { listHotels } from "@/data/typeHotel";
-import {
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -85,7 +81,7 @@ export default function Home() {
             onClick={scrollLeft}
             className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600"
           >
-            <FontAwesomeIcon icon={faChevronLeft} />
+            <LeftOutlined />
           </button>
           <div
             ref={scrollContainerRef}
@@ -115,7 +111,7 @@ export default function Home() {
             onClick={scrollRight}
             className="absolute -right-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600"
           >
-            <FontAwesomeIcon icon={faChevronRight} />
+            <RightOutlined />
           </button>
         </div>
 

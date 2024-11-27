@@ -1,10 +1,4 @@
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTachometerAlt,
-  faUsers,
-  faCog,
-} from "@fortawesome/free-solid-svg-icons"; // import các icon FontAwesome
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return (

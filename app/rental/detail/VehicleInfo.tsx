@@ -1,30 +1,29 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCar,
-  faGasPump,
-  faSuitcase,
-  faUserFriends,
-  faMotorcycle,
-} from "@fortawesome/free-solid-svg-icons";
+  DashboardOutlined,
+  TeamOutlined,
+  CarryOutOutlined,
+  FireOutlined,
+  ThunderboltOutlined,
+} from "@ant-design/icons";
 
 const CarDetailInfo = ({ details }: { details: any }) => {
   return (
-    <div className="px-2 space-y-2">
+    <div className="space-y-2 text-sm">
       <div className="flex items-center">
-        <FontAwesomeIcon icon={faUserFriends} className="mr-4 w-4" />
-        <span>{details.seats} chỗ ngồi</span>
-      </div>
-      <div className="flex items-center">
-        <FontAwesomeIcon icon={faCar} className="mr-4 w-4" />
+        <DashboardOutlined className="mr-4 text-lg" />
         <span>{details.transmission}</span>
       </div>
       <div className="flex items-center">
-        <FontAwesomeIcon icon={faSuitcase} className="mr-4 w-4" />
+        <TeamOutlined className="mr-4 text-lg" />
+        <span>{details.seats} chỗ ngồi</span>
+      </div>
+      <div className="flex items-center">
+        <CarryOutOutlined className="mr-4 text-lg" />
         <span>{details.baggage_capacity} hành lý</span>
       </div>
       <div className="flex items-center">
-        <FontAwesomeIcon icon={faGasPump} className="mr-4 w-4" />
-        <span>{details.fuel_type}</span>
+        <FireOutlined className="mr-4 text-lg" />
+        <span>{details.fuel}</span>
       </div>
     </div>
   );
@@ -32,14 +31,14 @@ const CarDetailInfo = ({ details }: { details: any }) => {
 
 const MotorDetailInfo = ({ details }: { details: any }) => {
   return (
-    <div className="px-2 space-y-2">
+    <div className="space-y-2 text-sm">
       <div className="flex items-center">
-        <FontAwesomeIcon icon={faMotorcycle} className="mr-4 w-4" />
+        <ThunderboltOutlined className="mr-4 text-lg" />
         <span>{details.engine} phân khối</span>
       </div>
       <div className="flex items-center">
-        <FontAwesomeIcon icon={faGasPump} className="mr-4 w-4" />
-        <span>{details.fuel_type}</span>
+        <FireOutlined className="mr-4 text-lg" />
+        <span>{details.fuel}</span>
       </div>
     </div>
   );

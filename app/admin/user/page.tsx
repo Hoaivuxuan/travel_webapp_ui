@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import "./index.css";
-import { Table, Switch } from "antd";
+import { Table, Switch, Tag } from "antd";
 
 interface DataType {
   key: string;
@@ -18,11 +18,24 @@ interface DataType {
   role: string;
 }
 
+const roleTags = [
+  { role: "ADMIN", color: "red" },
+  { role: "USER", color: "blue" },
+  { role: "SUPERADMIN", color: "green" },
+  { role: "DEV", color: "orange" },
+];
+
 export default function UserAdmin() {
   const [listUser, setListUser] = useState<DataType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUserId = localStorage.getItem("userId");
+      setCurrentUserId(storedUserId ? Number(storedUserId) : null);
+    }
+
     const fetchUsers = async () => {
       try {
         const bearerToken = localStorage.getItem("token");
@@ -90,38 +103,31 @@ export default function UserAdmin() {
     },
     {
       title: "Role",
-      render: (text: any, record: DataType) => (
-        <Switch
-          checked={record.role === "USER"}
-          checkedChildren="USER"
-          unCheckedChildren="ADMIN"
-          onChange={(value) => handleRoleChange(value, record)}
-          style={{
-            backgroundColor: record.role === "USER" ? "#1890ff" : "#f5222d",
-            borderColor: record.role === "USER" ? "#1890ff" : "#f5222d",
-          }}
-          disabled={
-            record.role === "ADMIN" &&
-            record.id !== Number(localStorage.getItem("userId"))
-          }
-        />
-      ),
+      render: (text: any, record: DataType) => {
+        const roles = roleTags
+          .filter(tag => tag.role === record.role)
+          .map(tag => 
+            <Tag color={tag.color} key={tag.role}>{tag.role}</Tag>
+          );
+        return <>{roles}</>;
+      },
       width: "10%",
     },
     {
       title: "Active",
       render: (text: any, record: DataType) => {
-        const isSwitchVisible = !(record.role === "ADMIN");
-        return isSwitchVisible ? (
-          <Switch
-            checked={record.active}
-            onChange={(value) => handleActiveChange(value, record)}
-            style={{
-              backgroundColor: record.active ? "#52c41a" : "#f5222d",
-              borderColor: record.active ? "#52c41a" : "#f5222d",
-            }}
-          />
-        ) : null;
+        if ((currentUserId !== null && record.id !== currentUserId)) {
+          return (
+            <Switch
+              checked={record.active}
+              onChange={(value) => handleActiveChange(value, record)}
+              style={{
+                backgroundColor: record.active ? "#52c41a" : "#f5222d",
+                borderColor: record.active ? "#52c41a" : "#f5222d",
+              }}
+            />
+          );
+        }
       },
     },
   ];
