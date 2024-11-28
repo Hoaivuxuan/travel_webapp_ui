@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { UserOutlined } from "@ant-design/icons"; // Import the Ant Design icon
 import { useRouter } from "next/navigation";
 import { Table, Select } from "antd";
 import { format } from "date-fns";
@@ -17,21 +16,11 @@ interface AvailableRoomsTableProps {
   rooms: Room[];
 }
 
-const calculateNights = (s1: string, s2: string): number => {
-  const date1 = new Date(s1);
-  const date2 = new Date(s2);
-
-  const diffInMilliseconds = date2.getTime() - date1.getTime();
-  const diffInDays = diffInMilliseconds / (1000 * 60 * 60 * 24);
-
-  return Math.max(diffInDays, 0);
-};
-
 const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ id, rooms }) => {
   const initialSelection = {
     selectedRooms: Array(rooms.length).fill(0),
     totalRooms: 0,
-    totalPrice: 0
+    totalPrice: 0,
   };
 
   const [selectedRooms, setSelectedRooms] = useState<number[]>(initialSelection.selectedRooms);
@@ -96,7 +85,7 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ id, rooms }) 
       key: "max_guests",
       render: (maxGuests: number) => (
         <span>
-          {maxGuests} x <FontAwesomeIcon icon={faUser} className="mx-2" />
+          {maxGuests} x <UserOutlined className="mx-2" />
         </span>
       ),
     },
@@ -110,20 +99,22 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ id, rooms }) 
       title: "Các lựa chọn",
       dataIndex: "amenities",
       key: "amenities",
+      width: "30%",
       render: (amenities: string[]) => (
-        <ul className="list-disc pl-5">
+        <div className="flex flex-wrap gap-2">
           {amenities.map((option, i) => (
-            <li key={i} className="text-green-600 text-sm">
-              {option}
-            </li>
+            <div key={i} className="w-auto inline-block bg-green-200 text-green-600 rounded-full px-4 py-1 text-xs">
+              <span>{option}</span>
+            </div>
           ))}
-        </ul>
+        </div>
       ),
     },
     {
       title: "Chọn số lượng",
       dataIndex: "select",
       key: "select",
+      width: "10%",
       render: (_: any, record: any, index: number) => (
         <Select
           value={selectedRooms[index]}

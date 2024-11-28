@@ -3,12 +3,8 @@
 import React, { useRef } from "react";
 import SearchForm from "@/components/home/SearchForm";
 import { destination } from "@/data/fakeData";
-import {
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image"; // Import Image component
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import Image from "next/image";
 
 export default function Home() {
   const trendingDestinations = destination.slice(0, 5);
@@ -58,8 +54,8 @@ export default function Home() {
                 className="object-cover rounded-lg w-full h-72"
                 src={item.src}
                 alt={item.title}
-                width={540} // Set width to match the image dimensions
-                height={405} // Set height to match the image dimensions
+                width={540}
+                height={405}
               />
               <div className="pt-3">
                 <p className="font-bold">{item.title}</p>
@@ -80,9 +76,9 @@ export default function Home() {
         <div className="relative flex items-center">
           <button
             onClick={scrollLeft}
-            className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600"
+            className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex justify-center items-center"
           >
-            <FontAwesomeIcon icon={faChevronLeft} />
+            <LeftOutlined />
           </button>
           <div
             ref={scrollContainerRef}
@@ -110,9 +106,9 @@ export default function Home() {
           </div>
           <button
             onClick={scrollRight}
-            className="absolute -right-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600"
+            className="absolute -right-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex justify-center items-center"
           >
-            <FontAwesomeIcon icon={faChevronRight} />
+            <RightOutlined />
           </button>
         </div>
       </section>

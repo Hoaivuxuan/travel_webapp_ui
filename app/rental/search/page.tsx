@@ -14,21 +14,29 @@ type Props = {
 export type RentalSearchParams = {
   url: URL;
   location: string;
-  checkin: string;
-  checkout: string;
-  type: string;
+  pickup: string;
+  return: string;
 };
 
 const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
   const [selectedTypes, setSelectedTypes] = useState<string[]>(["car", "motor"]);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [itemsToShow, setItemsToShow] = useState(10);
 
   const searchResult = useMemo(() => {
     return vehicles.sort((a, b) => a.model.localeCompare(b.model));
   }, []);
 
-  const minPrice = Math.min(...vehicles.map((item) => item.price));
-  const maxPrice = Math.max(...vehicles.map((item) => item.price));
+  const minPrice = Math.min(
+    ...vehicles.map((item) =>
+      Math.min(...item.rentalFacility.map((facility) => facility.price)),
+    ),
+  );
+  const maxPrice = Math.max(
+    ...vehicles.map((item) =>
+      Math.max(...item.rentalFacility.map((facility) => facility.price)),
+    ),
+  );
   const [priceRange, setPriceRange] = useState<[number, number]>([minPrice, maxPrice]);
 
   const handlePriceChange = (value: number | number[]) => {
@@ -41,18 +49,12 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
     return searchResult.filter(
       (item) =>
         selectedTypes.includes(item.type) &&
-        item.price >= priceRange[0] &&
-        item.price <= priceRange[1]
+        Math.min(...item.rentalFacility.map((facility) => facility.price)) >= priceRange[0] &&
+        Math.min(...item.rentalFacility.map((facility) => facility.price)) <= priceRange[1]
     );
   }, [searchResult, selectedTypes, priceRange]);
 
   const displayedResults = filteredResults.slice(0, itemsToShow);
-
-  const handleCheckboxChange = (type: string) => {
-    setSelectedTypes((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
-    );
-  };
 
   useEffect(() => {
     if (!searchParams.url) {
@@ -79,8 +81,8 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
 
         <h2 className="py-4">
           <span className="ml-2">
-            {searchParams.location}, từ {searchParams.checkin} đến{" "}
-            {searchParams.checkout} ({filteredResults.length} kết quả)
+            {searchParams.location},{" "}
+            từ {searchParams.pickup} đến {searchParams.return} ({filteredResults.length} kết quả)
           </span>
         </h2>
 
@@ -128,9 +130,19 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
             <div className="space-y-4">
               {displayedResults.map((item) =>
                 item.type === "car" ? (
-                  <CarItem key={item.id} id={item.id.toString()} />
+                  <CarItem
+                    key={item.id}
+                    id={item.id.toString()}
+                    isFacilityVisible={selectedItemId === item.id.toString()}
+                    onFacilityToggle={() => setSelectedItemId(selectedItemId === item.id.toString() ? null : item.id.toString())}
+                  />
                 ) : (
-                  <MotorItem key={item.id} id={item.id.toString()} />
+                  <MotorItem
+                    key={item.id}
+                    id={item.id.toString()}
+                    isFacilityVisible={selectedItemId === item.id.toString()}
+                    onFacilityToggle={() => setSelectedItemId(selectedItemId === item.id.toString() ? null : item.id.toString())}
+                  />
                 )
               )}
             </div>

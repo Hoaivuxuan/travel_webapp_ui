@@ -2,11 +2,7 @@
 
 import RentalSearchForm from "@/components/rental/RentalSearchForm";
 import { destination } from "@/data/fakeData";
-import {
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import React, { useRef } from "react";
 import Image from "next/image";
 
@@ -60,7 +56,7 @@ const RentalPage = () => {
             aria-label="Scroll left"
             className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
-            <FontAwesomeIcon icon={faChevronLeft} />
+            <LeftOutlined />
           </button>
           <div
             ref={scrollContainerRef}
@@ -92,7 +88,7 @@ const RentalPage = () => {
             aria-label="Scroll right"
             className="absolute -right-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
-            <FontAwesomeIcon icon={faChevronRight} />
+            <RightOutlined />
           </button>
         </div>
       </section>
