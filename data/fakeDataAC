@@ -1,0 +1,809 @@
+export const data_search_attraction_location = {
+    "products": [
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJGWDJIMGxUS3VBIiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Nutty Newport News Scavenger Hunt",
+            "productId": "PRFX2H0lTKuA",
+            "productSlug": "prfx2h0ltkua-nutty-newport-news-scavenger-hunt",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJpSEhIVjB1TGJPIiwidWZpIjoyMDA4ODMyNX0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "New York News and Media Walking Tour",
+            "productId": "PRiHHHV0uLbO",
+            "productSlug": "prihhhv0ulbo-new-york-news-and-media-walking-tour",
+            "taxonomySlug": "tours",
+            "cityUfi": 20088325,
+            "cityName": "New York",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFIyMFFJNmJIMU96IiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Scavenger Hunt in Newport News by Operation City Quest",
+            "productId": "PR20QI6bH1Oz",
+            "productSlug": "pr20qi6bh1oz-scavenger-hunt-experience-in-newport-news",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJqVkZYN3RMT2VTIiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Participate in a Fun Scavenger Hunt in Newport News by 3Quest Challenge",
+            "productId": "PRjVFX7tLOeS",
+            "productSlug": "prjvfx7tloes-newport-news-fun-scavenger-hunt",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFIzalRhSDBiRUQ5IiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Adventurous Scavenger Hunt in Newport News by Zombie Scavengers",
+            "productId": "PR3jTaH0bED9",
+            "productSlug": "pr3jtah0bed9-adventurous-scavenger-hunt-in-newport-news-by-zombie-scavengers",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJLZ0NzcUtnaGdOIiwidWZpIjoyMDA4MTk1N30=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Newark Airport Transfer (EWR) to New York City",
+            "productId": "PRKgCsqKghgN",
+            "productSlug": "prkgcsqkghgn-private-newark-airport-transfer-ewr-to-new-york-city",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20081957,
+            "cityName": "Newark",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFIyT1RFQUxKc3hlIiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Holiday Scavenger Hunt in Newport News by Holly Jolly Hunt",
+            "productId": "PR2OTEALJsxe",
+            "productSlug": "pr2otealjsxe-holiday-scavenger-hunt-in-newport-news-by-holly-jolly-hunt",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJBR3AwbDE2TGFQIiwidWZpIjoyMDA4ODMyNX0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "New York to Newark Airport (EWR) Departure Transfer",
+            "productId": "PRAGp0l16LaP",
+            "productSlug": "pragp0l16lap-new-york-to-newark-airport-ewr-departure-transfer",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20088325,
+            "cityName": "New York",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJFT0lUekpCZzZpIiwidWZpIjoyMDA4MTk1N30=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Newark Airport to Randolph City New Jersey Arrival Transfer",
+            "productId": "PREOITzJBg6i",
+            "productSlug": "preoitzjbg6i-newark-airport-to-randolph-city-new-jersey-arrival-transfer",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20081957,
+            "cityName": "Newark",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJIcURxZnozS1ZwIiwidWZpIjoyMDA4MTk1N30=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Newark Airport EWR to New York Arrival Private Transfer",
+            "productId": "PRHqDqfz3KVp",
+            "productSlug": "prhqdqfz3kvp-newark-airport-ewr-to-new-york-arrival-private-transfer",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20081957,
+            "cityName": "Newark",
+            "countryCode": "us"
+        }
+    ],
+    "destinations": [
+        {
+            "id": "eyJ1ZmkiOjIwMDUwMjY0fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": 20050264,
+            "country": "United States",
+            "cityName": "New Orleans",
+            "productCount": 550,
+            "cc1": "us"
+        },
+        {
+            "id": "eyJ1ZmkiOjIwMDg4MzI1fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": 20088325,
+            "country": "United States",
+            "cityName": "New York",
+            "productCount": 1901,
+            "cc1": "us"
+        },
+        {
+            "id": "eyJ1ZmkiOi0yMTA2MTAyfQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": -2106102,
+            "country": "India",
+            "cityName": "New Delhi",
+            "productCount": 4706,
+            "cc1": "in"
+        },
+        {
+            "id": "eyJ1ZmkiOi0yNjAzOTY2fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": -2603966,
+            "country": "United Kingdom",
+            "cityName": "Newcastle upon Tyne",
+            "productCount": 49,
+            "cc1": "gb"
+        },
+        {
+            "id": "eyJ1ZmkiOi0xNTkxMzE2fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": -1591316,
+            "country": "Australia",
+            "cityName": "Newcastle",
+            "productCount": 43,
+            "cc1": "au"
+        }
+    ]
+}
+// 
+export const data_search_attractions = {
+    "products": [
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJGWDJIMGxUS3VBIiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Nutty Newport News Scavenger Hunt",
+            "productId": "PRFX2H0lTKuA",
+            "productSlug": "prfx2h0ltkua-nutty-newport-news-scavenger-hunt",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJpSEhIVjB1TGJPIiwidWZpIjoyMDA4ODMyNX0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "New York News and Media Walking Tour",
+            "productId": "PRiHHHV0uLbO",
+            "productSlug": "prihhhv0ulbo-new-york-news-and-media-walking-tour",
+            "taxonomySlug": "tours",
+            "cityUfi": 20088325,
+            "cityName": "New York",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFIyMFFJNmJIMU96IiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Scavenger Hunt in Newport News by Operation City Quest",
+            "productId": "PR20QI6bH1Oz",
+            "productSlug": "pr20qi6bh1oz-scavenger-hunt-experience-in-newport-news",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFIzalRhSDBiRUQ5IiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Adventurous Scavenger Hunt in Newport News by Zombie Scavengers",
+            "productId": "PR3jTaH0bED9",
+            "productSlug": "pr3jtah0bed9-adventurous-scavenger-hunt-in-newport-news-by-zombie-scavengers",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJqVkZYN3RMT2VTIiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Participate in a Fun Scavenger Hunt in Newport News by 3Quest Challenge",
+            "productId": "PRjVFX7tLOeS",
+            "productSlug": "prjvfx7tloes-newport-news-fun-scavenger-hunt",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFIyT1RFQUxKc3hlIiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Holiday Scavenger Hunt in Newport News by Holly Jolly Hunt",
+            "productId": "PR2OTEALJsxe",
+            "productSlug": "pr2otealjsxe-holiday-scavenger-hunt-in-newport-news-by-holly-jolly-hunt",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJLZ0NzcUtnaGdOIiwidWZpIjoyMDA4MTk1N30=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Newark Airport Transfer (EWR) to New York City",
+            "productId": "PRKgCsqKghgN",
+            "productSlug": "prkgcsqkghgn-private-newark-airport-transfer-ewr-to-new-york-city",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20081957,
+            "cityName": "Newark",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJBR3AwbDE2TGFQIiwidWZpIjoyMDA4ODMyNX0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "New York to Newark Airport (EWR) Departure Transfer",
+            "productId": "PRAGp0l16LaP",
+            "productSlug": "pragp0l16lap-new-york-to-newark-airport-ewr-departure-transfer",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20088325,
+            "cityName": "New York",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJFT0lUekpCZzZpIiwidWZpIjoyMDA4MTk1N30=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Newark Airport to Randolph City New Jersey Arrival Transfer",
+            "productId": "PREOITzJBg6i",
+            "productSlug": "preoitzjbg6i-newark-airport-to-randolph-city-new-jersey-arrival-transfer",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20081957,
+            "cityName": "Newark",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJIcURxZnozS1ZwIiwidWZpIjoyMDA4MTk1N30=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Newark Airport EWR to New York Arrival Private Transfer",
+            "productId": "PRHqDqfz3KVp",
+            "productSlug": "prhqdqfz3kvp-newark-airport-ewr-to-new-york-arrival-private-transfer",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20081957,
+            "cityName": "Newark",
+            "countryCode": "us"
+        }
+    ],
+    "destinations": [
+        {
+            "id": "eyJ1ZmkiOjIwMDUwMjY0fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": 20050264,
+            "country": "United States",
+            "cityName": "New Orleans",
+            "productCount": 579,
+            "cc1": "us"
+        },
+        {
+            "id": "eyJ1ZmkiOjIwMDg4MzI1fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": 20088325,
+            "country": "United States",
+            "cityName": "New York",
+            "productCount": 1975,
+            "cc1": "us"
+        },
+        {
+            "id": "eyJ1ZmkiOi0yMTA2MTAyfQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": -2106102,
+            "country": "India",
+            "cityName": "New Delhi",
+            "productCount": 5149,
+            "cc1": "in"
+        },
+        {
+            "id": "eyJ1ZmkiOi0yNjAzOTY2fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": -2603966,
+            "country": "United Kingdom",
+            "cityName": "Newcastle upon Tyne",
+            "productCount": 52,
+            "cc1": "gb"
+        },
+        {
+            "id": "eyJ1ZmkiOi0xNTkxMzE2fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": -1591316,
+            "country": "Australia",
+            "cityName": "Newcastle",
+            "productCount": 45,
+            "cc1": "au"
+        }
+    ]
+}
+// 
+export const data_get_availability_calendar = {
+    "products": [
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJGWDJIMGxUS3VBIiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Nutty Newport News Scavenger Hunt",
+            "productId": "PRFX2H0lTKuA",
+            "productSlug": "prfx2h0ltkua-nutty-newport-news-scavenger-hunt",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJpSEhIVjB1TGJPIiwidWZpIjoyMDA4ODMyNX0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "New York News and Media Walking Tour",
+            "productId": "PRiHHHV0uLbO",
+            "productSlug": "prihhhv0ulbo-new-york-news-and-media-walking-tour",
+            "taxonomySlug": "tours",
+            "cityUfi": 20088325,
+            "cityName": "New York",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFIyMFFJNmJIMU96IiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Scavenger Hunt in Newport News by Operation City Quest",
+            "productId": "PR20QI6bH1Oz",
+            "productSlug": "pr20qi6bh1oz-scavenger-hunt-experience-in-newport-news",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFIzalRhSDBiRUQ5IiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Adventurous Scavenger Hunt in Newport News by Zombie Scavengers",
+            "productId": "PR3jTaH0bED9",
+            "productSlug": "pr3jtah0bed9-adventurous-scavenger-hunt-in-newport-news-by-zombie-scavengers",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJqVkZYN3RMT2VTIiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Participate in a Fun Scavenger Hunt in Newport News by 3Quest Challenge",
+            "productId": "PRjVFX7tLOeS",
+            "productSlug": "prjvfx7tloes-newport-news-fun-scavenger-hunt",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFIyT1RFQUxKc3hlIiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Holiday Scavenger Hunt in Newport News by Holly Jolly Hunt",
+            "productId": "PR2OTEALJsxe",
+            "productSlug": "pr2otealjsxe-holiday-scavenger-hunt-in-newport-news-by-holly-jolly-hunt",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJLZ0NzcUtnaGdOIiwidWZpIjoyMDA4MTk1N30=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Newark Airport Transfer (EWR) to New York City",
+            "productId": "PRKgCsqKghgN",
+            "productSlug": "prkgcsqkghgn-private-newark-airport-transfer-ewr-to-new-york-city",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20081957,
+            "cityName": "Newark",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJBR3AwbDE2TGFQIiwidWZpIjoyMDA4ODMyNX0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "New York to Newark Airport (EWR) Departure Transfer",
+            "productId": "PRAGp0l16LaP",
+            "productSlug": "pragp0l16lap-new-york-to-newark-airport-ewr-departure-transfer",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20088325,
+            "cityName": "New York",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJFT0lUekpCZzZpIiwidWZpIjoyMDA4MTk1N30=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Newark Airport to Randolph City New Jersey Arrival Transfer",
+            "productId": "PREOITzJBg6i",
+            "productSlug": "preoitzjbg6i-newark-airport-to-randolph-city-new-jersey-arrival-transfer",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20081957,
+            "cityName": "Newark",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJIcURxZnozS1ZwIiwidWZpIjoyMDA4MTk1N30=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Newark Airport EWR to New York Arrival Private Transfer",
+            "productId": "PRHqDqfz3KVp",
+            "productSlug": "prhqdqfz3kvp-newark-airport-ewr-to-new-york-arrival-private-transfer",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20081957,
+            "cityName": "Newark",
+            "countryCode": "us"
+        }
+    ],
+    "destinations": [
+        {
+            "id": "eyJ1ZmkiOjIwMDUwMjY0fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": 20050264,
+            "country": "United States",
+            "cityName": "New Orleans",
+            "productCount": 579,
+            "cc1": "us"
+        },
+        {
+            "id": "eyJ1ZmkiOjIwMDg4MzI1fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": 20088325,
+            "country": "United States",
+            "cityName": "New York",
+            "productCount": 1975,
+            "cc1": "us"
+        },
+        {
+            "id": "eyJ1ZmkiOi0yMTA2MTAyfQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": -2106102,
+            "country": "India",
+            "cityName": "New Delhi",
+            "productCount": 5149,
+            "cc1": "in"
+        },
+        {
+            "id": "eyJ1ZmkiOi0yNjAzOTY2fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": -2603966,
+            "country": "United Kingdom",
+            "cityName": "Newcastle upon Tyne",
+            "productCount": 52,
+            "cc1": "gb"
+        },
+        {
+            "id": "eyJ1ZmkiOi0xNTkxMzE2fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": -1591316,
+            "country": "Australia",
+            "cityName": "Newcastle",
+            "productCount": 45,
+            "cc1": "au"
+        }
+    ]
+}
+// 
+export const data_get_availability = {
+    "products": [
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJGWDJIMGxUS3VBIiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Nutty Newport News Scavenger Hunt",
+            "productId": "PRFX2H0lTKuA",
+            "productSlug": "prfx2h0ltkua-nutty-newport-news-scavenger-hunt",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJpSEhIVjB1TGJPIiwidWZpIjoyMDA4ODMyNX0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "New York News and Media Walking Tour",
+            "productId": "PRiHHHV0uLbO",
+            "productSlug": "prihhhv0ulbo-new-york-news-and-media-walking-tour",
+            "taxonomySlug": "tours",
+            "cityUfi": 20088325,
+            "cityName": "New York",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFIyMFFJNmJIMU96IiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Scavenger Hunt in Newport News by Operation City Quest",
+            "productId": "PR20QI6bH1Oz",
+            "productSlug": "pr20qi6bh1oz-scavenger-hunt-experience-in-newport-news",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFIzalRhSDBiRUQ5IiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Adventurous Scavenger Hunt in Newport News by Zombie Scavengers",
+            "productId": "PR3jTaH0bED9",
+            "productSlug": "pr3jtah0bed9-adventurous-scavenger-hunt-in-newport-news-by-zombie-scavengers",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJqVkZYN3RMT2VTIiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Participate in a Fun Scavenger Hunt in Newport News by 3Quest Challenge",
+            "productId": "PRjVFX7tLOeS",
+            "productSlug": "prjvfx7tloes-newport-news-fun-scavenger-hunt",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFIyT1RFQUxKc3hlIiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Holiday Scavenger Hunt in Newport News by Holly Jolly Hunt",
+            "productId": "PR2OTEALJsxe",
+            "productSlug": "pr2otealjsxe-holiday-scavenger-hunt-in-newport-news-by-holly-jolly-hunt",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJLZ0NzcUtnaGdOIiwidWZpIjoyMDA4MTk1N30=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Newark Airport Transfer (EWR) to New York City",
+            "productId": "PRKgCsqKghgN",
+            "productSlug": "prkgcsqkghgn-private-newark-airport-transfer-ewr-to-new-york-city",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20081957,
+            "cityName": "Newark",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJBR3AwbDE2TGFQIiwidWZpIjoyMDA4ODMyNX0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "New York to Newark Airport (EWR) Departure Transfer",
+            "productId": "PRAGp0l16LaP",
+            "productSlug": "pragp0l16lap-new-york-to-newark-airport-ewr-departure-transfer",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20088325,
+            "cityName": "New York",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJFT0lUekpCZzZpIiwidWZpIjoyMDA4MTk1N30=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Newark Airport to Randolph City New Jersey Arrival Transfer",
+            "productId": "PREOITzJBg6i",
+            "productSlug": "preoitzjbg6i-newark-airport-to-randolph-city-new-jersey-arrival-transfer",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20081957,
+            "cityName": "Newark",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJIcURxZnozS1ZwIiwidWZpIjoyMDA4MTk1N30=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Newark Airport EWR to New York Arrival Private Transfer",
+            "productId": "PRHqDqfz3KVp",
+            "productSlug": "prhqdqfz3kvp-newark-airport-ewr-to-new-york-arrival-private-transfer",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20081957,
+            "cityName": "Newark",
+            "countryCode": "us"
+        }
+    ],
+    "destinations": [
+        {
+            "id": "eyJ1ZmkiOjIwMDUwMjY0fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": 20050264,
+            "country": "United States",
+            "cityName": "New Orleans",
+            "productCount": 579,
+            "cc1": "us"
+        },
+        {
+            "id": "eyJ1ZmkiOjIwMDg4MzI1fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": 20088325,
+            "country": "United States",
+            "cityName": "New York",
+            "productCount": 1975,
+            "cc1": "us"
+        },
+        {
+            "id": "eyJ1ZmkiOi0yMTA2MTAyfQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": -2106102,
+            "country": "India",
+            "cityName": "New Delhi",
+            "productCount": 5149,
+            "cc1": "in"
+        },
+        {
+            "id": "eyJ1ZmkiOi0yNjAzOTY2fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": -2603966,
+            "country": "United Kingdom",
+            "cityName": "Newcastle upon Tyne",
+            "productCount": 52,
+            "cc1": "gb"
+        },
+        {
+            "id": "eyJ1ZmkiOi0xNTkxMzE2fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": -1591316,
+            "country": "Australia",
+            "cityName": "Newcastle",
+            "productCount": 45,
+            "cc1": "au"
+        }
+    ]
+}
+// 
+export const data_get_attraction_details = {
+    "products": [
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJGWDJIMGxUS3VBIiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Nutty Newport News Scavenger Hunt",
+            "productId": "PRFX2H0lTKuA",
+            "productSlug": "prfx2h0ltkua-nutty-newport-news-scavenger-hunt",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJpSEhIVjB1TGJPIiwidWZpIjoyMDA4ODMyNX0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "New York News and Media Walking Tour",
+            "productId": "PRiHHHV0uLbO",
+            "productSlug": "prihhhv0ulbo-new-york-news-and-media-walking-tour",
+            "taxonomySlug": "tours",
+            "cityUfi": 20088325,
+            "cityName": "New York",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFIyMFFJNmJIMU96IiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Scavenger Hunt in Newport News by Operation City Quest",
+            "productId": "PR20QI6bH1Oz",
+            "productSlug": "pr20qi6bh1oz-scavenger-hunt-experience-in-newport-news",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFIzalRhSDBiRUQ5IiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Adventurous Scavenger Hunt in Newport News by Zombie Scavengers",
+            "productId": "PR3jTaH0bED9",
+            "productSlug": "pr3jtah0bed9-adventurous-scavenger-hunt-in-newport-news-by-zombie-scavengers",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJqVkZYN3RMT2VTIiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Participate in a Fun Scavenger Hunt in Newport News by 3Quest Challenge",
+            "productId": "PRjVFX7tLOeS",
+            "productSlug": "prjvfx7tloes-newport-news-fun-scavenger-hunt",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFIyT1RFQUxKc3hlIiwidWZpIjoyMDE0MDE0OH0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Holiday Scavenger Hunt in Newport News by Holly Jolly Hunt",
+            "productId": "PR2OTEALJsxe",
+            "productSlug": "pr2otealjsxe-holiday-scavenger-hunt-in-newport-news-by-holly-jolly-hunt",
+            "taxonomySlug": "activities",
+            "cityUfi": 20140148,
+            "cityName": "Norfolk",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJLZ0NzcUtnaGdOIiwidWZpIjoyMDA4MTk1N30=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Newark Airport Transfer (EWR) to New York City",
+            "productId": "PRKgCsqKghgN",
+            "productSlug": "prkgcsqkghgn-private-newark-airport-transfer-ewr-to-new-york-city",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20081957,
+            "cityName": "Newark",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJBR3AwbDE2TGFQIiwidWZpIjoyMDA4ODMyNX0=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "New York to Newark Airport (EWR) Departure Transfer",
+            "productId": "PRAGp0l16LaP",
+            "productSlug": "pragp0l16lap-new-york-to-newark-airport-ewr-departure-transfer",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20088325,
+            "cityName": "New York",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJFT0lUekpCZzZpIiwidWZpIjoyMDA4MTk1N30=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Newark Airport to Randolph City New Jersey Arrival Transfer",
+            "productId": "PREOITzJBg6i",
+            "productSlug": "preoitzjbg6i-newark-airport-to-randolph-city-new-jersey-arrival-transfer",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20081957,
+            "cityName": "Newark",
+            "countryCode": "us"
+        },
+        {
+            "id": "eyJwaW5uZWRQcm9kdWN0IjoiUFJIcURxZnozS1ZwIiwidWZpIjoyMDA4MTk1N30=",
+            "__typename": "AttractionsSearchProductSuggestion",
+            "title": "Newark Airport EWR to New York Arrival Private Transfer",
+            "productId": "PRHqDqfz3KVp",
+            "productSlug": "prhqdqfz3kvp-newark-airport-ewr-to-new-york-arrival-private-transfer",
+            "taxonomySlug": "transfers-services",
+            "cityUfi": 20081957,
+            "cityName": "Newark",
+            "countryCode": "us"
+        }
+    ],
+    "destinations": [
+        {
+            "id": "eyJ1ZmkiOjIwMDUwMjY0fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": 20050264,
+            "country": "United States",
+            "cityName": "New Orleans",
+            "productCount": 579,
+            "cc1": "us"
+        },
+        {
+            "id": "eyJ1ZmkiOjIwMDg4MzI1fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": 20088325,
+            "country": "United States",
+            "cityName": "New York",
+            "productCount": 1975,
+            "cc1": "us"
+        },
+        {
+            "id": "eyJ1ZmkiOi0yMTA2MTAyfQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": -2106102,
+            "country": "India",
+            "cityName": "New Delhi",
+            "productCount": 5149,
+            "cc1": "in"
+        },
+        {
+            "id": "eyJ1ZmkiOi0yNjAzOTY2fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": -2603966,
+            "country": "United Kingdom",
+            "cityName": "Newcastle upon Tyne",
+            "productCount": 52,
+            "cc1": "gb"
+        },
+        {
+            "id": "eyJ1ZmkiOi0xNTkxMzE2fQ==",
+            "__typename": "AttractionsSearchDestinationSuggestion",
+            "ufi": -1591316,
+            "country": "Australia",
+            "cityName": "Newcastle",
+            "productCount": 45,
+            "cc1": "au"
+        }
+    ]
+}
