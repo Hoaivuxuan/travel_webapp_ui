@@ -167,7 +167,7 @@ function ActivitiesSearchForm() {
                           </button>
                           {suggestions.length > 0 && (
                             <ul className="absolute z-10 bg-white border border-gray-300 rounded shadow-md w-full mt-1 max-h-48 overflow-y-auto">
-                              {suggestions.map((suggestion) => (
+                              {suggestions.slice(0,5).map((suggestion) => (
                                 <li
                                   key={suggestion.id}
                                   className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -176,8 +176,8 @@ function ActivitiesSearchForm() {
                                   }
                                 >
                                   <div className="flex justify-between">
-                                    <span>{suggestion.name}</span>
-                                    <span className="text-gray-400 text-sm">
+                                    <span className="text-sm">{suggestion.name}</span>
+                                    <span className="bg-green-200 text-green-600 rounded-lg px-2 py-1 text-xs">
                                       {suggestion.type}
                                     </span>
                                   </div>
@@ -214,7 +214,7 @@ function ActivitiesSearchForm() {
           </div>
 
           <div className="col-span-1 flex justify-center items-center">
-            <Button type="primary" htmlType="submit" className="w-full border">
+            <Button type="primary" htmlType="submit" className="w-full bg-green-400">
               Tìm kiếm
             </Button>
           </div>

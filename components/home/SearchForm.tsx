@@ -25,8 +25,8 @@ export const formSchema = z.object({
     .min(1, "Vui lòng nhập điểm đến để bắt đầu tìm kiếm!")
     .max(50),
   dateRange: z.object({
-    from: z.date(),
-    to: z.date(),
+    startDate: z.date(),
+    endDate: z.date(),
   }),
   adults: z.number().min(1).max(12),
   children: z.number().min(0).max(12),
@@ -54,8 +54,8 @@ function SearchForm() {
     defaultValues: {
       location: "",
       dateRange: {
-        from: today,
-        to: tomorrow,
+        startDate: today,
+        endDate: tomorrow,
       },
       adults: 2,
       children: 0,
@@ -83,16 +83,16 @@ function SearchForm() {
       const parsedValues = JSON.parse(storedValues);
       form.setValue("location", parsedValues.location || "");
       form.setValue("dateRange", {
-        from: new Date(parsedValues.dateRange.from),
-        to: new Date(parsedValues.dateRange.to),
+        startDate: new Date(parsedValues.dateRange.startDate),
+        endDate: new Date(parsedValues.dateRange.endDate),
       });
       form.setValue("adults", parsedValues.adults || 2);
       form.setValue("children", parsedValues.children || 0);
       form.setValue("rooms", parsedValues.rooms || 1);
 
       setDateRange([
-        dayjs(parsedValues.dateRange.from),
-        dayjs(parsedValues.dateRange.to),
+        dayjs(parsedValues.dateRange.startDate),
+        dayjs(parsedValues.dateRange.endDate),
       ]);
     }
 
@@ -110,8 +110,8 @@ function SearchForm() {
     if (dates) {
       setDateRange(dates);
       form.setValue("dateRange", {
-        from: dates[0]?.toDate() ?? today,
-        to: dates[1]?.toDate() ?? tomorrow,
+        startDate: dates[0]?.toDate() ?? today,
+        endDate: dates[1]?.toDate() ?? tomorrow,
       });
     }
   };
@@ -125,16 +125,16 @@ function SearchForm() {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     localStorage.setItem("searchHotel", JSON.stringify(values));
 
-    const url = new URL("https://booking.html");
-    url.searchParams.set("hotel", "true");
-    url.searchParams.set("location", values.location);
-    url.searchParams.set("checkin", format(values.dateRange.from, "dd-MM-yyyy"));
-    url.searchParams.set("checkout", format(values.dateRange.to, "dd-MM-yyyy"));
-    url.searchParams.set("adults", values.adults.toString());
-    url.searchParams.set("children", values.children.toString());
-    url.searchParams.set("rooms", values.rooms.toString());
+    const query = new URLSearchParams({
+      location: values.location,
+      startDate: format(values.dateRange.startDate, "dd-MM-yyyy"),
+      endDate: format(values.dateRange.endDate, "dd-MM-yyyy"),
+      adults: values.adults.toString(),
+      children: values.children.toString(),
+      rooms: values.rooms.toString(),
+    });
 
-    router.push(`/home/search?url=${url.search}`);
+    router.push(`/home/search?url=1&${query.toString()}`);
   };
 
   return (
@@ -180,7 +180,7 @@ function SearchForm() {
                           </button>
                           {suggestions.length > 0 && (
                             <ul className="absolute z-10 bg-white border border-gray-300 rounded shadow-md w-full mt-1 max-h-48 overflow-y-auto">
-                              {suggestions.map((suggestion) => (
+                              {suggestions.slice(0,5).map((suggestion) => (
                                 <li
                                   key={suggestion.id}
                                   className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -189,8 +189,8 @@ function SearchForm() {
                                   }
                                 >
                                   <div className="flex justify-between">
-                                    <span>{suggestion.name}</span>
-                                    <span className="text-gray-400 text-sm">
+                                    <span className="text-sm">{suggestion.name}</span>
+                                    <span className="bg-green-200 text-green-600 rounded-lg px-2 py-1 text-xs">
                                       {suggestion.type}
                                     </span>
                                   </div>
@@ -209,7 +209,7 @@ function SearchForm() {
                 <FormField
                   control={form.control}
                   name="dateRange"
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FormField
                       control={form.control}
                       name="dateRange"
@@ -316,7 +316,7 @@ function SearchForm() {
           </div>
 
           <div className="col-span-1 flex justify-center items-center">
-            <Button type="primary" htmlType="submit" className="w-full border">
+            <Button type="primary" htmlType="submit" className="w-full bg-green-400">
               Tìm kiếm
             </Button>
           </div>

@@ -24,8 +24,8 @@ export default function Home() {
 
   return (
     <main className="bg-white">
-      <div className="bg-[#013B94] py-2">
-        <section className="bg-[#013B94] p-6 mx-auto h-[300px] max-w-7xl">
+      <div className="bg-[#472f91] py-2">
+        <section className="bg-[#472f91] p-6 mx-auto h-[300px] max-w-7xl">
           <h2 className="text-5xl font-bold text-white">
             Tìm Kiếm Chỗ Ở Tiếp Theo
           </h2>

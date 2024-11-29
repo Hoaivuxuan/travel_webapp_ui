@@ -114,7 +114,7 @@ const RegisterPage = () => {
           <Button
             type="primary"
             htmlType="submit"
-            className="w-full bg-[#013B94] text-white p-2 rounded"
+            className="w-full bg-[#472f91] text-white p-2 rounded"
           >
             Đăng Ký
           </Button>

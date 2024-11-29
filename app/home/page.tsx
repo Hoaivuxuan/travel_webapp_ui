@@ -27,8 +27,8 @@ export default function Home() {
 
   return (
     <main className="bg-white">
-      <div className="bg-[#013B94] py-2">
-        <section className="bg-[#013B94] grid grid-cols-2 gap-2 p-6 mx-auto h-[300px] max-w-7xl">
+      <div className="bg-[#472f91] py-2">
+        <section className="bg-[#472f91] grid grid-cols-2 gap-2 p-6 mx-auto h-[300px] max-w-7xl">
           <div className="col-span-1">
             <h2 className="text-4xl font-bold text-white">
               Tìm & đặt nơi lưu trú chi phí giá rẻ chỉ với những bước đơn giản!
@@ -64,7 +64,6 @@ export default function Home() {
               <div className="pt-3">
                 <p className="font-bold">{item.title}</p>
                 <p className="">{item.location}</p>
-                <p className="text-sm font-light">{item.description}</p>
               </div>
             </div>
           ))}
@@ -102,7 +101,6 @@ export default function Home() {
                 <div className="pt-3 px-1">
                   <p className="font-bold">{item.title}</p>
                   <p className="">{item.location}</p>
-                  <p className="text-sm font-light">{item.description}</p>
                 </div>
               </div>
             ))}

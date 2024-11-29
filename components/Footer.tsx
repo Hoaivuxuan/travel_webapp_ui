@@ -3,13 +3,13 @@ import { FacebookOutlined, TwitterOutlined, InstagramOutlined } from "@ant-desig
 
 const Footer = () => {
   return (
-    <footer className="bg-[#013B94] py-12">
+    <footer className="bg-[#472f91] py-12">
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
         <div className="text-white text-center md:text-left mb-6 md:mb-0">
-          <h2 className="text-xl font-bold">RedDevilTravel.vn</h2>
-          <p className="text-sm">123 Street Name, City, Country</p>
+          <h2 className="text-xl font-bold">Hanoitravel.vn</h2>
+          <p className="text-sm">Km10 Nguyễn Trãi, Hà Đông, tp. Hà Nội</p>
           <p className="text-sm">contact@example.com</p>
-          <p className="text-sm">123-456-7890</p>
+          <p className="text-sm">0392191291</p>
         </div>
         <div className="flex space-x-4">
           <a

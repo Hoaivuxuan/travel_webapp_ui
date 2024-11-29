@@ -15,41 +15,14 @@ type Props = {
 export type SearchParams = {
   url: URL;
   location: string;
+  startDate: string;
+  endDate: string;
   adults: string;
   children: string;
   rooms: string;
-  checkin: string;
-  checkout: string;
 };
 
 function SearchPage({ searchParams }: Props) {
-  const [coordinates, setCoordinates] = useState<{
-    lat: number;
-    lng: number;
-  } | null>(null);
-
-  useEffect(() => {
-    const fetchCoordinates = async () => {
-      if (searchParams.location) {
-        try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-              searchParams.location,
-            )}`,
-          );
-          const data = await response.json();
-          if (data && data.length > 0) {
-            const { lat, lon } = data[0];
-            setCoordinates({ lat: parseFloat(lat), lng: parseFloat(lon) });
-          }
-        } catch (error) {
-          console.error("Error fetching coordinates:", error);
-        }
-      }
-    };
-    fetchCoordinates();
-  }, [searchParams.location]);
-
   const minPrice = Math.min(
     ...listHotels.map((hotel) =>
       Math.min(...hotel.rooms.map((room) => room.price)),
@@ -70,14 +43,6 @@ function SearchPage({ searchParams }: Props) {
     setSelectedTypes(checkedValues);
   };
 
-  const handleStarClick = (star: number) => {
-    if (selectedRating === star - 0.5) {
-      setSelectedRating(star);
-    } else {
-      setSelectedRating(star - 0.5);
-    }
-  };
-
   const handlePriceChange = (value: number | number[]) => {
     if (Array.isArray(value)) {
       setPriceRange([value[0], value[1]]);
@@ -94,7 +59,7 @@ function SearchPage({ searchParams }: Props) {
       );
 
     const matchesRating =
-      selectedRating === null || item.reviews.average_rating >= selectedRating;
+      selectedRating === null || item.reviews.averageRating >= selectedRating;
 
     const hotelMinPrice = Math.min(...item.rooms.map((room) => room.price));
 
@@ -118,8 +83,8 @@ function SearchPage({ searchParams }: Props) {
 
           <h2 className="py-4">
             <p className="ml-2">
-              {searchParams.location}, từ {searchParams.checkin} đến{" "}
-              {searchParams.checkout} ({filteredResults.length} kết quả)
+              {searchParams.location},{" "}
+              từ {searchParams.startDate} đến {searchParams.endDate} ({filteredResults.length} kết quả)
             </p>
           </h2>
 
@@ -141,8 +106,12 @@ function SearchPage({ searchParams }: Props) {
                   handleStyle={[{ borderColor: "#1D4ED8" }, { borderColor: "#1D4ED8" }]}
                 />
                 <div className="flex justify-between mt-2 text-xs">
-                  <span>{priceRange[0].toLocaleString("vi-VN")} ₫</span>
-                  <span>{priceRange[1].toLocaleString("vi-VN")} ₫</span>
+                  <span>
+                    {priceRange[0].toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                  </span>
+                  <span>
+                    {priceRange[1].toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                  </span>
                 </div>
               </div>
 

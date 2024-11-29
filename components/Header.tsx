@@ -2,22 +2,29 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { UserOutlined, LogoutOutlined, HomeOutlined, CarOutlined, CameraOutlined } from "@ant-design/icons";
+import { usePathname } from "next/navigation";
+import {
+  UserOutlined,
+  LogoutOutlined,
+  HomeOutlined,
+  CarOutlined,
+  CameraOutlined,
+} from "@ant-design/icons";
 import { useAuth } from "@/app/login/AuthContext";
-import { useState, SetStateAction } from "react";
+import { useState, useRef, useEffect } from "react";
 
-const products = [
-  { 
-    name:"hotel",
+const mainMenu = [
+  {
+    name: "hotel",
     title: "TÌM NƠI LƯU TRÚ",
     href: "/home",
-    icon: <HomeOutlined className="text-lg" />
+    icon: <HomeOutlined className="text-lg" />,
   },
-  { 
+  {
     name: "rental",
     title: "CHO THUÊ XE",
     href: "/rental",
-    icon: <CarOutlined className="text-lg" />
+    icon: <CarOutlined className="text-lg" />,
   },
   {
     name: "activities",
@@ -28,24 +35,16 @@ const products = [
 ];
 
 const Header = () => {
-  const [activeItem, setActiveItem] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   const { isLoggedIn, user, logout } = useAuth();
   const username = user?.name;
   const avatar = user?.avatar;
   const role = user?.role;
 
-  const handleLinkClick = (name: SetStateAction<string>, href: string) => {
-    if (!isLoggedIn) {
-      window.location.href = "/login";
-    } else {
-      setActiveItem(name);
-      setDropdownOpen(false);
-    }
-  };
-
-  const handleLogoClick = () => {
+  const handleLinkClick = () => {
     setDropdownOpen(false);
   };
 
@@ -54,18 +53,31 @@ const Header = () => {
     setDropdownOpen(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <header className="bg-[#013B94]">
+    <header className="bg-[#472f91]">
       <nav className="grid grid-cols-6 items-center p-6 mx-auto max-w-7xl">
         <div className="col-span-1">
           <Link
             href="/home"
             className="flex items-center"
-            onClick={handleLogoClick}
+            onClick={handleLinkClick}
           >
             <span className="sr-only">Booking.com</span>
             <Image
-              src="https://static1.squarespace.com/static/5bde0f00c3c16aa95581e2e2/62b4cb1add9d257dd43bb03d/62b653fedc7c895918d19b24/1656116254983/booking+logo+white.png?format=1500w"
+              src="https://res.cloudinary.com/df42yelwi/image/upload/v1732781066/HANOI_fwj9na.png"
               alt="Logo"
               width={150}
               height={50}
@@ -77,16 +89,16 @@ const Header = () => {
         <div className="col-span-4 flex justify-center">
           <div className="flex justify-center flex-grow">
             {isLoggedIn &&
-              role !== "ADMIN" &&
-              products.map((item) => (
+              role === "USER" &&
+              mainMenu.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  onClick={() => handleLinkClick(item.name, item.href)}
-                  className={`flex items-center text-sm font-semibold text-white mx-4 ${
-                    item.href !== "#" && item.name === activeItem
-                      ? "bg-blue-600 rounded-lg p-2"
-                      : ""
+                  onClick={handleLinkClick}
+                  className={`flex items-center text-sm font-semibold mx-4 p-2 rounded-lg ${
+                    pathname === item.href
+                      ? "text-yellow-400"
+                      : "text-white"
                   }`}
                 >
                   <span className="mr-2">{item.icon}</span>
@@ -96,7 +108,10 @@ const Header = () => {
           </div>
         </div>
 
-        <div className="col-span-1 relative flex items-center justify-end space-x-2">
+        <div
+          className="col-span-1 relative flex items-center justify-end space-x-2"
+          ref={dropdownRef}
+        >
           {isLoggedIn ? (
             <>
               <Image
@@ -119,10 +134,7 @@ const Header = () => {
                   <Link
                     href="/settings/personal"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
-                    onClick={() => {
-                      setActiveItem("");
-                      setDropdownOpen(false);
-                    }}
+                    onClick={handleLinkClick}
                   >
                     <UserOutlined className="mr-2" />
                     Quản lý tài khoản
