@@ -23,7 +23,7 @@ const RentalPage = () => {
 
   return (
     <main className="bg-white">
-      <div className="bg-[#013B94] py-2">
+      <div className="bg-[#472f91] py-2">
         <section className="grid grid-cols-2 gap-2 p-6 mx-auto h-[300px] max-w-7xl">
           <div className="col-span-1">
             <h2 className="text-4xl font-bold text-white">
@@ -38,7 +38,7 @@ const RentalPage = () => {
         </section>
       </div>
 
-      <section className="py-4 px-2 mx-4 -mt-16 -mb-14 lg:px-4">
+      <section className="py-6 px-2 mx-4 -my-16 lg:px-4">
         <RentalSearchForm />
       </section>
 
@@ -78,7 +78,6 @@ const RentalPage = () => {
                 <div className="pt-3 px-1">
                   <p className="font-bold">{item.title}</p>
                   <p>{item.location}</p>
-                  <p className="text-sm font-light">{item.description}</p>
                 </div>
               </div>
             ))}

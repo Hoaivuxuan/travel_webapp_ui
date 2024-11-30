@@ -1,24 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { rentalFacilities, vehicles } from "@/data/fakeData";
 import { notFound, useRouter, useSearchParams } from "next/navigation";
-import VehicleInfo from "./VehicleInfo";
 import { format } from "date-fns";
 import {
   EnvironmentOutlined,
+  ClockCircleOutlined,
   MinusOutlined,
   PlusOutlined,
   SearchOutlined,
   StarFilled,
   StarOutlined,
+  AppstoreAddOutlined,
 } from "@ant-design/icons";
 import { Radio, Input, Space, Button } from "antd";
 import { importantInfo, policies, requirements } from "@/data/defaultValues";
+import Image from "next/image";
+import VehicleInfo from "./VehicleInfo";
 
 const availableServices = [
-  { key: "bonusDriver", name: "Tài xế phụ", max: 2 },
+  { key: "bonusDriver", name: "Tài xế phụ", max: 3 },
+  { key: "babySeat", name: "Ghế em bé", max: 2 },
   { key: "childSeat", name: "Ghế trẻ em", max: 2 },
   { key: "gps", name: "GPS", max: 1 },
 ] as const;
@@ -28,16 +31,15 @@ type Services = Record<ServiceKeys, number>;
 
 const VehicleDetail = () => {
   const router = useRouter();
-  const detailsParams = useSearchParams();
-  const id = detailsParams.get("id") || "";
-  const facilityId = detailsParams.get("facility") || "";
-
+  const params = useSearchParams();
+  const id = params.get("id") || "";
+  const facilityId = params.get("facility") || "";
   const [services, setServices] = useState<Services>(() =>
     Object.fromEntries(availableServices.map((service) => [service.key, 0])) as Services
   );
 
-  const [pickupLocation, setPickupLocation] = useState("office");
-  const [returnLocation, setReturnLocation] = useState("office");
+  const [pickupLocation, setPickupLocation] = useState("other");
+  const [returnLocation, setReturnLocation] = useState("other");
   const [pickupAddress, setPickupAddress] = useState("");
   const [returnAddress, setReturnAddress] = useState("");
 
@@ -48,15 +50,9 @@ const VehicleDetail = () => {
   }
 
   const rentalFacility = rentalItem.rentalFacility.find((facility) => facility.id === Number(facilityId)) || undefined;
-  const serviceCost = 300000;
-  const totalServiceCost = Object.values(services).reduce(
-    (sum, count) => sum + count * serviceCost,
-    0
-  );
-
-  const handleLocationChange = (e: any) => {
-    setReturnLocation(e.target.value);
-  };
+  const totalServiceCost = Object.values(services).reduce((sum, count) => sum + count * 300000, 0);
+  const search = localStorage.getItem("searchVehicle");
+  const searchObject = search ? JSON.parse(search) : null;
 
   const handleServiceChange = (service: ServiceKeys, amount: number) => {
     setServices((prev) => {
@@ -70,19 +66,14 @@ const VehicleDetail = () => {
   };
 
   const handleBookingClick = () => {
-    const search = localStorage.getItem("searchRental");
-    const url = new URL("https://booking.html");
-    if (search) {
-      const searchObject = JSON.parse(search);
-      url.searchParams.set("rental", "true");
-      url.searchParams.set("id", id);
-      url.searchParams.set("facility", facilityId);
-      url.searchParams.set("location", searchObject.location);
-      url.searchParams.set("checkin", format(searchObject.checkin.date, "yyyy-MM-dd"));
-      url.searchParams.set("checkout", format(searchObject.checkout.date, "yyyy-MM-dd"));
-    }
-
-    router.push(`/rental/booking?url=${url.search}`);
+    const query = new URLSearchParams({
+      id: id.toString(),
+      facility: facilityId.toString(),
+      location: searchObject.location,
+      pickup: format(searchObject.dateRange.pickupDate, "yyyy-MM-dd"),
+      return: format(searchObject.dateRange.returnDate, "yyyy-MM-dd"),
+    });
+    router.push(`/rental/booking?url=2&${query.toString()}`);
   };
 
   return (
@@ -124,7 +115,7 @@ const VehicleDetail = () => {
               </div>
             </div>
 
-            <div className="p-4 bg-white border rounded-lg space-y-4">
+            <div className="p-4 bg-white border-t space-y-4">
               <h3 className="text-lg font-bold mb-2">Chính sách thuê xe</h3>
               <ul className="list-disc pl-5 text-sm space-y-1">
                 {policies.map((policy, index) => (
@@ -133,7 +124,7 @@ const VehicleDetail = () => {
               </ul>
             </div>
 
-            <div className="p-4 bg-white border rounded-lg space-y-4">
+            <div className="p-4 bg-white border-t space-y-4">
               <h3 className="text-lg font-bold mb-2">Yêu cầu thuê xe</h3>
               <ul className="list-disc pl-5 text-sm space-y-1">
                 {requirements.map((requirement, index) => (
@@ -142,7 +133,7 @@ const VehicleDetail = () => {
               </ul>
             </div>
 
-            <div className="p-4 bg-white border rounded-lg space-y-4">
+            <div className="p-4 bg-white border-t space-y-4">
               <h3 className="text-lg font-bold mb-2">Thông tin quan trọng</h3>
               <div>
                 <h4 className="font-semibold mb-1">Trước khi đặt xe</h4>
@@ -173,7 +164,10 @@ const VehicleDetail = () => {
 
           {rentalItem.type === "car" && (
             <div className="p-4 bg-white border rounded-lg">
-              <h3 className="text-lg font-bold mb-4">Dịch vụ phụ</h3>
+              <div className="flex items-center space-x-2 mb-4">
+                <AppstoreAddOutlined style={{ fontSize: "20px", color: "#1890ff" }} />
+                <h2 className="text-lg font-bold">Dịch vụ bổ sung</h2>
+              </div>
               <div className="space-y-2">
                 {availableServices.map((service) => (
                   <div
@@ -206,7 +200,14 @@ const VehicleDetail = () => {
               <h2 className="text-lg font-bold">Điểm nhận xe</h2>
             </div>
             <div className="mb-4">
-              <Radio.Group value={pickupLocation}>
+              <Radio.Group
+                value={pickupLocation}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setPickupLocation(value);
+                  setPickupAddress(value === "office" ? facilityItem.headquarters : "");
+                }}
+              >
                 <Space direction="vertical">
                   <Radio value="office">Văn phòng thuê xe</Radio>
                   <Radio value="other">Địa điểm khác</Radio>
@@ -215,10 +216,13 @@ const VehicleDetail = () => {
             </div>
             <div className="mb-4">
               <Input
-                value={returnAddress}
+                value={pickupAddress}
                 onChange={(e) => setPickupAddress(e.target.value)}
-                placeholder="Nhập địa chỉ"
-                prefix={<SearchOutlined />}
+                placeholder="Tìm địa điểm..."
+                prefix={
+                  <SearchOutlined className="pr-2" />
+                }
+                readOnly={pickupLocation === "office"}
               />
             </div>
           </div>
@@ -228,9 +232,15 @@ const VehicleDetail = () => {
               <EnvironmentOutlined style={{ fontSize: "20px", color: "#1890ff" }} />
               <h2 className="text-lg font-bold">Điểm trả xe</h2>
             </div>
-
             <div className="mb-4">
-              <Radio.Group value={returnLocation}>
+              <Radio.Group
+                value={returnLocation}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setReturnLocation(value);
+                  setReturnAddress(value === "office" ? facilityItem.headquarters : "");
+                }}
+              >
                 <Space direction="vertical">
                   <Radio value="office">Văn phòng thuê xe</Radio>
                   <Radio value="other">Địa điểm khác</Radio>
@@ -241,49 +251,58 @@ const VehicleDetail = () => {
               <Input
                 value={returnAddress}
                 onChange={(e) => setReturnAddress(e.target.value)}
-                placeholder="Nhập địa chỉ"
-                prefix={<SearchOutlined />}
+                placeholder="Tìm địa điểm..."
+                prefix={
+                  <SearchOutlined className="pr-2" />
+                }
+                readOnly={returnLocation === "office"}
               />
             </div>
           </div>
 
           <div className="p-4 bg-white border rounded-lg">
+            <div className="flex items-center space-x-2 mb-4">
+              <ClockCircleOutlined style={{ fontSize: "20px", color: "#1890ff" }} />
+              <h2 className="text-lg font-bold">Thời gian thuê xe</h2>
+            </div>
             <div className="grid grid-cols-3 my-4">
-              <div className="flex justify-start items-center">
-                <p className="font-bold">Nhận xe</p>
+              <div className="mr-auto text-left">
+                <p className="font-bold text-sm">Nhận xe</p>
+                <p>
+                  {format(searchObject.dateRange.pickupDate, "dd-MM-yyyy")}
+                </p>
               </div>
-              
-              <div></div>
-              
-              <div className="flex justify-end items-center">
-                <p className="font-bold">Trả xe</p>
+              <div className="flex justify-center items-center">
+                <p>6 ngày</p>
+              </div>
+              <div className="ml-auto text-right">
+                <p className="font-bold text-sm">Trả xe</p>
+                <p>
+                  {format(searchObject.dateRange.returnDate, "dd-MM-yyyy")}
+                </p>
               </div>
             </div>
           </div>
 
-          <Button
-            type="primary"
-            className="w-full bg-blue-600"
-            onClick={handleBookingClick}
-          >
+          <Button type="primary" className="w-full bg-blue-600" onClick={handleBookingClick}>
             Tiếp tục
           </Button>
         </div>
 
         <div className="col-span-1">
-          <div className="space-y-4">
+          <div className="space-y-4 sticky top-5">
             <div className="p-4 bg-white border rounded-lg">
               {`Bởi ${facilityItem.name}`}
               <div className="flex items-center space-x-2 my-2">
                 <p className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold text-white bg-blue-600 rounded-lg">
-                  {facilityItem.reviews.average_rating.toFixed(1) || "N/A"}
+                  {facilityItem.reviews.averageRating.toFixed(1) || "N/A"}
                 </p>
                 <p className="text-xs">{facilityItem.reviews.total} lượt đánh giá</p>
               </div>
-              <h3 className="font-semibold mt-4 mb-2">Top Reviews</h3>
-              <div className="space-y-2">
-                {facilityItem.reviews.comments.slice(0, 2).map((comment, index) => (
-                  <div key={index} className="p-4 border rounded-lg">
+              <h3 className="font-semibold mt-8 mb-2">Top Reviews</h3>
+              <div className="p-4 border rounded-lg space-y-2">
+                {facilityItem.reviews.comments.slice(-1).map((comment, index) => (
+                  <div key={index}>
                     <div className="flex justify-between mb-2">
                       <p className="font-semibold">{comment.user}</p>
                       <div className="flex items-center">
@@ -307,11 +326,15 @@ const VehicleDetail = () => {
             <div className="space-y-4 p-4 bg-white border rounded-lg">
               <div className="flex justify-between">
                 <span className="text-sm font-bold">Giá thuê cơ bản</span>
-                <span className="text-sm font-semibold">{rentalFacility?.price} ₫</span>
+                <span className="text-sm font-semibold">
+                  {rentalFacility?.price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm">Dịch vụ phụ</span>
-                <span className="text-sm">{totalServiceCost} ₫</span>
+                <span className="text-sm">Dịch vụ bổ sung</span>
+                <span className="text-sm">
+                  {totalServiceCost.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm">Thuế</span>
@@ -321,15 +344,12 @@ const VehicleDetail = () => {
               <div className="flex justify-between border-t pt-4">
                 <span className="text-lg font-bold">Tổng giá tiền</span>
                 <span className="text-xl font-semibold">
-                  {(rentalFacility?.price || 0) + totalServiceCost} ₫
+                  {((rentalFacility?.price || 0) + totalServiceCost)
+                    .toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
                 </span>
               </div>
 
-              <Button
-                type="primary"
-                className="w-full bg-blue-600"
-                onClick={handleBookingClick}
-              >
+              <Button type="primary" className="w-full bg-blue-600" onClick={handleBookingClick}>
                 Tiếp tục
               </Button>
             </div>

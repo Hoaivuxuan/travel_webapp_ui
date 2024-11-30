@@ -115,27 +115,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 100,
-      average_rating: 4.5,
-      review_breakdown: {
+      totalReview: 100,
+      averageRating: 4.5,
+      reviewBreakdown: {
         "5_star": 80,
         "4_star": 15,
         "3_star": 3,
         "2_star": 1,
         "1_star": 1,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Nguyễn Văn A",
           date: "2024-09-20",
-          comment: "Khách sạn tuyệt vời, dịch vụ tốt.",
+          text: "Khách sạn tuyệt vời, dịch vụ tốt.",
         },
         {
           rating: 4,
           user: "Trần Thị B",
           date: "2024-09-18",
-          comment: "Phòng đẹp nhưng có thể cải thiện dịch vụ phòng.",
+          text: "Phòng đẹp nhưng có thể cải thiện dịch vụ phòng.",
         },
       ],
     },
@@ -216,27 +216,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 200,
-      average_rating: 4.8,
-      review_breakdown: {
+      totalReview: 200,
+      averageRating: 4.8,
+      reviewBreakdown: {
         "5_star": 150,
         "4_star": 30,
         "3_star": 10,
         "2_star": 5,
         "1_star": 5,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Hoàng Minh C",
           date: "2024-09-21",
-          comment: "Villa rất đẹp, dịch vụ xuất sắc, bãi biển gần.",
+          text: "Villa rất đẹp, dịch vụ xuất sắc, bãi biển gần.",
         },
         {
           rating: 4,
           user: "Lê Thanh D",
           date: "2024-09-19",
-          comment:
+          text:
             "Mọi thứ tốt, chỉ có điều tôi mong muốn thêm lựa chọn thực đơn.",
         },
       ],
@@ -328,27 +328,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 150,
-      average_rating: 4.7,
-      review_breakdown: {
+      totalReview: 150,
+      averageRating: 4.7,
+      reviewBreakdown: {
         "5_star": 110,
         "4_star": 30,
         "3_star": 5,
         "2_star": 3,
         "1_star": 2,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Nguyễn Minh E",
           date: "2024-09-22",
-          comment: "Phòng sạch sẽ, nhân viên rất thân thiện, vị trí tuyệt vời.",
+          text: "Phòng sạch sẽ, nhân viên rất thân thiện, vị trí tuyệt vời.",
         },
         {
           rating: 4,
           user: "Phan Hải F",
           date: "2024-09-20",
-          comment:
+          text:
             "Khách sạn tuyệt vời, tuy nhiên tôi mong muốn thêm bãi đậu xe.",
         },
       ],
@@ -430,27 +430,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 80,
-      average_rating: 4.4,
-      review_breakdown: {
+      totalReview: 80,
+      averageRating: 4.4,
+      reviewBreakdown: {
         "5_star": 50,
         "4_star": 20,
         "3_star": 5,
         "2_star": 3,
         "1_star": 2,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Đặng Hữu G",
           date: "2024-09-21",
-          comment: "Một nơi tuyệt vời để thư giãn và tận hưởng thiên nhiên.",
+          text: "Một nơi tuyệt vời để thư giãn và tận hưởng thiên nhiên.",
         },
         {
           rating: 4,
           user: "Phan Hữu H",
           date: "2024-09-19",
-          comment: "Mọi thứ ổn, nhưng cần cải thiện dịch vụ phòng.",
+          text: "Mọi thứ ổn, nhưng cần cải thiện dịch vụ phòng.",
         },
       ],
     },
@@ -539,27 +539,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 180,
-      average_rating: 4.6,
-      review_breakdown: {
+      totalReview: 180,
+      averageRating: 4.6,
+      reviewBreakdown: {
         "5_star": 120,
         "4_star": 40,
         "3_star": 10,
         "2_star": 5,
         "1_star": 5,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Nguyễn Đức I",
           date: "2024-09-22",
-          comment: "Khách sạn rất đẹp, dịch vụ tốt và vị trí thuận tiện.",
+          text: "Khách sạn rất đẹp, dịch vụ tốt và vị trí thuận tiện.",
         },
         {
           rating: 4,
           user: "Trần Thị K",
           date: "2024-09-20",
-          comment:
+          text:
             "Dịch vụ phòng rất tốt nhưng muốn có thêm lựa chọn bữa sáng.",
         },
       ],
@@ -650,28 +650,28 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 250,
-      average_rating: 4.8,
-      review_breakdown: {
+      totalReview: 250,
+      averageRating: 4.8,
+      reviewBreakdown: {
         "5_star": 200,
         "4_star": 40,
         "3_star": 5,
         "2_star": 3,
         "1_star": 2,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Lê Minh L",
           date: "2024-09-25",
-          comment:
+          text:
             "Khách sạn tuyệt vời, bãi biển rất đẹp và dịch vụ phòng rất tốt.",
         },
         {
           rating: 4,
           user: "Phạm Đức M",
           date: "2024-09-23",
-          comment: "Mọi thứ đều tốt, chỉ có phòng hơi nhỏ.",
+          text: "Mọi thứ đều tốt, chỉ có phòng hơi nhỏ.",
         },
       ],
     },
@@ -760,27 +760,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 320,
-      average_rating: 4.9,
-      review_breakdown: {
+      totalReview: 320,
+      averageRating: 4.9,
+      reviewBreakdown: {
         "5_star": 270,
         "4_star": 40,
         "3_star": 5,
         "2_star": 2,
         "1_star": 3,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Hoàng Trung D",
           date: "2024-09-26",
-          comment: "Một khách sạn tuyệt vời với chất lượng dịch vụ đỉnh cao.",
+          text: "Một khách sạn tuyệt vời với chất lượng dịch vụ đỉnh cao.",
         },
         {
           rating: 4,
           user: "Vũ Trọng K",
           date: "2024-09-24",
-          comment: "Khách sạn rất đẹp, chỉ có phòng hơi nhỏ.",
+          text: "Khách sạn rất đẹp, chỉ có phòng hơi nhỏ.",
         },
       ],
     },
@@ -868,27 +868,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 150,
-      average_rating: 4.9,
-      review_breakdown: {
+      totalReview: 150,
+      averageRating: 4.9,
+      reviewBreakdown: {
         "5_star": 130,
         "4_star": 15,
         "3_star": 3,
         "2_star": 2,
         "1_star": 0,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Nguyễn Thị T",
           date: "2024-09-29",
-          comment: "Một nơi tuyệt vời để thư giãn và nghỉ ngơi!",
+          text: "Một nơi tuyệt vời để thư giãn và nghỉ ngơi!",
         },
         {
           rating: 4,
           user: "Hoàng Quốc P",
           date: "2024-09-28",
-          comment: "Rất thích, nhưng bãi biển hơi xa một chút.",
+          text: "Rất thích, nhưng bãi biển hơi xa một chút.",
         },
       ],
     },
@@ -978,27 +978,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 210,
-      average_rating: 4.7,
-      review_breakdown: {
+      totalReview: 210,
+      averageRating: 4.7,
+      reviewBreakdown: {
         "5_star": 160,
         "4_star": 40,
         "3_star": 5,
         "2_star": 3,
         "1_star": 2,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Lương Quang T",
           date: "2024-10-10",
-          comment: "Khung cảnh tuyệt vời và phòng rất thoải mái.",
+          text: "Khung cảnh tuyệt vời và phòng rất thoải mái.",
         },
         {
           rating: 4,
           user: "Trần Thi Thanh",
           date: "2024-10-08",
-          comment: "Dịch vụ rất tốt, nhưng một số thiết bị trong phòng hơi cũ.",
+          text: "Dịch vụ rất tốt, nhưng một số thiết bị trong phòng hơi cũ.",
         },
       ],
     },
@@ -1088,27 +1088,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 180,
-      average_rating: 4.8,
-      review_breakdown: {
+      totalReview: 180,
+      averageRating: 4.8,
+      reviewBreakdown: {
         "5_star": 150,
         "4_star": 25,
         "3_star": 3,
         "2_star": 1,
         "1_star": 1,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Nguyễn Thanh H",
           date: "2024-09-30",
-          comment: "Nơi tuyệt vời để thư giãn và tận hưởng bãi biển riêng.",
+          text: "Nơi tuyệt vời để thư giãn và tận hưởng bãi biển riêng.",
         },
         {
           rating: 4,
           user: "Vũ Hoàng T",
           date: "2024-09-28",
-          comment: "Phòng đẹp, nhưng chất lượng thức ăn chưa thực sự tốt.",
+          text: "Phòng đẹp, nhưng chất lượng thức ăn chưa thực sự tốt.",
         },
       ],
     },
@@ -1198,27 +1198,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 220,
-      average_rating: 4.8,
-      review_breakdown: {
+      totalReview: 220,
+      averageRating: 4.8,
+      reviewBreakdown: {
         "5_star": 180,
         "4_star": 30,
         "3_star": 5,
         "2_star": 2,
         "1_star": 3,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Trương Quang T",
           date: "2024-10-05",
-          comment: "Dịch vụ tuyệt vời, phòng sạch sẽ và đầy đủ tiện nghi.",
+          text: "Dịch vụ tuyệt vời, phòng sạch sẽ và đầy đủ tiện nghi.",
         },
         {
           rating: 4,
           user: "Đặng Thị B",
           date: "2024-10-01",
-          comment: "Khách sạn đẹp nhưng hơi xa khu phố cổ.",
+          text: "Khách sạn đẹp nhưng hơi xa khu phố cổ.",
         },
       ],
     },
@@ -1308,27 +1308,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 350,
-      average_rating: 4.9,
-      review_breakdown: {
+      totalReview: 350,
+      averageRating: 4.9,
+      reviewBreakdown: {
         "5_star": 320,
         "4_star": 20,
         "3_star": 5,
         "2_star": 2,
         "1_star": 3,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Phan Minh K",
           date: "2024-10-12",
-          comment: "Một khách sạn tuyệt vời với chất lượng dịch vụ tuyệt hảo.",
+          text: "Một khách sạn tuyệt vời với chất lượng dịch vụ tuyệt hảo.",
         },
         {
           rating: 4,
           user: "Nguyễn Minh T",
           date: "2024-10-09",
-          comment: "Chất lượng phòng tốt nhưng bãi đỗ xe còn chật.",
+          text: "Chất lượng phòng tốt nhưng bãi đỗ xe còn chật.",
         },
       ],
     },
@@ -1419,28 +1419,28 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 190,
-      average_rating: 4.8,
-      review_breakdown: {
+      totalReview: 190,
+      averageRating: 4.8,
+      reviewBreakdown: {
         "5_star": 160,
         "4_star": 20,
         "3_star": 5,
         "2_star": 3,
         "1_star": 2,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Trương Thị L",
           date: "2024-10-15",
-          comment:
+          text:
             "Một kỳ nghỉ tuyệt vời, phòng rất đẹp và nhân viên thân thiện.",
         },
         {
           rating: 4,
           user: "Nguyễn Quang H",
           date: "2024-10-12",
-          comment: "Dịch vụ tuyệt vời, nhưng bãi đỗ xe có phần nhỏ.",
+          text: "Dịch vụ tuyệt vời, nhưng bãi đỗ xe có phần nhỏ.",
         },
       ],
     },
@@ -1531,27 +1531,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 300,
-      average_rating: 4.9,
-      review_breakdown: {
+      totalReview: 300,
+      averageRating: 4.9,
+      reviewBreakdown: {
         "5_star": 270,
         "4_star": 20,
         "3_star": 5,
         "2_star": 3,
         "1_star": 2,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Lê Quang P",
           date: "2024-10-10",
-          comment: "Khách sạn tuyệt vời, phòng sang trọng và dịch vụ hoàn hảo.",
+          text: "Khách sạn tuyệt vời, phòng sang trọng và dịch vụ hoàn hảo.",
         },
         {
           rating: 4,
           user: "Nguyễn Minh V",
           date: "2024-10-08",
-          comment: "Dịch vụ rất tốt nhưng thức ăn không đa dạng lắm.",
+          text: "Dịch vụ rất tốt nhưng thức ăn không đa dạng lắm.",
         },
       ],
     },
@@ -1641,27 +1641,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 120,
-      average_rating: 4.7,
-      review_breakdown: {
+      totalReview: 120,
+      averageRating: 4.7,
+      reviewBreakdown: {
         "5_star": 100,
         "4_star": 15,
         "3_star": 3,
         "2_star": 2,
         "1_star": 0,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Trần Quang K",
           date: "2024-10-02",
-          comment: "Một kỳ nghỉ tuyệt vời, không gian yên tĩnh và riêng tư.",
+          text: "Một kỳ nghỉ tuyệt vời, không gian yên tĩnh và riêng tư.",
         },
         {
           rating: 4,
           user: "Nguyễn Thị M",
           date: "2024-09-28",
-          comment: "Villa đẹp nhưng hơi xa trung tâm.",
+          text: "Villa đẹp nhưng hơi xa trung tâm.",
         },
       ],
     },
@@ -1744,27 +1744,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 150,
-      average_rating: 4.6,
-      review_breakdown: {
+      totalReview: 150,
+      averageRating: 4.6,
+      reviewBreakdown: {
         "5_star": 100,
         "4_star": 30,
         "3_star": 10,
         "2_star": 5,
         "1_star": 5,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Lê Quang M",
           date: "2024-10-05",
-          comment: "Khách sạn nhỏ nhưng rất ấm cúng, nhân viên nhiệt tình.",
+          text: "Khách sạn nhỏ nhưng rất ấm cúng, nhân viên nhiệt tình.",
         },
         {
           rating: 4,
           user: "Nguyễn Quang H",
           date: "2024-10-01",
-          comment:
+          text:
             "Chất lượng phòng tốt, nhưng có thể cải thiện thêm bữa sáng.",
         },
       ],

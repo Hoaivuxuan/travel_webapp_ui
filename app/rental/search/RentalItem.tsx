@@ -6,20 +6,39 @@ import {
   ThunderboltOutlined,
 } from "@ant-design/icons";
 import Image from "next/image";
-import { vehicles } from "@/data/fakeData";
+import jwt from "jwt-simple";
+import { rentalFacilities, vehicles } from "@/data/fakeData";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Radio } from "antd";
 
 export type RentalItemProps = {
   id: string;
 };
+
+const SECRET_KEY = "4e6f7274682072616e646f6d20736563726574206b65792e";
 
 const handleDetailClick = (
   router: ReturnType<typeof useRouter>,
   id: number,
   facilityId: number | null
 ) => {
-  if (id && facilityId) router.push(`/rental/detail?id=${id.toString().padStart(6, "0")}&facility=${facilityId}`);
+  const search = localStorage.getItem("searchVehicle");
+  let searchObject;
+  if ((id && facilityId && search)) {
+    try {
+      searchObject = JSON.parse(search);
+      const token = jwt.encode(searchObject, SECRET_KEY);
+      const query = new URLSearchParams({
+        id: id.toString().padStart(6, "0"),
+        facility: facilityId.toString(),
+        token: token,
+      });
+      router.push(`/rental/detail?url=2&${query.toString()}`);
+    } catch (error) {
+      searchObject = null;
+    }
+  }
 };
 
 export function CarItem({
@@ -76,7 +95,7 @@ export function CarItem({
         <div className="flex flex-col justify-end col-span-1 h-full">
           <div className="flex flex-col justify-end items-end mt-2">
             <p className="text-lg font-bold text-blue-600 text-right">
-               từ {rentalMinPrice.toLocaleString("vi-VN")} ₫
+               từ {rentalMinPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
             </p>
             <button
               onClick={() => handleDetailClick(router, item.id, selectedFacilityId)}
@@ -89,17 +108,25 @@ export function CarItem({
       </div>
       {isFacilityVisible && (
         <div className="mt-4 py-4 border-t">
-          <ul className="space-y-2">
-            {item.rentalFacility.map((facility) => (
-              <li
+          <Radio.Group
+            onChange={(e) => setSelectedFacilityId(e.target.value)}
+            value={selectedFacilityId}
+            className="w-full space-y-2"
+          >
+            {rentalFacilities.map((facility) => (
+              <Radio
                 key={facility.id}
-                className={`flex justify-between p-2 border rounded-md hover:bg-gray-100 ${selectedFacilityId === facility.id ? "bg-blue-100 border-blue-500" : ""}`}
-                onClick={() => setSelectedFacilityId(facility.id)}
+                value={facility.id}
+                className={`w-full p-2 border rounded-md ${
+                  selectedFacilityId === facility.id ? "bg-blue-100 border-blue-500" : ""
+                }`}
               >
-                <span>Cơ sở {facility.id}</span>
-              </li>
+                <div className="flex justify-between items-center">
+                  <p>{facility.name}</p>
+                </div>
+              </Radio>
             ))}
-          </ul>
+          </Radio.Group>
         </div>
       )}
     </div>
@@ -152,7 +179,7 @@ export function MotorItem({
         <div className="flex flex-col justify-end col-span-1 h-full">
           <div className="flex flex-col justify-end items-end mt-2">
             <p className="text-lg font-bold text-blue-600 text-right">
-               từ {rentalMinPrice.toLocaleString("vi-VN")} ₫
+               từ {rentalMinPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
             </p>
             <button
               onClick={() => handleDetailClick(router, item.id, selectedFacilityId)}
@@ -165,17 +192,25 @@ export function MotorItem({
       </div>
       {isFacilityVisible && (
         <div className="mt-4 py-4 border-t">
-          <ul className="space-y-2">
-            {item.rentalFacility.map((facility) => (
-              <li
+          <Radio.Group
+            onChange={(e) => setSelectedFacilityId(e.target.value)}
+            value={selectedFacilityId}
+            className="w-full space-y-2"
+          >
+            {rentalFacilities.map((facility) => (
+              <Radio
                 key={facility.id}
-                className={`flex justify-between p-2 border rounded-md hover:bg-gray-100 ${selectedFacilityId === facility.id ? "bg-blue-100 border-blue-500" : ""}`}
-                onClick={() => setSelectedFacilityId(facility.id)}
+                value={facility.id}
+                className={`w-full p-2 border rounded-md ${
+                  selectedFacilityId === facility.id ? "bg-blue-100 border-blue-500" : ""
+                }`}
               >
-                <span>Cơ sở {facility.id}</span>
-              </li>
+                <div className="flex justify-between items-center">
+                  <p className="mr-2">{facility.name}</p>
+                </div>
+              </Radio>
             ))}
-          </ul>
+          </Radio.Group>
         </div>
       )}
     </div>

@@ -54,7 +54,7 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
             <div className="flex items-center space-x-2 text-right mt-2">
               <div>
                 <p className="text-blue-600 text-sm font-bold">
-                  {ratingLabel.find((r) => item.reviews.average_rating >= r.min)
+                  {ratingLabel.find((r) => item.reviews.averageRating >= r.min)
                     ?.label || "Đánh giá"}
                 </p>
                 <p className="text-xs">
@@ -62,7 +62,7 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
                 </p>
               </div>
               <p className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold text-white bg-blue-600 rounded-lg">
-                {item.reviews.average_rating.toFixed(1) || "N/A"}
+                {item.reviews.averageRating.toFixed(1) || "N/A"}
               </p>
             </div>
           </div>
@@ -109,7 +109,7 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
             <div className="flex flex-col justify-end items-end mt-2">
               từ
               <p className="text-lg font-bold text-blue-600 text-right">
-                {minPrice.toLocaleString("vi-VN")} ₫/đêm
+                {minPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}/đêm
               </p>
               <button
                 onClick={handleDetailClick}

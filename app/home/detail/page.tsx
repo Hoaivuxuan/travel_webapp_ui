@@ -81,7 +81,7 @@ const HotelDetailPage = () => {
             <div className="flex flex-row justify-end col-span-2 h-full">
               <div className="flex flex-col justify-end items-end mt-2">
                 <p className="text-xl font-bold text-blue-600 text-right">
-                  từ {minPrice} ₫/đêm
+                  từ {minPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}/đêm
                 </p>
               </div>
             </div>
@@ -91,41 +91,46 @@ const HotelDetailPage = () => {
                 <div className="border p-4 rounded-lg">
                   <div className="flex items-center mb-4">
                     <p className="flex items-center justify-center flex-shrink-0 w-12 h-12 font-bold text-white bg-blue-600 rounded-lg">
-                      {hotelItem.reviews.average_rating.toFixed(1) || "N/A"}
+                      {hotelItem.reviews.averageRating.toFixed(1) || "N/A"}
                     </p>
                     <div className="ml-4">
                       <h3 className="text-lg font-semibold">
                         {ratingLabel.find(
-                          (r) => hotelItem.reviews.average_rating >= r.min,
+                          (r) => hotelItem.reviews.averageRating >= r.min,
                         )?.label || "Đánh giá"}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        {hotelItem.reviews.total_reviews} đánh giá
+                        {hotelItem.reviews.totalReview} đánh giá
                       </p>
                     </div>
                   </div>
                   <h4 className="mb-2">{hotelItem.description}</h4>
                   <div className="mt-8">
-                    <h3 className="font-semibold">
-                      Các đánh giá của khách hàng:
-                    </h3>
-                    {hotelItem.reviews.recent_reviews.map((comment, index) => (
-                      <div key={index} className="border-b py-4">
-                        <p className="font-semibold">{comment.user}</p>
-                        <p>{comment.comment}</p>
-                        <div className="flex items-center mt-2">
-                          {[...Array(5)].map((_, starIndex) => (
-                            <span key={starIndex} className="mr-1">
-                              {starIndex < comment.rating ? (
-                                <StarFilled className="text-yellow-300" />
-                              ) : (
-                                <StarOutlined className="text-yellow-300" />
-                              )}
-                            </span>
-                          ))}
+                    <h3 className="font-semibold text-lg mb-2">Top reviews</h3>
+                    <div className="border p-4 rounded-lg">
+                      {hotelItem.reviews.comments.slice(-2).map((comment, index) => (
+                        <div
+                          key={index}
+                          className={`py-2 ${index < hotelItem.reviews.comments.length - 1 ? "border-b" : ""}`}
+                        >
+                          <div className="flex justify-between mb-2">
+                            <p className="font-semibold">{comment.user}</p>
+                            <div className="flex items-center">
+                              {[...Array(5)].map((_, starIndex) => (
+                                <span key={starIndex} className="mr-1">
+                                  {starIndex < comment.rating ? (
+                                    <StarFilled className="text-yellow-300" />
+                                  ) : (
+                                    <StarOutlined className="text-yellow-300" />
+                                  )}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <p>{comment.text}</p>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
 

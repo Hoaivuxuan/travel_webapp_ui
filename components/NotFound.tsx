@@ -11,7 +11,7 @@ const NotFound = () => {
         Xin lỗi, chúng tôi không thể tìm thấy trang bạn đang tìm kiếm.
       </p>
       <Link href="/">
-        <a className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-[#013B94] transition duration-300">
+        <a className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-[#472f91] transition duration-300">
           Quay lại trang chủ
         </a>
       </Link>

@@ -71,7 +71,7 @@ function RentalSearchForm() {
   }, [keyword]);
 
   useEffect(() => {
-    const storedValues = localStorage.getItem("searchHotel");
+    const storedValues = localStorage.getItem("searchVehicle");
     if (storedValues) {
       const parsedValues = JSON.parse(storedValues);
       form.setValue("location", parsedValues.location || "");
@@ -87,7 +87,7 @@ function RentalSearchForm() {
     }
 
     const subscription = form.watch((value) => {
-      localStorage.setItem("searchHotel", JSON.stringify(value));
+      localStorage.setItem("searchVehicle", JSON.stringify(value));
     });
 
     return () => subscription.unsubscribe();
@@ -113,7 +113,7 @@ function RentalSearchForm() {
   };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    localStorage.setItem("searchHotel", JSON.stringify(values));
+    localStorage.setItem("searchVehicle", JSON.stringify(values));
 
     const query = new URLSearchParams({
       location: values.location,
@@ -132,12 +132,12 @@ function RentalSearchForm() {
       >
         <div className="grid grid-cols-9 gap-2">
           <div className="col-span-8">
-            <div className=" grid grid-cols-2 gap-2">
-              <div className="col-span-1">
+            <div className=" grid grid-cols-3 gap-2">
+              <div className="col-span-2">
                 <FormField
                   control={form.control}
                   name="location"
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FormItem>
                       <FormControl>
                         <div className="relative">
@@ -167,7 +167,7 @@ function RentalSearchForm() {
                           </button>
                           {suggestions.length > 0 && (
                             <ul className="absolute z-10 bg-white border border-gray-300 rounded shadow-md w-full mt-1 max-h-48 overflow-y-auto">
-                              {suggestions.map((suggestion) => (
+                              {suggestions.slice(0,5).map((suggestion) => (
                                 <li
                                   key={suggestion.id}
                                   className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -176,8 +176,8 @@ function RentalSearchForm() {
                                   }
                                 >
                                   <div className="flex justify-between">
-                                    <span>{suggestion.name}</span>
-                                    <span className="text-gray-400 text-sm">
+                                    <span className="text-sm">{suggestion.name}</span>
+                                    <span className="bg-green-200 text-green-600 rounded-lg px-2 py-1 text-xs">
                                       {suggestion.type}
                                     </span>
                                   </div>
@@ -214,7 +214,7 @@ function RentalSearchForm() {
           </div>
 
           <div className="col-span-1 flex justify-center items-center">
-            <Button type="primary" htmlType="submit" className="w-full border">
+            <Button type="primary" htmlType="submit" className="w-full bg-green-400">
               Tìm kiếm
             </Button>
           </div>

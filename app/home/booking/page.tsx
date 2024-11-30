@@ -77,13 +77,13 @@ const BookingHotel = () => {
             </div>
             <div className="flex items-center space-x-2 mt-4">
               <p className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold text-white bg-blue-600 rounded-lg">
-                {hotel.reviews.average_rating.toFixed(1) || "N/A"}
+                {hotel.reviews.averageRating.toFixed(1) || "N/A"}
               </p>
               <div>
                 <p className="text-blue-600 text-sm font-bold">
-                  {ratingLabel.find((r) => hotel.reviews.average_rating >= r.min)?.label || "Đánh giá"}
+                  {ratingLabel.find((r) => hotel.reviews.averageRating >= r.min)?.label || "Đánh giá"}
                 </p>
-                <p className="text-xs">{hotel.reviews.total_reviews} lượt đánh giá</p>
+                <p className="text-xs">{hotel.reviews.totalReview} lượt đánh giá</p>
               </div>
             </div>
           </div>
@@ -128,20 +128,29 @@ const BookingHotel = () => {
             <div className="grid grid-cols-3 gap-2 my-2">
               <p className="col-span-2 font-bold">Giá phòng</p>
               <p>
-                {`${params.roomSelection.totalPrice.toLocaleString("vi-VN")} ₫`}
+                {`${params.roomSelection.totalPrice.toLocaleString('vi-VN', {
+                  style: 'currency',
+                  currency: 'VND',
+                })}`}
               </p>
             </div>
             <div className="grid grid-cols-3 gap-2 my-2">
               <p className="col-span-2 font-bold">Thuế và phí</p>
               <p>
-                {`${params.roomSelection.totalPrice.toLocaleString("vi-VN")} ₫`}
+                {`${params.roomSelection.totalPrice.toLocaleString('vi-VN', {
+                  style: 'currency',
+                  currency: 'VND',
+                })}`}
               </p>
             </div>
             <hr className="my-1 border border-gray-200" />
             <div className="grid grid-cols-3 gap-2 my-2">
               <p className="col-span-2 font-bold">Tổng cộng</p>
               <p>
-                {`${params.roomSelection.totalPrice.toLocaleString("vi-VN")} ₫`}
+                {`${params.roomSelection.totalPrice.toLocaleString('vi-VN', {
+                  style: 'currency',
+                  currency: 'VND',
+                })}`}
               </p>
             </div>
           </div>

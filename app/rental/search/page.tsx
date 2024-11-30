@@ -107,8 +107,12 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
                 ]}
               />
               <div className="flex justify-between mt-2 text-xs">
-                <span>{priceRange[0].toLocaleString("vi-VN")} ₫</span>
-                <span>{priceRange[1].toLocaleString("vi-VN")} ₫</span>
+                <span>
+                  {priceRange[0].toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                </span>
+                <span>
+                  {priceRange[1].toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                </span>
               </div>
             </div>
 

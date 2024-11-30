@@ -6,7 +6,7 @@ type BookingStepsProps = {
 
 const BookingSteps: React.FC<BookingStepsProps> = ({ step }) => {
   return (
-    <div className="mb-4">
+    <div className="my-4">
       <div className="flex space-x-4">
         <div className={`w-1/3 text-center ${step >= 1 ? 'text-blue-600' : 'text-gray-500'}`}>
           <span className="font-bold">Bước 1</span>

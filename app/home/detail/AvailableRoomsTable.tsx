@@ -46,31 +46,31 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ id, rooms }) 
 
   const handleBookingClick = () => {
     const search = localStorage.getItem("searchHotel");
-    const url = new URL("https://booking.html");
+    const roomSelection = JSON.stringify({
+      selectedRooms: selectedRooms
+        .map((count, index) => ({
+          type: rooms[index].type,
+          count,
+          price: rooms[index].price,
+        }))
+        .filter((room) => room.count > 0),
+      totalRooms,
+      totalPrice,
+    });
+
     if (search) {
       const searchObject = JSON.parse(search);
-      url.searchParams.set("booking", "true");
-      url.searchParams.set("id", id.toString());
-      url.searchParams.set("checkin", format(searchObject.dateRange.from, "yyyy-MM-dd"));
-      url.searchParams.set("checkout", format(searchObject.dateRange.to, "yyyy-MM-dd"));
-      url.searchParams.set("adults", searchObject.adults.toString());
-      url.searchParams.set("children", searchObject.children.toString());
-      url.searchParams.set("rooms", searchObject.rooms.toString());
-      const roomSelection = JSON.stringify({
-        selectedRooms: selectedRooms
-          .map((count, index) => ({
-            type: rooms[index].type,
-            count,
-            price: rooms[index].price,
-          }))
-          .filter((room) => room.count > 0),
-        totalRooms,
-        totalPrice,
+      const query = new URLSearchParams({
+        id: id.toString(),
+        checkin: format(searchObject.dateRange.startDate, "yyyy-MM-dd"),
+        checkout: format(searchObject.dateRange.endDate, "yyyy-MM-dd"),
+        adults: searchObject.adults.toString(),
+        children: searchObject.children.toString(),
+        rooms: searchObject.rooms.toString(),
+        roomSelection: roomSelection,
       });
-      url.searchParams.set("roomSelection", encodeURIComponent(roomSelection));
+      router.push(`/home/booking?url=1&${query.toString()}`);
     }
-
-    router.push(`/home/booking?url=${url.search}`);
   };
 
   const columns = [
@@ -93,7 +93,8 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ id, rooms }) 
       title: "Giá phòng",
       dataIndex: "price",
       key: "price",
-      render: (price: number) => `${price.toLocaleString("en-GB")} ₫`,
+      render: (price: number) => 
+        `${price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`,
     },
     {
       title: "Các lựa chọn",
@@ -160,7 +161,9 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ id, rooms }) 
           <div>
             <p className="text-sm font-semibold">
               <p className="text-blue-600">{totalRooms} phòng tổng giá:</p>
-              <p className="text-green-600">{totalPrice.toLocaleString("en-GB")} ₫</p>
+              <p className="text-green-600">
+                {totalPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+              </p>
             </p>
           </div>
         )}

@@ -210,10 +210,11 @@ export const rentalFacilities = [
   { 
     id: 1,
     name: "Hanoi Auto",
+    headquarters: "123 Tran Hung Dao, Hoan Kiem, Hanoi",
     reviews: {
       total: 2,
-      average_rating: 4.5,
-      review_breakdown: {
+      averageRating: 4.5,
+      reviewBreakdown: {
         "5_star": 1,
         "4_star": 1,
         "3_star": 0,
@@ -239,10 +240,11 @@ export const rentalFacilities = [
   { 
     id: 2,
     name: "Ho Chi Minh City Auto",
+    headquarters: "45 Nguyen Thi Minh Khai, District 1, Ho Chi Minh City",
     reviews: {
       total: 2,
-      average_rating: 4.5,
-      review_breakdown: {
+      averageRating: 4.5,
+      reviewBreakdown: {
         "5_star": 1,
         "4_star": 1,
         "3_star": 0,
@@ -268,10 +270,11 @@ export const rentalFacilities = [
   { 
     id: 3,
     name: "Da Nang Auto",
+    headquarters: "678 Bach Dang, Hai Chau, Da Nang",
     reviews: {
       total: 2,
-      average_rating: 4.5,
-      review_breakdown: {
+      averageRating: 4.5,
+      reviewBreakdown: {
         "5_star": 1,
         "4_star": 1,
         "3_star": 0,
