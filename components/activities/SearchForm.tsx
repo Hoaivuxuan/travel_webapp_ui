@@ -142,7 +142,7 @@ function ActivitiesSearchForm() {
                       <FormControl>
                         <div className="relative">
                           <Input
-                            placeholder="Bạn đang ở đâu..."
+                            placeholder="Bạn muốn đi đâu?"
                             {...field}
                             onChange={(e) => {
                               setKeyword(e.target.value);
@@ -167,7 +167,7 @@ function ActivitiesSearchForm() {
                           </button>
                           {suggestions.length > 0 && (
                             <ul className="absolute z-10 bg-white border border-gray-300 rounded shadow-md w-full mt-1 max-h-48 overflow-y-auto">
-                              {suggestions.slice(0,5).map((suggestion) => (
+                              {suggestions.slice(0, 5).map((suggestion) => (
                                 <li
                                   key={suggestion.id}
                                   className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -196,17 +196,23 @@ function ActivitiesSearchForm() {
                 <FormField
                   control={form.control}
                   name="dateRange"
-                  render={({field}) => (
-                    <FormItem className="flex flex-col">
-                      <FormControl>
-                        <DatePicker.RangePicker
-                          value={dateRange}
-                          onChange={handleDateChange}
-                          disabledDate={(current) => current && current < dayjs().startOf("day")}
-                          format="DD/MM/YYYY"
-                        />
-                      </FormControl>
-                    </FormItem>
+                  render={({ field }) => (
+                    <FormField
+                      control={form.control}
+                      name="dateRange"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <FormControl>
+                            <DatePicker.RangePicker
+                              value={dateRange}
+                              onChange={handleDateChange}
+                              disabledDate={(current) => current && current < dayjs().startOf("day")}
+                              format="DD/MM/YYYY"
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
                   )}
                 />
               </div>

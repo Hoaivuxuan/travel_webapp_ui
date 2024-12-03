@@ -120,34 +120,34 @@ export default function Home() {
           </p>
         </div>
         <div className="py-5 grid grid-cols-5 gap-4">
-        {[...listHotels]
-          .sort((a, b) => b.reviews.total_reviews - a.reviews.total_reviews)
-          .slice(0, 5)
-          .map((item) => (
-            <div
-              key={item.id}
-              className="cursor-pointer"
-              onClick={() =>
-                router.push(
-                  `/home/detail?id=${item.id.toString().padStart(6, "0")}`
-                )
-              }
-            >
-              <Image
-                className="object-cover rounded-lg w-full h-72"
-                src={item.images[0]}
-                alt={`Hotel ${item.id}`}
-                width={540}
-                height={405}
-              />
-              <div className="pt-3">
-                <p className="font-bold text-blue-500 hover:underline">
-                  {item.name}
-                </p>
-                <p className="text-sm font-light">{item.city}</p>
+          {[...listHotels]
+            .sort((a: any, b: any) => b.reviews.total_reviews - a.reviews.total_reviews)
+            .slice(0, 5)
+            .map((item) => (
+              <div
+                key={item.id}
+                className="cursor-pointer"
+                onClick={() =>
+                  router.push(
+                    `/home/detail?id=${item.id.toString().padStart(6, "0")}`
+                  )
+                }
+              >
+                <Image
+                  className="object-cover rounded-lg w-full h-72"
+                  src={item.images[0]}
+                  alt={`Hotel ${item.id}`}
+                  width={540}
+                  height={405}
+                />
+                <div className="pt-3">
+                  <p className="font-bold text-blue-500 hover:underline">
+                    {item.name}
+                  </p>
+                  <p className="text-sm font-light">{item.city}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </section>
     </main>
