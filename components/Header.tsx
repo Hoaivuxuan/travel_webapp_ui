@@ -102,7 +102,8 @@ const Header = () => {
                   <span className="mr-2">{item.icon}</span>
                   {item.title}
                 </Link>
-              ))}
+              ))
+            }
           </div>
         </div>
 

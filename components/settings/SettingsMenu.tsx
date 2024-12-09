@@ -1,19 +1,34 @@
-import React from "react";
+"use client";
+
+import Link from "next/link";
+import React, { useState } from "react";
+
+const settingMenu = [
+  { name: "personal", title: "Thông tin chung", href: "personal" },
+  { name: "resetPassword", title: "Đổi mật khẩu", href: "resetPassword" },
+  { name: "other", title: "Cài đặt khác", href: "personal" },
+];
 
 const SettingsMenu = () => {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const handleLinkClick = () => {
+    setDropdownOpen(false);
+  };
+
   return (
-    <div className="bg-white border rounded-lg hover:shadow-lg transition-shadow duration-200">
-      <ul className="divide-y">
-        <li className="p-4 flex items-center hover:bg-gray-100 cursor-pointer transition">
-          <span className="font-semibold text-blue-500">Thông tin cá nhân</span>
-        </li>
-        <li className="p-4 flex items-center hover:bg-gray-100 cursor-pointer transition">
-          <span className="font-semibold text-blue-500">Đổi mật khẩu</span>
-        </li>
-        <li className="p-4 flex items-center hover:bg-gray-100 cursor-pointer transition">
-          <span className="font-semibold text-blue-500">Cài đặt chung</span>
-        </li>
-      </ul>
+    <div className="bg-white text-sm border rounded-t-lg hover:shadow-lg transition-shadow duration-200">
+      <div className="flex divide-x px-2">
+        {settingMenu.map((item) => (
+          <Link
+            key={item.name}
+            href={item.href}
+            onClick={handleLinkClick}
+            className="flex items-center text-sm text-[#472f91] font-semibold px-4 py-2"
+          >
+            {item.title}
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };

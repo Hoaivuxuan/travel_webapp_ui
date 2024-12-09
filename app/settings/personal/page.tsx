@@ -1,6 +1,6 @@
 "use client";
 
-import { Input, Button, Avatar, Form, Row, Col, DatePicker } from "antd";
+import { Input, Button, Avatar, DatePicker } from "antd";
 import React, { useEffect, useState } from "react";
 import { EditOutlined, CloseOutlined } from "@ant-design/icons";
 import { ToastContainer } from "react-toastify";
@@ -129,7 +129,7 @@ const PersonalInfoPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="p-4 bg-white border rounded-lg hover:shadow-lg transition-shadow duration-200">
+      <div className="p-4 bg-white border rounded-b-lg hover:shadow-lg transition-shadow duration-200">
         <div className="flex items-center mb-8">
           <h1 className="text-2xl font-bold flex-grow">Thông tin cá nhân</h1>
           <div className="relative">

@@ -31,17 +31,13 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
         </div>
       </div>
       <div className="flex items-start my-4">
-        <Checkbox
-          checked={isChecked}
-          onChange={handleCheckboxChange}
-          className="text-blue-600"
-        >
+        <Checkbox className="text-blue-600" checked={isChecked} onChange={handleCheckboxChange}>
           Tôi đồng ý nhận email marketing từ Booking.com, bao gồm khuyến mãi, đề xuất được cá nhân hóa, tặng thưởng, trải nghiệm du lịch và cập nhật về các sản phẩm và dịch vụ của Booking.com.
         </Checkbox>
       </div>
       <div className="space-y-4">
-        <p className="text-sm text-gray-500">
-          {`Đặt phòng của bạn sẽ tiếp tục được ${hotel.name} và bạn đồng ý với điều kiện đặt phòng, điều khoản chung và chính sách bảo mật.`}
+        <p className="text-sm text-gray-500 ml-6">
+          {`Đặt phòng của bạn sẽ tiếp tục được ${hotel.hotel_name} và bạn đồng ý với điều kiện đặt phòng, điều khoản chung và chính sách bảo mật.`}
         </p>
       </div>
       <div className="mt-4 flex justify-end">

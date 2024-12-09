@@ -126,7 +126,6 @@ const BecomeAdminPage = () => {
           </p>
         </div>
       </form>
-
       <ToastContainer />
     </div>
   );
