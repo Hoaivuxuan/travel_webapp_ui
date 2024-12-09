@@ -54,6 +54,12 @@ const VehicleDetail = () => {
   const search = localStorage.getItem("searchVehicle");
   const searchObject = search ? JSON.parse(search) : null;
 
+  const servicesJson = availableServices.map((service) => ({
+    name: service.name,
+    quantity: services[service.key],
+    cost: services[service.key] * 300000,
+  }));
+
   const handleServiceChange = (service: ServiceKeys, amount: number) => {
     setServices((prev) => {
       const newValue = prev[service] + amount;
@@ -73,6 +79,7 @@ const VehicleDetail = () => {
       pickup: format(searchObject.dateRange.pickupDate, "yyyy-MM-dd"),
       return: format(searchObject.dateRange.returnDate, "yyyy-MM-dd"),
     });
+
     router.push(`/rental/booking?url=2&${query.toString()}`);
   };
 
@@ -165,15 +172,12 @@ const VehicleDetail = () => {
           {rentalItem.type === "car" && (
             <div className="p-4 bg-white border rounded-lg">
               <div className="flex items-center space-x-2 mb-4">
-                <AppstoreAddOutlined style={{ fontSize: "20px", color: "#1890ff" }} />
+                <AppstoreAddOutlined className="text-[20px] text-blue-600" />
                 <h2 className="text-lg font-bold">Dịch vụ bổ sung</h2>
               </div>
               <div className="space-y-2">
                 {availableServices.map((service) => (
-                  <div
-                    key={service.key}
-                    className="flex justify-between items-center"
-                  >
+                  <div key={service.key} className="flex justify-between items-center">
                     <span className="text-sm">{service.name}</span>
                     <div className="flex items-center">
                       <Button
@@ -196,7 +200,7 @@ const VehicleDetail = () => {
 
           <div className="p-4 bg-white border rounded-lg">
             <div className="flex items-center space-x-2 mb-4">
-              <EnvironmentOutlined style={{ fontSize: "20px", color: "#1890ff" }} />
+              <EnvironmentOutlined className="text-[20px] text-blue-600" />
               <h2 className="text-lg font-bold">Điểm nhận xe</h2>
             </div>
             <div className="mb-4">
@@ -229,7 +233,7 @@ const VehicleDetail = () => {
 
           <div className="p-4 bg-white border rounded-lg">
             <div className="flex items-center space-x-2 mb-4">
-              <EnvironmentOutlined style={{ fontSize: "20px", color: "#1890ff" }} />
+              <EnvironmentOutlined className="text-[20px] text-blue-600" />
               <h2 className="text-lg font-bold">Điểm trả xe</h2>
             </div>
             <div className="mb-4">
@@ -262,22 +266,24 @@ const VehicleDetail = () => {
 
           <div className="p-4 bg-white border rounded-lg">
             <div className="flex items-center space-x-2 mb-4">
-              <ClockCircleOutlined style={{ fontSize: "20px", color: "#1890ff" }} />
+              <ClockCircleOutlined className="text-[20px] text-blue-600" />
               <h2 className="text-lg font-bold">Thời gian thuê xe</h2>
             </div>
             <div className="grid grid-cols-3 my-4">
               <div className="mr-auto text-left">
-                <p className="font-bold text-sm">Nhận xe</p>
-                <p>
+                <p className="font-bold">Nhận xe</p>
+                <p className="text-sm">
                   {format(searchObject.dateRange.pickupDate, "dd-MM-yyyy")}
                 </p>
               </div>
               <div className="flex justify-center items-center">
-                <p>6 ngày</p>
+                <p className="w-auto inline-block bg-blue-200 text-blue-600 rounded-lg px-3 py-1 text-sm">
+                  6 ngày
+                </p>
               </div>
               <div className="ml-auto text-right">
-                <p className="font-bold text-sm">Trả xe</p>
-                <p>
+                <p className="font-bold">Trả xe</p>
+                <p className="text-sm">
                   {format(searchObject.dateRange.returnDate, "dd-MM-yyyy")}
                 </p>
               </div>
@@ -300,9 +306,12 @@ const VehicleDetail = () => {
                 <p className="text-xs">{facilityItem.reviews.total} lượt đánh giá</p>
               </div>
               <h3 className="font-semibold mt-8 mb-2">Top Reviews</h3>
-              <div className="p-4 border rounded-lg space-y-2">
-                {facilityItem.reviews.comments.slice(-1).map((comment, index) => (
-                  <div key={index}>
+              <div className="py-2">
+                {facilityItem.reviews.comments.slice(-2).map((comment, index) => (
+                  <div
+                    key={index}
+                    className={`py-2 border-t min-h-[100px] ${index === facilityItem.reviews.comments.slice(-2).length - 1 ? 'border-b' : ''}`}
+                  >
                     <div className="flex justify-between mb-2">
                       <p className="font-semibold">{comment.user}</p>
                       <div className="flex items-center">
@@ -330,15 +339,17 @@ const VehicleDetail = () => {
                   {rentalFacility?.price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
                 </span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-sm">Dịch vụ bổ sung</span>
-                <span className="text-sm">
-                  {totalServiceCost.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm">Thuế</span>
-                <span className="text-sm">0 ₫</span>
+              <div className="space-y-2">
+                {servicesJson.map((service, index) => (
+                  service.quantity > 0 && (
+                    <div key={index} className="flex justify-between items-center">
+                      <span className="text-sm">{service.quantity} x {service.name}</span>
+                      <span className="text-sm">
+                        {service.cost.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                      </span>
+                    </div>
+                  )
+                ))}
               </div>
 
               <div className="flex justify-between border-t pt-4">

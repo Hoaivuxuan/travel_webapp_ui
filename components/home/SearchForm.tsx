@@ -1,16 +1,19 @@
 "use client";
 
+import * as z from "zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { format } from "date-fns";
 import { Button, DatePicker, Input, Select } from "antd";
 import { useRouter } from "next/navigation";
 import { EnvironmentOutlined, CloseOutlined } from "@ant-design/icons";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Notification from "@/components/Notification";
+import locations from "@/data/SelectCity.json";
 import dayjs from "dayjs";
-import locations from "@/data/location.json";
 
 interface Location {
   id: number;
@@ -30,11 +33,12 @@ export const formSchema = z.object({
   }),
   adults: z.number().min(1).max(12),
   children: z.number().min(0).max(12),
-  rooms: z.number().min(1).max(10),
+  rooms: z.number(),
 });
 
 function SearchForm() {
   const router = useRouter();
+  const { notifyWarning } = Notification();
   const [keyword, setKeyword] = useState("");
   const [suggestions, setSuggestions] = useState<Location[]>([]);
   const today = new Date();
@@ -133,19 +137,26 @@ function SearchForm() {
       children: values.children.toString(),
       rooms: values.rooms.toString(),
     });
-
     router.push(`/home/search?url=1&${query.toString()}`);
+  };
+
+  const onError = (errors: any) => {
+    Object.values(errors).forEach((error: any) => {
+      if (error && error.message) {
+        notifyWarning(error.message);
+      }
+    });
   };
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="bg-blue-600 p-4 rounded-lg max-w-7xl lg:mx-auto"
+        onSubmit={form.handleSubmit(onSubmit, onError)}
+        className="bg-[#472f91] border border-white p-4 rounded-lg max-w-7xl lg:mx-auto"
       >
         <div className="grid grid-cols-9 gap-2">
           <div className="col-span-8">
-            <div className=" grid grid-cols-12 gap-2">
+            <div className="grid grid-cols-12 gap-2">
               <div className="col-span-4">
                 <FormField
                   control={form.control}
@@ -167,26 +178,21 @@ function SearchForm() {
                           <span className="absolute left-4 top-1/2 transform -translate-y-1/2">
                             <EnvironmentOutlined className="text-gray-400" />
                           </span>
-                          <button
-                            type="button"
+                          <CloseOutlined
                             className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
                             onClick={() => {
                               setKeyword("");
                               form.setValue("location", "");
                               setSuggestions([]);
                             }}
-                          >
-                            <CloseOutlined />
-                          </button>
+                          />
                           {suggestions.length > 0 && (
                             <ul className="absolute z-10 bg-white border border-gray-300 rounded shadow-md w-full mt-1 max-h-48 overflow-y-auto">
-                              {suggestions.slice(0,5).map((suggestion) => (
+                              {suggestions.slice(0, 5).map((suggestion) => (
                                 <li
                                   key={suggestion.id}
                                   className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                  onClick={() =>
-                                    handleSuggestionClick(suggestion.name)
-                                  }
+                                  onClick={() => handleSuggestionClick(suggestion.name)}
                                 >
                                   <div className="flex justify-between">
                                     <span className="text-sm">{suggestion.name}</span>
@@ -209,23 +215,17 @@ function SearchForm() {
                 <FormField
                   control={form.control}
                   name="dateRange"
-                  render={({field}) => (
-                    <FormField
-                      control={form.control}
-                      name="dateRange"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col">
-                          <FormControl>
-                            <DatePicker.RangePicker
-                              value={dateRange}
-                              onChange={handleDateChange}
-                              disabledDate={(current) => current && current < dayjs().startOf("day")}
-                              format="DD/MM/YYYY"
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormControl>
+                        <DatePicker.RangePicker
+                          value={dateRange}
+                          onChange={handleDateChange}
+                          disabledDate={(current) => current && current < dayjs().startOf("day")}
+                          format="DD/MM/YYYY"
+                        />
+                      </FormControl>
+                    </FormItem>
                   )}
                 />
               </div>
@@ -241,10 +241,7 @@ function SearchForm() {
                           <Select
                             className="w-full h-full"
                             value={field.value}
-                            onChange={(value) => {
-                              const newAdults = Number(value);
-                              field.onChange(newAdults);
-                            }}
+                            onChange={(value) => field.onChange(Number(value))}
                           >
                             {Array.from({ length: 13 }, (_, i) => i + 1).map((count) => (
                               <Select.Option key={count} value={count}>
@@ -268,10 +265,7 @@ function SearchForm() {
                           <Select
                             className="w-full h-full"
                             value={field.value}
-                            onChange={(value) => {
-                              const newChildren = Number(value);
-                              field.onChange(newChildren);
-                            }}
+                            onChange={(value) => field.onChange(Number(value))}
                           >
                             {Array.from({ length: 13 }, (_, i) => i).map((count) => (
                               <Select.Option key={count} value={count}>
@@ -295,10 +289,7 @@ function SearchForm() {
                           <Select
                             className="w-full h-full"
                             value={field.value}
-                            onChange={(value) => {
-                              const newRooms = Number(value);
-                              field.onChange(newRooms);
-                            }}
+                            onChange={(value) => field.onChange(Number(value))}
                           >
                             {Array.from({ length: 11 }, (_, i) => i + 1).map((count) => (
                               <Select.Option key={count} value={count}>
@@ -316,12 +307,13 @@ function SearchForm() {
           </div>
 
           <div className="col-span-1 flex justify-center items-center">
-            <Button type="primary" htmlType="submit" className="w-full bg-green-400">
+            <Button type="primary" htmlType="submit" className="w-full bg-yellow-400 text-[#472f91]">
               Tìm kiếm
             </Button>
           </div>
         </div>
       </form>
+      <ToastContainer />
     </Form>
   );
 }

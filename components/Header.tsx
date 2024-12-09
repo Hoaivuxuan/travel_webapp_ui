@@ -75,7 +75,7 @@ const Header = () => {
             className="flex items-center"
             onClick={handleLinkClick}
           >
-            <span className="sr-only">Booking.com</span>
+            <span className="sr-only">HANOI</span>
             <Image
               src="https://res.cloudinary.com/df42yelwi/image/upload/v1732781066/HANOI_fwj9na.png"
               alt="Logo"
@@ -95,11 +95,9 @@ const Header = () => {
                   key={item.name}
                   href={item.href}
                   onClick={handleLinkClick}
-                  className={`flex items-center text-sm font-semibold mx-4 p-2 rounded-lg ${
-                    pathname === item.href
-                      ? "text-yellow-400"
-                      : "text-white"
-                  }`}
+                  className={`flex items-center text-sm font-semibold mx-4 p-2 rounded-lg
+                    ${pathname === item.href ? "text-yellow-400" : "text-white"}`
+                  }
                 >
                   <span className="mr-2">{item.icon}</span>
                   {item.title}

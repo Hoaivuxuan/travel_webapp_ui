@@ -1,16 +1,16 @@
 "use client";
 
+import * as z from "zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { format } from "date-fns";
-import { Button, DatePicker, Input, Select } from "antd";
+import { Button, DatePicker, Input } from "antd";
 import { useRouter } from "next/navigation";
 import { EnvironmentOutlined, CloseOutlined } from "@ant-design/icons";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import dayjs from "dayjs";
-import locations from "@/data/location.json";
+import locations from "@/data/SelectCity.json";
 
 interface Location {
   id: number;
@@ -128,7 +128,7 @@ function ActivitiesSearchForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="bg-blue-600 p-4 rounded-lg max-w-7xl lg:mx-auto"
+        className="bg-[#472f91] border border-white p-4 rounded-lg max-w-7xl lg:mx-auto"
       >
         <div className="grid grid-cols-9 gap-2">
           <div className="col-span-8">
@@ -214,7 +214,7 @@ function ActivitiesSearchForm() {
           </div>
 
           <div className="col-span-1 flex justify-center items-center">
-            <Button type="primary" htmlType="submit" className="w-full bg-green-400">
+            <Button type="primary" htmlType="submit" className="w-full bg-yellow-400 text-[#472f91]">
               Tìm kiếm
             </Button>
           </div>

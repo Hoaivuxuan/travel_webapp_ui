@@ -37,6 +37,7 @@ const LoginPage = () => {
           const data = await response.json();
 
           if (data) {
+            console.log(data);
             notifySuccess("Đăng nhập thành công!");
             login(data.id, data.token);
             setTimeout(() => {

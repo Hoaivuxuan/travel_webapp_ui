@@ -1,10 +1,8 @@
 import React from "react";
-import countries from "@/data/listCountry.json";
+import countries from "@/data/SelectCountry.json";
+import paymentMethods from "@/data/SelectPayment.json";
 import { Form, Input, Select, Radio, Checkbox, Button } from "antd";
-import { CheckCircleOutlined, NotificationOutlined } from "@ant-design/icons";
-
-const { Option } = Select;
-const { TextArea } = Input;
+import { CheckCircleOutlined } from "@ant-design/icons";
 
 type BookingFormProps = {
   params: any;
@@ -17,18 +15,21 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
 
   const saveBookingHotel = (values: any) => {
     const bookingHotel = {
-      hotel: Number(params.id),
-      checkinDate: params.checkin,
-      checkoutDate: params.checkout,
-      adults: Number(params.adults),
-      children: Number(params.children),
-      roomSelection: params.roomSelection,
+      hotel: {
+        name: params.bookingHotel?.hotel?.hotel_name,
+        city: params.bookingHotel?.hotel?.city.name,
+      },
       customerInfo: {
         fullName: values.fullName,
         email: values.email,
         phone: values.phone,
         country: values.country || "Vietnam",
       },
+      checkinDate: params.bookingHotel?.booking?.dateRange.startDate,
+      checkoutDate: params.bookingHotel?.booking?.dateRange.endDate,
+      adults: Number(params.bookingHotel?.booking?.adults),
+      children: Number(params.bookingHotel?.booking?.children),
+      roomSelection: params.roomSelection,
     };
 
     localStorage.setItem("bookingHotel", JSON.stringify(bookingHotel));
@@ -53,17 +54,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
       initialValues={{
         country: "Vietnam",
         whoBooking: "self",
+        payment: "none",
         nearbyRooms: false,
       }}
     >
       <div className="p-4 bg-white border rounded-lg">
         <h2 className="text-xl font-bold mb-4">Nhập thông tin chi tiết của bạn</h2>
         <div className="grid grid-cols-2 gap-4">
-          <Form.Item
-            label="Họ tên"
-            name="fullName"
-            rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}
-          >
+          <Form.Item label="Họ tên" name="fullName" rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}>
             <Input placeholder="ví dụ: Nguyễn Văn A" />
           </Form.Item>
           <Form.Item
@@ -76,47 +74,48 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
           >
             <Input placeholder="email@example.com" />
           </Form.Item>
-          <Form.Item
-            label="Số điện thoại"
-            name="phone"
-            rules={[{ required: true, message: "Vui lòng nhập số điện thoại!" }]}
-          >
+          <Form.Item label="Số điện thoại" name="phone" rules={[{ required: true, message: "Vui lòng nhập số điện thoại!" }]}>
             <Input placeholder="Số điện thoại" />
           </Form.Item>
-          <Form.Item label="Quốc gia" name="country">
+          <Form.Item label="Quốc gia" name="country" rules={[{ required: true }]}>
             <Select>
               {countries.map((country, index) => (
-                <Option key={index} value={country.name}>
+                <Select.Option key={index} value={country.name}>
                   {country.name}
-                </Option>
+                </Select.Option>
               ))}
             </Select>
           </Form.Item>
         </div>
-      </div>
-      <div className="p-4 bg-white border rounded-lg">
+        <hr className="mb-4"></hr>
         <Form.Item label="Bạn đặt phòng cho ai?" name="whoBooking">
           <Radio.Group>
-            <Radio value="self">
+            <Radio value="self" className="block">
               Tôi là khách lưu trú chính
             </Radio>
-            <Radio value="other">
+            <Radio value="other" className="block">
               Đặt phòng này là cho người khác
             </Radio>
           </Radio.Group>
         </Form.Item>
+        <Form.Item label="Bạn muốn thanh toán bằng cách nào?" name="payment">
+          <Radio.Group>
+            {paymentMethods.map((method) => (
+              <Radio key={method.value} value={method.value} className="block">
+                <span>{method.text}</span>
+              </Radio>
+            ))}
+          </Radio.Group>
+        </Form.Item>
       </div>
+      
       <div className="p-4 bg-white border rounded-lg">
         <h2 className="text-xl font-bold mb-4">Các yêu cầu đặc biệt</h2>
         <Form.Item label="Yêu cầu đặc biệt (không bắt buộc)" name="specialRequest">
           <p className="text-gray-600 mb-2">
-            Các yêu cầu đặc biệt không đảm bảo sẽ được đáp ứng. Tuy nhiên, chỗ nghỉ sẽ cố gắng hết sức để thực hiện,
-            bạn luôn có thể gửi yêu cầu đặc biệt sau khi hoàn tất đặt phòng của mình!
+            Các yêu cầu đặc biệt không đảm bảo sẽ được đáp ứng. Tuy nhiên, chỗ nghỉ sẽ cố gắng hết sức để thực hiện, bạn luôn có thể gửi yêu cầu đặc biệt sau khi hoàn tất đặt phòng của mình!
           </p>
-          <TextArea
-            placeholder="Ví dụ: Yêu cầu phòng gần nhau, ăn chay..."
-            rows={3}
-          />
+          <Input.TextArea rows={3} placeholder="Ví dụ: Yêu cầu phòng gần nhau, ăn chay..." />
         </Form.Item>
         <Form.Item name="nearbyRooms" valuePropName="checked">
           <Checkbox>Tôi muốn các phòng ở gần nhau (nếu có thể)</Checkbox>
@@ -130,18 +129,21 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
             Các phòng của bạn sẽ sẵn sàng để nhận trong khoảng từ 14:00 đến 00:00
           </p>
         </div>
-        <Form.Item label="Thêm thời gian đến dự kiến của bạn (không bắt buộc)" name="arrivalTime">
+        <Form.Item
+          label="Thêm thời gian đến dự kiến của bạn (không bắt buộc)"
+          name="arrivalTime"
+        >
           <Select placeholder="Vui lòng chọn">
-            <Option value="14:00-15:00">14:00 - 15:00</Option>
-            <Option value="15:00-16:00">15:00 - 16:00</Option>
-            <Option value="16:00-17:00">16:00 - 17:00</Option>
-            <Option value="17:00-18:00">17:00 - 18:00</Option>
-            <Option value="18:00-19:00">18:00 - 19:00</Option>
-            <Option value="19:00-20:00">19:00 - 20:00</Option>
-            <Option value="20:00-21:00">20:00 - 21:00</Option>
+            <Select.Option value="14:00-15:00">14:00 - 15:00</Select.Option>
+            <Select.Option value="15:00-16:00">15:00 - 16:00</Select.Option>
+            <Select.Option value="16:00-17:00">16:00 - 17:00</Select.Option>
+            <Select.Option value="17:00-18:00">17:00 - 18:00</Select.Option>
+            <Select.Option value="18:00-19:00">18:00 - 19:00</Select.Option>
+            <Select.Option value="19:00-20:00">19:00 - 20:00</Select.Option>
+            <Select.Option value="20:00-21:00">20:00 - 21:00</Select.Option>
           </Select>
         </Form.Item>
-        <p className="text-sm text-gray-500 mt-2">Thời gian theo múi giờ của Hà Nội</p>
+        <p className="text-sm text-gray-500">Thời gian theo múi giờ của Hà Nội</p>
       </div>
       <div className="mt-4 flex justify-end">
         <Button

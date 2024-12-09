@@ -3,8 +3,6 @@
 import { Input, Button, Avatar, Form, Row, Col, DatePicker } from "antd";
 import React, { useEffect, useState } from "react";
 import { EditOutlined, CloseOutlined } from "@ant-design/icons";
-import axios from "axios";
-import Image from "next/image";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
@@ -30,6 +28,8 @@ const PersonalInfoPage = () => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [values, setValues] = useState<UserData | null>(null);
   const [avatar, setAvatar] = useState<string | null>("");
+  const [loading, setLoading] = useState(false);
+  const [newAvatarFile, setNewAvatarFile] = useState<File | null>(null);
 
   const personalInfo = [
     { label: "Họ", key: "last_name" as UserInfoKeys },
@@ -47,14 +47,11 @@ const PersonalInfoPage = () => {
     const fetchUserData = async () => {
       if (!userId || !bearerToken) return;
       try {
-        const response = await fetch(
-          `http://localhost:8080/users/details?id=${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${bearerToken}`,
-            },
+        const response = await fetch(`http://localhost:8080/users/details?id=${userId}`, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
           },
-        );
+        });
 
         if (response.ok) {
           const userData: UserData = await response.json();
@@ -72,17 +69,6 @@ const PersonalInfoPage = () => {
     fetchUserData();
   }, []);
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatar(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleEditClick = (index: number) => {
     setEditingIndex(index);
   };
@@ -94,6 +80,8 @@ const PersonalInfoPage = () => {
   };
 
   const handleSaveClick = async () => {
+    let isUserDataChanged = false;
+
     const updatedData: Partial<UserData> = {
       name: values?.name,
       first_name: values?.first_name,
@@ -101,31 +89,42 @@ const PersonalInfoPage = () => {
       phone_number: values?.phone_number,
       address: values?.address,
       date_of_birth: values?.date_of_birth,
-      avatar: values?.avatar,
     };
 
-    try {
-      const response = await fetch(`http://localhost:8080/users`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(updatedData),
-      });
+    if (isUserDataChanged) setLoading(true);
+    isUserDataChanged = Object.keys(updatedData).some(
+      (key) =>
+        updatedData[key as keyof UserData] !== user?.[key as keyof UserData],
+    );
 
-      if (response.ok) {
-        const updatedUserData = await response.json();
-        notifySuccess("Thông tin người dùng đã được cập nhật.");
-        localStorage.setItem("user", JSON.stringify(updatedUserData));
-        setUser(updatedUserData);
-        setEditingIndex(null);
-      } else {
-        notifyWarning("Cập nhật thất bại");
+    if (isUserDataChanged) {
+      const bearerToken = localStorage.getItem("token");
+      if (!bearerToken) return;
+
+      try {
+        const response = await fetch(`http://localhost:8080/users`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken}`,
+          },
+          body: JSON.stringify(updatedData),
+        });
+
+        if (response.ok) {
+          const updatedUserData = await response.json();
+          notifySuccess("Thông tin người dùng đã được cập nhật.");
+          localStorage.setItem("user", JSON.stringify(updatedUserData));
+          setUser(updatedUserData);
+          setEditingIndex(null);
+        } else {
+          notifyWarning("Cập nhật thất bại");
+        }
+      } catch (error) {
+        notifyWarning("Error updating user data");
       }
-    } catch (error) {
-      notifyWarning("Error updating user data");
     }
+    setLoading(false);
   };
 
   return (
@@ -140,11 +139,10 @@ const PersonalInfoPage = () => {
               onClick={() => document.getElementById("avatar-upload")?.click()}
               className="cursor-pointer"
             />
-            <input
+            <Input
               id="avatar-upload"
               type="file"
               accept="image/*"
-              onChange={handleAvatarChange}
               className="absolute opacity-0 cursor-pointer inset-0"
             />
           </div>
@@ -175,11 +173,13 @@ const PersonalInfoPage = () => {
               ) : (
                 <div className="col-span-8">
                   <Input
-                    value={values?.first_name && values?.last_name
-                      ? `${values?.first_name} ${values?.last_name}`
-                      : `USER ${values?.id}`}
+                    value={
+                      (values?.first_name && values?.last_name)
+                        ? `${values?.first_name} ${values?.last_name}`
+                        : `USER ${values?.id}`
+                    }
+                    className="!bg-white !text-[#000000] mt-1 border rounded w-full cursor-not-allowed"
                     disabled
-                    className="mt-1 !text-[#000000] border rounded w-full cursor-not-allowed"
                   />
                 </div>
               )}
@@ -208,19 +208,19 @@ const PersonalInfoPage = () => {
                 <div className="col-span-8">
                   {field.key === "date_of_birth" ? (
                     <DatePicker
-                      className="w-full mt-1 custom-date-picker"
                       value={values?.date_of_birth ? dayjs(values?.date_of_birth) : null}
-                      format="YYYY-MM-DD"
+                      format="DD-MM-YYYY"
                       onChange={(date, dateString) =>
                         handleInputChange(field.key, String(dateString))
                       }
+                      className="!bg-white w-full mt-1 custom-date-picker"
                       disabled={editingIndex !== index + 1}
                     />
                   ) : (
                     <Input
                       value={values?.[field.key] || ""}
                       onChange={(e) => handleInputChange(field.key, e.target.value)}
-                      className={`mt-1 ${
+                      className={`!bg-white mt-1 ${
                         editingIndex === index + 1 ? "" : "!text-[#000000]"
                       }`}
                       disabled={editingIndex !== index + 1}
@@ -245,17 +245,22 @@ const PersonalInfoPage = () => {
               </div>
             </div>
           ))}
-          {editingIndex === null && (
-            <Button
-              className="float-right mt-5"
-              type="primary"
-              onClick={handleSaveClick}
-            >
-              Lưu
-            </Button>
-          )}
+
+          <div className="py-4 flex items-center justify-between">
+            <div className="w-full flex justify-end">
+              <Button
+                type="primary"
+                onClick={handleSaveClick}
+                loading={loading}
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Lưu
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

@@ -45,8 +45,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (userId: string, token: string) => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/users/details?id=${userId}`,
+      const response = await fetch(`http://localhost:8080/users/details?id=${userId}`,
         {
           method: "GET",
           headers: {

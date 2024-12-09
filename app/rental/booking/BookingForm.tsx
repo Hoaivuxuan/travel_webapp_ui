@@ -1,6 +1,6 @@
 import React from "react";
 import jwt from "jwt-simple";
-import countries from "@/data/listCountry.json";
+import countries from "@/data/SelectCountry.json";
 import { Form, Input, Select, Button } from "antd";
 
 type BookingFormProps = {

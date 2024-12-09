@@ -3,14 +3,11 @@ import React, { useState } from "react";
 import { Checkbox, Button } from "antd";
 
 interface ConfirmBookingProps {
-  id: number;
+  hotel: any;
 }
 
-const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ id }) => {
+const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
   const [isChecked, setIsChecked] = useState(false);
-
-  const hotel = listHotels.find((item) => item.id === id) || undefined;
-  if (!hotel) return null;
 
   const handleCheckboxChange = (e: any) => {
     setIsChecked(e.target.checked);
@@ -28,7 +25,7 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ id }) => {
           <div className="col-span-6">
             <h3 className="font-bold mb-2">Không yêu cầu thông tin thanh toán</h3>
             <p className="text-sm text-gray-500">
-              {`Thanh toán của bạn sẽ do ${hotel.name} xử lý, nên bạn không cần nhập thông tin thanh toán cho đơn đặt này.`}
+              {`Thanh toán của bạn sẽ do ${hotel.hotel_name} xử lý, nên bạn không cần nhập thông tin thanh toán cho đơn đặt này.`}
             </p>
           </div>
         </div>

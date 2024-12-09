@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { UserOutlined } from "@ant-design/icons"; // Import the Ant Design icon
+import { UserOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { Table, Select } from "antd";
 import { format } from "date-fns";
+import { hotelOptions } from "@/data/defaultValues";
+import { encodeToJWT } from "@/utils/JWT";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Notification from "@/components/Notification";
 
 interface Room {
-  type: string;
+  name: string;
   max_guests: number;
   price: number;
   amenities: string[];
+  available_rooms: number;
 }
 
 interface AvailableRoomsTableProps {
-  id: number;
+  hotel: any;
   rooms: Room[];
 }
 
-const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ id, rooms }) => {
+const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms }) => {
   const initialSelection = {
     selectedRooms: Array(rooms.length).fill(0),
     totalRooms: 0,
@@ -27,6 +33,7 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ id, rooms }) 
   const [totalRooms, setTotalRooms] = useState<number>(initialSelection.totalRooms);
   const [totalPrice, setTotalPrice] = useState<number>(initialSelection.totalPrice);
   const router = useRouter();
+  const { notifyWarning } = Notification();
 
   useEffect(() => {
     const newTotalRooms = selectedRooms.reduce((sum, count) => sum + count, 0);
@@ -36,7 +43,7 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ id, rooms }) 
     );
     setTotalRooms(newTotalRooms);
     setTotalPrice(newTotalPrice);
-  }, [selectedRooms, rooms, id]);
+  }, [selectedRooms, rooms, hotel]);
 
   const handleRoomSelect = (index: number, value: number) => {
     const updatedSelection = [...selectedRooms];
@@ -46,28 +53,39 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ id, rooms }) 
 
   const handleBookingClick = () => {
     const search = localStorage.getItem("searchHotel");
-    const roomSelection = JSON.stringify({
+    const user = localStorage.getItem("user");
+    const roomSelection = {
       selectedRooms: selectedRooms
         .map((count, index) => ({
-          type: rooms[index].type,
+          type: rooms[index].name,
           count,
           price: rooms[index].price,
         }))
         .filter((room) => room.count > 0),
       totalRooms,
       totalPrice,
-    });
+    };
 
-    if (search) {
-      const searchObject = JSON.parse(search);
+    if (search && user) {
+      const booking = JSON.parse(search);
+      const bookingHotel = {
+        user: JSON.parse(user),
+        hotel,
+        booking: JSON.parse(search),
+      }
+
+      if (roomSelection.totalRooms === 0) {
+        notifyWarning("Vui lòng chọn ít nhất một phòng trước khi tiếp tục!");
+        return;
+      }
+      if (roomSelection.totalRooms > booking.rooms) {
+        notifyWarning("Số phòng bạn chọn vượt quá số lượng phòng bạn muốn đặt!");
+        return;
+      }
+
       const query = new URLSearchParams({
-        id: id.toString(),
-        checkin: format(searchObject.dateRange.startDate, "yyyy-MM-dd"),
-        checkout: format(searchObject.dateRange.endDate, "yyyy-MM-dd"),
-        adults: searchObject.adults.toString(),
-        children: searchObject.children.toString(),
-        rooms: searchObject.rooms.toString(),
-        roomSelection: roomSelection,
+        bookingHotel: encodeToJWT(bookingHotel),
+        roomSelection: encodeToJWT(roomSelection),
       });
       router.push(`/home/booking?url=1&${query.toString()}`);
     }
@@ -76,7 +94,8 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ id, rooms }) 
   const columns = [
     {
       title: "Loại chỗ ở",
-      dataIndex: "type",
+      dataIndex: "name",
+      width: "30%",
       key: "type",
     },
     {
@@ -101,14 +120,12 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ id, rooms }) 
       dataIndex: "amenities",
       key: "amenities",
       width: "30%",
-      render: (amenities: string[]) => (
-        <div className="flex flex-wrap gap-2">
-          {amenities.map((option, i) => (
-            <div key={i} className="w-auto inline-block bg-green-200 text-green-600 rounded-full px-4 py-1 text-xs">
-              <span>{option}</span>
-            </div>
+      render: () => (
+        <ul className="list-disc pl-5 text-sm space-y-1">
+          {hotelOptions.map((option, index) => (
+            <li key={index}>{option}</li>
           ))}
-        </div>
+        </ul>
       ),
     },
     {
@@ -122,7 +139,7 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ id, rooms }) 
           onChange={(value: number) => handleRoomSelect(index, value)}
           className="w-full"
         >
-          {Array.from({ length: 11 }, (_, i) => (
+          {Array.from({ length: record.available_rooms + 1 }, (_, i) => (
             <Select.Option key={i} value={i}>
               {i}
             </Select.Option>
@@ -134,10 +151,11 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ id, rooms }) 
 
   const data = rooms.map((room, index) => ({
     key: index,
-    type: room.type,
+    name: room.name,
     max_guests: room.max_guests,
     price: room.price,
     amenities: room.amenities,
+    available_rooms: room.available_rooms,
   }));
 
   return (
@@ -168,6 +186,7 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ id, rooms }) 
           </div>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 };

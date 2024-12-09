@@ -10,28 +10,24 @@ import jwt from "jwt-simple";
 import { rentalFacilities, vehicles } from "@/data/fakeData";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Radio } from "antd";
-
-export type RentalItemProps = {
-  id: string;
-};
+import { Button, Radio } from "antd";
 
 const SECRET_KEY = "4e6f7274682072616e646f6d20736563726574206b65792e";
 
 const handleDetailClick = (
   router: ReturnType<typeof useRouter>,
   id: number,
-  facilityId: number | null
+  facility: number | null
 ) => {
   const search = localStorage.getItem("searchVehicle");
   let searchObject;
-  if ((id && facilityId && search)) {
+  if ((id && facility && search)) {
     try {
       searchObject = JSON.parse(search);
       const token = jwt.encode(searchObject, SECRET_KEY);
       const query = new URLSearchParams({
         id: id.toString().padStart(6, "0"),
-        facility: facilityId.toString(),
+        facility: facility.toString(),
         token: token,
       });
       router.push(`/rental/detail?url=2&${query.toString()}`);
@@ -61,7 +57,13 @@ export function CarItem({
 
   return (
     <div className="p-4 border rounded-lg">
-      <div className="grid grid-cols-5 gap-4" onClick={onFacilityToggle}>
+      <div
+        className="grid grid-cols-5 gap-4"
+        onClick={() => {
+          onFacilityToggle();
+          setSelectedFacilityId(null);
+        }}
+      >
         <div className="col-span-1 flex justify-center items-center h-[200px]">
           <Image
             src={`https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg`}
@@ -94,15 +96,20 @@ export function CarItem({
         </div>
         <div className="flex flex-col justify-end col-span-1 h-full">
           <div className="flex flex-col justify-end items-end mt-2">
+            <p className="text-sm">Giá cho 3 ngày</p>
             <p className="text-lg font-bold text-blue-600 text-right">
                từ {rentalMinPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
             </p>
-            <button
-              onClick={() => handleDetailClick(router, item.id, selectedFacilityId)}
-              className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2"
-            >
-              Xem chi tiết
-            </button>
+            {(isFacilityVisible && selectedFacilityId) && (
+              <Button
+                onClick={() => {
+                  handleDetailClick(router, item.id, selectedFacilityId);
+                }}
+                className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2"
+              >
+                Xem chi tiết
+              </Button>
+            )}
           </div>
         </div>
       </div>
@@ -153,7 +160,13 @@ export function MotorItem({
 
   return (
     <div className="p-4 border rounded-lg">
-      <div className="grid grid-cols-5 gap-4" onClick={onFacilityToggle}>
+      <div
+        className="grid grid-cols-5 gap-4"
+        onClick={() => {
+          onFacilityToggle();
+          setSelectedFacilityId(null);
+        }}
+      >
         <div className="col-span-1 flex justify-center items-center h-[200px]">
           <Image
             src={`https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg`}
@@ -178,15 +191,20 @@ export function MotorItem({
         </div>
         <div className="flex flex-col justify-end col-span-1 h-full">
           <div className="flex flex-col justify-end items-end mt-2">
+            <p className="text-sm">Giá cho 3 ngày</p>
             <p className="text-lg font-bold text-blue-600 text-right">
                từ {rentalMinPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
             </p>
-            <button
-              onClick={() => handleDetailClick(router, item.id, selectedFacilityId)}
-              className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2"
-            >
-              Xem chi tiết
-            </button>
+            {(isFacilityVisible && selectedFacilityId) && (
+              <Button
+                onClick={() => {
+                  handleDetailClick(router, item.id, selectedFacilityId);
+                }}
+                className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2"
+              >
+                Xem chi tiết
+              </Button>
+            )}
           </div>
         </div>
       </div>

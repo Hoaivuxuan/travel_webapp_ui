@@ -1,3 +1,5 @@
+import { WalletOutlined, PayCircleOutlined, CreditCardOutlined, BankOutlined } from "@ant-design/icons";
+
 export const policies = [
   "Sử dụng tới 24 giờ mỗi ngày thuê",
   "Trả xe với cùng mức nhiên liệu khi nhận",
@@ -22,3 +24,9 @@ export const importantInfo = {
     "Sau đó, đọc và ký vào hợp đồng thuê.",
   ],
 };
+
+export const hotelOptions = [
+  "Bao gồm bữa sáng tuyệt vời",
+  "Không hoàn tiền",
+  "Thanh toán cho chỗ nghỉ trước khi đến",
+];

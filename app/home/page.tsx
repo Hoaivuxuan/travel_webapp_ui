@@ -1,17 +1,33 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SearchForm from "@/components/home/SearchForm";
 import { destination } from "@/data/fakeData";
-import { listHotels } from "@/data/typeHotel";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Button } from "antd";
+import { encodeToJWT } from "@/utils/JWT";
 
 export default function Home() {
   const router = useRouter();
   const trendingDestinations = destination.slice(0, 5);
+  const [listHotels, setListHotels] = useState([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchHotels = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/hotels?noRooms=0&keyword=`);
+        const data = await response.json();
+        setListHotels(data.hotels);
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu:", error);
+      }
+    };
+
+    fetchHotels();
+  });
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
@@ -53,7 +69,7 @@ export default function Home() {
         </div>
         <div className="py-5 grid grid-cols-5 gap-4">
           {trendingDestinations.map((item) => (
-            <div key={item.id} className="cursor-pointer">
+            <div key={item.id} className="relative cursor-pointer group">
               <Image
                 className="object-cover rounded-lg w-full h-72"
                 src={item.src}
@@ -61,9 +77,9 @@ export default function Home() {
                 width={540}
                 height={405}
               />
-              <div className="pt-3">
-                <p className="font-bold">{item.title}</p>
-                <p className="">{item.location}</p>
+              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent text-white p-3 rounded-b-lg">
+                <p className="text-sm font-bold">{item.title}</p>
+                <p className="text-xs">{item.location}</p>
               </div>
             </div>
           ))}
@@ -76,21 +92,18 @@ export default function Home() {
           </p>
         </div>
         <div className="relative flex items-center">
-          <button
+          <Button
             onClick={scrollLeft}
             className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600"
           >
             <LeftOutlined />
-          </button>
+          </Button>
           <div
             ref={scrollContainerRef}
             className="flex py-5 space-x-4 overflow-x-hidden scroll-smooth"
           >
             {destination.map((item) => (
-              <div
-                key={item.id}
-                className="space-y-1 cursor-pointer shrink-0 w-[233.59px]"
-              >
+              <div key={item.id} className="relative cursor-pointer group space-y-1 shrink-0 w-[233.59px]">
                 <Image
                   className="object-cover rounded-lg w-80 h-72"
                   src={item.src}
@@ -98,56 +111,46 @@ export default function Home() {
                   width={540}
                   height={405}
                 />
-                <div className="pt-3 px-1">
-                  <p className="font-bold">{item.title}</p>
-                  <p className="">{item.location}</p>
+                <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent text-white p-3 rounded-b-lg">
+                  <p className="text-sm font-bold">{item.title}</p>
+                  <p className="text-xs">{item.location}</p>
                 </div>
               </div>
             ))}
           </div>
-          <button
+          <Button
             onClick={scrollRight}
             className="absolute -right-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600"
           >
             <RightOutlined />
-          </button>
+          </Button>
         </div>
 
         <div className="pt-5">
           <h3 className="text-xl font-bold">Top Nơi Lưu Trú Nổi Bật</h3>
-          <p className="font-light">
-            Top 5 nơi lưu trú được đánh giá nhiều nhất
-          </p>
+          <p className="font-light">Top 5 nơi lưu trú được đánh giá nhiều nhất</p>
         </div>
         <div className="py-5 grid grid-cols-5 gap-4">
-        {[...listHotels]
-          .sort((a, b) => b.reviews.total_reviews - a.reviews.total_reviews)
-          .slice(0, 5)
-          .map((item) => (
-            <div
-              key={item.id}
-              className="cursor-pointer"
-              onClick={() =>
-                router.push(
-                  `/home/detail?id=${item.id.toString().padStart(6, "0")}`
-                )
-              }
-            >
-              <Image
-                className="object-cover rounded-lg w-full h-72"
-                src={item.images[0]}
-                alt={`Hotel ${item.id}`}
-                width={540}
-                height={405}
-              />
-              <div className="pt-3">
-                <p className="font-bold text-blue-500 hover:underline">
-                  {item.name}
-                </p>
-                <p className="text-sm font-light">{item.city}</p>
+          {Array.isArray(listHotels) &&
+            listHotels.slice(0, 5).map((item: any) => (
+              <div
+                key={item.id}
+                className="relative cursor-pointer group"
+                onClick={() => router.push(`/home/detail?token=${encodeToJWT(item)}`)}
+              >
+                <Image
+                  className="object-cover rounded-lg w-full h-72"
+                  src={item.images[0]}
+                  alt={`Hotel ${item.id}`}
+                  width={540}
+                  height={405}
+                />
+                <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent text-white p-3 rounded-b-lg">
+                  <p className="text-sm font-bold">{item.hotel_name}</p>
+                  <p className="text-xs">{item.city.name}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </section>
     </main>
