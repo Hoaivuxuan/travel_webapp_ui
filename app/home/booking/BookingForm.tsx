@@ -2,7 +2,7 @@ import React from "react";
 import countries from "@/data/SelectCountry.json";
 import paymentMethods from "@/data/SelectPayment.json";
 import { Form, Input, Select, Radio, Checkbox, Button } from "antd";
-import { CheckCircleOutlined } from "@ant-design/icons";
+import { AiOutlineCheckCircle } from "react-icons/ai";
 
 type BookingFormProps = {
   params: any;
@@ -15,6 +15,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
 
   const saveBookingHotel = (values: any) => {
     const bookingHotel = {
+      user: params.bookingHotel?.user?.id,
       hotel: {
         name: params.bookingHotel?.hotel?.hotel_name,
         city: params.bookingHotel?.hotel?.city.name,
@@ -30,6 +31,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
       adults: Number(params.bookingHotel?.booking?.adults),
       children: Number(params.bookingHotel?.booking?.children),
       roomSelection: params.roomSelection,
+      specialRequest: values.specialRequest || "",
+      arrivalTime: values.arrivalTime || null,
+      status: 0,
     };
 
     localStorage.setItem("bookingHotel", JSON.stringify(bookingHotel));
@@ -112,9 +116,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
       <div className="p-4 bg-white border rounded-lg">
         <h2 className="text-xl font-bold mb-4">Các yêu cầu đặc biệt</h2>
         <Form.Item label="Yêu cầu đặc biệt (không bắt buộc)" name="specialRequest">
-          <p className="text-gray-600 mb-2">
-            Các yêu cầu đặc biệt không đảm bảo sẽ được đáp ứng. Tuy nhiên, chỗ nghỉ sẽ cố gắng hết sức để thực hiện, bạn luôn có thể gửi yêu cầu đặc biệt sau khi hoàn tất đặt phòng của mình!
-          </p>
           <Input.TextArea rows={3} placeholder="Ví dụ: Yêu cầu phòng gần nhau, ăn chay..." />
         </Form.Item>
         <Form.Item name="nearbyRooms" valuePropName="checked">
@@ -124,7 +125,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
       <div className="p-4 bg-white border rounded-lg">
         <h2 className="text-xl font-bold mb-4">Thời gian đến của bạn</h2>
         <div className="flex items-center mb-2">
-          <CheckCircleOutlined className="text-green-600 mr-2" />
+          <AiOutlineCheckCircle className="text-green-600 text-lg mr-2" />
           <p className="text-gray-700">
             Các phòng của bạn sẽ sẵn sàng để nhận trong khoảng từ 14:00 đến 00:00
           </p>

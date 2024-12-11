@@ -4,7 +4,8 @@ import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ratingLabel } from "@/data/typeHotel";
 import { Carousel } from "antd";
-import { EnvironmentOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
+import { GiPositionMarker } from "react-icons/gi";
+import { FaStar, FaRegStar } from "react-icons/fa";
 import { decodeToJWT } from "@/utils/JWT";
 import FAQSection from "@/components/home/FAQs";
 import AvailableRoomsTable from "./AvailableRoomsTable";
@@ -103,9 +104,9 @@ const HotelDetailPage = () => {
                                 {[...Array(5)].map((_, starIndex) => (
                                   <span key={starIndex} className="mr-1">
                                     {starIndex < comment.rating ? (
-                                      <StarFilled className="text-yellow-300" />
+                                      <FaStar className="text-yellow-300" />
                                     ) : (
-                                      <StarOutlined className="text-yellow-300" />
+                                      <FaRegStar className="text-yellow-300" />
                                     )}
                                   </span>
                                 ))}
@@ -125,7 +126,7 @@ const HotelDetailPage = () => {
                   </div>
                   <div className="border p-4 rounded-lg">
                     <div className="flex items-center space-x-2 mb-4">
-                      <EnvironmentOutlined className="text-[20px] text-blue-600" />
+                      <GiPositionMarker className="text-[20px] text-blue-600" />
                       <h4 className="text-lg font-semibold">Trong khu vực</h4>
                     </div>
                     <p className="text-gray-600 mb-4">

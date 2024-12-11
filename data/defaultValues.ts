@@ -1,5 +1,3 @@
-import { WalletOutlined, PayCircleOutlined, CreditCardOutlined, BankOutlined } from "@ant-design/icons";
-
 export const policies = [
   "Sử dụng tới 24 giờ mỗi ngày thuê",
   "Trả xe với cùng mức nhiên liệu khi nhận",
@@ -29,4 +27,17 @@ export const hotelOptions = [
   "Bao gồm bữa sáng tuyệt vời",
   "Không hoàn tiền",
   "Thanh toán cho chỗ nghỉ trước khi đến",
+];
+
+export const statusTags = [
+  { id: 0, text: "PENDING", color: "orange" },
+  { id: 1, text: "DONE", color: "green" },
+  { id: 2, text: "CANCEL", color: "red" },
+];
+
+export const roleTags = [
+  { role: "ADMIN", color: "red" },
+  { role: "USER", color: "blue" },
+  { role: "SUPERADMIN", color: "green" },
+  { role: "DEV", color: "orange" },
 ];

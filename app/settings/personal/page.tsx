@@ -2,7 +2,7 @@
 
 import { Input, Button, Avatar, DatePicker } from "antd";
 import React, { useEffect, useState } from "react";
-import { EditOutlined, CloseOutlined } from "@ant-design/icons";
+import { AiOutlineEdit, AiOutlineClose } from 'react-icons/ai';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
@@ -186,13 +186,13 @@ const PersonalInfoPage = () => {
               <div className="text-center col-span-1">
                 {editingIndex === 0 ? (
                   <Button
-                    icon={<CloseOutlined />}
+                    icon={<AiOutlineClose className="text-lg" />}
                     onClick={() => setEditingIndex(null)}
                     type="link"
                   />
                 ) : (
                   <Button
-                    icon={<EditOutlined />}
+                    icon={<AiOutlineEdit className="text-lg" />}
                     onClick={() => handleEditClick(0)}
                     type="link"
                   />
@@ -208,10 +208,13 @@ const PersonalInfoPage = () => {
                 <div className="col-span-8">
                   {field.key === "date_of_birth" ? (
                     <DatePicker
-                      value={values?.date_of_birth ? dayjs(values?.date_of_birth) : null}
-                      format="DD-MM-YYYY"
-                      onChange={(date, dateString) =>
-                        handleInputChange(field.key, String(dateString))
+                      value={values?.date_of_birth ? dayjs(values?.date_of_birth, "YYYY-MM-DD") : null}
+                      format="DD/MM/YYYY"
+                      onChange={(date) =>
+                        handleInputChange(
+                          field.key,
+                          date ? dayjs(date).format("YYYY-MM-DD") : ""
+                        )
                       }
                       className="!bg-white w-full mt-1 custom-date-picker"
                       disabled={editingIndex !== index + 1}
@@ -230,13 +233,13 @@ const PersonalInfoPage = () => {
                 <div className="text-center col-span-1">
                   {editingIndex === index + 1 ? (
                     <Button
-                      icon={<CloseOutlined />}
+                      icon={<AiOutlineClose className="text-lg" />}
                       onClick={() => setEditingIndex(null)}
                       type="link"
                     />
                   ) : (
                     <Button
-                      icon={<EditOutlined />}
+                      icon={<AiOutlineEdit className="text-lg" />}
                       onClick={() => handleEditClick(index + 1)}
                       type="link"
                     />

@@ -8,7 +8,7 @@ import { AuthProvider } from "@/app/login/AuthContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Hanoitravel.vn",
+  title: "HANOITRAVEL.vn",
   description:
     "A website to book hotels, rental vehicles and book tours",
 };

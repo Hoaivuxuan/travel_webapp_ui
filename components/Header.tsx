@@ -3,13 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import {
-  UserOutlined,
-  LogoutOutlined,
-  HomeOutlined,
-  CarOutlined,
-  CameraOutlined,
-} from "@ant-design/icons";
+import { AiOutlineUser, AiOutlineHome, AiOutlineCamera } from "react-icons/ai";
+import { FiLogOut } from "react-icons/fi";
+import { FaCar } from "react-icons/fa";
 import { useAuth } from "@/app/login/AuthContext";
 import { useState, useRef, useEffect } from "react";
 
@@ -18,19 +14,19 @@ const mainMenu = [
     name: "hotel",
     title: "TÌM NƠI LƯU TRÚ",
     href: "/home",
-    icon: <HomeOutlined className="text-lg" />,
+    icon: <AiOutlineHome className="text-lg" />,
   },
   {
     name: "rental",
     title: "CHO THUÊ XE",
     href: "/rental",
-    icon: <CarOutlined className="text-lg" />,
+    icon: <FaCar className="text-lg" />,
   },
   {
     name: "activities",
     title: "HOẠT ĐỘNG & VUI CHƠI",
     href: "/activities",
-    icon: <CameraOutlined className="text-lg" />,
+    icon: <AiOutlineCamera className="text-lg" />,
   },
 ];
 
@@ -67,7 +63,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="bg-[#472f91]">
+    <header className="bg-[#472f91] relative z-10">
       <nav className="grid grid-cols-6 items-center p-6 mx-auto max-w-7xl">
         <div className="col-span-1">
           <Link
@@ -88,8 +84,7 @@ const Header = () => {
 
         <div className="col-span-4 flex justify-center">
           <div className="flex justify-center flex-grow">
-            {isLoggedIn &&
-              role === "USER" &&
+            {(isLoggedIn && role === "USER") &&
               mainMenu.map((item) => (
                 <Link
                   key={item.name}
@@ -115,7 +110,7 @@ const Header = () => {
             <>
               <Image
                 src={avatar || ""}
-                alt={`${username}'s avatar`}
+                alt={`${username}`}
                 width={40}
                 height={40}
                 className="w-10 h-10 rounded-full cursor-pointer"
@@ -132,17 +127,27 @@ const Header = () => {
                 <div className="absolute right-0 top-10 mt-2 w-48 bg-white shadow-lg">
                   <Link
                     href="/settings/personal"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                    className="flex block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
                     onClick={handleLinkClick}
                   >
-                    <UserOutlined className="mr-2" />
+                    <AiOutlineUser className="text-lg mr-2" />
                     Quản lý tài khoản
                   </Link>
+                  {(role === "USER") &&
+                    <Link
+                      href="/manage/home"
+                      className="flex block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                      onClick={handleLinkClick}
+                    >
+                      <AiOutlineUser className="text-lg mr-2" />
+                      Theo dõi đơn
+                    </Link>
+                  }
                   <button
                     onClick={handleLogoutClick}
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                    className="flex block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
                   >
-                    <LogoutOutlined className="mr-2" />
+                    <FiLogOut className="text-lg mr-2" />
                     Đăng xuất
                   </button>
                 </div>

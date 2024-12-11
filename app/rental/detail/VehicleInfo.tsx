@@ -1,28 +1,22 @@
-import {
-  DashboardOutlined,
-  TeamOutlined,
-  CarryOutOutlined,
-  FireOutlined,
-  ThunderboltOutlined,
-} from "@ant-design/icons";
+import { FaCar, FaMotorcycle, FaUsers, FaLuggageCart, FaGasPump } from 'react-icons/fa';
 
 const CarDetailInfo = ({ details }: { details: any }) => {
   return (
     <div className="space-y-2 text-sm">
       <div className="flex items-center">
-        <DashboardOutlined className="mr-4 text-lg" />
+        <FaCar className="mr-4 text-lg" />
         <span>{details.transmission}</span>
       </div>
       <div className="flex items-center">
-        <TeamOutlined className="mr-4 text-lg" />
+        <FaUsers className="mr-4 text-lg" />
         <span>{details.seats} chỗ ngồi</span>
       </div>
       <div className="flex items-center">
-        <CarryOutOutlined className="mr-4 text-lg" />
-        <span>{details.baggage_capacity} hành lý</span>
+        <FaLuggageCart className="mr-4 text-lg" />
+        <span>{details.baggage_capacity}</span>
       </div>
       <div className="flex items-center">
-        <FireOutlined className="mr-4 text-lg" />
+        <FaGasPump className="mr-4 text-lg" />
         <span>{details.fuel}</span>
       </div>
     </div>
@@ -33,11 +27,11 @@ const MotorDetailInfo = ({ details }: { details: any }) => {
   return (
     <div className="space-y-2 text-sm">
       <div className="flex items-center">
-        <ThunderboltOutlined className="mr-4 text-lg" />
+        <FaMotorcycle className="mr-4 text-lg" />
         <span>{details.engine} phân khối</span>
       </div>
       <div className="flex items-center">
-        <FireOutlined className="mr-4 text-lg" />
+        <FaGasPump className="mr-4 text-lg" />
         <span>{details.fuel}</span>
       </div>
     </div>

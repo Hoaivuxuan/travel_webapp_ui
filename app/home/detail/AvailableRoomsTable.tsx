@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { UserOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { Table, Select } from "antd";
-import { format } from "date-fns";
 import { hotelOptions } from "@/data/defaultValues";
 import { encodeToJWT } from "@/utils/JWT";
 import { ToastContainer } from "react-toastify";
+import { BsDoorOpen, BsFillPersonFill } from "react-icons/bs";
+import { FaRuler } from 'react-icons/fa';
 import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
 
 interface Room {
   name: string;
+  type: string;
+  size: number;
   max_guests: number;
+  type_bed_1: string;
+  no_bed_1: number;
+  type_bed_2: string;
+  no_bed_2: number | null;
   price: number;
-  amenities: string[];
   available_rooms: number;
+  amenities_for_rooms: string[];
 }
 
 interface AvailableRoomsTableProps {
@@ -38,8 +44,7 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms 
   useEffect(() => {
     const newTotalRooms = selectedRooms.reduce((sum, count) => sum + count, 0);
     const newTotalPrice = selectedRooms.reduce(
-      (sum, count, index) => sum + count * rooms[index].price,
-      0
+      (sum, count, index) => sum + count * rooms[index].price, 0
     );
     setTotalRooms(newTotalRooms);
     setTotalPrice(newTotalPrice);
@@ -97,15 +102,30 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms 
       dataIndex: "name",
       width: "30%",
       key: "type",
+      render: (_: any, record: any) => (
+        <div className="space-y-1">
+          <p className="font-semibold mb-4">{record.name}</p>
+          <div className="space-y-2">
+            <div className="flex">
+              <BsDoorOpen className="text-lg mr-2" /> {record.type}
+            </div>
+            <div className="flex">
+              <FaRuler className="text-lg mr-2" /> {record.size} m²
+            </div>
+            <p>{record.no_bed_1} x {record.type_bed_1}</p>
+            <p>{record.type_bed_2 && `${record.no_bed_2} x ${record.type_bed_2}`}</p>
+          </div>
+        </div>
+      ),
     },
     {
       title: "Số lượng khách",
       dataIndex: "max_guests",
       key: "max_guests",
       render: (maxGuests: number) => (
-        <span>
-          {maxGuests} x <UserOutlined className="mx-2" />
-        </span>
+        <div className="flex items-center">
+          {maxGuests} x <BsFillPersonFill className="text-lg mx-2" />
+        </div>
       ),
     },
     {
@@ -152,9 +172,15 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms 
   const data = rooms.map((room, index) => ({
     key: index,
     name: room.name,
+    type: room.type,
+    size: room.size,
+    type_bed_1: room.type_bed_1,
+    no_bed_1: room.no_bed_1,
+    type_bed_2: room.type_bed_2,
+    no_bed_2: room.no_bed_2,
     max_guests: room.max_guests,
     price: room.price,
-    amenities: room.amenities,
+    amenities: room.amenities_for_rooms,
     available_rooms: room.available_rooms,
   }));
 

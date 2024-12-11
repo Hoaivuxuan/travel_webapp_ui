@@ -7,7 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { Button, DatePicker, Input } from "antd";
 import { useRouter } from "next/navigation";
-import { EnvironmentOutlined, CloseOutlined } from "@ant-design/icons";
+import { AiOutlineClose } from 'react-icons/ai';
+import { GiPositionMarker } from "react-icons/gi";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import dayjs from "dayjs";
 import locations from "@/data/SelectCity.json";
@@ -152,19 +153,16 @@ function ActivitiesSearchForm() {
                             className="pl-10"
                           />
                           <span className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                            <EnvironmentOutlined className="text-gray-400" />
+                            <GiPositionMarker className="text-gray-400" />
                           </span>
-                          <button
-                            type="button"
+                          <AiOutlineClose
                             className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
                             onClick={() => {
                               setKeyword("");
                               form.setValue("location", "");
                               setSuggestions([]);
                             }}
-                          >
-                            <CloseOutlined />
-                          </button>
+                          />
                           {suggestions.length > 0 && (
                             <ul className="absolute z-10 bg-white border border-gray-300 rounded shadow-md w-full mt-1 max-h-48 overflow-y-auto">
                               {suggestions.slice(0, 5).map((suggestion) => (

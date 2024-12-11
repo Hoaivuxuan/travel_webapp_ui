@@ -1,191 +1,117 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import "./index.css";
-import type { TableProps } from "antd";
-import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
-import Image from "next/image";
-
-interface DataType {
-  key: string;
-  name: string;
-  type: number;
-  address: string;
-}
-
-const originData = Array.from({ length: 100 }).map<DataType>((_, i) => ({
-  key: i.toString(),
-  name: `Hoai ${i}`,
-  type: 32,
-  address: `ThaiBinh City no. ${i}`,
-}));
-
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
-  dataIndex: string;
-  title: any;
-  inputType: "number" | "text";
-  record: DataType;
-  index: number;
-}
-
-const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{ margin: 0 }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
+import React, { useEffect, useState } from "react";
+import { Table, Button, Space } from "antd";
+import { BsEye } from "react-icons/bs";
+import HotelDetailModal from "./HotelDetails";
 
 export default function HotelAdmin() {
-  const [form] = Form.useForm();
-  const [data, setData] = useState<DataType[]>(originData);
-  const [editingKey, setEditingKey] = useState("");
+  const [listHotel, setListHotel] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [currentHotel, setCurrentHotel] = useState<any>(null);
 
-  const isEditing = (record: DataType) => record.key === editingKey;
-
-  const edit = (record: Partial<DataType> & { key: React.Key }) => {
-    form.setFieldsValue({ name: "", type: "", address: "", ...record });
-    setEditingKey(record.key);
-  };
-
-  const cancel = () => {
-    setEditingKey("");
-  };
-
-  const save = async (key: React.Key) => {
-    try {
-      const row = (await form.validateFields()) as DataType;
-
-      const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
-        setData(newData);
-        setEditingKey("");
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey("");
+  useEffect(() => {
+    const fetchHotels = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/hotels?noRooms=0&keyword=");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setListHotel(data.hotels);
+      } catch (error) {
+        console.error("Error fetching hotels:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
-    }
+    };
+
+    fetchHotels();
+  }, []);
+
+  const showModal = (hotel: any) => {
+    setCurrentHotel(hotel);
+    setIsModalVisible(true);
   };
 
-  const columns = [
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setCurrentHotel(null);
+  };
+
+  const hotelColumns = [
     {
-      title: "name",
-      dataIndex: "name",
-      width: "25%",
-      editable: true,
+      title: "",
+      key: "actions",
+      width: 50,
+      render: (_: any, record: any) => (
+        <Space className="flex items-center justify-center">
+          <Button
+            type="link"
+            icon={<BsEye className="text-lg" />}
+            onClick={() => showModal(record)}
+          />
+        </Space>
+      ),
     },
     {
-      title: "type",
+      title: "ID",
+      dataIndex: "id",
+      width: 100,
+      render: (id: number) => id.toString().padStart(6, "0"),
+    },
+    {
+      title: "Hotel Name",
+      dataIndex: "hotel_name",
+      key: "hotel_name",
+      render: (_: any, record: any) => (
+        <a href={record.website} target="_blank" rel="noopener noreferrer">
+          {record.hotel_name}
+        </a>
+      ),
+    },
+    {
+      title: "Type",
       dataIndex: "type",
-      width: "15%",
-      editable: true,
+      key: "type",
     },
     {
-      title: "address",
-      dataIndex: "address",
-      width: "40%",
-      editable: true,
+      title: "City",
+      dataIndex: ["city", "name"],
+      key: "city",
     },
     {
-      title: "operation",
-      dataIndex: "operation",
-      render: (_: any, record: DataType) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <span>
-            <Typography.Link
-              onClick={() => save(record.key)}
-              style={{ marginInlineEnd: 8 }}
-            >
-              Save
-            </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <a>Cancel</a>
-            </Popconfirm>
-          </span>
-        ) : (
-          <Typography.Link
-            disabled={editingKey !== ""}
-            onClick={() => edit(record)}
-          >
-            Edit
-          </Typography.Link>
-        );
-      },
+      title: "Total Reviews",
+      dataIndex: ["reviews", "total_reviews"],
+      key: "total_reviews",
+    },
+    {
+      title: "Average Rating",
+      dataIndex: ["reviews", "average_rating"],
+      key: "average_rating",
     },
   ];
 
-  const mergedColumns: TableProps<DataType>["columns"] = columns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record: DataType) => ({
-        record,
-        inputType: col.dataIndex === "type" ? "number" : "text",
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
-
   return (
-    <main className="bg-white">
-      <section className="p-6 bg-white rounded-t-lg max-w-7xl">
-        <div className="pt-5">
-          <h3 className="text-xl font-bold">Quản trị khách sạn</h3>
-        </div>
-      </section>
-      <Form form={form} component={false}>
-        <Table<DataType>
-          components={{
-            body: { cell: EditableCell },
-          }}
+    <main className="h-screen">
+      <section className="p-6 bg-white rounded-t-lg">
+        <h3 className="mb-4 text-xl font-bold">Danh sách khách sạn</h3>
+        <Table
           bordered
-          dataSource={data}
-          columns={mergedColumns}
-          rowClassName="editable-row"
-          pagination={{ onChange: cancel }}
+          dataSource={listHotel}
+          columns={hotelColumns}
+          rowKey="id"
+          loading={loading}
+          pagination={{ pageSize: 10 }}
+          scroll={{ x: 1500 }}
         />
-      </Form>
+      </section>
+      <HotelDetailModal
+        visible={isModalVisible}
+        hotel={currentHotel}
+        onClose={handleCancel}
+      />
     </main>
   );
 }

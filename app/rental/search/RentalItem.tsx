@@ -1,10 +1,4 @@
-import {
-  DashboardOutlined,
-  TeamOutlined,
-  CarryOutOutlined,
-  FireOutlined,
-  ThunderboltOutlined,
-} from "@ant-design/icons";
+import { FaCar, FaMotorcycle, FaUsers, FaLuggageCart, FaGasPump } from 'react-icons/fa';
 import Image from "next/image";
 import jwt from "jwt-simple";
 import { rentalFacilities, vehicles } from "@/data/fakeData";
@@ -76,22 +70,24 @@ export function CarItem({
         <div className="flex flex-col justify-between col-span-3">
           <div>
             <p className="mb-4 font-bold text-blue-600 text-lg">{item.model}</p>
-            <p className="text-sm text-gray-700 flex items-center">
-              <DashboardOutlined className="mx-2 w-4" />
-              {item.details.transmission}
-            </p>
-            <p className="text-sm flex items-center text-gray-600">
-              <TeamOutlined className="mx-2 w-4" />
-              {item.details.seats} ghế
-            </p>
-            <p className="text-sm flex items-center text-gray-600">
-              <CarryOutOutlined className="mx-2 w-4" />
-              {item.details.baggage_capacity} hành lý
-            </p>
-            <p className="text-sm flex items-center text-gray-600">
-              <FireOutlined className="mx-2 w-4" />
-              {item.details.fuel}
-            </p>
+            <div className="space-y-1">
+              <p className="text-sm flex items-center text-gray-600">
+                <FaCar className="mx-2 w-4" />
+                {item.details.transmission}
+              </p>
+              <p className="text-sm flex items-center text-gray-600">
+                <FaUsers className="mx-2 w-4" />
+                {item.details.seats} ghế
+              </p>
+              <p className="text-sm flex items-center text-gray-600">
+                <FaLuggageCart className="mx-2 w-4" />
+                {item.details.baggage_capacity} hành lý
+              </p>
+              <p className="text-sm flex items-center text-gray-600">
+                <FaGasPump className="mx-2 w-4" />
+                {item.details.fuel}
+              </p>
+            </div>
           </div>
         </div>
         <div className="flex flex-col justify-end col-span-1 h-full">
@@ -114,7 +110,7 @@ export function CarItem({
         </div>
       </div>
       {isFacilityVisible && (
-        <div className="mt-4 py-4 border-t">
+        <div className="mt-4 py-4">
           <Radio.Group
             onChange={(e) => setSelectedFacilityId(e.target.value)}
             value={selectedFacilityId}
@@ -124,8 +120,8 @@ export function CarItem({
               <Radio
                 key={facility.id}
                 value={facility.id}
-                className={`w-full p-2 border rounded-md ${
-                  selectedFacilityId === facility.id ? "bg-blue-100 border-blue-500" : ""
+                className={`w-full p-2 border-t border-b ${
+                  selectedFacilityId === facility.id ? "bg-blue-100" : ""
                 }`}
               >
                 <div className="flex justify-between items-center">
@@ -179,14 +175,16 @@ export function MotorItem({
         <div className="flex flex-col justify-between col-span-3">
           <div>
             <p className="mb-4 font-bold text-blue-600 text-lg">{item.model}</p>
-            <p className="text-sm text-gray-700 flex items-center">
-              <ThunderboltOutlined className="mx-2 w-4" />
-              {item.details.engine} phân khối
-            </p>
-            <p className="text-sm flex items-center text-gray-600">
-              <FireOutlined className="mx-2 w-4" />
-              {item.details.fuel}
-            </p>
+            <div className='space-y-1'>
+              <p className="text-sm text-gray-700 flex items-center">
+                <FaMotorcycle className="mx-2 w-4" />
+                {item.details.engine} phân khối
+              </p>
+              <p className="text-sm flex items-center text-gray-600">
+                <FaGasPump className="mx-2 w-4" />
+                {item.details.fuel}
+              </p>
+            </div>
           </div>
         </div>
         <div className="flex flex-col justify-end col-span-1 h-full">
@@ -209,7 +207,7 @@ export function MotorItem({
         </div>
       </div>
       {isFacilityVisible && (
-        <div className="mt-4 py-4 border-t">
+        <div className="mt-4 py-4">
           <Radio.Group
             onChange={(e) => setSelectedFacilityId(e.target.value)}
             value={selectedFacilityId}
@@ -219,8 +217,8 @@ export function MotorItem({
               <Radio
                 key={facility.id}
                 value={facility.id}
-                className={`w-full p-2 border rounded-md ${
-                  selectedFacilityId === facility.id ? "bg-blue-100 border-blue-500" : ""
+                className={`w-full p-2 border-t border-b ${
+                  selectedFacilityId === facility.id ? "bg-blue-100" : ""
                 }`}
               >
                 <div className="flex justify-between items-center">

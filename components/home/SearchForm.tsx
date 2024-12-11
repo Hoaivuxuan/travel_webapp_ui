@@ -7,7 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { Button, DatePicker, Input, Select } from "antd";
 import { useRouter } from "next/navigation";
-import { EnvironmentOutlined, CloseOutlined } from "@ant-design/icons";
+import { AiOutlineClose } from 'react-icons/ai';
+import { GiPositionMarker } from "react-icons/gi";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -176,9 +177,9 @@ function SearchForm() {
                             className="pl-10"
                           />
                           <span className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                            <EnvironmentOutlined className="text-gray-400" />
+                            <GiPositionMarker className="text-gray-400" />
                           </span>
-                          <CloseOutlined
+                          <AiOutlineClose
                             className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
                             onClick={() => {
                               setKeyword("");

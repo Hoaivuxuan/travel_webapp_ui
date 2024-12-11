@@ -4,16 +4,10 @@ import { useState } from "react";
 import { rentalFacilities, vehicles } from "@/data/fakeData";
 import { notFound, useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
-import {
-  EnvironmentOutlined,
-  ClockCircleOutlined,
-  MinusOutlined,
-  PlusOutlined,
-  SearchOutlined,
-  StarFilled,
-  StarOutlined,
-  AppstoreAddOutlined,
-} from "@ant-design/icons";
+import { GiPositionMarker } from "react-icons/gi";
+import { AiOutlineDropbox, AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { FiSearch } from "react-icons/fi";
+import { FaRegClock, FaStar, FaRegStar } from "react-icons/fa";
 import { Radio, Input, Space, Button } from "antd";
 import { importantInfo, policies, requirements } from "@/data/defaultValues";
 import Image from "next/image";
@@ -172,7 +166,7 @@ const VehicleDetail = () => {
           {rentalItem.type === "car" && (
             <div className="p-4 bg-white border rounded-lg">
               <div className="flex items-center space-x-2 mb-4">
-                <AppstoreAddOutlined className="text-[20px] text-blue-600" />
+                <AiOutlineDropbox className="text-[20px] text-blue-600" />
                 <h2 className="text-lg font-bold">Dịch vụ bổ sung</h2>
               </div>
               <div className="space-y-2">
@@ -181,13 +175,13 @@ const VehicleDetail = () => {
                     <span className="text-sm">{service.name}</span>
                     <div className="flex items-center">
                       <Button
-                        icon={<MinusOutlined />}
+                        icon={<AiOutlineMinus className="text-lg" />}
                         onClick={() => handleServiceChange(service.key, -1)}
                         disabled={services[service.key] === 0}
                       />
                       <div className="w-[35px] text-center">{services[service.key]}</div>
                       <Button
-                        icon={<PlusOutlined />}
+                        icon={<AiOutlinePlus className="text-lg" />}
                         onClick={() => handleServiceChange(service.key, 1)}
                         disabled={services[service.key] >= service.max}
                       />
@@ -200,7 +194,7 @@ const VehicleDetail = () => {
 
           <div className="p-4 bg-white border rounded-lg">
             <div className="flex items-center space-x-2 mb-4">
-              <EnvironmentOutlined className="text-[20px] text-blue-600" />
+              <GiPositionMarker className="text-[20px] text-blue-600" />
               <h2 className="text-lg font-bold">Điểm nhận xe</h2>
             </div>
             <div className="mb-4">
@@ -224,7 +218,7 @@ const VehicleDetail = () => {
                 onChange={(e) => setPickupAddress(e.target.value)}
                 placeholder="Tìm địa điểm..."
                 prefix={
-                  <SearchOutlined className="pr-2" />
+                  <FiSearch className="text-lg pr-2" />
                 }
                 readOnly={pickupLocation === "office"}
               />
@@ -233,7 +227,7 @@ const VehicleDetail = () => {
 
           <div className="p-4 bg-white border rounded-lg">
             <div className="flex items-center space-x-2 mb-4">
-              <EnvironmentOutlined className="text-[20px] text-blue-600" />
+              <GiPositionMarker className="text-[20px] text-blue-600" />
               <h2 className="text-lg font-bold">Điểm trả xe</h2>
             </div>
             <div className="mb-4">
@@ -257,7 +251,7 @@ const VehicleDetail = () => {
                 onChange={(e) => setReturnAddress(e.target.value)}
                 placeholder="Tìm địa điểm..."
                 prefix={
-                  <SearchOutlined className="pr-2" />
+                  <FiSearch className="text-lg pr-2" />
                 }
                 readOnly={returnLocation === "office"}
               />
@@ -266,14 +260,14 @@ const VehicleDetail = () => {
 
           <div className="p-4 bg-white border rounded-lg">
             <div className="flex items-center space-x-2 mb-4">
-              <ClockCircleOutlined className="text-[20px] text-blue-600" />
+              <FaRegClock className="text-[20px] text-blue-600" />
               <h2 className="text-lg font-bold">Thời gian thuê xe</h2>
             </div>
             <div className="grid grid-cols-3 my-4">
               <div className="mr-auto text-left">
                 <p className="font-bold">Nhận xe</p>
                 <p className="text-sm">
-                  {format(searchObject.dateRange.pickupDate, "dd-MM-yyyy")}
+                  {format(searchObject.dateRange.pickupDate, "dd/MM/yyyy")}
                 </p>
               </div>
               <div className="flex justify-center items-center">
@@ -284,7 +278,7 @@ const VehicleDetail = () => {
               <div className="ml-auto text-right">
                 <p className="font-bold">Trả xe</p>
                 <p className="text-sm">
-                  {format(searchObject.dateRange.returnDate, "dd-MM-yyyy")}
+                  {format(searchObject.dateRange.returnDate, "dd/MM/yyyy")}
                 </p>
               </div>
             </div>
@@ -318,9 +312,9 @@ const VehicleDetail = () => {
                         {[...Array(5)].map((_, starIndex) => (
                           <span key={starIndex} className="mr-1">
                             {starIndex < comment.rating ? (
-                              <StarFilled className="text-yellow-300" />
+                              <FaStar className="text-yellow-300" />
                             ) : (
-                              <StarOutlined className="text-yellow-300" />
+                              <FaRegStar className="text-yellow-300" />
                             )}
                           </span>
                         ))}

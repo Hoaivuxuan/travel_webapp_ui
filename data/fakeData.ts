@@ -533,3 +533,228 @@ export const listings = {
     ],
   },
 };
+
+export const bookingHotel = [
+  {
+    id: 1,
+    user: 1,
+    hotel: {
+      name: "InterContinental Hanoi Westlake",
+      city: "Hà Nội"
+    },
+    customerInfo: {
+      fullName: "Do Duc Thu",
+      email: "ddthumonky0810@gmail.com",
+      phone: "0398206185",
+      country: "Vietnam"
+    },
+    checkinDate: "2024-12-09",
+    checkoutDate: "2024-12-10",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [
+        {
+          type: "Lake View Room",
+          count: 1,
+          price: 5280000
+        },
+        {
+          type: "Presidential Suite",
+          count: 1,
+          price: 14400000
+        }
+      ],
+      totalRooms: 2,
+      totalPrice: 19680000
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    status: 0
+  },
+  {
+    id: 2,
+    user: 1,
+    hotel: {
+      name: "InterContinental Hanoi Westlake",
+      city: "Hà Nội"
+    },
+    customerInfo: {
+      fullName: "Do Duc Thu",
+      email: "ddthumonky0810@gmail.com",
+      phone: "0398206185",
+      country: "Vietnam"
+    },
+    checkinDate: "2024-12-09",
+    checkoutDate: "2024-12-10",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [
+        {
+          type: "Lake View Room",
+          count: 1,
+          price: 5280000
+        },
+        {
+          type: "Presidential Suite",
+          count: 1,
+          price: 14400000
+        }
+      ],
+      totalRooms: 2,
+      totalPrice: 19680000
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    status: 0
+  },
+  {
+    id: 3,
+    user: 2,
+    hotel: {
+      name: "InterContinental Hanoi Westlake",
+      city: "Hà Nội"
+    },
+    customerInfo: {
+      fullName: "Dao Quang Duy",
+      email: "daoquangduy441@gmail.com",
+      phone: "0398206185",
+      country: "Vietnam"
+    },
+    checkinDate: "2024-12-09",
+    checkoutDate: "2024-12-10",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [
+        {
+          type: "Lake View Room",
+          count: 1,
+          price: 5280000
+        },
+        {
+          type: "Presidential Suite",
+          count: 1,
+          price: 14400000
+        }
+      ],
+      totalRooms: 2,
+      totalPrice: 19680000
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    status: 0
+  },
+  {
+    id: 4,
+    user: 2,
+    hotel: {
+      name: "InterContinental Hanoi Westlake",
+      city: "Hà Nội"
+    },
+    customerInfo: {
+      fullName: "Dao Quang Duy",
+      email: "daoquangduy441@gmail.com",
+      phone: "0398206185",
+      country: "Vietnam"
+    },
+    checkinDate: "2024-12-09",
+    checkoutDate: "2024-12-10",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [
+        {
+          type: "Lake View Room",
+          count: 1,
+          price: 5280000
+        },
+        {
+          type: "Presidential Suite",
+          count: 1,
+          price: 14400000
+        }
+      ],
+      totalRooms: 2,
+      totalPrice: 19680000
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    status: 0
+  },
+  {
+    id: 5,
+    user: 3,
+    hotel: {
+      name: "InterContinental Hanoi Westlake",
+      city: "Hà Nội"
+    },
+    customerInfo: {
+      fullName: "Nguyen Minh Hang",
+      email: "hanghonghach2910@gmail.com",
+      phone: "0398206185",
+      country: "Vietnam"
+    },
+    checkinDate: "2024-12-09",
+    checkoutDate: "2024-12-10",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [
+        {
+          type: "Lake View Room",
+          count: 1,
+          price: 5280000
+        },
+        {
+          type: "Presidential Suite",
+          count: 1,
+          price: 14400000
+        }
+      ],
+      totalRooms: 2,
+      totalPrice: 19680000
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    status: 0
+  },
+  {
+    id: 6,
+    user: 3,
+    hotel: {
+      name: "InterContinental Hanoi Westlake",
+      city: "Hà Nội"
+    },
+    customerInfo: {
+      fullName: "Nguyen Thi Minh Hang",
+      email: "hanghonghach2910@gmail.com",
+      phone: "0398206185",
+      country: "Vietnam"
+    },
+    checkinDate: "2024-12-09",
+    checkoutDate: "2024-12-10",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [
+        {
+          type: "Lake View Room",
+          count: 1,
+          price: 5280000
+        },
+        {
+          type: "Presidential Suite",
+          count: 1,
+          price: 14400000
+        }
+      ],
+      totalRooms: 2,
+      totalPrice: 19680000
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    status: 0
+  },
+];

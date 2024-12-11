@@ -3,11 +3,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import SearchForm from "@/components/home/SearchForm";
 import { destination } from "@/data/fakeData";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "antd";
 import { encodeToJWT } from "@/utils/JWT";
+import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 
 export default function Home() {
   const router = useRouter();
@@ -93,11 +93,10 @@ export default function Home() {
         </div>
         <div className="relative flex items-center">
           <Button
+            icon={<AiFillCaretLeft className="text-lg" />}
             onClick={scrollLeft}
             className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600"
-          >
-            <LeftOutlined />
-          </Button>
+          />
           <div
             ref={scrollContainerRef}
             className="flex py-5 space-x-4 overflow-x-hidden scroll-smooth"
@@ -119,11 +118,10 @@ export default function Home() {
             ))}
           </div>
           <Button
+            icon={<AiFillCaretRight className="text-lg" />}
             onClick={scrollRight}
             className="absolute -right-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600"
-          >
-            <RightOutlined />
-          </Button>
+          />
         </div>
 
         <div className="pt-5">

@@ -2,31 +2,16 @@
 
 import React, { useEffect, useState } from "react";
 import "./index.css";
-import { Table, Switch, Tag } from "antd";
-
-interface DataType {
-  key: string;
-  id: number;
-  name: string;
-  first_name: string;
-  last_name: string;
-  phone_number: string;
-  email: string;
-  address: string;
-  date_of_birth: string | null;
-  active: boolean;
-  role: string;
-}
-
-const roleTags = [
-  { role: "ADMIN", color: "red" },
-  { role: "USER", color: "blue" },
-  { role: "SUPERADMIN", color: "green" },
-  { role: "DEV", color: "orange" },
-];
+import { Table, Switch, Space, Button } from "antd";
+import { AiOutlineEye, AiOutlineBars, AiOutlineDelete } from "react-icons/ai";
+import UserDetailsModal from "./UserDatails";
+import UserBookingModal from "./UserBooking";
 
 export default function UserAdmin() {
-  const [listUser, setListUser] = useState<DataType[]>([]);
+  const [listUser, setListUser] = useState<any>([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isUserDetailsVisible, setIsUserDetailsVisible] = useState(false);
+  const [isUserBookingVisible, setIsUserBookingVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
@@ -62,90 +47,196 @@ export default function UserAdmin() {
     fetchUsers();
   }, []);
 
-  const handleRoleChange = (value: boolean, record: DataType) => {
-    const newRole = value ? "USER" : "ADMIN";
-    const newListUser = listUser.map((user) =>
-      user.id === record.id ? { ...user, role: newRole } : user,
-    );
-    setListUser(newListUser);
-  };
-
-  const handleActiveChange = (value: boolean, record: DataType) => {
-    const newListUser = listUser.map((user) =>
+  const handleActiveChange = (value: boolean, record: any) => {
+    const newListUser = listUser.map((user: any) =>
       user.id === record.id ? { ...user, active: value } : user,
     );
     setListUser(newListUser);
   };
 
-  const columns = [
+  const handleViewDetails = (record: any) => {
+    setSelectedUser(record);
+    setIsUserDetailsVisible(true);
+    console.log(selectedUser);
+  };
+
+  const handleUserDetailsModalClose = () => {
+    setSelectedUser(null);
+    setIsUserDetailsVisible(false);
+  };
+
+  const handleViewBooking = (record: any) => {
+    setSelectedUser(record);
+    setIsUserBookingVisible(true);
+    console.log(selectedUser);
+  };
+
+  const handleUserBookingModalClose = () => {
+    setSelectedUser(null);
+    setIsUserBookingVisible(false);
+  };
+
+  const userColumns = [
+    {
+      title: "",
+      key: "actions",
+      width: 50,
+      render: (_: any, record: any) => (
+        <Space className="flex items-center justify-center">
+          <Button
+            type="link"
+            icon={<AiOutlineEye className="text-lg" />}
+            onClick={() => handleViewDetails(record)}
+          />
+          <Button
+            type="link"
+            icon={<AiOutlineBars className="text-lg" />}
+            onClick={() => handleViewBooking(record)}
+          />
+          <Button
+            type="link"
+            icon={<AiOutlineDelete className="text-lg" />}
+          />
+        </Space>
+      ),
+    },
     {
       title: "ID",
       dataIndex: "id",
+      width: 80,
+      render: (id: number) => id.toString().padStart(6, "0"),
+    },
+    {
+      title: "Username",
+      dataIndex: "name",
+      width: 150,
     },
     {
       title: "Full Name",
-      render: (text: any, record: DataType) =>
+      width: 200,
+      render: (_: any, record: any) =>
         (record.first_name && record.last_name)
           ? `${record.first_name} ${record.last_name}`
           : `USER ${record.id}`,
     },
     {
-      title: "Phone Number",
-      dataIndex: "phone_number",
-    },
-    {
       title: "Email",
       dataIndex: "email",
+      width: 300,
+    },
+    {
+      title: "Phone",
+      dataIndex: "phone_number",
+      width: 120,
     },
     {
       title: "Address",
       dataIndex: "address",
     },
     {
-      title: "Role",
-      render: (text: any, record: DataType) => {
-        const roles = roleTags
-          .filter(tag => tag.role === record.role)
-          .map(tag => 
-            <Tag color={tag.color} key={tag.role}>{tag.role}</Tag>
-          );
-        return <>{roles}</>;
-      },
-      width: "10%",
+      title: "Active",
+      width: 50,
+      render: (_: any, record: any) =>
+        <Switch
+          checked={record.active}
+          size="small"
+          onChange={(value) => handleActiveChange(value, record)}
+          style={{
+            backgroundColor: record.active ? "#52c41a" : "#f5222d",
+            borderColor: record.active ? "#52c41a" : "#f5222d",
+          }}
+          disabled
+        />
+    },
+  ];
+
+  const adminColumns = [
+    {
+      title: "",
+      key: "actions",
+      width: 50,
+      render: (_: any, record: any) => (
+        <Space className="flex items-center justify-center">
+          <Button
+            type="link"
+            icon={<AiOutlineEye className="text-xl" />}
+            onClick={() => handleViewDetails(record)}
+          />
+        </Space>
+      ),
     },
     {
-      title: "Active",
-      render: (text: any, record: DataType) => {
-        if ((currentUserId !== null && record.id !== currentUserId)) {
-          return (
-            <Switch
-              checked={record.active}
-              onChange={(value) => handleActiveChange(value, record)}
-              style={{
-                backgroundColor: record.active ? "#52c41a" : "#f5222d",
-                borderColor: record.active ? "#52c41a" : "#f5222d",
-              }}
-            />
-          );
-        }
-      },
+      title: "ID",
+      dataIndex: "id",
+      width: 80,
+      render: (id: number) => id.toString().padStart(6, "0"),
+    },
+    {
+      title: "Username",
+      dataIndex: "name",
+      width: 150,
+    },
+    {
+      title: "Full Name",
+      width: 200,
+      render: (_: any, record: any) =>
+        (record.first_name && record.last_name)
+          ? `${record.first_name} ${record.last_name}`
+          : `ADMIN ${record.id}`,
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      width: 300,
+    },
+    {
+      title: "Phone",
+      dataIndex: "phone_number",
+      width: 120,
+    },
+    {
+      title: "Country",
+      dataIndex: "country",
+    },
+    {
+      title: "Address",
+      dataIndex: "address",
     },
   ];
 
   return (
-    <main className="py-6 mx-auto max-w-7xl">
+    <main className="h-screen">
       <section className="p-6 bg-white rounded-t-lg">
-        <div className="pt-5">
-          <h3 className="text-xl font-bold">Quản trị người dùng</h3>
-        </div>
+        <h3 className="mb-2 text-xl font-bold">Quản trị người dùng</h3>
+        <Table
+          bordered
+          dataSource={listUser.filter((user: any) => user.role === "USER")}
+          columns={userColumns}
+          rowClassName="editable-row"
+          loading={loading}
+          pagination={{ pageSize: 10 }}
+          scroll={{ x: 1500 }}
+        />
+        <h3 className="mb-2 text-xl font-bold">Quản trị viên</h3>
+        <Table
+          bordered
+          dataSource={listUser.filter((user: any) => user.role === "ADMIN")}
+          columns={adminColumns}
+          rowClassName="editable-row"
+          loading={loading}
+          pagination={{ pageSize: 10 }}
+          scroll={{ x: 1500 }}
+        />
       </section>
-      <Table<DataType>
-        bordered
-        dataSource={listUser}
-        columns={columns}
-        rowClassName="editable-row"
-        loading={loading}
-        pagination={{ pageSize: 10 }}
+      <UserDetailsModal
+        user={selectedUser}
+        visible={isUserDetailsVisible}
+        onClose={handleUserDetailsModalClose}
+      />
+      <UserBookingModal
+        user={selectedUser}
+        visible={isUserBookingVisible}
+        onClose={handleUserBookingModalClose}
       />
     </main>
   );

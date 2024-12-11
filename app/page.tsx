@@ -8,9 +8,9 @@ import axios from "axios";
 export default function Home() {
   const trendingDestinations = destination.slice(0, 5);
   const users = [
+    { email: "ddthumonky0810@gmail.com", password: "08102002", confirm_password: "08102002" },
     { email: "hanghonghach2910@gmail.com", password: "29102002", confirm_password: "29102002" },
     { email: "daoquangduy441@gmail.com", password: "wnwbovwyeehvobdz", confirm_password: "wnwbovwyeehvobdz" },
-    { email: "ddthumonky0810@gmail.com", password: "08102002", confirm_password: "08102002" },
   ];
 
   const registerUser = async (user: { email: string; password: string; confirm_password: string }) => {
@@ -20,15 +20,18 @@ export default function Home() {
           "Content-Type": "application/json",
         },
       });
+      console.log("Success");
     } catch (error) {
+      console.log("Fail");
     }
   };
 
   useEffect(() => {
     users.forEach((user) => {
       registerUser(user);
+      return;
     });
-  }, []);
+  }, [users]);
 
   return (
     <main className="bg-white">
