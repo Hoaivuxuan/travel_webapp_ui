@@ -11,7 +11,6 @@ interface HotelDetailModalProps {
 }
 
 const HotelDetailModal: React.FC<HotelDetailModalProps> = ({ visible, hotel, onClose }) => {
-  if (!hotel) return null;
   const [hotelInfo, setHotelInfo] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
