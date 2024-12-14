@@ -111,16 +111,12 @@ const BookingHotel = () => {
                 ))}
               </div>
             </div>
-            <a
-              href="#"
-              className="text-sm text-blue-500 mt-2 underline"
-              onClick={(e) => {
-                e.preventDefault();
-                handleGoBack();
-              }}
+            <span 
+              className="text-sm text-blue-500 mt-4 underline hover:no-underline cursor-pointer" 
+              onClick={handleGoBack}
             >
               Đổi lựa chọn của bạn
-            </a>
+            </span>
           </div>
 
           <div className="p-4 bg-white border rounded-lg">

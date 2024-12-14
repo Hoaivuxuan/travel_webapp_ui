@@ -206,306 +206,6 @@ export const activities: Destination[] = [
   },
 ];
 
-export const rentalFacilities = [
-  { 
-    id: 1,
-    name: "Hanoi Auto",
-    headquarters: "123 Tran Hung Dao, Hoan Kiem, Hanoi",
-    reviews: {
-      total: 2,
-      averageRating: 4.5,
-      reviewBreakdown: {
-        "5_star": 1,
-        "4_star": 1,
-        "3_star": 0,
-        "2_star": 0,
-        "1_star": 0,
-      },
-      comments: [
-        {
-          user: "bruno08",
-          date: "2024-09-21",
-          text: "Chủ xe nhiệt tình hỗ trợ giao nhận xe tận nơi, xe mới và vận hành ổn",
-          rating: 5,
-        },
-        {
-          user: "ptht2012",
-          date: "2024-09-19",
-          text: "Chủ xe nhiệt tình hỗ trợ giao nhận xe tận nơi, xe mới và vận hành ổn",
-          rating: 4,
-        },
-      ],
-    },
-  },
-  { 
-    id: 2,
-    name: "Ho Chi Minh City Auto",
-    headquarters: "45 Nguyen Thi Minh Khai, District 1, Ho Chi Minh City",
-    reviews: {
-      total: 2,
-      averageRating: 4.5,
-      reviewBreakdown: {
-        "5_star": 1,
-        "4_star": 1,
-        "3_star": 0,
-        "2_star": 0,
-        "1_star": 0,
-      },
-      comments: [
-        {
-          rating: 5,
-          user: "bruno08",
-          date: "2024-09-21",
-          text: "Chủ xe nhiệt tình hỗ trợ giao nhận xe tận nơi, xe mới và vận hành ổn",
-        },
-        {
-          rating: 4,
-          user: "ptht2012",
-          date: "2024-09-19",
-          text: "Chủ xe nhiệt tình hỗ trợ giao nhận xe tận nơi, xe mới và vận hành ổn",
-        },
-      ],
-    },
-  },
-  { 
-    id: 3,
-    name: "Da Nang Auto",
-    headquarters: "678 Bach Dang, Hai Chau, Da Nang",
-    reviews: {
-      total: 2,
-      averageRating: 4.5,
-      reviewBreakdown: {
-        "5_star": 1,
-        "4_star": 1,
-        "3_star": 0,
-        "2_star": 0,
-        "1_star": 0,
-      },
-      comments: [
-        {
-          rating: 5,
-          user: "bruno08",
-          date: "2024-09-21",
-          text: "Chủ xe nhiệt tình hỗ trợ giao nhận xe tận nơi, xe mới và vận hành ổn",
-        },
-        {
-          rating: 4,
-          user: "ptht2012",
-          date: "2024-09-19",
-          text: "Chủ xe nhiệt tình hỗ trợ giao nhận xe tận nơi, xe mới và vận hành ổn",
-        },
-      ],
-    },
-  },
-];
-
-export const vehicles = [
-  {
-    id: 1,
-    model: "Kia Morning",
-    rentalFacility: [
-      { id: 1, price: 500000 },
-      { id: 2, price: 520000 },
-      { id: 3, price: 480000 },
-    ],
-    type: "car",
-    details: {
-      transmission: "Automatic",
-      baggage_capacity: 2,
-      seats: 4,
-      fuel: "Petrol",
-      year: 2018,
-      safety_features: ["Airbags", "ABS", "Rear Camera"],
-      engine: null,
-    },
-  },
-  {
-    id: 2,
-    model: "Hyundai Grand i10",
-    rentalFacility: [
-      { id: 1, price: 550000 },
-      { id: 2, price: 570000 },
-      { id: 3, price: 530000 },
-    ],
-    type: "car",
-    details: {
-      transmission: "Automatic",
-      baggage_capacity: 2,
-      seats: 4,
-      fuel: "Petrol",
-      year: 2019,
-      safety_features: ["Airbags", "ABS", "Parking Sensors"],
-      engine: null,
-    },
-  },
-  {
-    id: 3,
-    model: "Toyota Yaris",
-    rentalFacility: [
-      { id: 1, price: 700000 },
-      { id: 2, price: 750000 },
-      { id: 3, price: 690000 },
-    ],
-    type: "car",
-    details: {
-      transmission: "Automatic",
-      baggage_capacity: 3,
-      seats: 5,
-      fuel: "Petrol",
-      year: 2021,
-      safety_features: ["Airbags", "ABS", "Lane Departure Warning"],
-      engine: null,
-    },
-  },
-  {
-    id: 4,
-    model: "Mazda 3",
-    rentalFacility: [
-      { id: 1, price: 800000 },
-      { id: 2, price: 850000 },
-      { id: 3, price: 780000 },
-    ],
-    type: "car",
-    details: {
-      transmission: "Automatic",
-      baggage_capacity: 2,
-      seats: 5,
-      fuel: "Petrol",
-      year: 2023,
-      safety_features: [
-        "Airbags",
-        "ABS",
-        "Blind Spot Monitoring",
-        "Lane Departure Warning",
-      ],
-      engine: null,
-    },
-  },
-  {
-    id: 5,
-    model: "Honda City",
-    rentalFacility: [
-      { id: 1, price: 650000 },
-      { id: 2, price: 680000 },
-      { id: 3, price: 620000 },
-    ],
-    type: "car",
-    details: {
-      transmission: "Automatic",
-      baggage_capacity: 3,
-      seats: 5,
-      fuel: "Petrol",
-      year: 2021,
-      safety_features: ["Airbags", "ABS", "Cruise Control"],
-      engine: null,
-    },
-  },
-  {
-    id: 6,
-    model: "Yamaha Exciter 150",
-    rentalFacility: [
-      { id: 1, price: 200000 },
-      { id: 2, price: 220000 },
-      { id: 3, price: 190000 },
-    ],
-    type: "motor",
-    details: {
-      engine: 150,
-      fuel: "Petrol",
-      features: ["LED Headlight", "Sporty Design", "Disc Brakes"],
-      transmission: null,
-      baggage_capacity: null,
-      seats: null,
-      year: null,
-      safety_features: null,
-    },
-  },
-  {
-    id: 7,
-    model: "Honda Winner X",
-    rentalFacility: [
-      { id: 1, price: 250000 },
-      { id: 2, price: 270000 },
-      { id: 3, price: 240000 },
-    ],
-    type: "motor",
-    details: {
-      engine: 150,
-      fuel: "Petrol",
-      features: ["ABS", "Full Digital Display", "LED Lights"],
-      transmission: null,
-      baggage_capacity: null,
-      seats: null,
-      year: 2021,
-      safety_features: null,
-    },
-  },
-  {
-    id: 8,
-    model: "Suzuki Raider 150",
-    rentalFacility: [
-      { id: 1, price: 180000 },
-      { id: 2, price: 200000 },
-      { id: 3, price: 170000 },
-    ],
-    type: "motor",
-    details: {
-      engine: 150,
-      fuel: "Petrol",
-      features: ["Underbone Frame", "Sporty Design", "Fuel Injection"],
-      transmission: null,
-      baggage_capacity: null,
-      seats: null,
-      year: null,
-      safety_features: null,
-    },
-  },
-  {
-    id: 9,
-    model: "Yamaha MT-15",
-    rentalFacility: [
-      { id: 1, price: 300000 },
-      { id: 2, price: 320000 },
-      { id: 3, price: 290000 },
-    ],
-    type: "motor",
-    details: {
-      engine: 155,
-      fuel: "Petrol",
-      features: ["Variable Valve Actuation", "ABS", "LED Headlight"],
-      transmission: null,
-      baggage_capacity: null,
-      seats: null,
-      year: null,
-      safety_features: null,
-    },
-  },
-  {
-    id: 10,
-    model: "Honda CBR150R",
-    rentalFacility: [
-      { id: 1, price: 350000 },
-      { id: 2, price: 370000 },
-      { id: 3, price: 340000 },
-    ],
-    type: "motor",
-    details: {
-      engine: 150,
-      fuel: "Petrol",
-      features: [
-        "Sporty Design",
-        "LED Headlights",
-        "Anti-lock Braking System",
-      ],
-      transmission: null,
-      baggage_capacity: null,
-      seats: null,
-      year: null,
-      safety_features: null,
-    },
-  },
-];
-
 export const listings = {
   content: {
     listActivitis: [
@@ -534,19 +234,17 @@ export const listings = {
   },
 };
 
+
 export const bookingHotel = [
   {
     id: 1,
-    user: 1,
-    hotel: {
-      name: "InterContinental Hanoi Westlake",
-      city: "Hà Nội"
-    },
-    customerInfo: {
+    user: 2,
+    hotel: { id: 1, city: null },
+    customerInfo: { 
       fullName: "Do Duc Thu",
       email: "ddthumonky0810@gmail.com",
-      phone: "0398206185",
-      country: "Vietnam"
+      phone: "0398206185", 
+      country: "Vietnam",
     },
     checkinDate: "2024-12-09",
     checkoutDate: "2024-12-10",
@@ -554,110 +252,77 @@ export const bookingHotel = [
     children: 0,
     roomSelection: {
       selectedRooms: [
-        {
-          type: "Lake View Room",
-          count: 1,
-          price: 5280000
-        },
-        {
-          type: "Presidential Suite",
-          count: 1,
-          price: 14400000
-        }
+        { type: "Lake View Room", count: 1, price: 5280000 }
       ],
-      totalRooms: 2,
-      totalPrice: 19680000
+      totalRooms: 1,
+      totalPrice: 5280000,
     },
     specialRequest: null,
     arrivalTime: "16:00-17:00",
-    status: 0
+    createdDate: "2024-12-09",
+    status: 0,
   },
   {
     id: 2,
-    user: 1,
-    hotel: {
-      name: "InterContinental Hanoi Westlake",
-      city: "Hà Nội"
-    },
-    customerInfo: {
+    user: 2,
+    hotel: { id: 2, city: null },
+    customerInfo: { 
       fullName: "Do Duc Thu",
       email: "ddthumonky0810@gmail.com",
-      phone: "0398206185",
-      country: "Vietnam"
+      phone: "0398206185", 
+      country: "Vietnam",
     },
-    checkinDate: "2024-12-09",
-    checkoutDate: "2024-12-10",
+    checkinDate: "2024-12-10",
+    checkoutDate: "2024-12-11",
     adults: 2,
     children: 0,
     roomSelection: {
       selectedRooms: [
-        {
-          type: "Lake View Room",
-          count: 1,
-          price: 5280000
-        },
-        {
-          type: "Presidential Suite",
-          count: 1,
-          price: 14400000
-        }
+        { type: "Presidential Suite", count: 1, price: 14400000 }
       ],
-      totalRooms: 2,
-      totalPrice: 19680000
+      totalRooms: 1,
+      totalPrice: 14400000,
     },
     specialRequest: null,
     arrivalTime: "16:00-17:00",
-    status: 0
+    createdDate: "2024-12-10",
+    status: 0,
   },
   {
     id: 3,
     user: 2,
-    hotel: {
-      name: "InterContinental Hanoi Westlake",
-      city: "Hà Nội"
+    hotel: { id: 3, city: null },
+    customerInfo: { 
+      fullName: "Do Duc Thu",
+      email: "ddthumonky0810@gmail.com",
+      phone: "0398206185", 
+      country: "Vietnam",
     },
-    customerInfo: {
-      fullName: "Dao Quang Duy",
-      email: "daoquangduy441@gmail.com",
-      phone: "0398206185",
-      country: "Vietnam"
-    },
-    checkinDate: "2024-12-09",
-    checkoutDate: "2024-12-10",
+    checkinDate: "2024-12-11",
+    checkoutDate: "2024-12-12",
     adults: 2,
     children: 0,
     roomSelection: {
       selectedRooms: [
-        {
-          type: "Lake View Room",
-          count: 1,
-          price: 5280000
-        },
-        {
-          type: "Presidential Suite",
-          count: 1,
-          price: 14400000
-        }
+        { type: "Lake View Room", count: 1, price: 5280000 }
       ],
-      totalRooms: 2,
-      totalPrice: 19680000
+      totalRooms: 1,
+      totalPrice: 5280000,
     },
     specialRequest: null,
     arrivalTime: "16:00-17:00",
-    status: 0
+    createdDate: "2024-12-11",
+    status: 0,
   },
   {
     id: 4,
-    user: 2,
-    hotel: {
-      name: "InterContinental Hanoi Westlake",
-      city: "Hà Nội"
-    },
+    user: 3,
+    hotel: { id: 4, city: null },
     customerInfo: {
       fullName: "Dao Quang Duy",
-      email: "daoquangduy441@gmail.com",
-      phone: "0398206185",
-      country: "Vietnam"
+      email: "daoquangduy441@gmail.com", 
+      phone: "0398206185", 
+      country: "Vietnam",
     },
     checkinDate: "2024-12-09",
     checkoutDate: "2024-12-10",
@@ -665,73 +330,75 @@ export const bookingHotel = [
     children: 0,
     roomSelection: {
       selectedRooms: [
-        {
-          type: "Lake View Room",
-          count: 1,
-          price: 5280000
-        },
-        {
-          type: "Presidential Suite",
-          count: 1,
-          price: 14400000
-        }
+        { type: "Lake View Room", count: 1, price: 5280000 }
       ],
-      totalRooms: 2,
-      totalPrice: 19680000
+      totalRooms: 1,
+      totalPrice: 5280000,
     },
     specialRequest: null,
     arrivalTime: "16:00-17:00",
-    status: 0
+    createdDate: "2024-12-09",
+    status: 0,
   },
   {
     id: 5,
     user: 3,
-    hotel: {
-      name: "InterContinental Hanoi Westlake",
-      city: "Hà Nội"
-    },
+    hotel: { id: 5, city: null },
     customerInfo: {
-      fullName: "Nguyen Minh Hang",
-      email: "hanghonghach2910@gmail.com",
-      phone: "0398206185",
-      country: "Vietnam"
+      fullName: "Dao Quang Duy",
+      email: "daoquangduy441@gmail.com", 
+      phone: "0398206185", 
+      country: "Vietnam",
     },
-    checkinDate: "2024-12-09",
-    checkoutDate: "2024-12-10",
+    checkinDate: "2024-12-10",
+    checkoutDate: "2024-12-11",
     adults: 2,
     children: 0,
     roomSelection: {
       selectedRooms: [
-        {
-          type: "Lake View Room",
-          count: 1,
-          price: 5280000
-        },
-        {
-          type: "Presidential Suite",
-          count: 1,
-          price: 14400000
-        }
+        { type: "Presidential Suite", count: 1, price: 14400000 }
       ],
-      totalRooms: 2,
-      totalPrice: 19680000
+      totalRooms: 1,
+      totalPrice: 14400000,
     },
     specialRequest: null,
     arrivalTime: "16:00-17:00",
-    status: 0
+    createdDate: "2024-12-10",
+    status: 0,
   },
   {
     id: 6,
     user: 3,
-    hotel: {
-      name: "InterContinental Hanoi Westlake",
-      city: "Hà Nội"
-    },
+    hotel: { id: 6, city: null },
     customerInfo: {
-      fullName: "Nguyen Thi Minh Hang",
-      email: "hanghonghach2910@gmail.com",
+      fullName: "Dao Quang Duy",
+      email: "daoquangduy441@gmail.com", 
+      phone: "0398206185", 
+      country: "Vietnam",
+    },
+    checkinDate: "2024-12-11",
+    checkoutDate: "2024-12-12",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [{ type: "Lake View Room", count: 1, price: 5280000 }],
+      totalRooms: 1,
+      totalPrice: 5280000,
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    createdDate: "2024-12-11",
+    status: 0,
+  },
+  {
+    id: 7,
+    user: 4,
+    hotel: { id: 7, city: null },
+    customerInfo: {
+      fullName: "Vu Xuan Hoai",
+      email: "vuxuanhoai28@gmail.com",
       phone: "0398206185",
-      country: "Vietnam"
+      country: "Vietnam",
     },
     checkinDate: "2024-12-09",
     checkoutDate: "2024-12-10",
@@ -739,22 +406,64 @@ export const bookingHotel = [
     children: 0,
     roomSelection: {
       selectedRooms: [
-        {
-          type: "Lake View Room",
-          count: 1,
-          price: 5280000
-        },
-        {
-          type: "Presidential Suite",
-          count: 1,
-          price: 14400000
-        }
+        { type: "Lake View Room", count: 1, price: 5280000 }
       ],
-      totalRooms: 2,
-      totalPrice: 19680000
+      totalRooms: 1,
+      totalPrice: 5280000,
     },
     specialRequest: null,
     arrivalTime: "16:00-17:00",
-    status: 0
+    createdDate: "2024-12-09",
+    status: 0,
+  },
+  {
+    id: 8,
+    user: 4,
+    hotel: { id: 8, city: null },
+    customerInfo: {
+      fullName: "Vu Xuan Hoai",
+      email: "vuxuanhoai28@gmail.com",
+      phone: "0398206185",
+      country: "Vietnam",
+    },
+    checkinDate: "2024-12-10",
+    checkoutDate: "2024-12-11",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [{ type: "Presidential Suite", count: 1, price: 14400000 }],
+      totalRooms: 1,
+      totalPrice: 14400000,
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    createdDate: "2024-12-10",
+    status: 0,
+  },
+  {
+    id: 9,
+    user: 4,
+    hotel: { id: 9, city: null },
+    customerInfo: {
+      fullName: "Vu Xuan Hoai",
+      email: "vuxuanhoai28@gmail.com",
+      phone: "0398206185",
+      country: "Vietnam",
+    },
+    checkinDate: "2024-12-11",
+    checkoutDate: "2024-12-12",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [
+        { type: "Lake View Room", count: 1, price: 5280000 }
+      ],
+      totalRooms: 1,
+      totalPrice: 5280000,
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    createdDate: "2024-12-11",
+    status: 0,
   },
 ];

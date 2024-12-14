@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { Button, DatePicker, Input } from "antd";
+import { AutoComplete, Button, DatePicker, Input } from "antd";
 import { useRouter } from "next/navigation";
 import { AiOutlineClose } from 'react-icons/ai';
 import { GiPositionMarker } from "react-icons/gi";
@@ -16,18 +16,11 @@ import Notification from "@/components/Notification";
 import locations from "@/data/SelectCity.json";
 import dayjs from "dayjs";
 
-interface Location {
-  id: number;
-  name: string;
-  type: string;
-  parent_id: number | null;
-}
-
 export const formSchema = z.object({
-  location: z
-    .string()
-    .min(1, "Vui lòng nhập điểm đến để bắt đầu tìm kiếm!")
-    .max(50),
+  location: z.object({
+    name: z.string().min(1, "Vui lòng nhập điểm đến để bắt đầu tìm kiếm!").max(50),
+    id: z.number().optional(),
+  }),
   dateRange: z.object({
     pickupDate: z.date(),
     returnDate: z.date(),
@@ -38,7 +31,8 @@ function RentalSearchForm() {
   const router = useRouter();
   const { notifyWarning } = Notification();
   const [keyword, setKeyword] = useState("");
-  const [suggestions, setSuggestions] = useState<Location[]>([]);
+  const [listCity, setListCity] = useState<any[]>([]);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
   const today = new Date();
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1);
@@ -54,7 +48,10 @@ function RentalSearchForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      location: "",
+      location: {
+        name: "",
+        id: undefined,
+      },
       dateRange: {
         pickupDate: today,
         returnDate: tomorrow,
@@ -63,9 +60,24 @@ function RentalSearchForm() {
   });
 
   useEffect(() => {
-    if (keyword.trim()) {
+    const fetchCity = async () => {
+      const bearerToken = localStorage.getItem("token");
+      try {
+        const response = await fetch(`http://localhost:8080/city`, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+        const data = await response.json();
+        setListCity(data.response);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (Array.isArray(listCity)) {
       const normalizedKeyword = normalizeString(keyword);
-      const filtered = locations.filter((loc) => {
+      const filtered = listCity.filter((loc: any) => {
         const normalizedLocationName = normalizeString(loc.name);
         return normalizedLocationName.includes(normalizedKeyword);
       });
@@ -73,18 +85,19 @@ function RentalSearchForm() {
     } else {
       setSuggestions([]);
     }
-  }, [keyword]);
+  
+    fetchCity();
+  }, [keyword, listCity]);
 
   useEffect(() => {
     const storedValues = localStorage.getItem("searchVehicle");
     if (storedValues) {
       const parsedValues = JSON.parse(storedValues);
-      form.setValue("location", parsedValues.location || "");
+      form.setValue("location", parsedValues.location || { name: "", id: undefined });
       form.setValue("dateRange", {
         pickupDate: new Date(parsedValues.dateRange.pickupDate),
         returnDate: new Date(parsedValues.dateRange.returnDate),
       });
-
       setDateRange([
         dayjs(parsedValues.dateRange.pickupDate),
         dayjs(parsedValues.dateRange.returnDate),
@@ -111,20 +124,30 @@ function RentalSearchForm() {
     }
   };
 
-  const handleSuggestionClick = (name: string) => {
-    setKeyword(name);
-    form.setValue("location", name);
-    setSuggestions([]);
+  const handleLocationSearch = (keyword: string, setSuggestions: any) => {
+    if (!keyword) {
+      setSuggestions([]);
+      return;
+    }
+    if (Array.isArray(listCity)) {
+      const filteredSuggestions = listCity.filter((location) =>
+        location.name.toLowerCase().includes(keyword.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    } else {
+      console.error("listCity is not an array");
+    }
   };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     localStorage.setItem("searchVehicle", JSON.stringify(values));
     const query = new URLSearchParams({
-      location: values.location,
+      location: values.location.name,
+      locationId: values.location.id?.toString() || "",
       pickup: format(values.dateRange.pickupDate, "dd-MM-yyyy"),
       return: format(values.dateRange.returnDate, "dd-MM-yyyy"),
     });
-
+  
     router.push(`/rental/search?url=2&${query.toString()}`);
   };
 
@@ -147,50 +170,63 @@ function RentalSearchForm() {
                 <FormField
                   control={form.control}
                   name="location"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <div className="relative">
-                          <Input
-                            placeholder="Bạn đang ở đâu..."
-                            {...field}
-                            onChange={(e) => {
-                              setKeyword(e.target.value);
-                              field.onChange(e);
+                          <AutoComplete
+                            options={suggestions.slice(0,5).map((suggestion: any) => ({
+                              value: suggestion.name,
+                              label: (
+                                <div className="flex justify-between">
+                                  <span className="text-sm">{suggestion.name}</span>
+                                  <span className="bg-green-200 text-green-600 rounded-lg px-2 py-1 text-xs">
+                                    {suggestion.type}
+                                  </span>
+                                </div>
+                              ),
+                              id: suggestion.id,
+                            }))}
+                            onSearch={(value) => {
+                              setKeyword(value);
+                              handleLocationSearch(value, setSuggestions);
+                              field.onChange({ name: value, id: undefined });
                             }}
-                            value={keyword || field.value}
-                            className="pl-10"
-                          />
+                            onSelect={(value, option: any) => {
+                              const selectedSuggestion = suggestions.find((s) => s.name === value);
+                              if (selectedSuggestion) {
+                                form.setValue("location", {
+                                  name: selectedSuggestion.name,
+                                  id: selectedSuggestion.id,
+                                });
+                                setKeyword(selectedSuggestion.name);
+                              }
+                            }}
+                            value={keyword || field.value?.name || ""}
+                            className="w-full"
+                          >
+                            <Input
+                              placeholder="Tìm kiếm điểm đến..."
+                              value={keyword || field.value?.name || ""}
+                              onChange={(e) => {
+                                setKeyword(e.target.value);
+                                field.onChange({ name: e.target.value, id: undefined });
+                              }}
+                              className="pl-10"
+                            />
+                          </AutoComplete>
                           <span className="absolute left-4 top-1/2 transform -translate-y-1/2">
                             <GiPositionMarker className="text-gray-400" />
                           </span>
-                          <AiOutlineClose
-                            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
-                            onClick={() => {
-                              setKeyword("");
-                              form.setValue("location", "");
-                              setSuggestions([]);
-                            }}
-                          />
-                          {suggestions.length > 0 && (
-                            <ul className="absolute z-10 bg-white border border-gray-300 rounded shadow-md w-full mt-1 max-h-48 overflow-y-auto">
-                              {suggestions.slice(0,5).map((suggestion) => (
-                                <li
-                                  key={suggestion.id}
-                                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                  onClick={() =>
-                                    handleSuggestionClick(suggestion.name)
-                                  }
-                                >
-                                  <div className="flex justify-between">
-                                    <span className="text-sm">{suggestion.name}</span>
-                                    <span className="bg-green-200 text-green-600 rounded-lg px-2 py-1 text-xs">
-                                      {suggestion.type}
-                                    </span>
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
+                          {keyword && (
+                            <AiOutlineClose
+                              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                              onClick={() => {
+                                setKeyword("");
+                                form.setValue("location", { name: "", id: undefined });
+                                setSuggestions([]);
+                              }}
+                            />
                           )}
                         </div>
                       </FormControl>

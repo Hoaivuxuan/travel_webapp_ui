@@ -2,7 +2,7 @@ import { FaCar, FaMotorcycle, FaUsers, FaLuggageCart, FaGasPump } from 'react-ic
 
 const CarDetailInfo = ({ details }: { details: any }) => {
   return (
-    <div className="space-y-2 text-sm">
+    <div className="text-sm grid grid-cols-2 gap-1">
       <div className="flex items-center">
         <FaCar className="mr-4 text-lg" />
         <span>{details.transmission}</span>
@@ -13,7 +13,7 @@ const CarDetailInfo = ({ details }: { details: any }) => {
       </div>
       <div className="flex items-center">
         <FaLuggageCart className="mr-4 text-lg" />
-        <span>{details.baggage_capacity}</span>
+        <span>{details.baggage_capacity} hành lý</span>
       </div>
       <div className="flex items-center">
         <FaGasPump className="mr-4 text-lg" />
@@ -25,7 +25,7 @@ const CarDetailInfo = ({ details }: { details: any }) => {
 
 const MotorDetailInfo = ({ details }: { details: any }) => {
   return (
-    <div className="space-y-2 text-sm">
+    <div className="text-sm grid grid-cols-2 gap-1">
       <div className="flex items-center">
         <FaMotorcycle className="mr-4 text-lg" />
         <span>{details.engine} phân khối</span>
@@ -38,7 +38,7 @@ const MotorDetailInfo = ({ details }: { details: any }) => {
   );
 };
 
-const VehicleInfo = ({
+const VehicleDetailInfo = ({
   type,
   details,
 }: {
@@ -54,4 +54,4 @@ const VehicleInfo = ({
   }
 };
 
-export default VehicleInfo;
+export default VehicleDetailInfo;

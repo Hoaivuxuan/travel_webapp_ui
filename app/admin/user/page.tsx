@@ -13,14 +13,8 @@ export default function UserAdmin() {
   const [isUserDetailsVisible, setIsUserDetailsVisible] = useState(false);
   const [isUserBookingVisible, setIsUserBookingVisible] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedUserId = localStorage.getItem("userId");
-      setCurrentUserId(storedUserId ? Number(storedUserId) : null);
-    }
-
     const fetchUsers = async () => {
       try {
         const bearerToken = localStorage.getItem("token");
@@ -57,7 +51,6 @@ export default function UserAdmin() {
   const handleViewDetails = (record: any) => {
     setSelectedUser(record);
     setIsUserDetailsVisible(true);
-    console.log(selectedUser);
   };
 
   const handleUserDetailsModalClose = () => {
@@ -68,7 +61,6 @@ export default function UserAdmin() {
   const handleViewBooking = (record: any) => {
     setSelectedUser(record);
     setIsUserBookingVisible(true);
-    console.log(selectedUser);
   };
 
   const handleUserBookingModalClose = () => {

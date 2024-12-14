@@ -11,7 +11,8 @@ import BookingDetailsModal from "./BookingHotelDetails";
 const BookingHotelPage: React.FC = () => {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const filteredData = bookingHotel.filter((item) => item.user === 1);
+  const userId = localStorage.getItem("userId")
+  const filteredData = bookingHotel.filter((item) => item.user === Number(userId));
 
   const columns = [
     {
@@ -35,7 +36,7 @@ const BookingHotelPage: React.FC = () => {
     },
     {
       title: "Hotel",
-      dataIndex: ["hotel", "name"],
+      dataIndex: ["hotel", "id"],
       key: "hotelName",
       width: 300,
     },

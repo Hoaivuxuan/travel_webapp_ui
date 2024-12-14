@@ -3,7 +3,6 @@
 import SearchForm from "@/components/activities/SearchForm";
 import ActivityCard from "@/components/AttractionCard";
 import FilterPanel from "@/components/activities/FilterPanel";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { activitiesSearch } from "@/data/fakeData";
 import "./style.css";

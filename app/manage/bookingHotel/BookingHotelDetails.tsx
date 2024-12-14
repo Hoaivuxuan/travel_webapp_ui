@@ -45,7 +45,8 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
       visible={visible}
       onCancel={onClose}
       footer={null}
-      width={800}
+      width={1000}
+      centered
     >
       <Descriptions bordered column={1} size="middle">
         <Descriptions.Item label="ID">

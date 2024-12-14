@@ -25,9 +25,9 @@ export default function Home() {
         console.error("Lỗi khi lấy dữ liệu:", error);
       }
     };
-
+  
     fetchHotels();
-  });
+  }, []);
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {

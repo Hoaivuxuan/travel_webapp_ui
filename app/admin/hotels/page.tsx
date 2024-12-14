@@ -1,15 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Table, Button, Space } from "antd";
-import { BsEye } from "react-icons/bs";
-import HotelDetailModal from "./HotelDetails";
+import "./index.css";
+import { Table, Space, Button } from "antd";
+import { AiOutlineEye } from "react-icons/ai";
+import HotelDetailsModal from "./HotelDetails";
 
-export default function HotelAdmin() {
+export default function UserAdmin() {
   const [listHotel, setListHotel] = useState<any>([]);
+  const [selectedHotel, setSelectedHotel] = useState(null);
+  const [isHotelDetailsVisible, setIsHotelDetailsVisible] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [currentHotel, setCurrentHotel] = useState<any>(null);
 
   useEffect(() => {
     const fetchHotels = async () => {
@@ -30,14 +31,14 @@ export default function HotelAdmin() {
     fetchHotels();
   }, []);
 
-  const showModal = (hotel: any) => {
-    setCurrentHotel(hotel);
-    setIsModalVisible(true);
+  const handleViewDetails = (record: any) => {
+    setSelectedHotel(record);
+    setIsHotelDetailsVisible(true);
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    setCurrentHotel(null);
+  const handleHotelDetailsModalClose = () => {
+    setSelectedHotel(null);
+    setIsHotelDetailsVisible(false);
   };
 
   const hotelColumns = [
@@ -49,8 +50,8 @@ export default function HotelAdmin() {
         <Space className="flex items-center justify-center">
           <Button
             type="link"
-            icon={<BsEye className="text-lg" />}
-            onClick={() => showModal(record)}
+            icon={<AiOutlineEye className="text-lg" />}
+            onClick={() => handleViewDetails(record)}
           />
         </Space>
       ),
@@ -96,21 +97,21 @@ export default function HotelAdmin() {
   return (
     <main className="h-screen">
       <section className="p-6 bg-white rounded-t-lg">
-        <h3 className="mb-4 text-xl font-bold">Danh sách khách sạn</h3>
+        <h3 className="mb-2 text-xl font-bold">Hệ thống nơi lưu trú</h3>
         <Table
           bordered
           dataSource={listHotel}
           columns={hotelColumns}
-          rowKey="id"
+          rowClassName="editable-row"
           loading={loading}
           pagination={{ pageSize: 10 }}
           scroll={{ x: 1500 }}
         />
       </section>
-      <HotelDetailModal
-        visible={isModalVisible}
-        hotel={currentHotel}
-        onClose={handleCancel}
+      <HotelDetailsModal
+        hotel={selectedHotel}
+        visible={isHotelDetailsVisible}
+        onClose={handleHotelDetailsModalClose}
       />
     </main>
   );

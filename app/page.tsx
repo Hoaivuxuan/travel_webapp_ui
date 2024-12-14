@@ -1,38 +1,11 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { destination } from "@/data/fakeData";
 import Image from "next/image";
-import axios from "axios";
 
 export default function Home() {
   const trendingDestinations = destination.slice(0, 5);
-  const users = [
-    { email: "ddthumonky0810@gmail.com", password: "08102002", confirm_password: "08102002" },
-    { email: "hanghonghach2910@gmail.com", password: "29102002", confirm_password: "29102002" },
-    { email: "daoquangduy441@gmail.com", password: "wnwbovwyeehvobdz", confirm_password: "wnwbovwyeehvobdz" },
-  ];
-
-  const registerUser = async (user: { email: string; password: string; confirm_password: string }) => {
-    try {
-      await axios.post("http://localhost:8080/users/register", user, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log("Success");
-    } catch (error) {
-      console.log("Fail");
-    }
-  };
-
-  useEffect(() => {
-    users.forEach((user) => {
-      registerUser(user);
-      return;
-    });
-  }, [users]);
-
   return (
     <main className="bg-white">
       <div className="bg-[#472f91] py-2">

@@ -5,20 +5,12 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { Button, DatePicker, Input } from "antd";
+import { AutoComplete, Button, DatePicker, Input } from "antd";
 import { useRouter } from "next/navigation";
 import { AiOutlineClose } from 'react-icons/ai';
 import { GiPositionMarker } from "react-icons/gi";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import dayjs from "dayjs";
-import locations from "@/data/SelectCity.json";
-
-interface Location {
-  id: number;
-  name: string;
-  type: string;
-  parent_id: number | null;
-}
 
 export const formSchema = z.object({
   location: z
@@ -34,7 +26,8 @@ export const formSchema = z.object({
 function ActivitiesSearchForm() {
   const router = useRouter();
   const [keyword, setKeyword] = useState("");
-  const [suggestions, setSuggestions] = useState<Location[]>([]);
+  const [listCity, setListCity] = useState<any[]>([]);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
   const today = new Date();
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1);
@@ -59,17 +52,35 @@ function ActivitiesSearchForm() {
   });
 
   useEffect(() => {
-    if (keyword.trim()) {
+    const fetchCity = async () => {
+      const bearerToken = localStorage.getItem("token");
+      try {
+        const response = await fetch(`http://localhost:8080/city`, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+        const data = await response.json();
+        setListCity(data.response);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (Array.isArray(listCity)) {
       const normalizedKeyword = normalizeString(keyword);
-      const filtered = locations.filter((loc) => {
+      const filtered = listCity.filter((loc: any) => {
         const normalizedLocationName = normalizeString(loc.name);
         return normalizedLocationName.includes(normalizedKeyword);
       });
       setSuggestions(filtered);
     } else {
+      console.warn("listCity is not an array:", listCity);
       setSuggestions([]);
     }
-  }, [keyword]);
+  
+    fetchCity();
+  }, [keyword, listCity]);
 
   useEffect(() => {
     const storedValues = localStorage.getItem("searchActivities");
@@ -80,7 +91,6 @@ function ActivitiesSearchForm() {
         startDate: new Date(parsedValues.dateRange.startDate),
         endDate: new Date(parsedValues.dateRange.endDate),
       });
-
       setDateRange([
         dayjs(parsedValues.dateRange.startDate),
         dayjs(parsedValues.dateRange.endDate),
@@ -107,10 +117,19 @@ function ActivitiesSearchForm() {
     }
   };
 
-  const handleSuggestionClick = (name: string) => {
-    setKeyword(name);
-    form.setValue("location", name);
-    setSuggestions([]);
+  const handleLocationSearch = (keyword: string, setSuggestions: any) => {
+    if (!keyword) {
+      setSuggestions([]);
+      return;
+    }
+    if (Array.isArray(listCity)) {
+      const filteredSuggestions = listCity.filter((location) =>
+        location.name.toLowerCase().includes(keyword.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    } else {
+      console.error("listCity is not an array");
+    }
   };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
@@ -142,46 +161,52 @@ function ActivitiesSearchForm() {
                     <FormItem>
                       <FormControl>
                         <div className="relative">
-                          <Input
-                            placeholder="Bạn muốn đi đâu?"
-                            {...field}
-                            onChange={(e) => {
-                              setKeyword(e.target.value);
-                              field.onChange(e);
+                          <AutoComplete
+                            options={suggestions.map((suggestion: any) => ({
+                              value: suggestion.name,
+                              label: (
+                                <div className="flex justify-between">
+                                  <span className="text-sm">{suggestion.name}</span>
+                                  <span className="bg-green-200 text-green-600 rounded-lg px-2 py-1 text-xs">
+                                    {suggestion.type}
+                                  </span>
+                                </div>
+                              ),
+                            }))}
+                            onSearch={(value) => {
+                              setKeyword(value);
+                              handleLocationSearch(value, setSuggestions);
+                              field.onChange(value);
+                            }}
+                            onSelect={(value) => {
+                              setKeyword(value);
+                              field.onChange(value);
                             }}
                             value={keyword || field.value}
-                            className="pl-10"
-                          />
+                            className="w-full"
+                          >
+                            <Input
+                              placeholder="Tìm kiếm điểm đến..."
+                              value={keyword || field.value}
+                              onChange={(e) => {
+                                setKeyword(e.target.value);
+                                field.onChange(e);
+                              }}
+                              className="pl-10"
+                            />
+                          </AutoComplete>
                           <span className="absolute left-4 top-1/2 transform -translate-y-1/2">
                             <GiPositionMarker className="text-gray-400" />
                           </span>
-                          <AiOutlineClose
-                            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
-                            onClick={() => {
-                              setKeyword("");
-                              form.setValue("location", "");
-                              setSuggestions([]);
-                            }}
-                          />
-                          {suggestions.length > 0 && (
-                            <ul className="absolute z-10 bg-white border border-gray-300 rounded shadow-md w-full mt-1 max-h-48 overflow-y-auto">
-                              {suggestions.slice(0, 5).map((suggestion) => (
-                                <li
-                                  key={suggestion.id}
-                                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                  onClick={() =>
-                                    handleSuggestionClick(suggestion.name)
-                                  }
-                                >
-                                  <div className="flex justify-between">
-                                    <span className="text-sm">{suggestion.name}</span>
-                                    <span className="bg-green-200 text-green-600 rounded-lg px-2 py-1 text-xs">
-                                      {suggestion.type}
-                                    </span>
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
+                          {keyword && (
+                            <AiOutlineClose
+                              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                              onClick={() => {
+                                setKeyword("");
+                                form.setValue("location", "");
+                                setSuggestions([]);
+                              }}
+                            />
                           )}
                         </div>
                       </FormControl>
@@ -189,7 +214,7 @@ function ActivitiesSearchForm() {
                   )}
                 />
               </div>
-
+              
               <div className="col-span-1">
                 <FormField
                   control={form.control}

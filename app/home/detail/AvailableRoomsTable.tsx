@@ -5,7 +5,7 @@ import { hotelOptions } from "@/data/defaultValues";
 import { encodeToJWT } from "@/utils/JWT";
 import { ToastContainer } from "react-toastify";
 import { BsDoorOpen, BsFillPersonFill } from "react-icons/bs";
-import { FaRuler } from 'react-icons/fa';
+import { RxRulerSquare } from "react-icons/rx";
 import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
 
@@ -48,7 +48,7 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms 
     );
     setTotalRooms(newTotalRooms);
     setTotalPrice(newTotalPrice);
-  }, [selectedRooms, rooms, hotel]);
+  }, [selectedRooms, rooms]);
 
   const handleRoomSelect = (index: number, value: number) => {
     const updatedSelection = [...selectedRooms];
@@ -104,14 +104,17 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms 
       key: "type",
       render: (_: any, record: any) => (
         <div className="space-y-1">
-          <p className="font-semibold mb-4">{record.name}</p>
+          <p className="font-bold mb-2">{record.name}</p>
           <div className="space-y-2">
-            <div className="flex">
-              <BsDoorOpen className="text-lg mr-2" /> {record.type}
+            <div className="flex space-x-4">
+              <span className="flex">
+                <BsDoorOpen className="text-lg mr-2" /> {record.type}
+              </span>
+              <span className="flex">
+                <RxRulerSquare className="text-lg mr-2" /> {record.size} m²
+              </span>
             </div>
-            <div className="flex">
-              <FaRuler className="text-lg mr-2" /> {record.size} m²
-            </div>
+            <hr />
             <p>{record.no_bed_1} x {record.type_bed_1}</p>
             <p>{record.type_bed_2 && `${record.no_bed_2} x ${record.type_bed_2}`}</p>
           </div>
@@ -187,6 +190,7 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms 
   return (
     <div className="overflow-x-auto">
       <Table
+        bordered
         columns={columns}
         dataSource={data}
         pagination={false}

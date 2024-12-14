@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from "react";
 import SearchForm from "@/components/home/SearchForm";
 import { notFound } from "next/navigation";
-import { Slider, Checkbox, Button } from "antd";
-import { fetchHotelTypes } from "@/utils/listTypeHotel";
+import { Slider, Checkbox, Button, Radio } from "antd";
 import HotelItem from "./HotelItem";
 
 type Props = {
@@ -30,14 +29,28 @@ const removeAccent = (str: string) => {
 function SearchPage({ searchParams }: Props) {
   const [hotels, setHotels] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState<number[]>([]);
+  const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 0]);
   const [minPrice, setMinPrice] = useState<number>();
   const [maxPrice, setMaxPrice] = useState<number>();
   const [listType, setListType] = useState<any>();
-  const [itemsToShow, setItemsToShow] = useState(10);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchFilter = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/hotels?noRooms=0&keyword");
+        const data = await response.json();
+        const type = Array.from(new Set<string>(data.hotels.map((hotel: any) => hotel.type)))
+          .sort((a, b) => a.localeCompare(b))
+          .map((type, id) => ({ id: id, name: type }));
+        setListType(type);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+
     const fetchHotels = async () => {
       try {
         const keyword = (searchParams.location || "")
@@ -58,43 +71,40 @@ function SearchPage({ searchParams }: Props) {
         setMinPrice(minPrice);
         setMaxPrice(maxPrice);
         setPriceRange([minPrice, maxPrice]);
-        setHotels(data.hotels);
+        setHotels(data.hotels.sort((a: any, b: any) => a.name.localeCompare(b.name)));
         setLoading(false);
       } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu:", error);
         setLoading(false);
       }
     };
 
-    const fetchFilter = async () => {
-      const types = await fetchHotelTypes();
-      setListType(types);
-    };
-
-    fetchHotels();
     fetchFilter();
-  }, [searchParams.location]);
+    fetchHotels();
 
-  const handleTypeSelection = (checkedValues: number[]) => {
-    setSelectedTypes(checkedValues);
-  };
+  }, [searchParams.location]);
 
   const handlePriceChange = (value: number | number[]) => {
     if (Array.isArray(value)) setPriceRange([value[0], value[1]]);
+  };
+
+  const handleTypeSelection = (checkedValues: number[]) => {
+    setSelectedTypes(checkedValues);
   };
 
   const filteredResults = hotels.filter((item: any) => {
     const matchesType =
       selectedTypes.length === 0 || selectedTypes.some((typeId) => typeId === item.type);
 
+    const matchesRating =
+      selectedRatings.length === 0 ||
+      selectedRatings.some((rating) => item.reviews.average_rating >= rating);
+
     const hotelMinPrice = Math.min(...item.rooms.map((room: any) => room.price));
     const matchesPrice =
       hotelMinPrice >= priceRange[0] && hotelMinPrice <= priceRange[1];
 
-    return matchesType && matchesPrice;
+    return matchesType && matchesRating && matchesPrice;
   });
-
-  const displayedResults = filteredResults.slice(0, itemsToShow);
 
   return (
     <section>
@@ -126,7 +136,10 @@ function SearchPage({ searchParams }: Props) {
                   value={priceRange}
                   onChange={handlePriceChange}
                   trackStyle={[{ backgroundColor: "#1D4ED8" }]}
-                  handleStyle={[{ borderColor: "#1D4ED8" }, { borderColor: "#1D4ED8" }]}
+                  handleStyle={[
+                    { borderColor: "#1D4ED8" },
+                    { borderColor: "#1D4ED8" },
+                  ]}
                 />
                 <div className="flex justify-between mt-2 text-xs">
                   <span>
@@ -139,6 +152,15 @@ function SearchPage({ searchParams }: Props) {
               </div>
               <div className="text-sm border-t py-4">
                 <h4 className="font-semibold mb-2">Đánh giá của khách hàng</h4>
+                <Radio.Group value={selectedRatings[0]} onChange={(e) => setSelectedRatings([e.target.value])}>
+                  {[2.5, 3, 3.5, 4, 4.5].map((rating) => (
+                    <Radio key={rating} value={rating} className="mb-1 w-full">
+                      <div className="flex items-center">
+                        {`≥ ${rating} sao`}
+                      </div>
+                    </Radio>
+                  ))}
+                </Radio.Group>
               </div>
               <div className="text-sm border-t py-4">
                 <h4 className="font-semibold mb-2">Loại chỗ ở</h4>
@@ -159,21 +181,9 @@ function SearchPage({ searchParams }: Props) {
                 <div>Đang tải dữ liệu...</div>
               ) : (
                 <div className="space-y-3">
-                  {displayedResults.map((item: any) => (
+                  {filteredResults.map((item: any) => (
                     <HotelItem key={item.id} id={item.id.toString()} />
                   ))}
-                </div>
-              )}
-
-              {filteredResults.length > itemsToShow && (
-                <div className="mt-4 text-center">
-                  <Button
-                    type="primary"
-                    onClick={() => setItemsToShow(itemsToShow + 10)}
-                    className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-600 transition-colors duration-200"
-                  >
-                    Xem thêm
-                  </Button>
                 </div>
               )}
             </div>

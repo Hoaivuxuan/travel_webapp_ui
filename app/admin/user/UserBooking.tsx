@@ -31,7 +31,7 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
     },
     {
       title: "Hotel",
-      dataIndex: ["hotel", "name"],
+      dataIndex: ["hotel", "id"],
       key: "hotelName",
       width: 300,
     },

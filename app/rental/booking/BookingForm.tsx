@@ -1,7 +1,7 @@
 import React from "react";
-import jwt from "jwt-simple";
 import countries from "@/data/SelectCountry.json";
 import { Form, Input, Select, Button } from "antd";
+import { encodeToJWT } from "@/utils/JWT";
 
 type BookingFormProps = {
   params: any;
@@ -14,8 +14,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
 
   const saveRentalVehicle = (values: any) => {
     const rentalVehicle = {
-      vehicle: Number(params.id),
-      rentalFacility: Number(params.facilityId),
+      vehicle: params.vehicle,
+      facility: {
+        id: params.facility.id,
+        name: params.facility.name,
+      },
       pickup: {
         location: params.pickupLocation,
         date: params.pickupDate,
@@ -36,10 +39,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
       },
     };
 
-    const SECRET_KEY = "4e6f7274682072616e646f6d20736563726574206b65792e";
-    const token = jwt.encode(rentalVehicle, SECRET_KEY);
-    localStorage.setItem("rentalVehicleToken", token);
     localStorage.setItem("rentalVehicle", JSON.stringify(rentalVehicle));
+    localStorage.setItem("rentalVehicleToken", encodeToJWT(rentalVehicle));
   };
 
   const handleNextStep = () => {

@@ -2,8 +2,7 @@
 
 import { notFound } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
-import { vehicles } from "@/data/fakeData";
-import { CarItem, MotorItem } from "./RentalItem";
+import { VehicleItem } from "./RentalItem";
 import RentalSearchForm from "@/components/rental/RentalSearchForm";
 import { Slider, Checkbox, Button } from "antd";
 
@@ -18,26 +17,80 @@ export type RentalSearchParams = {
   return: string;
 };
 
+const removeAccent = (str: string) => {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+};
+
 const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
-  const [selectedTypes, setSelectedTypes] = useState<string[]>(["car", "motor"]);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
-  const [itemsToShow, setItemsToShow] = useState(10);
+  const [vehicles, setVehicles] = useState([]);
+  const [listBrand, setListBrand] = useState<any>();
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 0]);
+  const [minPrice, setMinPrice] = useState<number>();
+  const [maxPrice, setMaxPrice] = useState<number>();
+  const [loading, setLoading] = useState(true);
+  const bearerToken = localStorage.getItem("token");
 
-  const searchResult = useMemo(() => {
-    return vehicles.sort((a, b) => a.model.localeCompare(b.model));
-  }, []);
+  useEffect(() => {
+    const fetchFilter = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/vehicles?city", {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+        const data = await response.json();
+        const brands = Array.from(new Set<string>(data.vehicles.map((vehicle: any) => vehicle.details.brand)))
+          .sort((a, b) => a.localeCompare(b))
+          .map((brand, id) => ({ id: id, name: brand }));
 
-  const minPrice = Math.min(
-    ...vehicles.map((item) =>
-      Math.min(...item.rentalFacility.map((facility) => facility.price)),
-    ),
-  );
-  const maxPrice = Math.max(
-    ...vehicles.map((item) =>
-      Math.max(...item.rentalFacility.map((facility) => facility.price)),
-    ),
-  );
-  const [priceRange, setPriceRange] = useState<[number, number]>([minPrice, maxPrice]);
+        setListBrand(brands);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+
+    const fetchVehicles = async () => {
+      try {
+        const keyword = (searchParams.location || "")
+          .trim()
+          .replace(/\s+/g, "")
+          .toLowerCase();
+
+        const response = await fetch(`http://localhost:8080/vehicles?city=${removeAccent(keyword)}`, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+        const data = await response.json();
+
+        const minPrice = Math.min(
+          ...data.vehicles.map((vehicle: any) => Math.min(...vehicle.facilities.map((facility: any) => facility.price))),
+        );
+        const maxPrice = Math.max(
+          ...data.vehicles.map((vehicle: any) => Math.min(...vehicle.facilities.map((facility: any) => facility.price))),
+        );
+
+        setMinPrice(minPrice);
+        setMaxPrice(maxPrice);
+        setPriceRange([minPrice, maxPrice]);
+        setVehicles(data.vehicles.sort((a: any, b: any) => a.model.localeCompare(b.model)));
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+
+    if (!searchParams.url) notFound();
+    fetchFilter();
+    fetchVehicles();
+    
+  }, [bearerToken, searchParams.location, searchParams.url]);
 
   const handlePriceChange = (value: number | number[]) => {
     if (Array.isArray(value)) {
@@ -46,21 +99,13 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
   };
 
   const filteredResults = useMemo(() => {
-    return searchResult.filter(
-      (item) =>
-        selectedTypes.includes(item.type) &&
-        Math.min(...item.rentalFacility.map((facility) => facility.price)) >= priceRange[0] &&
-        Math.min(...item.rentalFacility.map((facility) => facility.price)) <= priceRange[1]
+    return vehicles.filter((item: any) =>
+      (selectedTypes.length === 0 || selectedTypes.includes(item.type)) &&
+      (selectedBrands.length === 0 || selectedBrands.includes(item.details.brand)) &&
+      Math.min(...item.facilities.map((facility: any) => facility.price)) >= priceRange[0] &&
+      Math.min(...item.facilities.map((facility: any) => facility.price)) <= priceRange[1]
     );
-  }, [searchResult, selectedTypes, priceRange]);
-
-  const displayedResults = filteredResults.slice(0, itemsToShow);
-
-  useEffect(() => {
-    if (!searchParams.url) {
-      notFound();
-    }
-  }, [searchParams.url]);
+  }, [vehicles, selectedTypes, selectedBrands, priceRange]);
 
   if (!searchParams.url) {
     return (
@@ -91,8 +136,7 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
         <div className="grid grid-cols-5 gap-4">
           <aside className="col-span-1 p-4 border rounded-lg sticky top-6 h-fit">
             <h3 className="font-bold text-sm mb-3">Chọn lọc theo:</h3>
-            <hr className="my-2" />
-            <div className="mb-6 text-sm">
+            <div className="text-sm border-t py-4">
               <h4 className="font-semibold mb-2">Giá mỗi đêm (₫)</h4>
               <Slider
                 range
@@ -115,52 +159,41 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
                 </span>
               </div>
             </div>
-
-            <hr className="my-2" />
-            <div className="mb-6 text-sm">
+            <div className="text-sm border-t py-4">
               <h4 className="font-semibold mb-2">Loại phương tiện</h4>
               <Checkbox.Group value={selectedTypes} onChange={setSelectedTypes}>
-                <Checkbox value="car" className="mb-1 w-full">
-                  Ô tô
-                </Checkbox>
-                <Checkbox value="motor" className="mb-1 w-full">
-                  Mô tô
-                </Checkbox>
+                <Checkbox value="car" className="mb-1 w-full"> Ô TÔ </Checkbox>
+                <Checkbox value="motor" className="mb-1 w-full"> XE MÁY </Checkbox>
+              </Checkbox.Group>
+            </div>
+            <div className="text-sm border-t py-4">
+              <h4 className="font-semibold mb-2">Thương hiệu</h4>
+              <Checkbox.Group
+                value={selectedBrands}
+                onChange={(values) => setSelectedBrands(values as string[])}
+              >
+                {(Array.isArray(listBrand) && listBrand.length > 0) && (
+                  listBrand.map((type: any) => (
+                    <Checkbox key={type.id} value={type.name} className="mb-1 w-full">
+                      {type.name}
+                    </Checkbox>
+                  ))
+                )}
               </Checkbox.Group>
             </div>
           </aside>
 
           <div className="col-span-4">
             <div className="space-y-4">
-              {displayedResults.map((item) =>
-                item.type === "car" ? (
-                  <CarItem
-                    key={item.id}
-                    id={item.id.toString()}
-                    isFacilityVisible={selectedItemId === item.id.toString()}
-                    onFacilityToggle={() => setSelectedItemId(selectedItemId === item.id.toString() ? null : item.id.toString())}
-                  />
-                ) : (
-                  <MotorItem
-                    key={item.id}
-                    id={item.id.toString()}
-                    isFacilityVisible={selectedItemId === item.id.toString()}
-                    onFacilityToggle={() => setSelectedItemId(selectedItemId === item.id.toString() ? null : item.id.toString())}
-                  />
-                )
+              {filteredResults.map((item: any) =>
+                <VehicleItem
+                  key={item.id}
+                  id={item.id.toString()}
+                  isFacilityVisible={selectedItemId === item.id.toString()}
+                  onFacilityToggle={() => setSelectedItemId(selectedItemId === item.id.toString() ? null : item.id.toString())}
+                />
               )}
             </div>
-
-            {filteredResults.length > itemsToShow && (
-              <div className="mt-4 text-center">
-                <Button
-                  onClick={() => setItemsToShow(itemsToShow + 10)}
-                  className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-600 transition-colors duration-200"
-                >
-                  Xem thêm
-                </Button>
-              </div>
-            )}
           </div>
         </div>
       </div>

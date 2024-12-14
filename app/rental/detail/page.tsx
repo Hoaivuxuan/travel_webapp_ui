@@ -1,17 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { rentalFacilities, vehicles } from "@/data/fakeData";
-import { notFound, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import { GiPositionMarker } from "react-icons/gi";
 import { AiOutlineDropbox, AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-import { FiSearch } from "react-icons/fi";
+import { FaSearch } from "react-icons/fa";
 import { FaRegClock, FaStar, FaRegStar } from "react-icons/fa";
-import { Radio, Input, Space, Button } from "antd";
+import { Radio, Input, Space, Button, Modal, Select, AutoComplete } from "antd";
 import { importantInfo, policies, requirements } from "@/data/defaultValues";
 import Image from "next/image";
-import VehicleInfo from "./VehicleInfo";
+import VehicleDetailInfo from "./VehicleInfo";
+import { decodeToJWT, encodeToJWT } from "@/utils/JWT";
 
 const availableServices = [
   { key: "bonusDriver", name: "Tài xế phụ", max: 3 },
@@ -25,25 +25,26 @@ type Services = Record<ServiceKeys, number>;
 
 const VehicleDetail = () => {
   const router = useRouter();
-  const params = useSearchParams();
-  const id = params.get("id") || "";
-  const facilityId = params.get("facility") || "";
   const [services, setServices] = useState<Services>(() =>
     Object.fromEntries(availableServices.map((service) => [service.key, 0])) as Services
   );
 
-  const [pickupLocation, setPickupLocation] = useState("other");
-  const [returnLocation, setReturnLocation] = useState("other");
-  const [pickupAddress, setPickupAddress] = useState("");
-  const [returnAddress, setReturnAddress] = useState("");
+  const [pickupOption, setPickupOption] = useState("other");
+  const [returnOption, setReturnOption] = useState("other");
+  const [pickupLocation, setPickupLocation] = useState("");
+  const [returnLocation, setReturnLocation] = useState("");
+  const [listOffice, setListOffice] = useState<any>([]);
+  const [listAttraction, setListAttraction] = useState<any>([]);
+  const [pickupSuggestions, setPickupSuggestions] = useState<any>([]);
+  const [returnSuggestions, setReturnSuggestions] = useState<any>([]);
+  const [isReviewModalVisible, setIsReviewModalVisible] = useState(false);
 
-  const rentalItem = vehicles.find((item) => item.id === Number(id));
-  const facilityItem = rentalFacilities.find((item) => item.id === Number(facilityId));
-  if (!rentalItem || !facilityItem) {
-    return notFound();
-  }
+  const params = useSearchParams();
+  const rentalVehicle = decodeToJWT(params.get("rentalVehicle") || "");
+  const facilityId = Number(params.get("facility") || "");
+  const vehicleItem: any = rentalVehicle?.vehicle;
+  const facility: any = vehicleItem.facilities.find((item: any) => item.id === facilityId);
 
-  const rentalFacility = rentalItem.rentalFacility.find((facility) => facility.id === Number(facilityId)) || undefined;
   const totalServiceCost = Object.values(services).reduce((sum, count) => sum + count * 300000, 0);
   const search = localStorage.getItem("searchVehicle");
   const searchObject = search ? JSON.parse(search) : null;
@@ -53,6 +54,74 @@ const VehicleDetail = () => {
     quantity: services[service.key],
     cost: services[service.key] * 300000,
   }));
+
+  useEffect(() => {
+    const fetchOffice = async () => {
+      const bearerToken = localStorage.getItem("token");
+      try {
+        const response = await fetch(`http://localhost:8080/attraction/office?city=${rentalVehicle.location.id}&rental=${facilityId}`, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+        const data = await response.json();
+        setListOffice(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    const fetchAttraction = async () => {
+      const bearerToken = localStorage.getItem("token");
+      try {
+        const response = await fetch(`http://localhost:8080/attraction/not-office?city=${rentalVehicle.location.id}`, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+        const data = await response.json();
+        setListAttraction(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    fetchOffice();
+    fetchAttraction();
+  }, [facilityId, rentalVehicle.location.id]);
+  
+
+  const handleOpenReviewModal = () => {
+    setIsReviewModalVisible(true);
+  };
+
+  const handleCloseReviewModal = () => {
+    setIsReviewModalVisible(false);
+  };
+
+  const handlePickupSearch = (value: string) => {
+    setPickupLocation(value);
+    if (value && listAttraction.length > 0) {
+      const filteredSuggestions = listAttraction.filter((attraction: any) =>
+        attraction.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setPickupSuggestions(filteredSuggestions);
+    } else {
+      setPickupSuggestions([]);
+    }
+  };
+  
+  const handleReturnSearch = (value: string) => {
+    setReturnLocation(value);
+    if (value && listAttraction.length > 0) {
+      const filteredSuggestions = listAttraction.filter((attraction: any) =>
+        attraction.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setReturnSuggestions(filteredSuggestions);
+    } else {
+      setReturnSuggestions([]);
+    }
+  };  
 
   const handleServiceChange = (service: ServiceKeys, amount: number) => {
     setServices((prev) => {
@@ -66,15 +135,19 @@ const VehicleDetail = () => {
   };
 
   const handleBookingClick = () => {
-    const query = new URLSearchParams({
-      id: id.toString(),
-      facility: facilityId.toString(),
-      location: searchObject.location,
-      pickup: format(searchObject.dateRange.pickupDate, "yyyy-MM-dd"),
-      return: format(searchObject.dateRange.returnDate, "yyyy-MM-dd"),
-    });
-
-    router.push(`/rental/booking?url=2&${query.toString()}`);
+    const schedule = {
+      pickup: {
+        location: pickupLocation,
+        date: format(searchObject.dateRange.pickupDate, "yyyy-MM-dd"),
+      },
+      return: {
+        location: returnLocation,
+        date: format(searchObject.dateRange.returnDate, "yyyy-MM-dd"),
+      },
+    };
+    const {facilities, ...vehicle} = vehicleItem;
+    const bookingVehicle = {vehicle, facility, schedule};
+    router.push(`/rental/booking?booking=${encodeToJWT(bookingVehicle)}`);
   };
 
   return (
@@ -83,9 +156,7 @@ const VehicleDetail = () => {
         <Button
           type="primary"
           className="bg-blue-600"
-          onClick={() => {
-            router.back();
-          }}
+          onClick={() => { router.back() }}
         >
           Quay lại trang trước
         </Button>
@@ -98,7 +169,7 @@ const VehicleDetail = () => {
                 <div className="h-[300px]">
                   <Image
                     src={`https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg`}
-                    alt={`Image of ${rentalItem.id}`}
+                    alt={`Image of VEHICLE`}
                     className="rounded-l-lg h-full w-auto"
                     width={300}
                     height={300}
@@ -106,12 +177,12 @@ const VehicleDetail = () => {
                 </div>
                 <div>
                   <div className="pb-4">
-                    <h1 className="text-2xl font-bold">{rentalItem.model}</h1>
+                    <h1 className="text-2xl font-bold">{vehicleItem.model}</h1>
                     <p className="text-gray-500 text-sm">
-                      Cung cấp bởi Mioto Ho Chi Minh City
+                      Cung cấp bởi {facility.name}
                     </p>
                   </div>
-                  <VehicleInfo type={rentalItem.type} details={rentalItem.details} />
+                  <VehicleDetailInfo type={vehicleItem.type} details={vehicleItem.details} />
                 </div>
               </div>
             </div>
@@ -163,7 +234,7 @@ const VehicleDetail = () => {
             </div>
           </div>
 
-          {rentalItem.type === "car" && (
+          {vehicleItem.type === "car" && (
             <div className="p-4 bg-white border rounded-lg">
               <div className="flex items-center space-x-2 mb-4">
                 <AiOutlineDropbox className="text-[20px] text-blue-600" />
@@ -199,11 +270,11 @@ const VehicleDetail = () => {
             </div>
             <div className="mb-4">
               <Radio.Group
-                value={pickupLocation}
+                value={pickupOption}
                 onChange={(e) => {
                   const value = e.target.value;
-                  setPickupLocation(value);
-                  setPickupAddress(value === "office" ? facilityItem.headquarters : "");
+                  setPickupOption(value);
+                  setPickupLocation("");
                 }}
               >
                 <Space direction="vertical">
@@ -213,15 +284,36 @@ const VehicleDetail = () => {
               </Radio.Group>
             </div>
             <div className="mb-4">
-              <Input
-                value={pickupAddress}
-                onChange={(e) => setPickupAddress(e.target.value)}
-                placeholder="Tìm địa điểm..."
-                prefix={
-                  <FiSearch className="text-lg pr-2" />
-                }
-                readOnly={pickupLocation === "office"}
+            {pickupOption === "office" ? (
+              <Select
+                value={pickupLocation}
+                className="w-full"
+                onChange={(value) => setPickupLocation(value)}
+                placeholder="Chọn văn phòng"
+                options={listOffice.map((office: any) => ({
+                  value: office.name,
+                  label: office.name,
+                }))}
               />
+            ) : (
+              <AutoComplete
+                value={pickupLocation}
+                className="w-full"
+                onSearch={handlePickupSearch}
+                onChange={handlePickupSearch}
+                options={pickupSuggestions.map((suggestion: any) => ({
+                  value: suggestion.name,
+                }))}
+              >
+                <Input
+                  value={pickupLocation}
+                  className="w-full"
+                  onChange={(e) => setPickupLocation(e.target.value)}
+                  placeholder="Tìm địa điểm..."
+                  prefix={<FaSearch className="text-xl pr-2" />}
+                />
+              </AutoComplete>
+            )}
             </div>
           </div>
 
@@ -232,11 +324,11 @@ const VehicleDetail = () => {
             </div>
             <div className="mb-4">
               <Radio.Group
-                value={returnLocation}
+                value={returnOption}
                 onChange={(e) => {
                   const value = e.target.value;
-                  setReturnLocation(value);
-                  setReturnAddress(value === "office" ? facilityItem.headquarters : "");
+                  setReturnOption(value);
+                  setReturnLocation("");
                 }}
               >
                 <Space direction="vertical">
@@ -246,15 +338,35 @@ const VehicleDetail = () => {
               </Radio.Group>
             </div>
             <div className="mb-4">
-              <Input
-                value={returnAddress}
-                onChange={(e) => setReturnAddress(e.target.value)}
-                placeholder="Tìm địa điểm..."
-                prefix={
-                  <FiSearch className="text-lg pr-2" />
-                }
-                readOnly={returnLocation === "office"}
-              />
+              {returnOption === "office" ? (
+                <Select
+                  value={returnLocation}
+                  className="w-full"
+                  onChange={(value) => setReturnLocation(value)}
+                  placeholder="Chọn văn phòng"
+                  options={listOffice.map((office: any) => ({
+                    value: office.name,
+                    label: office.name,
+                  }))}
+                />
+              ) : (
+                <AutoComplete
+                  value={returnLocation}
+                  className="w-full"
+                  onSearch={handleReturnSearch}
+                  onChange={(value) => handleReturnSearch(value)}
+                  options={returnSuggestions.map((suggestion: any) => ({
+                    value: suggestion.name,
+                  }))}
+                >
+                  <Input
+                    value={returnLocation}
+                    onChange={(e) => setReturnLocation(e.target.value)}
+                    placeholder="Tìm địa điểm..."
+                    prefix={<FaSearch className="text-xl pr-2" />}
+                  />
+                </AutoComplete>
+              )}
             </div>
           </div>
 
@@ -292,22 +404,33 @@ const VehicleDetail = () => {
         <div className="col-span-1">
           <div className="space-y-4 sticky top-5">
             <div className="p-4 bg-white border rounded-lg">
-              {`Bởi ${facilityItem.name}`}
+              <div className="flex items-center justify-center">
+                <p className="mb-2 flex items-center justify-center flex-shrink-0 w-[60px] h-[60px] text-3xl font-bold text-white bg-blue-600 rounded-sm">
+                  {facility.name.charAt(0).toUpperCase()}
+                </p>
+              </div>
+              <div className="text-sm pb-3">
+                {`Bởi ${facility.name}`}
+              </div>
+              
               <div className="flex items-center space-x-2 my-2">
                 <p className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold text-white bg-blue-600 rounded-lg">
-                  {facilityItem.reviews.averageRating.toFixed(1) || "N/A"}
+                  {facility.reviewResponse.average_rating.toFixed(1) || "N/A"}
                 </p>
-                <p className="text-xs">{facilityItem.reviews.total} lượt đánh giá</p>
+                <p className="text-xs">{facility.reviewResponse.total_reviews} lượt đánh giá</p>
               </div>
               <h3 className="font-semibold mt-8 mb-2">Top Reviews</h3>
-              <div className="py-2">
-                {facilityItem.reviews.comments.slice(-2).map((comment, index) => (
+              <div
+                className="py-2"
+                onClick={handleOpenReviewModal}
+              >
+                {facility.reviewResponse.comments.slice(-2).map((comment: any, index: number) => (
                   <div
                     key={index}
-                    className={`py-2 border-t min-h-[100px] ${index === facilityItem.reviews.comments.slice(-2).length - 1 ? 'border-b' : ''}`}
+                    className={`py-2 border-t min-h-[100px] ${index === facility.reviewResponse.comments.slice(-2).length - 1 ? 'border-b' : ''}`}
                   >
                     <div className="flex justify-between mb-2">
-                      <p className="font-semibold">{comment.user}</p>
+                      <p className="text-sm font-semibold">{comment.user}</p>
                       <div className="flex items-center">
                         {[...Array(5)].map((_, starIndex) => (
                           <span key={starIndex} className="mr-1">
@@ -320,7 +443,7 @@ const VehicleDetail = () => {
                         ))}
                       </div>
                     </div>
-                    <p className="text-sm">{comment.text}</p>
+                    <p className="text-sm">{comment.comment}</p>
                   </div>
                 ))}
               </div>
@@ -330,7 +453,7 @@ const VehicleDetail = () => {
               <div className="flex justify-between">
                 <span className="text-sm font-bold">Giá thuê cơ bản</span>
                 <span className="text-sm font-semibold">
-                  {rentalFacility?.price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                  {facility?.price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
                 </span>
               </div>
               <div className="space-y-2">
@@ -349,7 +472,7 @@ const VehicleDetail = () => {
               <div className="flex justify-between border-t pt-4">
                 <span className="text-lg font-bold">Tổng giá tiền</span>
                 <span className="text-xl font-semibold">
-                  {((rentalFacility?.price || 0) + totalServiceCost)
+                  {((facility?.price || 0) + totalServiceCost)
                     .toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
                 </span>
               </div>
@@ -361,6 +484,38 @@ const VehicleDetail = () => {
           </div>
         </div>
       </section>
+      <Modal
+        title="Top Reviews"
+        visible={isReviewModalVisible}
+        onCancel={handleCloseReviewModal}
+        footer={null}
+        centered
+      >
+        <div className="py-2 max-h-[400px] overflow-y-auto">
+          {facility.reviewResponse.comments.map((comment: any, index: number) => (
+            <div
+              key={index}
+              className={`py-2 border-t min-h-[100px] ${index === facility.reviewResponse.comments.length - 1 ? 'border-b' : ''}`}
+            >
+              <div className="flex justify-between mb-2">
+                <p className="font-semibold">{comment.user}</p>
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, starIndex) => (
+                    <span key={starIndex} className="mr-1">
+                      {starIndex < comment.rating ? (
+                        <FaStar className="text-yellow-300" />
+                      ) : (
+                        <FaRegStar className="text-yellow-300" />
+                      )}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <p className="text-sm">{comment.comment}</p>
+            </div>
+          ))}
+        </div>
+      </Modal>
     </div>
   );
 };

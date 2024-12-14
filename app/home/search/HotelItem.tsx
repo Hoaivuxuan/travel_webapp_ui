@@ -38,10 +38,7 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
   if (loading) {
     return <div>Đang tải thông tin khách sạn...</div>;
   }
-  if (error) {
-    return <div>{error}</div>;
-  }
-  if (!hotel) {
+  if (error || !hotel) {
     return <div>Không tìm thấy thông tin khách sạn.</div>;
   }
 
