@@ -82,54 +82,69 @@ export const destination: Destination[] = [
 // data/fakeData.ts
 export const activitiesSearch = [
   {
-    title: "Buổi biểu diễn múa rối nước Thăng Long",
-    location: "Hà Nội",
+    id: 1,
+    name: "Buổi biểu diễn múa rối nước Thăng Long",
+    address: "Hà Nội",
     isBestSeller: true,
     rating: 4.5,
     reviews: 950,
-    price: "US$4.39",
-    imageUrl:
+    price: "80000",
+    image_url:
       "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+    cancellationPolicy: 1,
+    availableDate: "Mở cửa từ 5 tháng 11",
   },
   {
-    title: "Tour đi bộ tham quan thành phố có hướng dẫn viên",
-    location: "Hà Nội",
+    id: 2,
+    name: "Tour đi bộ tham quan thành phố có hướng dẫn viên",
+    address: "Hà Nội",
     isBestSeller: true,
     rating: 4.6,
     reviews: 446,
-    price: "US$55",
-    imageUrl:
+    price: "80000",
+    image_url:
       "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+    cancellationPolicy: 0,
+    availableDate: "Mở cửa từ 5 tháng 11",
   },
   {
-    title: "Tour ẩm thực phố cổ",
-    location: "Hà Nội",
+    id: 3,
+    name: "Tour ẩm thực phố cổ",
+    address: "Hà Nội",
     isBestSeller: false,
     rating: 4.8,
     reviews: 625,
-    price: "US$18.99",
-    imageUrl:
+    price: "80000",
+    image_url:
       "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+    cancellationPolicy: 1,
+    availableDate: "Mở cửa từ 5 tháng 11",
   },
   {
-    title: "Tour Vịnh Hạ Long cả ngày có kèm bữa trưa, đi từ Hà Nội",
-    location: "Hà Nội",
+    id: 4,
+    name: "Tour Vịnh Hạ Long cả ngày có kèm bữa trưa, đi từ Hà Nội",
+    address: "Hà Nội",
     isBestSeller: true,
     rating: 4.4,
     reviews: 276,
-    price: "US$49",
-    imageUrl:
+    price: "800000",
+    image_url:
       "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+    cancellationPolicy: 0,
+    availableDate: "Mở cửa từ 5 tháng 11",
   },
   {
-    title: "Lớp học nấu ăn và tour tham quan chợ",
-    location: "Hà Nội",
+    id: 5,
+    name: "Lớp học nấu ăn và tour tham quan chợ",
+    address: "Hà Nội",
     isBestSeller: false,
     rating: 4.8,
     reviews: 211,
-    price: "US$39.29",
-    imageUrl:
+    price: "80000",
+    image_url:
       "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+    cancellationPolicy: 1,
+    availableDate: "Mở cửa từ 5 tháng 11",
   },
 ];
 
@@ -206,44 +221,39 @@ export const activities: Destination[] = [
   },
 ];
 
-export const listings = {
-  content: {
-    listActivitis: [
-      {
-        id: 1,
-        name: "Buổi biểu diễn múa rối nước Thăng Long",
-        description: "Buổi biểu diễn múa rối nước Thăng Long.",
-        distanceToCenter: 7,
-        roomTypes: "Phòng đôi, Phòng gia đình",
-        activities: "Đi bộ, Thư giãn",
-        checkInTime: "14:00",
-        checkOutTime: "12:00",
-        rating: 8.5,
-        reviewCount: 30,
-        type: "Homestays",
-        city: "Ninh Bình",
-        location: {
-          latitude: 20.25,
-          longitude: 105.9884,
-        },
-        amenities: ["Wi-Fi miễn phí", "Vườn", "Bếp chung"],
-        price: 650000,
-        url: "https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o=",
-      },
-    ],
+export const listActivitis = [
+  {
+    id: 1,
+    name: "Buổi biểu diễn múa rối nước Thăng Long",
+    description: "Buổi biểu diễn múa rối nước Thăng Long.",
+    distanceToCenter: 7,
+    roomTypes: "Phòng đôi, Phòng gia đình",
+    activities: "Đi bộ, Thư giãn",
+    checkInTime: "14:00",
+    checkOutTime: "12:00",
+    rating: 8.5,
+    reviewCount: 30,
+    type: "Homestays",
+    city: "Ninh Bình",
+    location: {
+      latitude: 20.25,
+      longitude: 105.9884,
+    },
+    amenities: ["Wi-Fi miễn phí", "Vườn", "Bếp chung"],
+    price: 650000,
+    url: "https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o=",
   },
-};
-
+];
 
 export const bookingHotel = [
   {
     id: 1,
     user: 2,
     hotel: { id: 1, city: null },
-    customerInfo: { 
+    customerInfo: {
       fullName: "Do Duc Thu",
       email: "ddthumonky0810@gmail.com",
-      phone: "0398206185", 
+      phone: "0398206185",
       country: "Vietnam",
     },
     checkinDate: "2024-12-09",
@@ -251,9 +261,7 @@ export const bookingHotel = [
     adults: 2,
     children: 0,
     roomSelection: {
-      selectedRooms: [
-        { type: "Lake View Room", count: 1, price: 5280000 }
-      ],
+      selectedRooms: [{ type: "Lake View Room", count: 1, price: 5280000 }],
       totalRooms: 1,
       totalPrice: 5280000,
     },
@@ -266,10 +274,10 @@ export const bookingHotel = [
     id: 2,
     user: 2,
     hotel: { id: 2, city: null },
-    customerInfo: { 
+    customerInfo: {
       fullName: "Do Duc Thu",
       email: "ddthumonky0810@gmail.com",
-      phone: "0398206185", 
+      phone: "0398206185",
       country: "Vietnam",
     },
     checkinDate: "2024-12-10",
@@ -278,7 +286,7 @@ export const bookingHotel = [
     children: 0,
     roomSelection: {
       selectedRooms: [
-        { type: "Presidential Suite", count: 1, price: 14400000 }
+        { type: "Presidential Suite", count: 1, price: 14400000 },
       ],
       totalRooms: 1,
       totalPrice: 14400000,
@@ -292,10 +300,10 @@ export const bookingHotel = [
     id: 3,
     user: 2,
     hotel: { id: 3, city: null },
-    customerInfo: { 
+    customerInfo: {
       fullName: "Do Duc Thu",
       email: "ddthumonky0810@gmail.com",
-      phone: "0398206185", 
+      phone: "0398206185",
       country: "Vietnam",
     },
     checkinDate: "2024-12-11",
@@ -303,9 +311,7 @@ export const bookingHotel = [
     adults: 2,
     children: 0,
     roomSelection: {
-      selectedRooms: [
-        { type: "Lake View Room", count: 1, price: 5280000 }
-      ],
+      selectedRooms: [{ type: "Lake View Room", count: 1, price: 5280000 }],
       totalRooms: 1,
       totalPrice: 5280000,
     },
@@ -320,8 +326,8 @@ export const bookingHotel = [
     hotel: { id: 4, city: null },
     customerInfo: {
       fullName: "Dao Quang Duy",
-      email: "daoquangduy441@gmail.com", 
-      phone: "0398206185", 
+      email: "daoquangduy441@gmail.com",
+      phone: "0398206185",
       country: "Vietnam",
     },
     checkinDate: "2024-12-09",
@@ -329,9 +335,7 @@ export const bookingHotel = [
     adults: 2,
     children: 0,
     roomSelection: {
-      selectedRooms: [
-        { type: "Lake View Room", count: 1, price: 5280000 }
-      ],
+      selectedRooms: [{ type: "Lake View Room", count: 1, price: 5280000 }],
       totalRooms: 1,
       totalPrice: 5280000,
     },
@@ -346,8 +350,8 @@ export const bookingHotel = [
     hotel: { id: 5, city: null },
     customerInfo: {
       fullName: "Dao Quang Duy",
-      email: "daoquangduy441@gmail.com", 
-      phone: "0398206185", 
+      email: "daoquangduy441@gmail.com",
+      phone: "0398206185",
       country: "Vietnam",
     },
     checkinDate: "2024-12-10",
@@ -356,7 +360,7 @@ export const bookingHotel = [
     children: 0,
     roomSelection: {
       selectedRooms: [
-        { type: "Presidential Suite", count: 1, price: 14400000 }
+        { type: "Presidential Suite", count: 1, price: 14400000 },
       ],
       totalRooms: 1,
       totalPrice: 14400000,
@@ -372,8 +376,8 @@ export const bookingHotel = [
     hotel: { id: 6, city: null },
     customerInfo: {
       fullName: "Dao Quang Duy",
-      email: "daoquangduy441@gmail.com", 
-      phone: "0398206185", 
+      email: "daoquangduy441@gmail.com",
+      phone: "0398206185",
       country: "Vietnam",
     },
     checkinDate: "2024-12-11",
@@ -405,9 +409,7 @@ export const bookingHotel = [
     adults: 2,
     children: 0,
     roomSelection: {
-      selectedRooms: [
-        { type: "Lake View Room", count: 1, price: 5280000 }
-      ],
+      selectedRooms: [{ type: "Lake View Room", count: 1, price: 5280000 }],
       totalRooms: 1,
       totalPrice: 5280000,
     },
@@ -431,7 +433,9 @@ export const bookingHotel = [
     adults: 2,
     children: 0,
     roomSelection: {
-      selectedRooms: [{ type: "Presidential Suite", count: 1, price: 14400000 }],
+      selectedRooms: [
+        { type: "Presidential Suite", count: 1, price: 14400000 },
+      ],
       totalRooms: 1,
       totalPrice: 14400000,
     },
@@ -455,9 +459,7 @@ export const bookingHotel = [
     adults: 2,
     children: 0,
     roomSelection: {
-      selectedRooms: [
-        { type: "Lake View Room", count: 1, price: 5280000 }
-      ],
+      selectedRooms: [{ type: "Lake View Room", count: 1, price: 5280000 }],
       totalRooms: 1,
       totalPrice: 5280000,
     },
