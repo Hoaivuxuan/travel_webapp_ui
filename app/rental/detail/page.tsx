@@ -13,27 +13,16 @@ import Image from "next/image";
 import VehicleDetailInfo from "./VehicleInfo";
 import { decodeToJWT, encodeToJWT } from "@/utils/JWT";
 
-const availableServices = [
-  { key: "babySeat", name: "Ghế em bé", max: 2 },
-  { key: "childSeat", name: "Ghế trẻ em", max: 2 },
-  { key: "gps", name: "GPS", max: 1 },
-] as const;
-
-type ServiceKeys = typeof availableServices[number]["key"];
-type Services = Record<ServiceKeys, number>;
-
 const VehicleDetail = () => {
   const router = useRouter();
-  const [services, setServices] = useState<Services>(() =>
-    Object.fromEntries(availableServices.map((service) => [service.key, 0])) as Services
-  );
-
   const [pickupOption, setPickupOption] = useState("other");
   const [returnOption, setReturnOption] = useState("other");
   const [pickupLocation, setPickupLocation] = useState("");
   const [returnLocation, setReturnLocation] = useState("");
   const [listOffice, setListOffice] = useState<any>([]);
   const [listAttraction, setListAttraction] = useState<any>([]);
+  const [listAccessory, setListAccessory] = useState<any>([]);
+  const [services, setServices] = useState<Record<string, number>>({});
   const [pickupSuggestions, setPickupSuggestions] = useState<any>([]);
   const [returnSuggestions, setReturnSuggestions] = useState<any>([]);
   const [isViewReviewModalVisible, setIsViewReviewModalVisible] = useState(false);
@@ -45,19 +34,10 @@ const VehicleDetail = () => {
   const rentalVehicle = decodeToJWT(params.get("rentalVehicle") || "");
   const facilityId = Number(params.get("facility") || "");
   const vehicleItem: any = rentalVehicle?.vehicle;
-  const facility: any = vehicleItem.facilities.find((item: any) => item.id === facilityId);
+  const facility: any = vehicleItem?.facilities?.find((item: any) => item.id === facilityId);
 
   const search = localStorage.getItem("searchVehicle");
   const searchObject = search ? JSON.parse(search) : null;
-
-  const bonusServices = availableServices
-    .map((service) => ({
-      name: service.name,
-      count: services[service.key],
-      price: services[service.key] * 300000,
-    }))
-    .filter((service) => service.count > 0);
-  const totalServiceCost = Object.values(services).reduce((sum, count) => sum + count * 300000, 0);
 
   useEffect(() => {
     const fetchOffice = async () => {
@@ -71,10 +51,10 @@ const VehicleDetail = () => {
         const data = await response.json();
         setListOffice(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching office data:", error);
       }
     };
-  
+
     const fetchAttraction = async () => {
       const bearerToken = localStorage.getItem("token");
       try {
@@ -86,14 +66,76 @@ const VehicleDetail = () => {
         const data = await response.json();
         setListAttraction(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching attraction data:", error);
       }
     };
-  
+
+    const fetchAccessory = async () => {
+      const bearerToken = localStorage.getItem("token");
+      try {
+        const response = await fetch(`http://localhost:8080/accessory?type=${vehicleItem.type}`, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+        const data = await response.json();
+        setListAccessory(data);
+      } catch (error) {
+        console.error("Error fetching accessory data:", error);
+      }
+    };
+
     fetchOffice();
     fetchAttraction();
-  }, [facilityId, rentalVehicle.location.id]);
-  
+    fetchAccessory();
+  }, [facilityId, rentalVehicle.location.id, vehicleItem.type]);
+
+  useEffect(() => {
+    if (listAccessory.length > 0) {
+      setServices(
+        listAccessory.reduce((acc: Record<string, number>, accessory: any) => {
+          acc[accessory.name] = 0;
+          return acc;
+        }, {})
+      );
+    }
+  }, [listAccessory]);
+
+  const handlePickupSearch = (value: string) => {
+    setPickupLocation(value);
+    if (value && listAttraction.length > 0) {
+      const filteredSuggestions = listAttraction.filter((attraction: any) =>
+        attraction.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setPickupSuggestions(filteredSuggestions);
+    } else {
+      setPickupSuggestions([]);
+    }
+  };
+
+  const handleReturnSearch = (value: string) => {
+    setReturnLocation(value);
+    if (value && listAttraction.length > 0) {
+      const filteredSuggestions = listAttraction.filter((attraction: any) =>
+        attraction.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setReturnSuggestions(filteredSuggestions);
+    } else {
+      setReturnSuggestions([]);
+    }
+  };
+
+  const handleServiceChange = (serviceName: string, amount: number) => {
+    setServices((prev) => {
+      const currentCount = prev[serviceName] || 0;
+      const maxLimit = listAccessory.find((s: any) => s.name === serviceName)?.max || Infinity;
+      const newCount = Math.max(0, Math.min(currentCount + amount, maxLimit));
+      return {
+        ...prev,
+        [serviceName]: newCount,
+      };
+    });
+  };
 
   const handleOpenViewReviewModal = () => {
     setIsViewReviewModalVisible(true);
@@ -119,40 +161,18 @@ const VehicleDetail = () => {
     setComment("");
   };
 
-  const handlePickupSearch = (value: string) => {
-    setPickupLocation(value);
-    if (value && listAttraction.length > 0) {
-      const filteredSuggestions = listAttraction.filter((attraction: any) =>
-        attraction.name.toLowerCase().includes(value.toLowerCase())
-      );
-      setPickupSuggestions(filteredSuggestions);
-    } else {
-      setPickupSuggestions([]);
-    }
-  };
+  const bonusServices = listAccessory
+    .map((service: any) => ({
+      name: service.name,
+      count: Number(services[service.name] || 0),
+      cost: Number((services[service.name] || 0) * service.price),
+    }))
+    .filter((service: any) => service.count > 0);
   
-  const handleReturnSearch = (value: string) => {
-    setReturnLocation(value);
-    if (value && listAttraction.length > 0) {
-      const filteredSuggestions = listAttraction.filter((attraction: any) =>
-        attraction.name.toLowerCase().includes(value.toLowerCase())
-      );
-      setReturnSuggestions(filteredSuggestions);
-    } else {
-      setReturnSuggestions([]);
-    }
-  };  
-
-  const handleServiceChange = (service: ServiceKeys, amount: number) => {
-    setServices((prev) => {
-      const newValue = prev[service] + amount;
-      const maxLimit = availableServices.find((s) => s.key === service)?.max || 0;
-      return {
-        ...prev,
-        [service]: Math.max(0, Math.min(newValue, maxLimit)),
-      };
-    });
-  };
+  const totalServiceCost = bonusServices.reduce(
+    (sum: number, service: { cost: number }) => sum + (service.cost || 0),
+    0
+  );
 
   const handleBookingClick = () => {
     const booking = {
@@ -168,8 +188,8 @@ const VehicleDetail = () => {
       totalServiceCost,
     };
 
-    const {facilities, ...vehicle} = vehicleItem;
-    const bookingVehicle = {vehicle, facility, booking};
+    const { facilities, ...vehicle } = vehicleItem;
+    const bookingVehicle = { vehicle, facility, booking };
     router.push(`/rental/booking?rental=${encodeToJWT(bookingVehicle)}`);
   };
 
@@ -257,34 +277,32 @@ const VehicleDetail = () => {
             </div>
           </div>
 
-          {vehicleItem.type === "car" && (
-            <div className="p-4 bg-white border rounded-lg">
-              <div className="flex items-center space-x-2 mb-4">
-                <AiOutlineDropbox className="text-[20px] text-blue-600" />
-                <h2 className="text-lg font-bold">Dịch vụ bổ sung</h2>
-              </div>
-              <div className="space-y-2">
-                {availableServices.map((service) => (
-                  <div key={service.key} className="flex justify-between items-center">
-                    <span className="text-sm">{service.name}</span>
-                    <div className="flex items-center">
-                      <Button
-                        icon={<AiOutlineMinus className="text-lg" />}
-                        onClick={() => handleServiceChange(service.key, -1)}
-                        disabled={services[service.key] === 0}
-                      />
-                      <div className="w-[35px] text-center">{services[service.key]}</div>
-                      <Button
-                        icon={<AiOutlinePlus className="text-lg" />}
-                        onClick={() => handleServiceChange(service.key, 1)}
-                        disabled={services[service.key] >= service.max}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
+          <div className="p-4 bg-white border rounded-lg">
+            <div className="flex items-center space-x-2 mb-4">
+              <AiOutlineDropbox className="text-[20px] text-blue-600" />
+              <h2 className="text-lg font-bold">Dịch vụ bổ sung</h2>
             </div>
-          )}
+            <div className="space-y-2">
+              {listAccessory.map((service: any) => (
+                <div key={service.name} className="flex justify-between items-center">
+                  <span className="text-sm">{service.name}</span>
+                  <div className="flex items-center">
+                    <Button
+                      icon={<AiOutlineMinus className="text-lg" />}
+                      onClick={() => handleServiceChange(service.name, -1)}
+                      disabled={services[service.name] === 0}
+                    />
+                    <div className="w-[35px] text-center">{services[service.name]}</div>
+                    <Button
+                      icon={<AiOutlinePlus className="text-lg" />}
+                      onClick={() => handleServiceChange(service.name, 1)}
+                      disabled={services[service.name] >= service.max_value}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
           <div className="p-4 bg-white border rounded-lg">
             <div className="flex items-center space-x-2 mb-4">
@@ -485,22 +503,21 @@ const VehicleDetail = () => {
                 </span>
               </div>
               <div className="space-y-2">
-                {bonusServices.map((service, index) => (
+                {bonusServices.map((service: any, index: number) => (
                   service.count > 0 && (
                     <div key={index} className="flex justify-between items-center">
                       <span className="text-sm">{service.count} x {service.name}</span>
                       <span className="text-sm">
-                        {service.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                        {service.cost.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                       </span>
                     </div>
                   )
                 ))}
               </div>
-
               <div className="flex justify-between border-t pt-4">
                 <span className="text-lg font-bold">Tổng giá tiền</span>
                 <span className="text-xl font-semibold">
-                  {((facility?.price + totalServiceCost) || 0).toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                  {((facility?.price + totalServiceCost)).toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
                 </span>
               </div>
 

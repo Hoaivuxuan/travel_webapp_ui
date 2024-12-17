@@ -37,37 +37,6 @@ export function VehicleItem({
 }) {
   const router = useRouter();
   const [selectedFacilityId, setSelectedFacilityId] = useState<number | null>(null);
-
-  // useEffect(() => {
-  //   const fetchVehicle = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const response = await fetch(`http://localhost:8080/vehicles/${id}`, {
-  //         headers: {
-  //           Authorization: `Bearer ${bearerToken}`,
-  //         },
-  //       });
-  //       if (!response.ok) {
-  //         throw new Error("Không thể lấy thông tin phương tiện");
-  //       }
-  //       const data = await response.json();
-  //       setVehicle(data);
-  //     } catch (err: any) {
-  //       setError(err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchVehicle();
-  // }, [id]);
-
-  // if (loading) {
-  //   return <div>Đang tải thông tin phương tiện...</div>;
-  // }
-  // if (error || !vehicle) {
-  //   return <div>Không tìm thấy thông tin phương tiện.</div>;
-  // }
-
   const rentalMinPrice = Math.min(...vehicle.facilities.map((facility: any) => facility.price));
 
   return (
