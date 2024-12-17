@@ -1,52 +1,86 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import { Calendar } from "../ui/calendar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar, faMapLocation } from "@fortawesome/free-solid-svg-icons";
-import { useEffect } from "react";
-import "./index.css";
+import { AutoComplete, Button, DatePicker, Input } from "antd";
+import { useRouter } from "next/navigation";
+import { AiOutlineClose } from 'react-icons/ai';
+import { IoLocationOutline } from "react-icons/io5";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import dayjs from "dayjs";
 
 export const formSchema = z.object({
   location: z
     .string()
-    .min(1, "Vui lòng chọn địa điểm tham quan của bạn!")
+    .min(1, "Vui lòng nhập điểm đến để bắt đầu tìm kiếm!")
     .max(50),
   dateRange: z.object({
-    from: z.date(),
-    to: z.date(),
+    startDate: z.date(),
+    endDate: z.date(),
   }),
 });
 
-function SearchForm() {
+function ActivitiesSearchForm() {
   const router = useRouter();
+  const [keyword, setKeyword] = useState("");
+  const [listCity, setListCity] = useState<any[]>([]);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
   const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+
+  const normalizeString = (str: string) => {
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, "")
+      .toLowerCase();
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       location: "",
       dateRange: {
-        from: today,
-        to: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+        startDate: today,
+        endDate: tomorrow,
       },
     },
   });
+
+  useEffect(() => {
+    const fetchCity = async () => {
+      const bearerToken = localStorage.getItem("token");
+      try {
+        const response = await fetch(`http://localhost:8080/city`, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+        const data = await response.json();
+        setListCity(data.response);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (Array.isArray(listCity)) {
+      const normalizedKeyword = normalizeString(keyword);
+      const filtered = listCity.filter((loc: any) => {
+        const normalizedLocationName = normalizeString(loc.name);
+        return normalizedLocationName.includes(normalizedKeyword);
+      });
+      setSuggestions(filtered);
+    } else {
+      console.warn("listCity is not an array:", listCity);
+      setSuggestions([]);
+    }
+  
+    fetchCity();
+  }, [keyword, listCity]);
 
   useEffect(() => {
     const storedValues = localStorage.getItem("searchActivities");
@@ -54,9 +88,13 @@ function SearchForm() {
       const parsedValues = JSON.parse(storedValues);
       form.setValue("location", parsedValues.location || "");
       form.setValue("dateRange", {
-        from: new Date(parsedValues.dateRange.from),
-        to: new Date(parsedValues.dateRange.to),
+        startDate: new Date(parsedValues.dateRange.startDate),
+        endDate: new Date(parsedValues.dateRange.endDate),
       });
+      setDateRange([
+        dayjs(parsedValues.dateRange.startDate),
+        dayjs(parsedValues.dateRange.endDate),
+      ]);
     }
 
     const subscription = form.watch((value) => {
@@ -66,36 +104,56 @@ function SearchForm() {
     return () => subscription.unsubscribe();
   }, [form]);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const currentPath = window.location.pathname;
+
+  const [dateRange, setDateRange] = useState<[dayjs.Dayjs | null, dayjs.Dayjs | null]>([null, null]);
+
+  const handleDateChange = (dates: [dayjs.Dayjs | null, dayjs.Dayjs | null] | null) => {
+    if (dates) {
+      setDateRange(dates);
+      form.setValue("dateRange", {
+        startDate: dates[0]?.toDate() ?? today,
+        endDate: dates[1]?.toDate() ?? tomorrow,
+      });
+    }
+  };
+
+  const handleLocationSearch = (keyword: string, setSuggestions: any) => {
+    if (!keyword) {
+      setSuggestions([]);
+      return;
+    }
+    if (Array.isArray(listCity)) {
+      const filteredSuggestions = listCity.filter((location) =>
+        location.name.toLowerCase().includes(keyword.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    } else {
+      console.error("listCity is not an array");
+    }
+  };
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
     localStorage.setItem("searchActivities", JSON.stringify(values));
 
-    const url = new URL("https://searchresults.html");
-    url.searchParams.set("ss", "true");
-    url.searchParams.set("location", values.location);
-    url.searchParams.set(
-      "checkin",
-      format(values.dateRange.from, "yyyy-MM-dd"),
-    );
-    url.searchParams.set("checkout", format(values.dateRange.to, "yyyy-MM-dd"));
+    const query = new URLSearchParams({
+      location: values.location,
+      start: format(values.dateRange.startDate, "dd-MM-yyyy"),
+      end: format(values.dateRange.endDate, "dd-MM-yyyy"),
+    });
 
-    if (currentPath.includes("/search")) {
-      router.push(`search?url=${url.href}`);
-    } else {
-      router.push(`activities/search`);
-    }
-  }
+    router.push(`/activities/search?url=3&${query.toString()}`);
+  };
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="bg-blue-600 p-4 rounded-lg max-w-7xl lg:mx-auto"
+        className="bg-[#472f91] border border-white p-4 rounded-lg max-w-7xl lg:mx-auto"
       >
         <div className="grid grid-cols-9 gap-2">
           <div className="col-span-8">
-            <div className=" grid grid-cols-12 gap-2">
-              <div className="col-span-6">
+            <div className=" grid grid-cols-2 gap-2">
+              <div className="col-span-1">
                 <FormField
                   control={form.control}
                   name="location"
@@ -103,85 +161,89 @@ function SearchForm() {
                     <FormItem>
                       <FormControl>
                         <div className="relative">
-                          <Input
-                            placeholder="Bạn muốn đi ở đâu?"
-                            {...field}
-                            className="pl-10"
-                          />
-                          <span className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                            <FontAwesomeIcon
-                              icon={faMapLocation}
-                              className="mr-2 w-4 text-gray-400"
+                          <AutoComplete
+                            options={suggestions.map((suggestion: any) => ({
+                              value: suggestion.name,
+                              label: (
+                                <div className="flex justify-between">
+                                  <span className="text-sm">{suggestion.name}</span>
+                                  <span className="bg-green-200 text-green-600 rounded-lg px-2 py-1 text-xs">
+                                    {suggestion.type}
+                                  </span>
+                                </div>
+                              ),
+                            }))}
+                            onSearch={(value) => {
+                              setKeyword(value);
+                              handleLocationSearch(value, setSuggestions);
+                              field.onChange(value);
+                            }}
+                            onSelect={(value) => {
+                              setKeyword(value);
+                              field.onChange(value);
+                            }}
+                            value={keyword || field.value}
+                            className="w-full"
+                          >
+                            <Input
+                              placeholder="Tìm kiếm điểm đến..."
+                              value={keyword || field.value}
+                              onChange={(e) => {
+                                setKeyword(e.target.value);
+                                field.onChange(e);
+                              }}
+                              className="pl-10"
                             />
+                          </AutoComplete>
+                          <span className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                            <IoLocationOutline className="text-gray-400" />
                           </span>
+                          {keyword && (
+                            <AiOutlineClose
+                              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                              onClick={() => {
+                                setKeyword("");
+                                form.setValue("location", "");
+                                setSuggestions([]);
+                              }}
+                            />
+                          )}
                         </div>
                       </FormControl>
-                      {form.formState.errors.location && (
-                        <div className="form-error !-mt-3">
-                          {form.formState.errors.location.message}
-                        </div>
-                      )}
                     </FormItem>
                   )}
                 />
               </div>
-
-              <div className="col-span-6">
+              
+              <div className="col-span-1">
                 <FormField
                   control={form.control}
                   name="dateRange"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <Popover>
-                        <PopoverTrigger asChild>
+                    <FormField
+                      control={form.control}
+                      name="dateRange"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
                           <FormControl>
-                            <Button
-                              variant="outline"
-                              className={cn(
-                                "w-full justify-start text-left font-normal",
-                                !field.value && "text-muted-foreground",
-                              )}
-                            >
-                              <FontAwesomeIcon
-                                icon={faCalendar}
-                                className="w-4 h-4 mr-2 text-gray-400"
-                              />
-                              {field.value?.from && field.value?.to
-                                ? `${format(
-                                    field.value.from,
-                                    "dd/MM/yyyy",
-                                  )} - ${format(field.value.to, "dd/MM/yyyy")}`
-                                : "Chọn khoảng thời gian lưu trú"}
-                            </Button>
+                            <DatePicker.RangePicker
+                              value={dateRange}
+                              onChange={handleDateChange}
+                              disabledDate={(current) => current && current < dayjs().startOf("day")}
+                              format="DD/MM/YYYY"
+                            />
                           </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            initialFocus
-                            mode="range"
-                            selected={field.value}
-                            onSelect={(range) => {
-                              field.onChange(range);
-                            }}
-                            numberOfMonths={2}
-                            disabled={(date) =>
-                              date < new Date(today.setHours(0, 0, 0, 0))
-                            }
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </FormItem>
+                        </FormItem>
+                      )}
+                    />
                   )}
                 />
               </div>
             </div>
           </div>
 
-          <div className="col-span-1 flex items-end justify-center">
-            <Button
-              type="submit"
-              className="bg-[#013B94] text-base font-bold w-full"
-            >
+          <div className="col-span-1 flex justify-center items-center">
+            <Button type="primary" htmlType="submit" className="w-full bg-yellow-400 text-[#472f91]">
               Tìm kiếm
             </Button>
           </div>
@@ -191,4 +253,4 @@ function SearchForm() {
   );
 }
 
-export default SearchForm;
+export default ActivitiesSearchForm;

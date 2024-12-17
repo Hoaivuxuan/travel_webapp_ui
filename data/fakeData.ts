@@ -88,7 +88,8 @@ export const activitiesSearch = [
     rating: 4.5,
     reviews: 950,
     price: "US$4.39",
-    imageUrl: "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+    imageUrl:
+      "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
   },
   {
     title: "Tour đi bộ tham quan thành phố có hướng dẫn viên",
@@ -97,7 +98,8 @@ export const activitiesSearch = [
     rating: 4.6,
     reviews: 446,
     price: "US$55",
-    imageUrl: "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+    imageUrl:
+      "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
   },
   {
     title: "Tour ẩm thực phố cổ",
@@ -106,7 +108,8 @@ export const activitiesSearch = [
     rating: 4.8,
     reviews: 625,
     price: "US$18.99",
-    imageUrl: "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+    imageUrl:
+      "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
   },
   {
     title: "Tour Vịnh Hạ Long cả ngày có kèm bữa trưa, đi từ Hà Nội",
@@ -115,7 +118,8 @@ export const activitiesSearch = [
     rating: 4.4,
     reviews: 276,
     price: "US$49",
-    imageUrl: "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+    imageUrl:
+      "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
   },
   {
     title: "Lớp học nấu ăn và tour tham quan chợ",
@@ -124,7 +128,8 @@ export const activitiesSearch = [
     rating: 4.8,
     reviews: 211,
     price: "US$39.29",
-    imageUrl: "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+    imageUrl:
+      "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
   },
 ];
 
@@ -203,229 +208,262 @@ export const activities: Destination[] = [
 
 export const listings = {
   content: {
-    listCars: [
+    listActivitis: [
       {
         id: 1,
-        model: "Kia Morning",
-        price: 589280,
-        details: {
-          transmission: "Automatic",
-          baggage_capacity: 2,
-          seats: 4,
-          fuel_type: "Petrol",
-          year: 2018,
-          safety_features: ["Airbags", "ABS", "Rear Camera"],
+        name: "Buổi biểu diễn múa rối nước Thăng Long",
+        description: "Buổi biểu diễn múa rối nước Thăng Long.",
+        distanceToCenter: 7,
+        roomTypes: "Phòng đôi, Phòng gia đình",
+        activities: "Đi bộ, Thư giãn",
+        checkInTime: "14:00",
+        checkOutTime: "12:00",
+        rating: 8.5,
+        reviewCount: 30,
+        type: "Homestays",
+        city: "Ninh Bình",
+        location: {
+          latitude: 20.25,
+          longitude: 105.9884,
         },
-        token: "75b6e43e-65ff-42f7-a97d-4564d7576c51",
-      },
-      {
-        id: 2,
-        model: "Hyundai Grand i10",
-        price: 589280,
-        details: {
-          transmission: "Automatic",
-          baggage_capacity: 2,
-          seats: 4,
-          fuel_type: "Petrol",
-          year: 2019,
-          safety_features: ["Airbags", "ABS", "Parking Sensors"],
-        },
-        token: "6cb3dda4-0fb0-41df-a254-85a6f59b851f",
-      },
-      {
-        id: 3,
-        model: "VinFast Fadil",
-        price: 589280,
-        details: {
-          transmission: "Automatic",
-          baggage_capacity: 2,
-          seats: 4,
-          fuel_type: "Petrol",
-          year: 2020,
-          safety_features: ["Airbags", "ABS", "Electronic Stability Control"],
-        },
-        token: "89f21c14-e59c-469f-8937-88f70c6d06be",
-      },
-      {
-        id: 4,
-        model: "Toyota Yaris",
-        price: 620000,
-        details: {
-          transmission: "Automatic",
-          baggage_capacity: 3,
-          seats: 5,
-          fuel_type: "Petrol",
-          year: 2021,
-          safety_features: ["Airbags", "ABS", "Lane Departure Warning"],
-        },
-        token: "685ded43-563c-40c2-8910-ebb757fc5913",
-      },
-      {
-        id: 5,
-        model: "Mazda 3",
-        price: 700000,
-        details: {
-          transmission: "Automatic",
-          baggage_capacity: 2,
-          seats: 5,
-          fuel_type: "Petrol",
-          year: 2023,
-          safety_features: [
-            "Airbags",
-            "ABS",
-            "Blind Spot Monitoring",
-            "Lane Departure Warning",
-          ],
-        },
-        token: "bc42a5d2-0e44-4ec7-a241-66e9931b22b9",
-      },
-      {
-        id: 6,
-        model: "Honda City",
+        amenities: ["Wi-Fi miễn phí", "Vườn", "Bếp chung"],
         price: 650000,
-        details: {
-          transmission: "Automatic",
-          baggage_capacity: 3,
-          seats: 5,
-          fuel_type: "Petrol",
-          year: 2021,
-          safety_features: ["Airbags", "ABS", "Cruise Control"],
-        },
-        token: "2a4a1093-8e82-4f2e-9291-3c80bc1ba0a1",
-      },
-      {
-        id: 7,
-        model: "Mitsubishi Xpander",
-        price: 650000,
-        details: {
-          transmission: "Automatic",
-          baggage_capacity: 3,
-          seats: 7,
-          fuel_type: "Petrol",
-          year: 2022,
-          safety_features: [
-            "Airbags",
-            "ABS",
-            "Rear Parking Sensors",
-            "Stability Control",
-          ],
-        },
-        token: "c4726502-d882-49ba-b90a-14210f71dbe7",
-      },
-      {
-        id: 8,
-        model: "Kia Cerato",
-        price: 620000,
-        details: {
-          transmission: "Automatic",
-          baggage_capacity: 3,
-          seats: 5,
-          fuel_type: "Petrol",
-          year: 2022,
-          safety_features: [
-            "Airbags",
-            "ABS",
-            "Electronic Stability Control",
-            "Lane Departure Warning",
-          ],
-        },
-        token: "0d891b24-3838-4e65-9c58-4733d041bb1d",
-      },
-    ],
-    listMotors: [
-      {
-        id: 1,
-        model: "Yamaha Exciter 150",
-        price: 1000000,
-        details: {
-          engine: 150,
-          fuel_type: "Petrol",
-          features: ["LED Headlight", "Sporty Design", "Disc Brakes"],
-        },
-        token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
-      },
-      {
-        id: 2,
-        model: "Honda Winner X",
-        price: 1200000,
-        details: {
-          engine: 150,
-          fuel_type: "Petrol",
-          year: 2021,
-          features: ["ABS", "Full Digital Display", "LED Lights"],
-        },
-        token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
-      },
-      {
-        id: 3,
-        model: "Suzuki Raider 150",
-        price: 950000,
-        details: {
-          engine: 150,
-          fuel_type: "Petrol",
-          features: ["Underbone Frame", "Sporty Design", "Fuel Injection"],
-        },
-        token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
-      },
-      {
-        id: 4,
-        model: "SYM Star SR 125",
-        price: 1100000,
-        details: {
-          engine: 125,
-          fuel_type: "Petrol",
-          features: ["Advanced Suspension", "Fuel Injection", "LED Lights"],
-        },
-        token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
-      },
-      {
-        id: 5,
-        model: "Yamaha MT-15",
-        price: 1500000,
-        details: {
-          engine: 155,
-          fuel_type: "Petrol",
-          features: ["Variable Valve Actuation", "ABS", "LED Headlight"],
-        },
-        token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
-      },
-      {
-        id: 6,
-        model: "Honda CBR150R",
-        price: 1800000,
-        details: {
-          engine: 150,
-          fuel_type: "Petrol",
-          features: [
-            "Sporty Design",
-            "LED Headlights",
-            "Anti-lock Braking System",
-          ],
-        },
-        token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
-      },
-      {
-        id: 7,
-        model: "Kawasaki Z125 Pro",
-        price: 850000,
-        details: {
-          engine: 125,
-          fuel_type: "Petrol",
-          features: ["Compact Size", "LED Lights", "Disc Brakes"],
-        },
-        token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
-      },
-      {
-        id: 8,
-        model: "Yamaha XSR155",
-        price: 1400000,
-        details: {
-          engine: 155,
-          fuel_type: "Petrol",
-          features: ["Retro Design", "ABS", "LED Headlights"],
-        },
-        token: "01fbdcb3-46da-4582-b21d-3b0e73177e6e",
+        url: "https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o=",
       },
     ],
   },
 };
+
+
+export const bookingHotel = [
+  {
+    id: 1,
+    user: 2,
+    hotel: { id: 1, city: null },
+    customerInfo: { 
+      fullName: "Do Duc Thu",
+      email: "ddthumonky0810@gmail.com",
+      phone: "0398206185", 
+      country: "Vietnam",
+    },
+    checkinDate: "2024-12-09",
+    checkoutDate: "2024-12-10",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [
+        { type: "Lake View Room", count: 1, price: 5280000 }
+      ],
+      totalRooms: 1,
+      totalPrice: 5280000,
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    createdDate: "2024-12-09",
+    status: 0,
+  },
+  {
+    id: 2,
+    user: 2,
+    hotel: { id: 2, city: null },
+    customerInfo: { 
+      fullName: "Do Duc Thu",
+      email: "ddthumonky0810@gmail.com",
+      phone: "0398206185", 
+      country: "Vietnam",
+    },
+    checkinDate: "2024-12-10",
+    checkoutDate: "2024-12-11",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [
+        { type: "Presidential Suite", count: 1, price: 14400000 }
+      ],
+      totalRooms: 1,
+      totalPrice: 14400000,
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    createdDate: "2024-12-10",
+    status: 0,
+  },
+  {
+    id: 3,
+    user: 2,
+    hotel: { id: 3, city: null },
+    customerInfo: { 
+      fullName: "Do Duc Thu",
+      email: "ddthumonky0810@gmail.com",
+      phone: "0398206185", 
+      country: "Vietnam",
+    },
+    checkinDate: "2024-12-11",
+    checkoutDate: "2024-12-12",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [
+        { type: "Lake View Room", count: 1, price: 5280000 }
+      ],
+      totalRooms: 1,
+      totalPrice: 5280000,
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    createdDate: "2024-12-11",
+    status: 0,
+  },
+  {
+    id: 4,
+    user: 3,
+    hotel: { id: 4, city: null },
+    customerInfo: {
+      fullName: "Dao Quang Duy",
+      email: "daoquangduy441@gmail.com", 
+      phone: "0398206185", 
+      country: "Vietnam",
+    },
+    checkinDate: "2024-12-09",
+    checkoutDate: "2024-12-10",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [
+        { type: "Lake View Room", count: 1, price: 5280000 }
+      ],
+      totalRooms: 1,
+      totalPrice: 5280000,
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    createdDate: "2024-12-09",
+    status: 0,
+  },
+  {
+    id: 5,
+    user: 3,
+    hotel: { id: 5, city: null },
+    customerInfo: {
+      fullName: "Dao Quang Duy",
+      email: "daoquangduy441@gmail.com", 
+      phone: "0398206185", 
+      country: "Vietnam",
+    },
+    checkinDate: "2024-12-10",
+    checkoutDate: "2024-12-11",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [
+        { type: "Presidential Suite", count: 1, price: 14400000 }
+      ],
+      totalRooms: 1,
+      totalPrice: 14400000,
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    createdDate: "2024-12-10",
+    status: 0,
+  },
+  {
+    id: 6,
+    user: 3,
+    hotel: { id: 6, city: null },
+    customerInfo: {
+      fullName: "Dao Quang Duy",
+      email: "daoquangduy441@gmail.com", 
+      phone: "0398206185", 
+      country: "Vietnam",
+    },
+    checkinDate: "2024-12-11",
+    checkoutDate: "2024-12-12",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [{ type: "Lake View Room", count: 1, price: 5280000 }],
+      totalRooms: 1,
+      totalPrice: 5280000,
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    createdDate: "2024-12-11",
+    status: 0,
+  },
+  {
+    id: 7,
+    user: 4,
+    hotel: { id: 7, city: null },
+    customerInfo: {
+      fullName: "Vu Xuan Hoai",
+      email: "vuxuanhoai28@gmail.com",
+      phone: "0398206185",
+      country: "Vietnam",
+    },
+    checkinDate: "2024-12-09",
+    checkoutDate: "2024-12-10",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [
+        { type: "Lake View Room", count: 1, price: 5280000 }
+      ],
+      totalRooms: 1,
+      totalPrice: 5280000,
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    createdDate: "2024-12-09",
+    status: 0,
+  },
+  {
+    id: 8,
+    user: 4,
+    hotel: { id: 8, city: null },
+    customerInfo: {
+      fullName: "Vu Xuan Hoai",
+      email: "vuxuanhoai28@gmail.com",
+      phone: "0398206185",
+      country: "Vietnam",
+    },
+    checkinDate: "2024-12-10",
+    checkoutDate: "2024-12-11",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [{ type: "Presidential Suite", count: 1, price: 14400000 }],
+      totalRooms: 1,
+      totalPrice: 14400000,
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    createdDate: "2024-12-10",
+    status: 0,
+  },
+  {
+    id: 9,
+    user: 4,
+    hotel: { id: 9, city: null },
+    customerInfo: {
+      fullName: "Vu Xuan Hoai",
+      email: "vuxuanhoai28@gmail.com",
+      phone: "0398206185",
+      country: "Vietnam",
+    },
+    checkinDate: "2024-12-11",
+    checkoutDate: "2024-12-12",
+    adults: 2,
+    children: 0,
+    roomSelection: {
+      selectedRooms: [
+        { type: "Lake View Room", count: 1, price: 5280000 }
+      ],
+      totalRooms: 1,
+      totalPrice: 5280000,
+    },
+    specialRequest: null,
+    arrivalTime: "16:00-17:00",
+    createdDate: "2024-12-11",
+    status: 0,
+  },
+];

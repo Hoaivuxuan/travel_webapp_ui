@@ -1,329 +1,268 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import "./index.css";
-
+import { AutoComplete, Button, DatePicker, Input } from "antd";
+import { useRouter } from "next/navigation";
+import { AiOutlineClose } from 'react-icons/ai';
+import { IoLocationOutline } from "react-icons/io5";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import { Calendar } from "../ui/calendar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar, faMapLocation } from "@fortawesome/free-solid-svg-icons";
-import { useState, useEffect } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Notification from "@/components/Notification";
+import dayjs from "dayjs";
 
 export const formSchema = z.object({
-  type: z.string(),
-  location: z
-    .string()
-    .min(1, "Vui lòng nhập điểm đến để bắt đầu tìm kiếm!")
-    .max(50),
-  dates: z
-    .object({
-      startDate: z.date(),
-      endDate: z.date(),
-    })
-    .refine((data) => data.startDate < data.endDate, {
-      message: "Ngày kết thúc phải sau ngày bắt đầu",
-    }),
-  startTime: z.string(),
-  endTime: z.string(),
+  location: z.object({
+    name: z.string().min(1, "Vui lòng nhập điểm đến để bắt đầu tìm kiếm!").max(50),
+    id: z.number().optional(),
+  }),
+  dateRange: z.object({
+    pickupDate: z.date(),
+    returnDate: z.date(),
+  }),
 });
 
 function RentalSearchForm() {
   const router = useRouter();
+  const { notifyWarning } = Notification();
+  const [keyword, setKeyword] = useState("");
+  const [listCity, setListCity] = useState<any[]>([]);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
   const today = new Date();
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1);
 
-  const [selectedType, setSelectedType] = useState("cars");
+  const normalizeString = (str: string) => {
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, "")
+      .toLowerCase();
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      type: "cars",
-      location: "",
-      dates: {
-        startDate: today,
-        endDate: tomorrow,
+      location: {
+        name: "",
+        id: undefined,
       },
-      startTime: "09:00",
-      endTime: "09:00",
+      dateRange: {
+        pickupDate: today,
+        returnDate: tomorrow,
+      },
     },
   });
 
   useEffect(() => {
-    const storedValues = localStorage.getItem("searchRental");
+    const fetchCity = async () => {
+      const bearerToken = localStorage.getItem("token");
+      try {
+        const response = await fetch(`http://localhost:8080/city`, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+        const data = await response.json();
+        setListCity(data.response);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (Array.isArray(listCity)) {
+      const normalizedKeyword = normalizeString(keyword);
+      const filtered = listCity.filter((loc: any) => {
+        const normalizedLocationName = normalizeString(loc.name);
+        return normalizedLocationName.includes(normalizedKeyword);
+      });
+      setSuggestions(filtered);
+    } else {
+      setSuggestions([]);
+    }
+  
+    fetchCity();
+  }, [keyword, listCity]);
+
+  useEffect(() => {
+    const storedValues = localStorage.getItem("searchVehicle");
     if (storedValues) {
       const parsedValues = JSON.parse(storedValues);
-      form.setValue("type", parsedValues.type || "cars");
-      form.setValue("location", parsedValues.location || "");
-      form.setValue("dates.startDate", new Date(parsedValues.dates.startDate));
-      form.setValue("dates.endDate", new Date(parsedValues.dates.endDate));
-      form.setValue("startTime", parsedValues.startTime || "09:00");
-      form.setValue("endTime", parsedValues.endTime || "09:00");
-      setSelectedType(parsedValues.type || "cars");
+      form.setValue("location", parsedValues.location || { name: "", id: undefined });
+      form.setValue("dateRange", {
+        pickupDate: new Date(parsedValues.dateRange.pickupDate),
+        returnDate: new Date(parsedValues.dateRange.returnDate),
+      });
+      setDateRange([
+        dayjs(parsedValues.dateRange.pickupDate),
+        dayjs(parsedValues.dateRange.returnDate),
+      ]);
     }
 
     const subscription = form.watch((value) => {
-      localStorage.setItem("searchRental", JSON.stringify(value));
+      localStorage.setItem("searchVehicle", JSON.stringify(value));
     });
 
     return () => subscription.unsubscribe();
   }, [form]);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const checkin = format(values.dates.startDate, "dd-MM-yyyy");
-    const checkout = format(values.dates.endDate, "dd-MM-yyyy");
-    const currentPath = window.location.pathname;
-    localStorage.setItem("searchRental", JSON.stringify(values));
 
-    const url = new URL("https://searchresults.html");
-    url.searchParams.set("ss", "false");
-    url.searchParams.set("type", selectedType);
-    url.searchParams.set("location", values.location);
-    url.searchParams.set("checkin", checkin);
-    url.searchParams.set("checkout", checkout);
-    url.searchParams.set("start_time", values.startTime);
-    url.searchParams.set("end_time", values.endTime);
+  const [dateRange, setDateRange] = useState<[dayjs.Dayjs | null, dayjs.Dayjs | null]>([null, null]);
 
-    console.log(url.href);
-
-    if (currentPath.includes("/search")) {
-      router.push(`search?url=${url.href}`);
-    } else {
-      router.push(`rental/search?url=${url.href}`);
+  const handleDateChange = (dates: [dayjs.Dayjs | null, dayjs.Dayjs | null] | null) => {
+    if (dates) {
+      setDateRange(dates);
+      form.setValue("dateRange", {
+        pickupDate: dates[0]?.toDate() ?? today,
+        returnDate: dates[1]?.toDate() ?? tomorrow,
+      });
     }
-  }
+  };
+
+  const handleLocationSearch = (keyword: string, setSuggestions: any) => {
+    if (!keyword) {
+      setSuggestions([]);
+      return;
+    }
+    if (Array.isArray(listCity)) {
+      const filteredSuggestions = listCity.filter((location) =>
+        location.name.toLowerCase().includes(keyword.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    } else {
+      console.error("listCity is not an array");
+    }
+  };
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    localStorage.setItem("searchVehicle", JSON.stringify(values));
+    const query = new URLSearchParams({
+      location: values.location.name,
+      city: values.location.id?.toString() || "",
+      pickup: format(values.dateRange.pickupDate, "dd-MM-yyyy"),
+      return: format(values.dateRange.returnDate, "dd-MM-yyyy"),
+    });
+  
+    router.push(`/rental/search?url=2&${query.toString()}`);
+  };
+
+  const onError = (errors: any) => {
+    Object.values(errors).forEach((error: any) => {
+      if (error && error.message) notifyWarning(error.message);
+    });
+  };
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="bg-blue-600 p-4 rounded-lg max-w-7xl lg:mx-auto"
+        onSubmit={form.handleSubmit(onSubmit, onError)}
+        className="bg-[#472f91] border border-white p-4 rounded-lg max-w-7xl lg:mx-auto"
       >
-        <div className="grid grid-cols-10 gap-2">
-          <div className="col-span-3 relative">
-            <FormField
-              control={form.control}
-              name="location"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className="relative h-[65px]">
-                      <Input
-                        placeholder="Bạn muốn đến đâu?"
-                        {...field}
-                        className="pl-12 h-[65px]"
-                      />
-                      <span className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                        <FontAwesomeIcon
-                          icon={faMapLocation}
-                          className="mr-2 h-5 text-gray-400"
-                        />
-                      </span>
-                    </div>
-                  </FormControl>
-                  {form.formState.errors.location && (
-                    <div className="form-error !-mt-3">
-                      {form.formState.errors.location.message}
-                    </div>
+        <div className="grid grid-cols-9 gap-2">
+          <div className="col-span-8">
+            <div className=" grid grid-cols-3 gap-2">
+              <div className="col-span-2">
+                <FormField
+                  control={form.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="relative">
+                          <AutoComplete
+                            options={suggestions.slice(0,5).map((suggestion: any) => ({
+                              value: suggestion.name,
+                              label: (
+                                <div className="flex justify-between">
+                                  <span className="text-sm">{suggestion.name}</span>
+                                  <span className="bg-green-200 text-green-600 rounded-lg px-2 py-1 text-xs">
+                                    {suggestion.type}
+                                  </span>
+                                </div>
+                              ),
+                              id: suggestion.id,
+                            }))}
+                            onSearch={(value) => {
+                              setKeyword(value);
+                              handleLocationSearch(value, setSuggestions);
+                              field.onChange({ name: value, id: undefined });
+                            }}
+                            onSelect={(value, option: any) => {
+                              const selectedSuggestion = suggestions.find((s) => s.name === value);
+                              if (selectedSuggestion) {
+                                form.setValue("location", {
+                                  name: selectedSuggestion.name,
+                                  id: selectedSuggestion.id,
+                                });
+                                setKeyword(selectedSuggestion.name);
+                              }
+                            }}
+                            value={keyword || field.value?.name || ""}
+                            className="w-full"
+                          >
+                            <Input
+                              placeholder="Tìm kiếm điểm đến..."
+                              value={keyword || field.value?.name || ""}
+                              onChange={(e) => {
+                                setKeyword(e.target.value);
+                                field.onChange({ name: e.target.value, id: undefined });
+                              }}
+                              className="pl-10"
+                            />
+                          </AutoComplete>
+                          <span className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                            <IoLocationOutline className="text-gray-400" />
+                          </span>
+                          {keyword && (
+                            <AiOutlineClose
+                              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                              onClick={() => {
+                                setKeyword("");
+                                form.setValue("location", { name: "", id: undefined });
+                                setSuggestions([]);
+                              }}
+                            />
+                          )}
+                        </div>
+                      </FormControl>
+                    </FormItem>
                   )}
-                </FormItem>
-              )}
-            />
-          </div>
+                />
+              </div>
 
-          <div className="col-span-2 bg-white border border-gray-300 rounded-lg px-4 py-2">
-            <FormField
-              control={form.control}
-              name="dates.startDate"
-              render={({ field }) => (
-                <FormItem>
-                  <label className="block text-xs">Ngày nhận xe</label>
-                  <Popover>
-                    <PopoverTrigger asChild className="!p-0">
+              <div className="col-span-1">
+                <FormField
+                  control={form.control}
+                  name="dateRange"
+                  render={({field}) => (
+                    <FormItem className="flex flex-col">
                       <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full h-auto border border-white justify-start text-left font-normal",
-                            !field.value && "text-muted-foreground",
-                          )}
-                        >
-                          <FontAwesomeIcon
-                            icon={faCalendar}
-                            className="mr-2 w-4 text-gray-400"
-                          />
-                          {field.value
-                            ? format(field.value, "dd/MM/yyyy")
-                            : "Ngày nhận xe"}
-                        </Button>
+                        <DatePicker.RangePicker
+                          value={dateRange}
+                          onChange={handleDateChange}
+                          disabledDate={(current) => current && current < dayjs().startOf("day")}
+                          format="DD/MM/YYYY"
+                        />
                       </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        initialFocus
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        numberOfMonths={2}
-                        disabled={(date) =>
-                          date < new Date(new Date().setHours(0, 0, 0, 0))
-                        }
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </FormItem>
-              )}
-            />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="col-span-1 bg-white border border-gray-300 rounded-lg px-4 py-2">
-            <FormField
-              control={form.control}
-              name="startTime"
-              render={({ field }) => (
-                <FormItem>
-                  <label className="block text-xs">Thời gian</label>
-                  <FormControl>
-                    <div className="flex">
-                      <select
-                        className="rounded-lg w-full text-sm"
-                        value={field.value}
-                        onChange={(e) => field.onChange(e.target.value)}
-                      >
-                        {[...Array(24)].map((_, hourIndex) =>
-                          [...Array(2)].map((_, minuteIndex) => {
-                            const hour = hourIndex.toString().padStart(2, "0");
-                            const minutes = (minuteIndex * 30)
-                              .toString()
-                              .padStart(2, "0");
-                            const time = `${hour}:${minutes}`;
-                            return (
-                              <option
-                                key={`${hourIndex}-${minuteIndex}`}
-                                value={time}
-                              >
-                                {time}
-                              </option>
-                            );
-                          }),
-                        )}
-                      </select>
-                    </div>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="col-span-2 bg-white border border-gray-300 rounded-lg px-4 py-2">
-            <FormField
-              control={form.control}
-              name="dates.endDate"
-              render={({ field }) => (
-                <FormItem>
-                  <label className="block text-xs">Ngày trả xe</label>
-                  <Popover>
-                    <PopoverTrigger asChild className="!p-0">
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full h-auto border border-white justify-start text-left font-normal",
-                            !field.value && "text-muted-foreground",
-                          )}
-                        >
-                          <FontAwesomeIcon
-                            icon={faCalendar}
-                            className="mr-2 w-4 text-gray-400"
-                          />
-                          {field.value
-                            ? format(field.value, "dd/MM/yyyy")
-                            : "Ngày trả xe"}
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        initialFocus
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        numberOfMonths={2}
-                        disabled={(date) =>
-                          date <= form.getValues("dates.startDate")
-                        }
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="col-span-1 bg-white border border-gray-300 rounded-lg px-4 py-2">
-            <FormField
-              control={form.control}
-              name="endTime"
-              render={({ field }) => (
-                <FormItem>
-                  <label className="block text-xs">Thời gian</label>
-                  <FormControl>
-                    <div className="flex">
-                      <select
-                        className="rounded-lg w-full text-sm"
-                        value={field.value}
-                        onChange={(e) => field.onChange(e.target.value)}
-                      >
-                        {[...Array(24)].map((_, hourIndex) =>
-                          [...Array(2)].map((_, minuteIndex) => {
-                            const hour = hourIndex.toString().padStart(2, "0");
-                            const minutes = (minuteIndex * 30)
-                              .toString()
-                              .padStart(2, "0");
-                            const time = `${hour}:${minutes}`;
-                            return (
-                              <option
-                                key={`${hourIndex}-${minuteIndex}`}
-                                value={time}
-                              >
-                                {time}
-                              </option>
-                            );
-                          }),
-                        )}
-                      </select>
-                    </div>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="col-span-1 flex justify-center">
-            <Button
-              type="submit"
-              className="bg-[#013B94] text-base font-bold w-full h-full"
-            >
+          <div className="col-span-1 flex justify-center items-center">
+            <Button type="primary" htmlType="submit" className="w-full bg-yellow-400 text-[#472f91]">
               Tìm kiếm
             </Button>
           </div>
         </div>
       </form>
-      {/* <div className="max-w-7xl mt-4 lg:mx-auto">
-        <div className="flex space-x-4 text-base ml-2">
-          <span>
-            <strong>Chọn loại phương tiện: </strong>
-          </span>
-        </div>
-      </div> */}
+      <ToastContainer />
     </Form>
   );
 }

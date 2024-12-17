@@ -1,0 +1,10 @@
+[
+  {
+    "value": "none",
+    "text": "Thanh toán trực tiếp"
+  },
+  {
+    "value": "paypal",
+    "text": "Thanh toán bằng PayPal"
+  }
+]

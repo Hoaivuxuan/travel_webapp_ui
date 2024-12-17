@@ -4,30 +4,28 @@ type TypeHotel = {
 };
 
 export const type_hotel: TypeHotel[] = [
-  { id: 1, name: "Apartments" },
-  { id: 2, name: "Entire homes & apartments" },
-  { id: 3, name: "Hotels" },
-  { id: 4, name: "Villas" },
-  { id: 5, name: "Resorts" },
-  { id: 6, name: "Lodges" },
-  { id: 7, name: "Guest houses" },
-  { id: 8, name: "Chalets" },
-  { id: 9, name: "Love hotels" },
-  { id: 10, name: "Holiday homes" },
-  { id: 11, name: "Capsule hotels" },
-  { id: 12, name: "Bed and breakfasts" },
-  { id: 13, name: "Country houses" },
-  { id: 14, name: "Hostels" },
-  { id: 15, name: "Farm stays" },
-  { id: 16, name: "Campsites" },
-  { id: 17, name: "Homestays" },
+  { id: 1, name: "Apartment" },
+  { id: 2, name: "Homestay" },
+  { id: 3, name: "Hotel" },
+  { id: 4, name: "Villa" },
+  { id: 5, name: "Resort" },
+  { id: 6, name: "Lodge" },
+  { id: 7, name: "Guest House" },
+  { id: 8, name: "Chalet" },
+  { id: 9, name: "Love Hotel" },
+  { id: 10, name: "Holiday Home" },
+  { id: 11, name: "Capsule Hotel" },
+  { id: 12, name: "Bed & Breakfast" },
+  { id: 13, name: "Country House" },
+  { id: 14, name: "Hostel" },
+  { id: 15, name: "Farm Stay" },
+  { id: 16, name: "Campsite" },
 ];
 
 export const ratingLabel = [
-  { label: "Tuyệt hảo", min: 9 },
-  { label: "Rất tốt", min: 8 },
-  { label: "Tốt", min: 7 },
-  { label: "Dễ chịu", min: 6 },
+  { label: "Tuyệt hảo", min: 5 },
+  { label: "Rất tốt", min: 4 },
+  { label: "Tốt", min: 3 },
 ];
 
 export const listHotels = [
@@ -35,7 +33,8 @@ export const listHotels = [
     id: 1,
     name: "Ocean View Apartments",
     type: "Apartments",
-    description: "Modern apartments with an ocean view, ideal for family vacations.",
+    description:
+      "Modern apartments with an ocean view, ideal for family vacations.",
     address: "123 Beach Road, Phú Quốc, Kiên Giang, Vietnam",
     city: "Phú Quốc",
     location: {
@@ -48,7 +47,11 @@ export const listHotels = [
     },
     stars: 4,
     amenities: [
-      "WiFi miễn phí", "Hồ bơi", "Nhà hàng", "Trung tâm thể dục", "Bãi đậu xe",
+      "WiFi miễn phí",
+      "Hồ bơi",
+      "Nhà hàng",
+      "Trung tâm thể dục",
+      "Bãi đậu xe",
     ],
     checkIn_time: "14:00",
     checkOut_time: "12:00",
@@ -78,7 +81,11 @@ export const listHotels = [
         room_size: 30,
         view: "Biển",
         amenities: [
-          "Điều hòa", "TV", "Minibar", "Máy pha cà phê", "Bàn làm việc",
+          "Điều hòa",
+          "TV",
+          "Minibar",
+          "Máy pha cà phê",
+          "Bàn làm việc",
         ],
         availability: {
           available_rooms: 5,
@@ -93,7 +100,12 @@ export const listHotels = [
         room_size: 40,
         view: "Biển",
         amenities: [
-          "Điều hòa", "TV", "Minibar", "Máy pha cà phê", "Bàn làm việc", "Phòng tắm riêng",
+          "Điều hòa",
+          "TV",
+          "Minibar",
+          "Máy pha cà phê",
+          "Bàn làm việc",
+          "Phòng tắm riêng",
         ],
         availability: {
           available_rooms: 3,
@@ -102,27 +114,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 100,
-      average_rating: 4.5,
-      review_breakdown: {
+      totalReview: 100,
+      averageRating: 4.5,
+      reviewBreakdown: {
         "5_star": 80,
         "4_star": 15,
         "3_star": 3,
         "2_star": 1,
         "1_star": 1,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Nguyễn Văn A",
           date: "2024-09-20",
-          comment: "Khách sạn tuyệt vời, dịch vụ tốt.",
+          text: "Khách sạn tuyệt vời, dịch vụ tốt.",
         },
         {
           rating: 4,
           user: "Trần Thị B",
           date: "2024-09-18",
-          comment: "Phòng đẹp nhưng có thể cải thiện dịch vụ phòng.",
+          text: "Phòng đẹp nhưng có thể cải thiện dịch vụ phòng.",
         },
       ],
     },
@@ -143,15 +155,21 @@ export const listHotels = [
       ],
     },
     stars: 5,
-    amenities: ["WiFi miễn phí", "Hồ bơi riêng", "Spa", "Dịch vụ phòng 24/7", "Bar"],
+    amenities: [
+      "WiFi miễn phí",
+      "Hồ bơi riêng",
+      "Spa",
+      "Dịch vụ phòng 24/7",
+      "Bar",
+    ],
     checkIn_time: "15:00",
     checkOut_time: "12:00",
     hotel_policies: {
       cancellation_policy: "Hủy phòng miễn phí trước 48 giờ.",
-      deposit_required: "Cần đặt cọc 2.000.000 VND.",
+      deposit_required: "Cần đặt cọc 2.000.000 ₫.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 29 1234 5678",
@@ -184,7 +202,12 @@ export const listHotels = [
         bed_type: "2 Giường Queen",
         room_size: 100,
         view: "Biển và vườn",
-        amenities: ["WiFi miễn phí", "Phòng khách riêng", "Ban công", "Bồn tắm"],
+        amenities: [
+          "WiFi miễn phí",
+          "Phòng khách riêng",
+          "Ban công",
+          "Bồn tắm",
+        ],
         availability: {
           available_rooms: 2,
           status: "Có sẵn",
@@ -192,27 +215,28 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 200,
-      average_rating: 4.8,
-      review_breakdown: {
+      totalReview: 200,
+      averageRating: 4.8,
+      reviewBreakdown: {
         "5_star": 150,
         "4_star": 30,
         "3_star": 10,
         "2_star": 5,
         "1_star": 5,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Hoàng Minh C",
           date: "2024-09-21",
-          comment: "Villa rất đẹp, dịch vụ xuất sắc, bãi biển gần.",
+          text: "Villa rất đẹp, dịch vụ xuất sắc, bãi biển gần.",
         },
         {
           rating: 4,
           user: "Lê Thanh D",
           date: "2024-09-19",
-          comment: "Mọi thứ tốt, chỉ có điều tôi mong muốn thêm lựa chọn thực đơn.",
+          text:
+            "Mọi thứ tốt, chỉ có điều tôi mong muốn thêm lựa chọn thực đơn.",
         },
       ],
     },
@@ -221,7 +245,8 @@ export const listHotels = [
     id: 3,
     name: "Sunset Hotel",
     type: "Hotels",
-    description: "A premium hotel offering a variety of amenities and a prime location.",
+    description:
+      "A premium hotel offering a variety of amenities and a prime location.",
     address: "789 Sunshine Avenue, Hồ Chí Minh, Vietnam",
     city: "Hồ Chí Minh",
     location: {
@@ -233,15 +258,22 @@ export const listHotels = [
       ],
     },
     stars: 5,
-    amenities: ["WiFi miễn phí", "Hồ bơi trong nhà", "Nhà hàng", "Trung tâm thể dục", "Bar", "Dịch vụ phòng"],
+    amenities: [
+      "WiFi miễn phí",
+      "Hồ bơi trong nhà",
+      "Nhà hàng",
+      "Trung tâm thể dục",
+      "Bar",
+      "Dịch vụ phòng",
+    ],
     checkIn_time: "14:00",
     checkOut_time: "12:00",
     hotel_policies: {
       cancellation_policy: "Hủy phòng miễn phí 24 giờ trước khi nhận phòng.",
-      deposit_required: "Cần đặt cọc 1.000.000 VND.",
+      deposit_required: "Cần đặt cọc 1.000.000 ₫.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 300.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 300.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 28 1234 5678",
@@ -261,7 +293,13 @@ export const listHotels = [
         bed_type: "Giường Queen",
         room_size: 30,
         view: "Phố",
-        amenities: ["WiFi miễn phí", "TV", "Máy pha cà phê", "Minibar", "Bàn làm việc"],
+        amenities: [
+          "WiFi miễn phí",
+          "TV",
+          "Máy pha cà phê",
+          "Minibar",
+          "Bàn làm việc",
+        ],
         availability: {
           available_rooms: 8,
           status: "Có sẵn",
@@ -274,7 +312,14 @@ export const listHotels = [
         bed_type: "2 Giường Queen",
         room_size: 50,
         view: "Thành phố",
-        amenities: ["WiFi miễn phí", "Bồn tắm", "Máy pha cà phê", "TV", "Bàn làm việc", "Minibar"],
+        amenities: [
+          "WiFi miễn phí",
+          "Bồn tắm",
+          "Máy pha cà phê",
+          "TV",
+          "Bàn làm việc",
+          "Minibar",
+        ],
         availability: {
           available_rooms: 3,
           status: "Có sẵn",
@@ -282,27 +327,28 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 150,
-      average_rating: 4.7,
-      review_breakdown: {
+      totalReview: 150,
+      averageRating: 4.7,
+      reviewBreakdown: {
         "5_star": 110,
         "4_star": 30,
         "3_star": 5,
         "2_star": 3,
         "1_star": 2,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Nguyễn Minh E",
           date: "2024-09-22",
-          comment: "Phòng sạch sẽ, nhân viên rất thân thiện, vị trí tuyệt vời.",
+          text: "Phòng sạch sẽ, nhân viên rất thân thiện, vị trí tuyệt vời.",
         },
         {
           rating: 4,
           user: "Phan Hải F",
           date: "2024-09-20",
-          comment: "Khách sạn tuyệt vời, tuy nhiên tôi mong muốn thêm bãi đậu xe.",
+          text:
+            "Khách sạn tuyệt vời, tuy nhiên tôi mong muốn thêm bãi đậu xe.",
         },
       ],
     },
@@ -311,7 +357,8 @@ export const listHotels = [
     id: 4,
     name: "Mountain Resort",
     type: "Resorts",
-    description: "A relaxing resort located in the mountains, offering amazing views and activities.",
+    description:
+      "A relaxing resort located in the mountains, offering amazing views and activities.",
     address: "101 Mountain Road, Lâm Đồng, Vietnam",
     city: "Đà Lạt",
     location: {
@@ -351,7 +398,12 @@ export const listHotels = [
         bed_type: "Giường King",
         room_size: 35,
         view: "Núi",
-        amenities: ["WiFi miễn phí", "Máy pha cà phê", "Bàn làm việc", "Minibar"],
+        amenities: [
+          "WiFi miễn phí",
+          "Máy pha cà phê",
+          "Bàn làm việc",
+          "Minibar",
+        ],
         availability: {
           available_rooms: 6,
           status: "Có sẵn",
@@ -364,7 +416,12 @@ export const listHotels = [
         bed_type: "Giường Queen",
         room_size: 40,
         view: "Vườn",
-        amenities: ["WiFi miễn phí", "Máy pha cà phê", "Bàn làm việc", "Minibar"],
+        amenities: [
+          "WiFi miễn phí",
+          "Máy pha cà phê",
+          "Bàn làm việc",
+          "Minibar",
+        ],
         availability: {
           available_rooms: 4,
           status: "Có sẵn",
@@ -372,27 +429,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 80,
-      average_rating: 4.4,
-      review_breakdown: {
+      totalReview: 80,
+      averageRating: 4.4,
+      reviewBreakdown: {
         "5_star": 50,
         "4_star": 20,
         "3_star": 5,
         "2_star": 3,
         "1_star": 2,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Đặng Hữu G",
           date: "2024-09-21",
-          comment: "Một nơi tuyệt vời để thư giãn và tận hưởng thiên nhiên.",
+          text: "Một nơi tuyệt vời để thư giãn và tận hưởng thiên nhiên.",
         },
         {
           rating: 4,
           user: "Phan Hữu H",
           date: "2024-09-19",
-          comment: "Mọi thứ ổn, nhưng cần cải thiện dịch vụ phòng.",
+          text: "Mọi thứ ổn, nhưng cần cải thiện dịch vụ phòng.",
         },
       ],
     },
@@ -413,15 +470,22 @@ export const listHotels = [
       ],
     },
     stars: 5,
-    amenities: ["WiFi miễn phí", "Hồ bơi trên tầng thượng", "Spa", "Nhà hàng", "Phòng gym", "Quầy bar"],
+    amenities: [
+      "WiFi miễn phí",
+      "Hồ bơi trên tầng thượng",
+      "Spa",
+      "Nhà hàng",
+      "Phòng gym",
+      "Quầy bar",
+    ],
     checkIn_time: "15:00",
     checkOut_time: "12:00",
     hotel_policies: {
       cancellation_policy: "Hủy phòng miễn phí 48 giờ trước khi nhận phòng.",
-      deposit_required: "Cần đặt cọc 2.000.000 VND.",
+      deposit_required: "Cần đặt cọc 2.000.000 ₫.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 600.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 600.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 24 1234 5678",
@@ -441,7 +505,13 @@ export const listHotels = [
         bed_type: "Giường Queen",
         room_size: 35,
         view: "Thành phố",
-        amenities: ["WiFi miễn phí", "TV màn hình phẳng", "Minibar", "Bàn làm việc", "Máy pha cà phê"],
+        amenities: [
+          "WiFi miễn phí",
+          "TV màn hình phẳng",
+          "Minibar",
+          "Bàn làm việc",
+          "Máy pha cà phê",
+        ],
         availability: {
           available_rooms: 6,
           status: "Có sẵn",
@@ -454,7 +524,13 @@ export const listHotels = [
         bed_type: "Giường King",
         room_size: 50,
         view: "Thành phố",
-        amenities: ["WiFi miễn phí", "Bồn tắm", "TV màn hình phẳng", "Máy pha cà phê", "Minibar"],
+        amenities: [
+          "WiFi miễn phí",
+          "Bồn tắm",
+          "TV màn hình phẳng",
+          "Máy pha cà phê",
+          "Minibar",
+        ],
         availability: {
           available_rooms: 2,
           status: "Có sẵn",
@@ -462,27 +538,28 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 180,
-      average_rating: 4.6,
-      review_breakdown: {
+      totalReview: 180,
+      averageRating: 4.6,
+      reviewBreakdown: {
         "5_star": 120,
         "4_star": 40,
         "3_star": 10,
         "2_star": 5,
         "1_star": 5,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Nguyễn Đức I",
           date: "2024-09-22",
-          comment: "Khách sạn rất đẹp, dịch vụ tốt và vị trí thuận tiện.",
+          text: "Khách sạn rất đẹp, dịch vụ tốt và vị trí thuận tiện.",
         },
         {
           rating: 4,
           user: "Trần Thị K",
           date: "2024-09-20",
-          comment: "Dịch vụ phòng rất tốt nhưng muốn có thêm lựa chọn bữa sáng.",
+          text:
+            "Dịch vụ phòng rất tốt nhưng muốn có thêm lựa chọn bữa sáng.",
         },
       ],
     },
@@ -491,7 +568,8 @@ export const listHotels = [
     id: 6,
     name: "Golden Sands Resort",
     type: "Resorts",
-    description: "A beachfront resort offering a relaxing stay with water sports and a wellness center.",
+    description:
+      "A beachfront resort offering a relaxing stay with water sports and a wellness center.",
     address: "123 Golden Sands Beach, Phan Thiết, Bình Thuận, Vietnam",
     city: "Phan Thiết",
     location: {
@@ -503,7 +581,14 @@ export const listHotels = [
       ],
     },
     stars: 5,
-    amenities: ["WiFi miễn phí", "Hồ bơi ngoài trời", "Spa", "Nhà hàng", "Dịch vụ thể thao dưới nước", "Bãi biển riêng"],
+    amenities: [
+      "WiFi miễn phí",
+      "Hồ bơi ngoài trời",
+      "Spa",
+      "Nhà hàng",
+      "Dịch vụ thể thao dưới nước",
+      "Bãi biển riêng",
+    ],
     checkIn_time: "14:00",
     checkOut_time: "12:00",
     hotel_policies: {
@@ -511,7 +596,7 @@ export const listHotels = [
       deposit_required: "Không cần đặt cọc.",
       pets_allowed: true,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 400.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 400.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 62 1234 5678",
@@ -531,7 +616,13 @@ export const listHotels = [
         bed_type: "Giường King",
         room_size: 40,
         view: "Biển",
-        amenities: ["WiFi miễn phí", "Máy pha cà phê", "Minibar", "Bàn làm việc", "Phòng tắm riêng"],
+        amenities: [
+          "WiFi miễn phí",
+          "Máy pha cà phê",
+          "Minibar",
+          "Bàn làm việc",
+          "Phòng tắm riêng",
+        ],
         availability: {
           available_rooms: 4,
           status: "Có sẵn",
@@ -544,7 +635,13 @@ export const listHotels = [
         bed_type: "2 Giường Queen",
         room_size: 70,
         view: "Biển",
-        amenities: ["WiFi miễn phí", "Bồn tắm", "Máy pha cà phê", "Minibar", "Bàn làm việc"],
+        amenities: [
+          "WiFi miễn phí",
+          "Bồn tắm",
+          "Máy pha cà phê",
+          "Minibar",
+          "Bàn làm việc",
+        ],
         availability: {
           available_rooms: 3,
           status: "Có sẵn",
@@ -552,27 +649,28 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 250,
-      average_rating: 4.8,
-      review_breakdown: {
+      totalReview: 250,
+      averageRating: 4.8,
+      reviewBreakdown: {
         "5_star": 200,
         "4_star": 40,
         "3_star": 5,
         "2_star": 3,
         "1_star": 2,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Lê Minh L",
           date: "2024-09-25",
-          comment: "Khách sạn tuyệt vời, bãi biển rất đẹp và dịch vụ phòng rất tốt.",
+          text:
+            "Khách sạn tuyệt vời, bãi biển rất đẹp và dịch vụ phòng rất tốt.",
         },
         {
           rating: 4,
           user: "Phạm Đức M",
           date: "2024-09-23",
-          comment: "Mọi thứ đều tốt, chỉ có phòng hơi nhỏ.",
+          text: "Mọi thứ đều tốt, chỉ có phòng hơi nhỏ.",
         },
       ],
     },
@@ -581,7 +679,8 @@ export const listHotels = [
     id: 7,
     name: "Royal Palace Hotel",
     type: "Hotels",
-    description: "An elegant hotel with luxurious accommodations and a prime downtown location.",
+    description:
+      "An elegant hotel with luxurious accommodations and a prime downtown location.",
     address: "45 Royal Avenue, Thành phố Hồ Chí Minh, Vietnam",
     city: "Hồ Chí Minh",
     location: {
@@ -593,7 +692,13 @@ export const listHotels = [
       ],
     },
     stars: 5,
-    amenities: ["WiFi miễn phí", "Nhà hàng cao cấp", "Phòng gym", "Dịch vụ phòng 24/7", "Bãi đậu xe miễn phí"],
+    amenities: [
+      "WiFi miễn phí",
+      "Nhà hàng cao cấp",
+      "Phòng gym",
+      "Dịch vụ phòng 24/7",
+      "Bãi đậu xe miễn phí",
+    ],
     checkIn_time: "14:00",
     checkOut_time: "12:00",
     hotel_policies: {
@@ -601,7 +706,7 @@ export const listHotels = [
       deposit_required: "Không cần đặt cọc.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 28 1234 5678",
@@ -621,7 +726,13 @@ export const listHotels = [
         bed_type: "Giường King",
         room_size: 40,
         view: "Thành phố",
-        amenities: ["WiFi miễn phí", "TV", "Minibar", "Máy pha cà phê", "Bàn làm việc"],
+        amenities: [
+          "WiFi miễn phí",
+          "TV",
+          "Minibar",
+          "Máy pha cà phê",
+          "Bàn làm việc",
+        ],
         availability: {
           available_rooms: 6,
           status: "Có sẵn",
@@ -634,7 +745,13 @@ export const listHotels = [
         bed_type: "Giường King và Queen",
         room_size: 80,
         view: "Thành phố",
-        amenities: ["WiFi miễn phí", "Bồn tắm", "Minibar", "Máy pha cà phê", "Bàn làm việc"],
+        amenities: [
+          "WiFi miễn phí",
+          "Bồn tắm",
+          "Minibar",
+          "Máy pha cà phê",
+          "Bàn làm việc",
+        ],
         availability: {
           available_rooms: 2,
           status: "Có sẵn",
@@ -642,27 +759,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 320,
-      average_rating: 4.9,
-      review_breakdown: {
+      totalReview: 320,
+      averageRating: 4.9,
+      reviewBreakdown: {
         "5_star": 270,
         "4_star": 40,
         "3_star": 5,
         "2_star": 2,
         "1_star": 3,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Hoàng Trung D",
           date: "2024-09-26",
-          comment: "Một khách sạn tuyệt vời với chất lượng dịch vụ đỉnh cao.",
+          text: "Một khách sạn tuyệt vời với chất lượng dịch vụ đỉnh cao.",
         },
         {
           rating: 4,
           user: "Vũ Trọng K",
           date: "2024-09-24",
-          comment: "Khách sạn rất đẹp, chỉ có phòng hơi nhỏ.",
+          text: "Khách sạn rất đẹp, chỉ có phòng hơi nhỏ.",
         },
       ],
     },
@@ -676,14 +793,20 @@ export const listHotels = [
     city: "Phú Quốc",
     location: {
       latitude: 10.2899,
-      longitude: 103.9840,
+      longitude: 103.984,
       nearby_attractions: [
         { name: "Vinpearl Safari", distance: 10 },
         { name: "Bãi Dài", distance: 8 },
       ],
     },
     stars: 5,
-    amenities: ["WiFi miễn phí", "Hồ bơi riêng", "Nhà hàng", "Khu vực BBQ", "Dịch vụ chăm sóc khách hàng 24/7"],
+    amenities: [
+      "WiFi miễn phí",
+      "Hồ bơi riêng",
+      "Nhà hàng",
+      "Khu vực BBQ",
+      "Dịch vụ chăm sóc khách hàng 24/7",
+    ],
     checkIn_time: "14:00",
     checkOut_time: "12:00",
     hotel_policies: {
@@ -691,7 +814,7 @@ export const listHotels = [
       deposit_required: "Cần đặt cọc 50% giá trị đặt phòng.",
       pets_allowed: true,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 77 1234 5678",
@@ -711,7 +834,13 @@ export const listHotels = [
         bed_type: "Giường King và Queen",
         room_size: 60,
         view: "Biển",
-        amenities: ["WiFi miễn phí", "Bồn tắm", "Minibar", "Bàn làm việc", "Máy pha cà phê"],
+        amenities: [
+          "WiFi miễn phí",
+          "Bồn tắm",
+          "Minibar",
+          "Bàn làm việc",
+          "Máy pha cà phê",
+        ],
         availability: {
           available_rooms: 2,
           status: "Có sẵn",
@@ -724,7 +853,13 @@ export const listHotels = [
         bed_type: "2 Giường King",
         room_size: 80,
         view: "Vườn",
-        amenities: ["WiFi miễn phí", "Máy pha cà phê", "Minibar", "Bàn làm việc", "Khu vực ăn uống"],
+        amenities: [
+          "WiFi miễn phí",
+          "Máy pha cà phê",
+          "Minibar",
+          "Bàn làm việc",
+          "Khu vực ăn uống",
+        ],
         availability: {
           available_rooms: 3,
           status: "Có sẵn",
@@ -732,27 +867,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 150,
-      average_rating: 4.9,
-      review_breakdown: {
+      totalReview: 150,
+      averageRating: 4.9,
+      reviewBreakdown: {
         "5_star": 130,
         "4_star": 15,
         "3_star": 3,
         "2_star": 2,
         "1_star": 0,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Nguyễn Thị T",
           date: "2024-09-29",
-          comment: "Một nơi tuyệt vời để thư giãn và nghỉ ngơi!",
+          text: "Một nơi tuyệt vời để thư giãn và nghỉ ngơi!",
         },
         {
           rating: 4,
           user: "Hoàng Quốc P",
           date: "2024-09-28",
-          comment: "Rất thích, nhưng bãi biển hơi xa một chút.",
+          text: "Rất thích, nhưng bãi biển hơi xa một chút.",
         },
       ],
     },
@@ -761,7 +896,8 @@ export const listHotels = [
     id: 9,
     name: "Mountain Retreat Resort",
     type: "Resorts",
-    description: "A peaceful resort in the mountains with breathtaking views and outdoor activities.",
+    description:
+      "A peaceful resort in the mountains with breathtaking views and outdoor activities.",
     address: "22 Mountain Peak, Đà Lạt, Lâm Đồng, Vietnam",
     city: "Đà Lạt",
     location: {
@@ -773,7 +909,14 @@ export const listHotels = [
       ],
     },
     stars: 5,
-    amenities: ["WiFi miễn phí", "Hồ bơi ngoài trời", "Phòng tập gym", "Nhà hàng", "Dịch vụ massage", "Bãi đỗ xe"],
+    amenities: [
+      "WiFi miễn phí",
+      "Hồ bơi ngoài trời",
+      "Phòng tập gym",
+      "Nhà hàng",
+      "Dịch vụ massage",
+      "Bãi đỗ xe",
+    ],
     checkIn_time: "14:00",
     checkOut_time: "12:00",
     hotel_policies: {
@@ -781,7 +924,7 @@ export const listHotels = [
       deposit_required: "Không cần đặt cọc.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 263 1234 5678",
@@ -801,7 +944,13 @@ export const listHotels = [
         bed_type: "Giường King",
         room_size: 45,
         view: "Núi",
-        amenities: ["WiFi miễn phí", "TV", "Minibar", "Bàn làm việc", "Máy pha cà phê"],
+        amenities: [
+          "WiFi miễn phí",
+          "TV",
+          "Minibar",
+          "Bàn làm việc",
+          "Máy pha cà phê",
+        ],
         availability: {
           available_rooms: 4,
           status: "Có sẵn",
@@ -814,7 +963,13 @@ export const listHotels = [
         bed_type: "Giường King và Queen",
         room_size: 80,
         view: "Núi",
-        amenities: ["WiFi miễn phí", "Bồn tắm", "Minibar", "Máy pha cà phê", "Bàn làm việc"],
+        amenities: [
+          "WiFi miễn phí",
+          "Bồn tắm",
+          "Minibar",
+          "Máy pha cà phê",
+          "Bàn làm việc",
+        ],
         availability: {
           available_rooms: 2,
           status: "Có sẵn",
@@ -822,27 +977,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 210,
-      average_rating: 4.7,
-      review_breakdown: {
+      totalReview: 210,
+      averageRating: 4.7,
+      reviewBreakdown: {
         "5_star": 160,
         "4_star": 40,
         "3_star": 5,
         "2_star": 3,
         "1_star": 2,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Lương Quang T",
           date: "2024-10-10",
-          comment: "Khung cảnh tuyệt vời và phòng rất thoải mái.",
+          text: "Khung cảnh tuyệt vời và phòng rất thoải mái.",
         },
         {
           rating: 4,
           user: "Trần Thi Thanh",
           date: "2024-10-08",
-          comment: "Dịch vụ rất tốt, nhưng một số thiết bị trong phòng hơi cũ.",
+          text: "Dịch vụ rất tốt, nhưng một số thiết bị trong phòng hơi cũ.",
         },
       ],
     },
@@ -851,7 +1006,8 @@ export const listHotels = [
     id: 10,
     name: "Sunshine Beach Villas",
     type: "Villas",
-    description: "A tropical villa escape on the beachfront, perfect for relaxation and private gatherings.",
+    description:
+      "A tropical villa escape on the beachfront, perfect for relaxation and private gatherings.",
     address: "78 Sun Coast Road, Nha Trang, Khánh Hòa, Vietnam",
     city: "Nha Trang",
     location: {
@@ -863,7 +1019,14 @@ export const listHotels = [
       ],
     },
     stars: 5,
-    amenities: ["WiFi miễn phí", "Hồ bơi riêng", "Bãi biển riêng", "Dịch vụ BBQ", "Nhà hàng", "Chăm sóc khách hàng 24/7"],
+    amenities: [
+      "WiFi miễn phí",
+      "Hồ bơi riêng",
+      "Bãi biển riêng",
+      "Dịch vụ BBQ",
+      "Nhà hàng",
+      "Chăm sóc khách hàng 24/7",
+    ],
     checkIn_time: "15:00",
     checkOut_time: "12:00",
     hotel_policies: {
@@ -871,7 +1034,7 @@ export const listHotels = [
       deposit_required: "Cần đặt cọc 30% giá trị đặt phòng.",
       pets_allowed: true,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 600.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 600.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 258 1234 5678",
@@ -891,7 +1054,13 @@ export const listHotels = [
         bed_type: "2 Giường Queen",
         room_size: 70,
         view: "Biển",
-        amenities: ["WiFi miễn phí", "Máy pha cà phê", "Minibar", "Bồn tắm", "Phòng tắm riêng"],
+        amenities: [
+          "WiFi miễn phí",
+          "Máy pha cà phê",
+          "Minibar",
+          "Bồn tắm",
+          "Phòng tắm riêng",
+        ],
         availability: {
           available_rooms: 3,
           status: "Có sẵn",
@@ -904,7 +1073,13 @@ export const listHotels = [
         bed_type: "Giường King và Queen",
         room_size: 80,
         view: "Vườn",
-        amenities: ["WiFi miễn phí", "Bồn tắm", "Máy pha cà phê", "Minibar", "Bàn làm việc"],
+        amenities: [
+          "WiFi miễn phí",
+          "Bồn tắm",
+          "Máy pha cà phê",
+          "Minibar",
+          "Bàn làm việc",
+        ],
         availability: {
           available_rooms: 2,
           status: "Có sẵn",
@@ -912,27 +1087,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 180,
-      average_rating: 4.8,
-      review_breakdown: {
+      totalReview: 180,
+      averageRating: 4.8,
+      reviewBreakdown: {
         "5_star": 150,
         "4_star": 25,
         "3_star": 3,
         "2_star": 1,
         "1_star": 1,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Nguyễn Thanh H",
           date: "2024-09-30",
-          comment: "Nơi tuyệt vời để thư giãn và tận hưởng bãi biển riêng.",
+          text: "Nơi tuyệt vời để thư giãn và tận hưởng bãi biển riêng.",
         },
         {
           rating: 4,
           user: "Vũ Hoàng T",
           date: "2024-09-28",
-          comment: "Phòng đẹp, nhưng chất lượng thức ăn chưa thực sự tốt.",
+          text: "Phòng đẹp, nhưng chất lượng thức ăn chưa thực sự tốt.",
         },
       ],
     },
@@ -941,19 +1116,27 @@ export const listHotels = [
     id: 11,
     name: "The Golden Palm Hotel",
     type: "Hotels",
-    description: "An elegant hotel with a rich cultural theme and luxurious amenities.",
+    description:
+      "An elegant hotel with a rich cultural theme and luxurious amenities.",
     address: "202 Palm Avenue, Hội An, Quảng Nam, Vietnam",
     city: "Hội An",
     location: {
       latitude: 15.8801,
-      longitude: 108.3380,
+      longitude: 108.338,
       nearby_attractions: [
         { name: "Chùa Cầu", distance: 1 },
         { name: "Bảo tàng Hội An", distance: 2 },
       ],
     },
     stars: 5,
-    amenities: ["WiFi miễn phí", "Phòng tập gym", "Bể bơi ngoài trời", "Nhà hàng", "Phòng xông hơi", "Dịch vụ spa"],
+    amenities: [
+      "WiFi miễn phí",
+      "Phòng tập gym",
+      "Bể bơi ngoài trời",
+      "Nhà hàng",
+      "Phòng xông hơi",
+      "Dịch vụ spa",
+    ],
     checkIn_time: "14:00",
     checkOut_time: "12:00",
     hotel_policies: {
@@ -961,7 +1144,7 @@ export const listHotels = [
       deposit_required: "Không cần đặt cọc.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 400.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 400.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 235 1234 5678",
@@ -981,7 +1164,13 @@ export const listHotels = [
         bed_type: "Giường Queen",
         room_size: 40,
         view: "Hội An",
-        amenities: ["WiFi miễn phí", "TV màn hình phẳng", "Minibar", "Máy pha cà phê", "Bàn làm việc"],
+        amenities: [
+          "WiFi miễn phí",
+          "TV màn hình phẳng",
+          "Minibar",
+          "Máy pha cà phê",
+          "Bàn làm việc",
+        ],
         availability: {
           available_rooms: 6,
           status: "Có sẵn",
@@ -994,7 +1183,13 @@ export const listHotels = [
         bed_type: "Giường King",
         room_size: 70,
         view: "Hội An",
-        amenities: ["WiFi miễn phí", "Bồn tắm", "Minibar", "Máy pha cà phê", "Bàn làm việc"],
+        amenities: [
+          "WiFi miễn phí",
+          "Bồn tắm",
+          "Minibar",
+          "Máy pha cà phê",
+          "Bàn làm việc",
+        ],
         availability: {
           available_rooms: 3,
           status: "Có sẵn",
@@ -1002,27 +1197,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 220,
-      average_rating: 4.8,
-      review_breakdown: {
+      totalReview: 220,
+      averageRating: 4.8,
+      reviewBreakdown: {
         "5_star": 180,
         "4_star": 30,
         "3_star": 5,
         "2_star": 2,
         "1_star": 3,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Trương Quang T",
           date: "2024-10-05",
-          comment: "Dịch vụ tuyệt vời, phòng sạch sẽ và đầy đủ tiện nghi.",
+          text: "Dịch vụ tuyệt vời, phòng sạch sẽ và đầy đủ tiện nghi.",
         },
         {
           rating: 4,
           user: "Đặng Thị B",
           date: "2024-10-01",
-          comment: "Khách sạn đẹp nhưng hơi xa khu phố cổ.",
+          text: "Khách sạn đẹp nhưng hơi xa khu phố cổ.",
         },
       ],
     },
@@ -1031,7 +1226,8 @@ export const listHotels = [
     id: 12,
     name: "Royal Diamond Hotel",
     type: "Hotels",
-    description: "A luxurious hotel located in the heart of the city with first-class services.",
+    description:
+      "A luxurious hotel located in the heart of the city with first-class services.",
     address: "500 City Center Street, TP. Hồ Chí Minh, Vietnam",
     city: "TP. Hồ Chí Minh",
     location: {
@@ -1043,7 +1239,14 @@ export const listHotels = [
       ],
     },
     stars: 5,
-    amenities: ["WiFi miễn phí", "Hồ bơi ngoài trời", "Phòng tập gym", "Spa", "Nhà hàng", "Dịch vụ phòng 24/7"],
+    amenities: [
+      "WiFi miễn phí",
+      "Hồ bơi ngoài trời",
+      "Phòng tập gym",
+      "Spa",
+      "Nhà hàng",
+      "Dịch vụ phòng 24/7",
+    ],
     checkIn_time: "14:00",
     checkOut_time: "12:00",
     hotel_policies: {
@@ -1051,7 +1254,7 @@ export const listHotels = [
       deposit_required: "Không cần đặt cọc.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 700.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 700.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 28 1234 5678",
@@ -1071,7 +1274,13 @@ export const listHotels = [
         bed_type: "Giường King",
         room_size: 45,
         view: "Thành phố",
-        amenities: ["WiFi miễn phí", "Minibar", "Bồn tắm", "Bàn làm việc", "TV màn hình phẳng"],
+        amenities: [
+          "WiFi miễn phí",
+          "Minibar",
+          "Bồn tắm",
+          "Bàn làm việc",
+          "TV màn hình phẳng",
+        ],
         availability: {
           available_rooms: 5,
           status: "Có sẵn",
@@ -1084,7 +1293,13 @@ export const listHotels = [
         bed_type: "2 Giường King",
         room_size: 80,
         view: "Thành phố",
-        amenities: ["WiFi miễn phí", "Máy pha cà phê", "Minibar", "Bồn tắm", "Phòng khách riêng"],
+        amenities: [
+          "WiFi miễn phí",
+          "Máy pha cà phê",
+          "Minibar",
+          "Bồn tắm",
+          "Phòng khách riêng",
+        ],
         availability: {
           available_rooms: 3,
           status: "Có sẵn",
@@ -1092,27 +1307,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 350,
-      average_rating: 4.9,
-      review_breakdown: {
+      totalReview: 350,
+      averageRating: 4.9,
+      reviewBreakdown: {
         "5_star": 320,
         "4_star": 20,
         "3_star": 5,
         "2_star": 2,
         "1_star": 3,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Phan Minh K",
           date: "2024-10-12",
-          comment: "Một khách sạn tuyệt vời với chất lượng dịch vụ tuyệt hảo.",
+          text: "Một khách sạn tuyệt vời với chất lượng dịch vụ tuyệt hảo.",
         },
         {
           rating: 4,
           user: "Nguyễn Minh T",
           date: "2024-10-09",
-          comment: "Chất lượng phòng tốt nhưng bãi đỗ xe còn chật.",
+          text: "Chất lượng phòng tốt nhưng bãi đỗ xe còn chật.",
         },
       ],
     },
@@ -1121,11 +1336,12 @@ export const listHotels = [
     id: 13,
     name: "Ocean Breeze Resort",
     type: "Resorts",
-    description: "A luxurious beachfront resort offering relaxation, water activities, and stunning ocean views.",
+    description:
+      "A luxurious beachfront resort offering relaxation, water activities, and stunning ocean views.",
     address: "88 Ocean Drive, Phan Thiết, Bình Thuận, Vietnam",
     city: "Phan Thiết",
     location: {
-      latitude: 10.9570,
+      latitude: 10.957,
       longitude: 108.1916,
       nearby_attractions: [
         { name: "Bãi biển Mũi Né", distance: 1 },
@@ -1133,7 +1349,15 @@ export const listHotels = [
       ],
     },
     stars: 5,
-    amenities: ["WiFi miễn phí", "Hồ bơi ngoài trời", "Bãi biển riêng", "Phòng tập gym", "Nhà hàng", "Dịch vụ spa", "Massage thư giãn"],
+    amenities: [
+      "WiFi miễn phí",
+      "Hồ bơi ngoài trời",
+      "Bãi biển riêng",
+      "Phòng tập gym",
+      "Nhà hàng",
+      "Dịch vụ spa",
+      "Massage thư giãn",
+    ],
     checkIn_time: "14:00",
     checkOut_time: "12:00",
     hotel_policies: {
@@ -1141,7 +1365,7 @@ export const listHotels = [
       deposit_required: "Cần đặt cọc 30% giá trị đặt phòng.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 500.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 252 1234 5678",
@@ -1161,7 +1385,13 @@ export const listHotels = [
         bed_type: "Giường King",
         room_size: 45,
         view: "Biển",
-        amenities: ["WiFi miễn phí", "Minibar", "Máy pha cà phê", "Bồn tắm", "Bàn làm việc"],
+        amenities: [
+          "WiFi miễn phí",
+          "Minibar",
+          "Máy pha cà phê",
+          "Bồn tắm",
+          "Bàn làm việc",
+        ],
         availability: {
           available_rooms: 3,
           status: "Có sẵn",
@@ -1174,7 +1404,13 @@ export const listHotels = [
         bed_type: "2 Giường Queen",
         room_size: 75,
         view: "Biển",
-        amenities: ["WiFi miễn phí", "Bồn tắm", "Minibar", "Máy pha cà phê", "Phòng khách riêng"],
+        amenities: [
+          "WiFi miễn phí",
+          "Bồn tắm",
+          "Minibar",
+          "Máy pha cà phê",
+          "Phòng khách riêng",
+        ],
         availability: {
           available_rooms: 2,
           status: "Có sẵn",
@@ -1182,27 +1418,28 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 190,
-      average_rating: 4.8,
-      review_breakdown: {
+      totalReview: 190,
+      averageRating: 4.8,
+      reviewBreakdown: {
         "5_star": 160,
         "4_star": 20,
         "3_star": 5,
         "2_star": 3,
         "1_star": 2,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Trương Thị L",
           date: "2024-10-15",
-          comment: "Một kỳ nghỉ tuyệt vời, phòng rất đẹp và nhân viên thân thiện.",
+          text:
+            "Một kỳ nghỉ tuyệt vời, phòng rất đẹp và nhân viên thân thiện.",
         },
         {
           rating: 4,
           user: "Nguyễn Quang H",
           date: "2024-10-12",
-          comment: "Dịch vụ tuyệt vời, nhưng bãi đỗ xe có phần nhỏ.",
+          text: "Dịch vụ tuyệt vời, nhưng bãi đỗ xe có phần nhỏ.",
         },
       ],
     },
@@ -1211,7 +1448,8 @@ export const listHotels = [
     id: 14,
     name: "Grand Palace Hotel",
     type: "Hotels",
-    description: "A 5-star hotel in the heart of the city with elegant rooms and exceptional service.",
+    description:
+      "A 5-star hotel in the heart of the city with elegant rooms and exceptional service.",
     address: "350 Palace Road, Hà Nội, Vietnam",
     city: "Hà Nội",
     location: {
@@ -1223,7 +1461,15 @@ export const listHotels = [
       ],
     },
     stars: 5,
-    amenities: ["WiFi miễn phí", "Hồ bơi trong nhà", "Spa", "Nhà hàng", "Dịch vụ phòng 24/7", "Phòng xông hơi", "Karaoke"],
+    amenities: [
+      "WiFi miễn phí",
+      "Hồ bơi trong nhà",
+      "Spa",
+      "Nhà hàng",
+      "Dịch vụ phòng 24/7",
+      "Phòng xông hơi",
+      "Karaoke",
+    ],
     checkIn_time: "14:00",
     checkOut_time: "12:00",
     hotel_policies: {
@@ -1231,7 +1477,7 @@ export const listHotels = [
       deposit_required: "Không cần đặt cọc.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 400.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 400.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 24 1234 5678",
@@ -1251,7 +1497,13 @@ export const listHotels = [
         bed_type: "Giường King",
         room_size: 45,
         view: "Thành phố",
-        amenities: ["WiFi miễn phí", "Minibar", "TV màn hình phẳng", "Bồn tắm", "Bàn làm việc"],
+        amenities: [
+          "WiFi miễn phí",
+          "Minibar",
+          "TV màn hình phẳng",
+          "Bồn tắm",
+          "Bàn làm việc",
+        ],
         availability: {
           available_rooms: 5,
           status: "Có sẵn",
@@ -1264,7 +1516,13 @@ export const listHotels = [
         bed_type: "2 Giường King",
         room_size: 90,
         view: "Thành phố",
-        amenities: ["WiFi miễn phí", "Bồn tắm", "Minibar", "Máy pha cà phê", "Phòng khách riêng"],
+        amenities: [
+          "WiFi miễn phí",
+          "Bồn tắm",
+          "Minibar",
+          "Máy pha cà phê",
+          "Phòng khách riêng",
+        ],
         availability: {
           available_rooms: 3,
           status: "Có sẵn",
@@ -1272,27 +1530,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 300,
-      average_rating: 4.9,
-      review_breakdown: {
+      totalReview: 300,
+      averageRating: 4.9,
+      reviewBreakdown: {
         "5_star": 270,
         "4_star": 20,
         "3_star": 5,
         "2_star": 3,
         "1_star": 2,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Lê Quang P",
           date: "2024-10-10",
-          comment: "Khách sạn tuyệt vời, phòng sang trọng và dịch vụ hoàn hảo.",
+          text: "Khách sạn tuyệt vời, phòng sang trọng và dịch vụ hoàn hảo.",
         },
         {
           rating: 4,
           user: "Nguyễn Minh V",
           date: "2024-10-08",
-          comment: "Dịch vụ rất tốt nhưng thức ăn không đa dạng lắm.",
+          text: "Dịch vụ rất tốt nhưng thức ăn không đa dạng lắm.",
         },
       ],
     },
@@ -1301,19 +1559,27 @@ export const listHotels = [
     id: 15,
     name: "Skyline Luxury Villas",
     type: "Villas",
-    description: "A private luxury villa with modern design and magnificent views of the city skyline.",
+    description:
+      "A private luxury villa with modern design and magnificent views of the city skyline.",
     address: "35 Skyview Lane, Đà Nẵng, Vietnam",
     city: "Đà Nẵng",
     location: {
       latitude: 16.0713,
-      longitude: 108.2200,
+      longitude: 108.22,
       nearby_attractions: [
         { name: "Cầu Rồng", distance: 3 },
         { name: "Bà Nà Hills", distance: 18 },
       ],
     },
     stars: 5,
-    amenities: ["WiFi miễn phí", "Bể bơi riêng", "Vườn riêng", "Phòng xông hơi", "Nhà bếp đầy đủ tiện nghi", "Máy pha cà phê"],
+    amenities: [
+      "WiFi miễn phí",
+      "Bể bơi riêng",
+      "Vườn riêng",
+      "Phòng xông hơi",
+      "Nhà bếp đầy đủ tiện nghi",
+      "Máy pha cà phê",
+    ],
     checkIn_time: "15:00",
     checkOut_time: "11:00",
     hotel_policies: {
@@ -1321,7 +1587,7 @@ export const listHotels = [
       deposit_required: "Cần đặt cọc 20% giá trị đặt phòng.",
       pets_allowed: true,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 600.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 600.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 236 1234 5678",
@@ -1341,7 +1607,13 @@ export const listHotels = [
         bed_type: "2 Giường King",
         room_size: 90,
         view: "Biển",
-        amenities: ["WiFi miễn phí", "Bể bơi riêng", "Máy pha cà phê", "Phòng khách", "Bàn ăn"],
+        amenities: [
+          "WiFi miễn phí",
+          "Bể bơi riêng",
+          "Máy pha cà phê",
+          "Phòng khách",
+          "Bàn ăn",
+        ],
         availability: {
           available_rooms: 2,
           status: "Có sẵn",
@@ -1354,7 +1626,13 @@ export const listHotels = [
         bed_type: "3 Giường Queen",
         room_size: 120,
         view: "Vườn",
-        amenities: ["WiFi miễn phí", "Phòng khách riêng", "Vườn", "Máy pha cà phê", "TV màn hình phẳng"],
+        amenities: [
+          "WiFi miễn phí",
+          "Phòng khách riêng",
+          "Vườn",
+          "Máy pha cà phê",
+          "TV màn hình phẳng",
+        ],
         availability: {
           available_rooms: 1,
           status: "Có sẵn",
@@ -1362,27 +1640,27 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 120,
-      average_rating: 4.7,
-      review_breakdown: {
+      totalReview: 120,
+      averageRating: 4.7,
+      reviewBreakdown: {
         "5_star": 100,
         "4_star": 15,
         "3_star": 3,
         "2_star": 2,
         "1_star": 0,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Trần Quang K",
           date: "2024-10-02",
-          comment: "Một kỳ nghỉ tuyệt vời, không gian yên tĩnh và riêng tư.",
+          text: "Một kỳ nghỉ tuyệt vời, không gian yên tĩnh và riêng tư.",
         },
         {
           rating: 4,
           user: "Nguyễn Thị M",
           date: "2024-09-28",
-          comment: "Villa đẹp nhưng hơi xa trung tâm.",
+          text: "Villa đẹp nhưng hơi xa trung tâm.",
         },
       ],
     },
@@ -1391,7 +1669,8 @@ export const listHotels = [
     id: 16,
     name: "Cityscape Boutique Hotel",
     type: "Hotels",
-    description: "A stylish boutique hotel with personalized service and a cozy atmosphere.",
+    description:
+      "A stylish boutique hotel with personalized service and a cozy atmosphere.",
     address: "89 Main Street, Hà Nội, Vietnam",
     city: "Hà Nội",
     location: {
@@ -1403,7 +1682,13 @@ export const listHotels = [
       ],
     },
     stars: 4,
-    amenities: ["WiFi miễn phí", "Phòng gym nhỏ", "Nhà hàng", "Dịch vụ phòng 24/7", "Xe đưa đón sân bay"],
+    amenities: [
+      "WiFi miễn phí",
+      "Phòng gym nhỏ",
+      "Nhà hàng",
+      "Dịch vụ phòng 24/7",
+      "Xe đưa đón sân bay",
+    ],
     checkIn_time: "14:00",
     checkOut_time: "12:00",
     hotel_policies: {
@@ -1411,7 +1696,7 @@ export const listHotels = [
       deposit_required: "Cần đặt cọc 50% giá trị đặt phòng.",
       pets_allowed: false,
       smoking_policy: "Không hút thuốc trong phòng.",
-      extra_bed_policy: "Giường phụ có sẵn với phí 300.000 VND/đêm.",
+      extra_bed_policy: "Giường phụ có sẵn với phí 300.000 ₫/đêm.",
     },
     contact: {
       phone_number: "+84 24 1234 5678",
@@ -1444,7 +1729,13 @@ export const listHotels = [
         bed_type: "Giường King",
         room_size: 50,
         view: "Thành phố",
-        amenities: ["WiFi miễn phí", "Minibar", "Bồn tắm", "Phòng khách", "Máy pha cà phê"],
+        amenities: [
+          "WiFi miễn phí",
+          "Minibar",
+          "Bồn tắm",
+          "Phòng khách",
+          "Máy pha cà phê",
+        ],
         availability: {
           available_rooms: 2,
           status: "Có sẵn",
@@ -1452,27 +1743,28 @@ export const listHotels = [
       },
     ],
     reviews: {
-      total_reviews: 150,
-      average_rating: 4.6,
-      review_breakdown: {
+      totalReview: 150,
+      averageRating: 4.6,
+      reviewBreakdown: {
         "5_star": 100,
         "4_star": 30,
         "3_star": 10,
         "2_star": 5,
         "1_star": 5,
       },
-      recent_reviews: [
+      comments: [
         {
           rating: 5,
           user: "Lê Quang M",
           date: "2024-10-05",
-          comment: "Khách sạn nhỏ nhưng rất ấm cúng, nhân viên nhiệt tình.",
+          text: "Khách sạn nhỏ nhưng rất ấm cúng, nhân viên nhiệt tình.",
         },
         {
           rating: 4,
           user: "Nguyễn Quang H",
           date: "2024-10-01",
-          comment: "Chất lượng phòng tốt, nhưng có thể cải thiện thêm bữa sáng.",
+          text:
+            "Chất lượng phòng tốt, nhưng có thể cải thiện thêm bữa sáng.",
         },
       ],
     },

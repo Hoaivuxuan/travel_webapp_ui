@@ -1,35 +1,15 @@
 "use client";
 
-import React, { useRef } from "react";
-import SearchForm from "@/components/home/SearchForm";
+import React from "react";
 import { destination } from "@/data/fakeData";
-import {
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image"; // Import Image component
+import Image from "next/image";
 
 export default function Home() {
   const trendingDestinations = destination.slice(0, 5);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -300, behavior: "smooth" });
-    }
-  };
-
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 300, behavior: "smooth" });
-    }
-  };
-
   return (
     <main className="bg-white">
-      <div className="bg-[#013B94] py-2">
-        <section className="bg-[#013B94] p-6 mx-auto h-[300px] max-w-7xl">
+      <div className="bg-[#472f91] py-2">
+        <section className="bg-[#472f91] p-6 mx-auto h-[300px] max-w-7xl">
           <h2 className="text-5xl font-bold text-white">
             Tìm Kiếm Chỗ Ở Tiếp Theo
           </h2>
@@ -39,81 +19,36 @@ export default function Home() {
         </section>
       </div>
 
-      <section className="py-6 px-2 m-4 -mt-[5rem] -mb-14 lg:px-4">
-        <SearchForm />
-      </section>
-
       <section className="p-6 mx-auto mt-10 bg-white rounded-t-lg max-w-7xl">
-        <div className="pt-5">
-          <h3 className="text-xl font-bold">Điểm Đến Đang Thịnh Hành</h3>
-          <p className="font-light">
-            Du khách tìm kiếm về Việt Nam cũng đặt chỗ ở những nơi này
-          </p>
+        <div className="py-4">
+          <h3 className="text-2xl font-bold text-[#472f91] pb-2">SIÊU SALE DU LỊCH 12.12</h3>
+          <Image
+            className="object-cover rounded-lg w-full h-auto"
+            src="https://res.cloudinary.com/df42yelwi/image/upload/v1733369821/1732691096926-2c8f2d5f03f51a565b130e5c6e75b532_zq4izw.webp"
+            alt="SIÊU SALE DU LỊCH 12.12"
+            width={1280}
+            height={160}
+          />
         </div>
-
-        <div className="py-5 grid grid-cols-5 gap-4">
-          {trendingDestinations.map((item) => (
-            <div key={item.id} className="cursor-pointer">
-              <Image
-                className="object-cover rounded-lg w-full h-72"
-                src={item.src}
-                alt={item.title}
-                width={540} // Set width to match the image dimensions
-                height={405} // Set height to match the image dimensions
-              />
-              <div className="pt-3">
-                <p className="font-bold">{item.title}</p>
-                <p className="">{item.location}</p>
-                <p className="text-sm font-light">{item.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="pt-5">
-          <h3 className="text-xl font-bold">Khám Phá Việt Nam</h3>
-          <p className="font-light">
-            Các điểm đến phổ biến này có nhiều điều chờ đón bạn
-          </p>
-        </div>
-
-        <div className="relative flex items-center">
-          <button
-            onClick={scrollLeft}
-            className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600"
-          >
-            <FontAwesomeIcon icon={faChevronLeft} />
-          </button>
-          <div
-            ref={scrollContainerRef}
-            className="flex py-5 space-x-4 overflow-x-hidden scroll-smooth"
-          >
-            {destination.map((item) => (
-              <div
-                key={item.id}
-                className="space-y-1 cursor-pointer shrink-0 w-[233.59px]"
-              >
+        <div className="py-4">
+          <h3 className="text-2xl font-bold text-[#472f91] pb-2">CẨM NANG DU LỊCH</h3>
+          <div className="py-5 grid grid-cols-5 gap-4">
+            {trendingDestinations.map((item) => (
+              <div key={item.id} className="relative cursor-pointer group">
                 <Image
-                  className="object-cover rounded-lg w-80 h-72"
+                  className="object-cover rounded-lg w-full h-72"
                   src={item.src}
                   alt={item.title}
                   width={540}
                   height={405}
                 />
-                <div className="pt-3">
-                  <p className="font-bold">{item.title}</p>
-                  <p className="">{item.location}</p>
-                  <p className="text-sm font-light">{item.description}</p>
+                <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent text-white p-3 rounded-b-lg">
+                  <p className="text-sm font-bold">{item.title}</p>
+                  <p className="text-xs">{item.location}</p>
                 </div>
               </div>
             ))}
           </div>
-          <button
-            onClick={scrollRight}
-            className="absolute -right-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600"
-          >
-            <FontAwesomeIcon icon={faChevronRight} />
-          </button>
         </div>
       </section>
     </main>

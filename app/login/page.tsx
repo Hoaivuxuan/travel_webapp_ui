@@ -3,20 +3,26 @@
 import { useState } from "react";
 import { useAuth } from "@/app/login/AuthContext";
 import { ToastContainer } from "react-toastify";
-import Notification from "@/components/Notification";
 import "react-toastify/dist/ReactToastify.css";
-import { decodeJwt } from "jose";
+import Notification from "@/components/Notification";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Input, Button } from "antd";
 
 const LoginPage = () => {
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const { notifySuccess, notifyWarning } = Notification();
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (email && password) {
       try {
         const response = await fetch("http://localhost:8080/users/login", {
@@ -26,18 +32,18 @@ const LoginPage = () => {
           },
           body: JSON.stringify({ email, password }),
         });
-  
+
         if (response.ok) {
           const data = await response.json();
-          
+
           if (data) {
+            console.log(data);
             notifySuccess("Đăng nhập thành công!");
             login(data.id, data.token);
             setTimeout(() => {
-              window.location.href = "/home";
+              if (data.role === "USER") window.location.href = "/home";
+              if (data.role === "ADMIN") window.location.href = "/admin";
             }, 3000);
-          } else {
-            notifyWarning("Đã xảy ra lỗi trong quá trình đăng nhập!");
           }
         } else {
           notifyWarning("Email hoặc mật khẩu không đúng!");
@@ -59,7 +65,7 @@ const LoginPage = () => {
         <h2 className="text-2xl mb-6 text-center">Đăng Nhập</h2>
         <div className="mb-4">
           <label className="block mb-2">Email</label>
-          <input
+          <Input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -67,23 +73,25 @@ const LoginPage = () => {
             className="w-full p-2 border border-gray-300 rounded"
           />
         </div>
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <label className="block mb-2">Mật Khẩu</label>
-          <input
-            type="password"
+          <Input.Password
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            visibilityToggle={{ visible: showPassword, onVisibleChange: setShowPassword }}
             required
             className="w-full p-2 border border-gray-300 rounded"
           />
         </div>
+
         <div className="mt-4">
-          <button
-            type="submit"
-            className="w-full bg-[#013B94] text-white p-2 rounded"
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="w-full bg-[#472f91] text-white p-2 rounded"
           >
             Đăng Nhập
-          </button>
+          </Button>
           <p className="mt-2 text-center">
             Chưa có tài khoản?{" "}
             <a href="/register" className="text-blue-600">

@@ -1,11 +1,12 @@
 .form-error {
   position: absolute;
-  top: 50%;
+  top: 100%;
+  left: 10px;
   background-color: #d32f2f;
   color: white;
   padding: 6px 12px;
   border-radius: 4px;
-  margin-top: 4px;
+  margin-top: 8px;
   font-size: 12px;
   white-space: nowrap;
   z-index: 10;

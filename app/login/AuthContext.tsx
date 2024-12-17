@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 type User = {
   name: string;
@@ -39,12 +45,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (userId: string, token: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/users/details?id=${userId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(`http://localhost:8080/users/details?id=${userId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       if (response.ok) {
         const userData: User = await response.json();
@@ -69,6 +77,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("userId");
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    window.location.href = "/login";
   };
 
   return (

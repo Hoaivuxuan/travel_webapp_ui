@@ -1,128 +1,148 @@
-import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSuitcase,
-  faUserFriends,
-  faCar,
-  faMotorcycle,
-  faGasPump,
-} from "@fortawesome/free-solid-svg-icons";
-import { listings } from "@/data/fakeData";
-import ImageComponent from "@/components/GetImage";
+import { FaCar, FaMotorcycle, FaUsers, FaLuggageCart, FaGasPump } from 'react-icons/fa';
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button, Radio } from "antd";
+import { encodeToJWT } from '@/utils/JWT';
 
-export type RentalItemProps = {
-  id: string;
+const bearerToken = localStorage.getItem("token");
+
+const handleDetailClick = (
+  router: ReturnType<typeof useRouter>,
+  vehicle: any,
+  facility: number | null
+) => {
+  const search = localStorage.getItem("searchVehicle");
+  if ((facility && search)) {
+    try {
+      const searchObject = JSON.parse(search);
+      const rentalVehicle = {...searchObject, vehicle}
+      const query = new URLSearchParams({
+        facility: facility.toString(),
+        rentalVehicle: encodeToJWT(rentalVehicle),
+      });
+
+      router.push(`/rental/detail?url=2&${query.toString()}`);
+    } catch (error) {
+    }
+  }
 };
 
-export function CarItem({ id }: RentalItemProps) {
+export function VehicleItem({
+  vehicle, isFacilityVisible, onFacilityToggle,
+} : {
+  vehicle: any;
+  isFacilityVisible: boolean;
+  onFacilityToggle: () => void;
+}) {
   const router = useRouter();
-  const item = listings.content.listCars.find(
-    (car) => car.id.toString() === id
-  );
-
-  if (!item) {
-    return <div>Không tìm thấy thông tin xe.</div>;
-  }
-
-  const handleDetailClick = () => {
-    router.push(`/rental/cars/${item.id.toString().padStart(6, "0")}`);
-  };
+  const [selectedFacilityId, setSelectedFacilityId] = useState<number | null>(null);
+  const rentalMinPrice = Math.min(...vehicle.facilities.map((facility: any) => facility.price));
 
   return (
-    <div className="grid grid-cols-5 gap-4 p-4 border rounded-lg hover:shadow-lg transition-shadow duration-200">
-      <div className="col-span-1 flex justify-center items-center h-[200px]">
-        <ImageComponent
-          folder="car"
-          id={item.id}
-          token={item.token}
-          className="rounded-lg w-full h-auto max-h-[280px] mx-auto"  
-        />
-      </div>
-      <div className="flex flex-col justify-between col-span-3">
-        <div>
-          <p className="mb-4 font-bold text-blue-600 text-lg">{item.model}</p>
-          <p className="text-sm text-gray-700 flex items-center">
-            <FontAwesomeIcon icon={faCar} className="mx-2 w-4" />
-            {item.details.transmission}
-          </p>
-          <p className="text-sm flex items-center text-gray-600">
-            <FontAwesomeIcon icon={faUserFriends} className="mx-2 w-4" />
-            {item.details.seats} ghế
-          </p>
-          <p className="text-sm flex items-center text-gray-600">
-            <FontAwesomeIcon icon={faSuitcase} className="mx-2 w-4" />
-            {item.details.baggage_capacity} hành lý
-          </p>
+    <div className="p-4 border rounded-lg">
+      <div
+        className="grid grid-cols-5 gap-4"
+        onClick={() => {
+          onFacilityToggle();
+          setSelectedFacilityId(null);
+        }}
+      >
+        <div className="col-span-1 flex justify-center items-center h-[200px]">
+          <Image
+            src={`https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg`}
+            alt={`Vehicle ${vehicle.id}`}
+            className="rounded-l-lg h-full w-auto"
+            width={300}
+            height={300}
+          />
+        </div>
+        <div className="flex flex-col justify-between col-span-3">
+          <div>
+            <div className="mb-4">
+              <p className="mb-1 text-xs text-green-600 bg-green-200 rounded-sm px-2 py-1 inline-block">
+                {vehicle.details.brand}
+              </p>
+              <p className="font-bold text-blue-600 text-lg">{vehicle.model}</p>
+            </div>
+            { vehicle.type === "car" ? (
+              <div className="w-1/2 grid grid-cols-2 gap-1">
+                <p className="text-sm flex items-center text-gray-600">
+                  <FaCar className="mx-2 w-4" />
+                  {vehicle.details.transmission}
+                </p>
+                <p className="text-sm flex items-center text-gray-600">
+                  <FaUsers className="mx-2 w-4" />
+                  {vehicle.details.seats} ghế
+                </p>
+                <p className="text-sm flex items-center text-gray-600">
+                  <FaLuggageCart className="mx-2 w-4" />
+                  {vehicle.details.baggage_capacity} hành lý
+                </p>
+                <p className="text-sm flex items-center text-gray-600">
+                  <FaGasPump className="mx-2 w-4" />
+                  {vehicle.details.fuel}
+                </p>
+              </div>
+            ) : (
+              <div className="w-1/2 grid grid-cols-2 gap-1">
+                <p className="text-sm flex items-center text-gray-600">
+                  <FaMotorcycle className="mx-2 w-4" />
+                  {vehicle.details.engine} phân khối
+                </p>
+                <p className="text-sm flex items-center text-gray-600">
+                  <FaGasPump className="mx-2 w-4" />
+                  {vehicle.details.fuel}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="flex flex-col justify-end col-span-1 h-full">
+          <div className="flex flex-col justify-end items-end mt-2">
+            <p className="text-sm">Giá cho 3 ngày</p>
+            <p className="text-lg font-bold text-blue-600 text-right">
+               từ {rentalMinPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+            </p>
+            {(isFacilityVisible && selectedFacilityId) && (
+              <Button
+                onClick={() => {
+                  handleDetailClick(router, vehicle, selectedFacilityId);
+                }}
+                className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2"
+              >
+                Xem chi tiết
+              </Button>
+            )}
+          </div>
         </div>
       </div>
-      <div className="flex flex-col justify-end col-span-1 h-full">
-        <div className="flex flex-col justify-end items-end mt-2">
-          <p className="text-lg font-bold text-blue-600 text-right">
-            {item.price.toLocaleString("vi-VN")} VNĐ
-          </p>
-          <button
-            onClick={handleDetailClick}
-            className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2"
+      {isFacilityVisible && (
+        <div className="mt-4 py-4">
+          <Radio.Group
+            onChange={(e) => setSelectedFacilityId(e.target.value)}
+            value={selectedFacilityId}
+            className="w-full space-y-2"
           >
-            Xem chi tiết
-          </button>
+            {vehicle.facilities.map((facility: any) => (
+              <Radio
+                key={facility.id}
+                value={facility.id}
+                className={`w-full p-2 border-t border-b ${
+                  selectedFacilityId === facility.id ? "bg-blue-100" : ""
+                }`}
+              >
+                <div className="flex justify-between items-center">
+                  <p className="mr-2 flex items-center justify-center flex-shrink-0 w-10 h-10 text-lg font-bold text-white bg-blue-600 rounded-sm">
+                    {facility.name.charAt(0).toUpperCase()}
+                  </p>
+                  <p>{facility.name}</p>
+                </div>
+              </Radio>
+            ))}
+          </Radio.Group>
         </div>
-      </div>
-    </div>
-  );
-}
-
-export function MotorItem({ id }: RentalItemProps) {
-  const router = useRouter();
-  const item = listings.content.listMotors.find(
-    (motor) => motor.id.toString() === id
-  );
-
-  if (!item) {
-    return <div>Không tìm thấy thông tin xe.</div>;
-  }
-
-  const handleDetailClick = () => {
-    router.push(`/rental/motors/${item.id.toString().padStart(6, "0")}`);
-  };
-
-  return (
-    <div className="grid grid-cols-5 gap-4 p-4 border rounded-lg hover:shadow-lg transition-shadow duration-200">
-      <div className="col-span-1 flex justify-center items-center h-[200px]">
-        <ImageComponent
-          folder="motor"
-          id={item.id}
-          token={item.token}
-          className="rounded-lg w-full h-auto max-h-[280px] mx-auto"  
-        />
-      </div>
-      <div className="flex flex-col justify-between col-span-3">
-        <div>
-          <p className="mb-4 font-bold text-blue-600 text-lg">{item.model}</p>
-          <p className="text-sm text-gray-700 flex items-center">
-            <FontAwesomeIcon icon={faMotorcycle} className="mx-2 w-4" />
-            {item.details.engine} phân khối
-          </p>
-          <p className="text-sm flex items-center text-gray-600">
-            <FontAwesomeIcon icon={faGasPump} className="mx-2 w-4" />
-            {item.details.fuel_type}
-          </p>
-        </div>
-      </div>
-      <div className="flex flex-col justify-end col-span-1 h-full">
-        <div className="flex flex-col justify-end items-end mt-2">
-          <p className="text-lg font-bold text-blue-600 text-right">
-            {item.price.toLocaleString("vi-VN")} VNĐ
-          </p>
-          <button
-            onClick={handleDetailClick}
-            className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2"
-          >
-            Xem chi tiết
-          </button>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

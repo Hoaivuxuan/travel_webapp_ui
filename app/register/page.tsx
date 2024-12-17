@@ -4,23 +4,21 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ToastContainer } from "react-toastify";
 import Notification from "@/components/Notification";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
+import { Input, Button } from "antd";
 
 const RegisterPage = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // For password visibility
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // For confirm password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
 
   const { notifySuccess, notifyWarning } = Notification();
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -29,12 +27,9 @@ const RegisterPage = () => {
     }
 
     const registrationData = {
-      first_name: firstName,
-      last_name: lastName,
-      phone_number: phoneNumber,
       email: email,
-      date_of_birth: dateOfBirth,
       password: password,
+      confirm_password: confirmPassword,
     };
 
     try {
@@ -53,7 +48,9 @@ const RegisterPage = () => {
         }, 3000);
       } else {
         const errorResponse = await response.json();
-        notifyWarning(errorResponse.message || "Đã xảy ra lỗi trong quá trình đăng ký!");
+        notifyWarning(
+          errorResponse.message || "Đã xảy ra lỗi trong quá trình đăng ký!"
+        );
       }
     } catch (error) {
       notifyWarning("Đã xảy ra lỗi trong quá trình đăng ký!");
@@ -64,86 +61,52 @@ const RegisterPage = () => {
     <div className="flex justify-center items-center h-screen bg-[#f0f4f8]">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded shadow-md w-100"
+        className="bg-white p-8 rounded shadow-md w-[20%]"
       >
         <h2 className="text-2xl mb-6 text-center">Đăng Ký</h2>
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="mb-4">
-            <label className="block mb-2">Họ</label>
-            <input
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block mb-2">Tên</label>
-            <input
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
-          <div className="col-span-2 mb-4">
-            <label className="block mb-2">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
-          <div className="col-span-2 mb-4 relative">
-            <label className="block mb-2">Mật Khẩu</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-2 text-gray-500"
-            >
-              {showPassword ? "Ẩn" : "Hiện"}
-            </button>
-          </div>
-          <div className="col-span-2 mb-4 relative">
-            <label className="block mb-2">Xác Nhận Mật Khẩu</label>
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-2 top-2 text-gray-500"
-            >
-              {showConfirmPassword ? "Ẩn" : "Hiện"}
-            </button>
-          </div>
+        <div className="mb-4">
+          <label className="block mb-2">Email</label>
+          <Input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full p-2 border border-gray-300 rounded"
+          />
         </div>
+        <div className="mb-4 relative">
+          <label className="block mb-2">Mật Khẩu</label>
+          <Input.Password
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            visibilityToggle={{ visible: showPassword, onVisibleChange: setShowPassword }}
+            required
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+        <div className="mb-4 relative">
+          <label className="block mb-2">Xác Nhận Mật Khẩu</label>
+          <Input.Password
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            visibilityToggle={{ visible: showConfirmPassword, onVisibleChange: setShowConfirmPassword }}
+            required
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+
         <div className="mt-4">
-          <button
-            type="submit"
-            className="w-full bg-[#013B94] text-white p-2 rounded"
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="w-full bg-[#472f91] text-white p-2 rounded"
           >
             Đăng Ký
-          </button>
+          </Button>
           <p className="mt-2 text-center">
             Đã có tài khoản?{" "}
             <a href="/login" className="text-blue-600">
-              Đăng nhập ở đây
+              Đăng nhập
             </a>
           </p>
         </div>

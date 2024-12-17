@@ -1,10 +1,10 @@
 "use client";
 
 import { notFound } from "next/navigation";
-import { useState, useMemo } from "react";
-import { listings } from "@/data/fakeData";
-import { CarItem, MotorItem } from "./RentalItem";
+import { useState, useEffect, useMemo } from "react";
+import { VehicleItem } from "./RentalItem";
 import RentalSearchForm from "@/components/rental/RentalSearchForm";
+import { Slider, Checkbox, Button } from "antd";
 
 type Props = {
   searchParams: RentalSearchParams;
@@ -13,47 +13,94 @@ type Props = {
 export type RentalSearchParams = {
   url: URL;
   location: string;
-  checkin: string;
-  checkout: string;
-  type: string;
+  city: number;
+  pickup: string;
+  return: string;
 };
 
-async function RentalSearchPage({ searchParams }: Props) {
-  if (!searchParams.url) return notFound();
+const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [vehicles, setVehicles] = useState([]);
+  const [listBrand, setListBrand] = useState<any>();
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 0]);
+  const [minPrice, setMinPrice] = useState<number>();
+  const [maxPrice, setMaxPrice] = useState<number>();
+  const [loading, setLoading] = useState(true);
+  const bearerToken = localStorage.getItem("token");
 
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([
-    "car",
-    "motor",
-  ]);
+  useEffect(() => {
+    const fetchFilter = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/vehicles?id=0`, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+        const data = await response.json();
+        const brands = Array.from(new Set<string>(data.vehicles.map((vehicle: any) => vehicle.details.brand)))
+          .sort((a, b) => a.localeCompare(b))
+          .map((brand, id) => ({ id: id, name: brand }));
 
-  const searchResult = useMemo(() => {
-    return [
-      ...listings.content.listCars.map((item) => ({ 
-        ...item,
-        type: "car",
-      })),
-      ...listings.content.listMotors.map((item) => ({
-        ...item,
-        type: "motor",
-      })),
-    ].sort((a, b) => a.model.localeCompare(b.model));
-  }, []);
+        setListBrand(brands);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
 
-  const [itemsToShow, setItemsToShow] = useState(10);
+    const fetchVehicles = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/vehicles?id=${searchParams.city}`, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+        const data = await response.json();
 
-  const filteredResults = useMemo(() => {
-    return searchResult.filter((item) => selectedTypes.includes(item.type));
-  }, [searchResult, selectedTypes]);
+        const listData = data.vehicles
+          .sort((a: any, b: any) => a.model.localeCompare(b.model));
+        
+        const minPrice = Math.min(
+          ...listData.map((vehicle: any) => Math.min(...vehicle.facilities.map((facility: any) => facility.price))),
+        );
+        const maxPrice = Math.max(
+          ...listData.map((vehicle: any) => Math.min(...vehicle.facilities.map((facility: any) => facility.price))),
+        );
 
-  const displayedResults = filteredResults.slice(0, itemsToShow);
+        setMinPrice(minPrice);
+        setMaxPrice(maxPrice);
+        setPriceRange([minPrice, maxPrice]);
+        setVehicles(listData);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
 
-  const handleCheckboxChange = (type: string) => {
-    setSelectedTypes((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
-    );
+    if (!searchParams.url) notFound();
+    fetchFilter();
+    fetchVehicles();
+    
+  }, [bearerToken, searchParams.city, searchParams.url, vehicles]);
+
+  const handlePriceChange = (value: number | number[]) => {
+    if (Array.isArray(value)) {
+      setPriceRange(value as [number, number]);
+    }
   };
 
-  if (searchResult.length === 0) {
+  const filteredResults = useMemo(() => {
+    return vehicles.filter((item: any) =>
+      (selectedTypes.length === 0 || selectedTypes.includes(item.type)) &&
+      (selectedBrands.length === 0 || selectedBrands.includes(item.details.brand)) &&
+      Math.min(...item.facilities.map((facility: any) => facility.price)) >= priceRange[0] &&
+      Math.min(...item.facilities.map((facility: any) => facility.price)) <= priceRange[1]
+    );
+  }, [vehicles, selectedTypes, selectedBrands, priceRange]);
+
+  if (!searchParams.url) {
     return (
       <div className="text-center py-4">
         <h2 className="text-xl font-semibold">
@@ -72,8 +119,8 @@ async function RentalSearchPage({ searchParams }: Props) {
 
         <h2 className="py-4">
           <span className="ml-2">
-            {searchParams.location}, từ {searchParams.checkin} đến{" "}
-            {searchParams.checkout} ({filteredResults.length} kết quả)
+            {searchParams.location},{" "}
+            từ {searchParams.pickup} đến {searchParams.return} ({filteredResults.length} kết quả)
           </span>
         </h2>
 
@@ -82,59 +129,69 @@ async function RentalSearchPage({ searchParams }: Props) {
         <div className="grid grid-cols-5 gap-4">
           <aside className="col-span-1 p-4 border rounded-lg sticky top-6 h-fit">
             <h3 className="font-bold text-sm mb-3">Chọn lọc theo:</h3>
-            <hr className="my-2" />
-
-            <div className="mb-6 text-sm">
+            <div className="text-sm border-t py-4">
+              <h4 className="font-semibold mb-2">Giá mỗi đêm (₫)</h4>
+              <Slider
+                range
+                value={priceRange}
+                min={minPrice}
+                max={maxPrice}
+                onChange={handlePriceChange}
+                trackStyle={[{ backgroundColor: "#1D4ED8" }]}
+                handleStyle={[
+                  { borderColor: "#1D4ED8" },
+                  { borderColor: "#1D4ED8" },
+                ]}
+              />
+              <div className="flex justify-between mt-2 text-xs">
+                <span>
+                  {priceRange[0].toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                </span>
+                <span>
+                  {priceRange[1].toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                </span>
+              </div>
+            </div>
+            <div className="text-sm border-t py-4">
               <h4 className="font-semibold mb-2">Loại phương tiện</h4>
-              <ul>
-                <li className="mb-1 flex items-center">
-                  <input
-                    type="checkbox"
-                    className="mr-2"
-                    checked={selectedTypes.includes("car")}
-                    onChange={() => handleCheckboxChange("car")}
-                  />
-                  <label className="flex-grow">Ô tô</label>
-                </li>
-                <li className="mb-1 flex items-center">
-                  <input
-                    type="checkbox"
-                    className="mr-2"
-                    checked={selectedTypes.includes("motor")}
-                    onChange={() => handleCheckboxChange("motor")}
-                  />
-                  <label className="flex-grow">Mô tô</label>
-                </li>
-              </ul>
+              <Checkbox.Group value={selectedTypes} onChange={setSelectedTypes}>
+                <Checkbox value="car" className="mb-1 w-full"> Ô TÔ </Checkbox>
+                <Checkbox value="motor" className="mb-1 w-full"> XE MÁY </Checkbox>
+              </Checkbox.Group>
+            </div>
+            <div className="text-sm border-t py-4">
+              <h4 className="font-semibold mb-2">Thương hiệu</h4>
+              <Checkbox.Group
+                value={selectedBrands}
+                onChange={(values) => setSelectedBrands(values as string[])}
+              >
+                {(Array.isArray(listBrand) && listBrand.length > 0) && (
+                  listBrand.map((type: any) => (
+                    <Checkbox key={type.id} value={type.name} className="mb-1 w-full">
+                      {type.name}
+                    </Checkbox>
+                  ))
+                )}
+              </Checkbox.Group>
             </div>
           </aside>
 
           <div className="col-span-4">
             <div className="space-y-4">
-              {displayedResults.map((item) =>
-                item.type === "car" ? (
-                  <CarItem key={item.id} id={item.id.toString()} />
-                ) : (
-                  <MotorItem key={item.id} id={item.id.toString()} />
-                ),
+              {filteredResults.map((item: any) =>
+                <VehicleItem
+                  key={item.id}
+                  vehicle={item}
+                  isFacilityVisible={selectedItemId === item.id.toString()}
+                  onFacilityToggle={() => setSelectedItemId(selectedItemId === item.id.toString() ? null : item.id.toString())}
+                />
               )}
             </div>
-
-            {filteredResults.length > itemsToShow && (
-              <div className="mt-4 text-center">
-                <button
-                  onClick={() => setItemsToShow(itemsToShow + 10)}
-                  className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-600 transition-colors duration-200"
-                >
-                  Xem thêm
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>
     </section>
   );
-}
+};
 
 export default RentalSearchPage;

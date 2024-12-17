@@ -1,0 +1,128 @@
+[
+  {
+    "id": 1,
+    "name": "Hà Nội",
+    "type": "thành phố",
+    "parent_id": null
+  },
+  {
+    "id": 4,
+    "name": "Hồ Chí Minh",
+    "type": "thành phố",
+    "parent_id": null
+  },
+  {
+    "id": 5,
+    "name": "Thủ Đức",
+    "type": "thành phố",
+    "parent_id": 4
+  },
+  {
+    "id": 6,
+    "name": "Đà Nẵng",
+    "type": "thành phố",
+    "parent_id": null
+  },
+  {
+    "id": 7,
+    "name": "Cần Thơ",
+    "type": "thành phố",
+    "parent_id": null
+  },
+  {
+    "id": 9,
+    "name": "Hải Phòng",
+    "type": "thành phố",
+    "parent_id": null
+  },
+  {
+    "id": 10,
+    "name": "Đồng Nai",
+    "type": "tỉnh",
+    "parent_id": null
+  },
+  {
+    "id": 11,
+    "name": "Biên Hòa",
+    "type": "thành phố",
+    "parent_id": 10
+  },
+  {
+    "id": 12,
+    "name": "Long Khánh",
+    "type": "thành phố",
+    "parent_id": 10
+  },
+  {
+    "id": 13,
+    "name": "Bình Dương",
+    "type": "tỉnh",
+    "parent_id": null
+  },
+  {
+    "id": 14,
+    "name": "Thủ Dầu Một",
+    "type": "thành phố",
+    "parent_id": 13
+  },
+  {
+    "id": 15,
+    "name": "Bà Rịa-Vũng Tàu",
+    "type": "tỉnh",
+    "parent_id": null
+  },
+  {
+    "id": 16,
+    "name": "Bà Rịa",
+    "type": "thành phố",
+    "parent_id": 15
+  },
+  {
+    "id": 17,
+    "name": "Vũng Tàu",
+    "type": "thành phố",
+    "parent_id": 15
+  },
+  {
+    "id": 18,
+    "name": "Quảng Ninh",
+    "type": "tỉnh",
+    "parent_id": null
+  },
+  {
+    "id": 19,
+    "name": "Hạ Long",
+    "type": "thành phố",
+    "parent_id": 18
+  },
+  {
+    "id": 20,
+    "name": "Cẩm Phả",
+    "type": "thành phố",
+    "parent_id": 18
+  },
+  {
+    "id": 21,
+    "name": "Uông Bí",
+    "type": "thành phố",
+    "parent_id": 18
+  },
+  {
+    "id": 22,
+    "name": "Móng Cái",
+    "type": "thành phố",
+    "parent_id": 18
+  },
+  {
+    "id": 23,
+    "name": "Thừa-Thiên Huế",
+    "type": "tỉnh",
+    "parent_id": null
+  },
+  {
+    "id": 24,
+    "name": "Huế",
+    "type": "thành phố",
+    "parent_id": 23
+  }
+]

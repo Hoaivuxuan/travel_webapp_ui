@@ -8,9 +8,9 @@ import { AuthProvider } from "@/app/login/AuthContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Booking.com",
+  title: "HANOITRAVEL.vn",
   description:
-    "A booking.com clone built with Next.js and TailwindCSS to book flights and hotels",
+    "A website to book hotels, rental vehicles and book tours",
 };
 
 export default function RootLayout({
@@ -23,9 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
           <Header />
-          <main>
-            {children}
-          </main>
+          <main className="min-h-screen">{children}</main>
           <Footer />
         </AuthProvider>
       </body>
