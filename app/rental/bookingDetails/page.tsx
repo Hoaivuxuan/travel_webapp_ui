@@ -57,9 +57,10 @@ const BookingVehicleDetails: React.FC = () => {
     driverInfo,
     vehicle,
     facility,
-    pickup,
+    pickup: pickupInfo,
     return: returnInfo,
     services,
+    total_price
   } = bookingDetails;
 
   const serviceColumns = [
@@ -139,10 +140,10 @@ const BookingVehicleDetails: React.FC = () => {
             {facility?.name}
           </Descriptions.Item>
           <Descriptions.Item label="Điểm nhận xe">
-            {pickup?.name || "N/A"}
+            {pickupInfo?.name || "N/A"}
           </Descriptions.Item>
           <Descriptions.Item label="Ngày nhận xe">
-            {pickup?.date || "N/A"}
+            {pickupInfo?.date || "N/A"}
           </Descriptions.Item>
           <Descriptions.Item label="Điểm trả xe">
             {returnInfo?.name || "N/A"}
@@ -177,7 +178,8 @@ const BookingVehicleDetails: React.FC = () => {
         </div>
       </div>
       <div className="mt-6">
-        <p className="text-lg font-bold">Tổng chi phí dịch vụ: {services?.totalServices?.toLocaleString("vi-VN")} VNĐ</p>
+        <p className="text-lg font-bold">Phí dịch vụ: {services?.totalServices?.toLocaleString("vi-VN")} VNĐ</p>
+        <p className="text-lg font-bold">Tổng chi phí: {total_price?.toLocaleString("vi-VN")} VNĐ</p>
       </div>
     </div>
   );

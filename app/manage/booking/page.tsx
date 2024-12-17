@@ -9,13 +9,17 @@ import BookingDetailsModal from "./BookingHotelDetails";
 
 const BookingHotelPage: React.FC = () => {
   const [listBookingHotel, setListBookingHotel] = useState<any | null>();
-  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [listBookingVehicle, setListBookingVehicle] = useState<any | null>();
+  const [selectedBookingHotel, setSelectedBookingHotel] = useState(null);
+  const [selectedBookingVehicle, setSelectedBookingVehicle] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const userId = Number(localStorage.getItem("userId"));
 
   useEffect(() => {
-    const fetchData = async () => {
+    if(!userId) return;
+
+    const fetchBookingHotel = async () => {
       try {
         setLoading(true);
         const bearerToken = localStorage.getItem("token");
@@ -32,17 +36,6 @@ const BookingHotelPage: React.FC = () => {
         }
   
         const data = await response.json();
-        // const bookingHotelData = data.bookingRoom.map((item: any, index: number) => ({
-        //   id: item.id,
-        //   hotel: item.hotel,
-        //   customer: item.customerInfo,
-        //   checkin: item.checkin_date,
-        //   checkout: item.checkout_date,
-        //   roomSelection: item.room_selection,
-        //   totalPrice: item.totalPrice,
-        //   noAdults: item.adults,
-        //   noChildren: item.children,
-        // }));
         setListBookingHotel(data.bookingRoom);
         setLoading(false);
       } catch (error) {
@@ -50,11 +43,38 @@ const BookingHotelPage: React.FC = () => {
         message.error("Failed to fetch bookings. Please try again.");
       }
     };
-  
-    fetchData();
-  }, [listBookingHotel, userId]);
 
-  const userMenu = (record: any) => (
+    const fetchBookingVehicle = async () => {
+      try {
+        setLoading(true);
+        const bearerToken = localStorage.getItem("token");
+        const response = await fetch(`http://localhost:8080/bookingVehicle/user/${userId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        setListBookingVehicle(data.response);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        message.error("Failed to fetch bookings. Please try again.");
+      }
+    };
+  
+    fetchBookingHotel();
+    fetchBookingVehicle();
+
+  }, [userId]);
+
+  const hotelMenu = (record: any) => (
     <Menu>
       <Menu.Item key="1" onClick={() => handleViewDetails(record)}>
         <div className="flex items-center">
@@ -69,13 +89,28 @@ const BookingHotelPage: React.FC = () => {
     </Menu>
   );
 
-  const columns = [
+  const rentalMenu = (record: any) => (
+    <Menu>
+      <Menu.Item key="1">
+        <div className="flex items-center">
+          <AiOutlineEye className="mr-2" /> Xem chi tiết
+        </div>
+      </Menu.Item>
+      <Menu.Item key="2">
+        <div className="flex items-center">
+          <AiOutlineDelete className="mr-2" /> Hủy đơn đặt
+        </div>
+      </Menu.Item>
+    </Menu>
+  );
+
+  const hotelColumns = [
     {
       title: "",
       key: "actions",
       render: (_: any, record: any) => (
         <Space className="flex items-center justify-center">
-          <Dropdown overlay={userMenu(record)} trigger={['click']}>
+          <Dropdown overlay={hotelMenu(record)} trigger={['click']}>
             <Button type="link" icon={<AiOutlineBars className="text-lg" />} />
           </Dropdown>
         </Space>
@@ -158,13 +193,82 @@ const BookingHotelPage: React.FC = () => {
     },
   ];
 
+  const rentalColumns = [
+    {
+      title: "",
+      key: "actions",
+      render: (_: any, record: any) => (
+        <Space className="flex items-center justify-center">
+          <Dropdown overlay={rentalMenu(record)} trigger={['click']}>
+            <Button type="link" icon={<AiOutlineBars className="text-lg" />} />
+          </Dropdown>
+        </Space>
+      ),
+    },
+    {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+      render: (id: string) => id.toUpperCase(),
+    },
+    {
+      title: "Khách hàng",
+      dataIndex: ["customerInfo", "fullName"],
+      key: "customerName",
+      width: 200,
+    },
+    {
+      title: "Email",
+      dataIndex: ["customerInfo", "email"],
+      key: "email",
+      width: 250,
+    },
+    {
+      title: "Điện thoai",
+      dataIndex: ["customerInfo", "phone"],
+      key: "phone",
+      width: 150,
+    },  
+    {
+      title: "Phương tiện",
+      dataIndex: ["vehicle", "name"],
+      key: "vehicle",
+    },
+    {
+      title: "Cơ sở cho thuê",
+      dataIndex: ["facility", "name"],
+      key: "facility",
+    }, 
+    {
+      title: "Tổng chi phí",
+      dataIndex: ["total_price"],
+      key: "totalPrice",
+      width: 200,
+      render: (totalPrice: number) => `${totalPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`,
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      width: 120,
+      render: (text: any, record: any) => {
+        const status = statusTags
+          .filter(tag => tag.id === 0)
+          .map(tag => 
+            <Tag color={tag.color} key={tag.id}>{tag.text}</Tag>
+          );
+        return <>{status}</>;
+      },
+    },
+  ];
+
   const handleViewDetails = (record: any) => {
-    setSelectedBooking(record);
+    setSelectedBookingHotel(record);
     setIsModalVisible(true);
   };
 
   const handleModalClose = () => {
-    setSelectedBooking(null);
+    setSelectedBookingHotel(null);
     setIsModalVisible(false);
   };
 
@@ -180,21 +284,30 @@ const BookingHotelPage: React.FC = () => {
           <Table
             bordered
             dataSource={listBookingHotel}
-            columns={columns}
+            columns={hotelColumns}
+            size="middle"
             rowClassName="editable-row"
             pagination={{ pageSize: 10 }}
             scroll={{ x: 1500 }}
           />
         </Collapse.Panel>
         <Collapse.Panel header="HÓA ĐƠN THUÊ XE" key="2">
-          {/* Add corresponding data and columns for rental invoices */}
+        <Table
+            bordered
+            dataSource={listBookingVehicle}
+            columns={rentalColumns}
+            size="middle"
+            rowClassName="editable-row"
+            pagination={{ pageSize: 10 }}
+            scroll={{ x: 1500 }}
+          />
         </Collapse.Panel>
         <Collapse.Panel header="HÓA ĐƠN ĐẶT TOUR/VÉ THAM QUAN" key="3">
           {/* Add corresponding data and columns for tour invoices */}
         </Collapse.Panel>
       </Collapse>
       <BookingDetailsModal
-        booking={selectedBooking}
+        booking={selectedBookingHotel}
         visible={isModalVisible}
         onClose={handleModalClose}
       />

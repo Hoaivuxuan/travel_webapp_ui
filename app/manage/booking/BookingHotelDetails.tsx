@@ -71,7 +71,7 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
         <Descriptions.Item label="Email">{bookingHotel?.customerInfo.email}</Descriptions.Item>
         <Descriptions.Item label="Điện thoại">{bookingHotel?.customerInfo.phone}</Descriptions.Item>
         <Descriptions.Item label="Thời gian lưu trú">
-          {format(new Date(bookingHotel?.checkin_date), "dd/MM/yyyy")} - {format(new Date(bookingHotel?.checkout_date), "dd/MM/yyyy")}
+          {bookingHotel?.checkin_date} đến {bookingHotel?.checkout_date}
         </Descriptions.Item>
         <Descriptions.Item label="Số phòng">
           {bookingHotel?.room_selection?.selected_rooms.map((option: any, index: number) => (
