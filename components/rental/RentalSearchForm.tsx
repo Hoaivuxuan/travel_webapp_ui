@@ -8,12 +8,11 @@ import { format } from "date-fns";
 import { AutoComplete, Button, DatePicker, Input } from "antd";
 import { useRouter } from "next/navigation";
 import { AiOutlineClose } from 'react-icons/ai';
-import { GiPositionMarker } from "react-icons/gi";
+import { IoLocationOutline } from "react-icons/io5";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
-import locations from "@/data/SelectCity.json";
 import dayjs from "dayjs";
 
 export const formSchema = z.object({
@@ -143,7 +142,7 @@ function RentalSearchForm() {
     localStorage.setItem("searchVehicle", JSON.stringify(values));
     const query = new URLSearchParams({
       location: values.location.name,
-      locationId: values.location.id?.toString() || "",
+      city: values.location.id?.toString() || "",
       pickup: format(values.dateRange.pickupDate, "dd-MM-yyyy"),
       return: format(values.dateRange.returnDate, "dd-MM-yyyy"),
     });
@@ -216,7 +215,7 @@ function RentalSearchForm() {
                             />
                           </AutoComplete>
                           <span className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                            <GiPositionMarker className="text-gray-400" />
+                            <IoLocationOutline className="text-gray-400" />
                           </span>
                           {keyword && (
                             <AiOutlineClose

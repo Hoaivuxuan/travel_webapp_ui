@@ -135,7 +135,7 @@ const Header = () => {
                   </Link>
                   {(role === "USER") &&
                     <Link
-                      href="/manage/home"
+                      href="/manage/booking"
                       className="flex block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
                       onClick={handleLinkClick}
                     >

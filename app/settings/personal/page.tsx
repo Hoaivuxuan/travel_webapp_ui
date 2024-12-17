@@ -1,12 +1,14 @@
 "use client";
 
-import { Input, Button, Avatar, DatePicker } from "antd";
+import { Input, Button, Avatar, DatePicker, AutoComplete } from "antd";
 import React, { useEffect, useState } from "react";
 import { AiOutlineEdit, AiOutlineClose } from 'react-icons/ai';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
 import dayjs from "dayjs";
+import listCountries from "@/data/SelectCountry.json"
+import Image from "next/image";
 
 type UserInfoKeys = keyof UserData;
 interface UserData {
@@ -17,6 +19,7 @@ interface UserData {
   email: string;
   phone_number: string | null;
   date_of_birth: string | null;
+  country: string | null;
   address: string | null;
   avatar: string | null;
 }
@@ -27,9 +30,8 @@ const PersonalInfoPage = () => {
   const [user, setUser] = useState<UserData | null>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [values, setValues] = useState<UserData | null>(null);
-  const [avatar, setAvatar] = useState<string | null>("");
   const [loading, setLoading] = useState(false);
-  const [newAvatarFile, setNewAvatarFile] = useState<File | null>(null);
+  const [isUserDataChanged, setIsUserDataChanged] = useState(false);
 
   const personalInfo = [
     { label: "Họ", key: "last_name" as UserInfoKeys },
@@ -38,6 +40,7 @@ const PersonalInfoPage = () => {
     { label: "Email", key: "email" as UserInfoKeys, verified: true },
     { label: "Điện thoại", key: "phone_number" as UserInfoKeys },
     { label: "Ngày sinh", key: "date_of_birth" as UserInfoKeys },
+    { label: "Quốc tịch", key: "country" as UserInfoKeys },
     { label: "Địa chỉ", key: "address" as UserInfoKeys },
   ];
 
@@ -57,7 +60,6 @@ const PersonalInfoPage = () => {
           const userData: UserData = await response.json();
           setUser(userData);
           setValues(userData);
-          setAvatar(userData.avatar);
         } else {
           console.error("Failed to fetch user data");
         }
@@ -80,28 +82,25 @@ const PersonalInfoPage = () => {
   };
 
   const handleSaveClick = async () => {
-    let isUserDataChanged = false;
-
     const updatedData: Partial<UserData> = {
       name: values?.name,
       first_name: values?.first_name,
       last_name: values?.last_name,
       phone_number: values?.phone_number,
-      address: values?.address,
       date_of_birth: values?.date_of_birth,
+      country: values?.country,
+      address: values?.address,
+      avatar: "https://firebasestorage.googleapis.com/v0/b/travel-web-7b510.appspot.com/o/UNKNOWN_USER.PNG?alt=media&token=5a0b3bba-f852-491c-8f50-c532be5ca4b0",
     };
 
     if (isUserDataChanged) setLoading(true);
-    isUserDataChanged = Object.keys(updatedData).some(
-      (key) =>
-        updatedData[key as keyof UserData] !== user?.[key as keyof UserData],
-    );
+    setIsUserDataChanged(Object.keys(updatedData).some(
+      (key) => updatedData[key as keyof UserData] !== user?.[key as keyof UserData],
+    ));
 
     if (isUserDataChanged) {
-      const bearerToken = localStorage.getItem("token");
-      if (!bearerToken) return;
-
       try {
+        const bearerToken = localStorage.getItem("token");
         const response = await fetch(`http://localhost:8080/users`, {
           method: "PUT",
           headers: {
@@ -113,15 +112,15 @@ const PersonalInfoPage = () => {
 
         if (response.ok) {
           const updatedUserData = await response.json();
-          notifySuccess("Thông tin người dùng đã được cập nhật.");
+          notifySuccess("Thông tin người dùng đã được cập nhật!");
           localStorage.setItem("user", JSON.stringify(updatedUserData));
           setUser(updatedUserData);
           setEditingIndex(null);
         } else {
-          notifyWarning("Cập nhật thất bại");
+          notifyWarning("Cập nhật thất bại!");
         }
       } catch (error) {
-        notifyWarning("Error updating user data");
+        notifyWarning("Cập nhật thất bại!");
       }
     }
     setLoading(false);
@@ -134,7 +133,7 @@ const PersonalInfoPage = () => {
           <h1 className="text-2xl font-bold flex-grow">Thông tin cá nhân</h1>
           <div className="relative">
             <Avatar
-              src={avatar || ""}
+              src={user?.avatar || ""}
               size={100}
               onClick={() => document.getElementById("avatar-upload")?.click()}
               className="cursor-pointer"
@@ -155,19 +154,15 @@ const PersonalInfoPage = () => {
                 <div className="col-span-8 flex gap-2 w-full">
                   <Input
                     value={values?.first_name || ""}
-                    onChange={(e) =>
-                      handleInputChange("first_name", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange("first_name", e.target.value)}
                     className="mt-1 border rounded w-full"
-                    placeholder="Tên"
+                    placeholder="Họ"
                   />
                   <Input
                     value={values?.last_name || ""}
-                    onChange={(e) =>
-                      handleInputChange("last_name", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange("last_name", e.target.value)}
                     className="mt-1 border rounded w-full"
-                    placeholder="Họ"
+                    placeholder="Tên"
                   />
                 </div>
               ) : (
@@ -208,7 +203,7 @@ const PersonalInfoPage = () => {
                 <div className="col-span-8">
                   {field.key === "date_of_birth" ? (
                     <DatePicker
-                      value={values?.date_of_birth ? dayjs(values?.date_of_birth, "YYYY-MM-DD") : null}
+                      value={dayjs(values?.date_of_birth, "YYYY-MM-DD") || null}
                       format="DD/MM/YYYY"
                       onChange={(date) =>
                         handleInputChange(
@@ -218,6 +213,44 @@ const PersonalInfoPage = () => {
                       }
                       className="!bg-white w-full mt-1 custom-date-picker"
                       disabled={editingIndex !== index + 1}
+                    />
+                  ) : field.key === "country" ? (
+                    <AutoComplete
+                      value={listCountries.find((country) => country.code === values?.country)?.name || ""}
+                      options={listCountries.map((country) => ({
+                        value: country.code,
+                        label: (
+                          <div className="flex items-center gap-2">
+                            <Image
+                              src={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png`}
+                              alt={country.name}
+                              width={24}
+                              height={16}
+                              className="w-[24px] h-[16px]"
+                            />
+                            <span>{country.name}</span>
+                          </div>
+                        ),
+                      }))}
+                      onSearch={(inputValue) => {
+                        handleInputChange(field.key, inputValue);
+                      }}
+                      onSelect={(value) => {
+                        handleInputChange(field.key, value);
+                      }}
+                      onChange={(inputValue) => {
+                        handleInputChange(field.key, inputValue);
+                      }}
+                      className={`w-full mt-1 !bg-white !text-[#000000]`}
+                      disabled={editingIndex !== index + 1}
+                      placeholder="Chọn quốc tịch"
+                      filterOption={(inputValue, option) => {
+                        if (!option) return false;
+                        const country = listCountries.find((item) => item.code === option.value);
+                        return country
+                          ? country.name.toLowerCase().includes(inputValue.toLowerCase())
+                          : false;
+                      }}
                     />
                   ) : (
                     <Input

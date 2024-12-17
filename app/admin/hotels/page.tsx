@@ -21,6 +21,7 @@ export default function UserAdmin() {
         }
         const data = await response.json();
         setListHotel(data.hotels);
+        localStorage.setItem("listBookingHotel", JSON.stringify(listHotel));
       } catch (error) {
         console.error("Error fetching hotels:", error);
       } finally {
@@ -29,7 +30,7 @@ export default function UserAdmin() {
     };
 
     fetchHotels();
-  }, []);
+  }, [listHotel]);
 
   const handleViewDetails = (record: any) => {
     setSelectedHotel(record);

@@ -14,6 +14,9 @@ export type BookingParams = {
   returnLocation: string;
   pickupDate: string;
   returnDate: string;
+  bonusServices: any;
+  totalServiceCost: number;
+  noDriver: number;
 };
 
 const formatDate = (dateString: string): string => {
@@ -30,14 +33,17 @@ const BookingVehicle = () => {
     router.back();
   };
 
-  const booking = decodeToJWT(searchParams.get("booking") || "");
+  const rentalVehicle = decodeToJWT(searchParams.get("rental") || "");
   const params: BookingParams = {
-    vehicle: booking?.vehicle,
-    facility: booking?.facility,
-    pickupLocation: booking?.schedule?.pickup.location,
-    returnLocation: booking?.schedule?.return.location,
-    pickupDate: booking?.schedule?.pickup.date,
-    returnDate: booking?.schedule?.return.date,
+    vehicle: rentalVehicle?.vehicle,
+    facility: rentalVehicle?.facility,
+    pickupLocation: rentalVehicle?.booking?.pickup.location,
+    returnLocation: rentalVehicle?.booking?.return.location,
+    pickupDate: rentalVehicle?.booking?.pickup.date,
+    returnDate: rentalVehicle?.booking?.return.date,
+    bonusServices: rentalVehicle?.booking.bonusServices,
+    totalServiceCost: rentalVehicle?.booking.totalServiceCost,
+    noDriver: rentalVehicle?.booking.noDriver,
   };
 
   useEffect(() => {
@@ -103,14 +109,16 @@ const BookingVehicle = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-700">Dịch vụ khác</span>
-                  <span className="text-gray-700">0 ₫</span>
+                  <span className="text-gray-700">
+                    {params?.totalServiceCost.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                  </span>
                 </div>
 
                 <hr className="my-2" />
                 <div className="flex justify-between font-bold">
                   <span className="text-gray-700">Giá cho 4 ngày</span>
                   <span className="text-gray-700">
-                    {((params?.facility?.price || 0) + 0)
+                    {((params?.facility?.price + params?.totalServiceCost) || 0)
                       .toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
                   </span>
                 </div>

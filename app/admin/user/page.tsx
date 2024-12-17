@@ -2,8 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import "./index.css";
-import { Table, Switch, Space, Button } from "antd";
+import { Table, Switch, Space, Button, Menu, Dropdown } from "antd";
 import { AiOutlineEye, AiOutlineBars, AiOutlineDelete } from "react-icons/ai";
+import listCountries from "@/data/SelectCountry.json"
 import UserDetailsModal from "./UserDatails";
 import UserBookingModal from "./UserBooking";
 
@@ -68,6 +69,26 @@ export default function UserAdmin() {
     setIsUserBookingVisible(false);
   };
 
+  const userMenu = (record: any) => (
+    <Menu>
+      <Menu.Item key="1" onClick={() => handleViewDetails(record)}>
+        <div className="flex items-center">
+          <AiOutlineEye className="mr-2" /> Xem chi tiết
+        </div>
+      </Menu.Item>
+      <Menu.Item key="2" onClick={() => handleViewBooking(record)}>
+        <div className="flex items-center">
+          <AiOutlineBars className="mr-2" /> Xem đặt phòng
+        </div>
+      </Menu.Item>
+      <Menu.Item key="3">
+        <div className="flex items-center">
+          <AiOutlineDelete className="mr-2" /> Xóa
+        </div>
+      </Menu.Item>
+    </Menu>
+  );
+
   const userColumns = [
     {
       title: "",
@@ -75,20 +96,9 @@ export default function UserAdmin() {
       width: 50,
       render: (_: any, record: any) => (
         <Space className="flex items-center justify-center">
-          <Button
-            type="link"
-            icon={<AiOutlineEye className="text-lg" />}
-            onClick={() => handleViewDetails(record)}
-          />
-          <Button
-            type="link"
-            icon={<AiOutlineBars className="text-lg" />}
-            onClick={() => handleViewBooking(record)}
-          />
-          <Button
-            type="link"
-            icon={<AiOutlineDelete className="text-lg" />}
-          />
+          <Dropdown overlay={userMenu(record)} trigger={['click']}>
+            <Button type="link" icon={<AiOutlineBars className="text-lg" />} />
+          </Dropdown>
         </Space>
       ),
     },
@@ -120,6 +130,12 @@ export default function UserAdmin() {
       title: "Phone",
       dataIndex: "phone_number",
       width: 120,
+    },
+    {
+      title: "Country",
+      dataIndex: "country",
+      width: 200,
+      render: (country: string) => listCountries.find((item) => item.code === country)?.name || "N/A",
     },
     {
       title: "Address",
@@ -189,6 +205,8 @@ export default function UserAdmin() {
     {
       title: "Country",
       dataIndex: "country",
+      width: 200,
+      render: (country: string) => listCountries.find((item) => item.code === country)?.name || "N/A",
     },
     {
       title: "Address",

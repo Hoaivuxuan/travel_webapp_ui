@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, Descriptions, Tag, Image } from "antd";
 import { format } from "date-fns";
+import listCountries from "@/data/SelectCountry.json"
 
 interface UserDetailsModalProps {
   user: any;
@@ -48,7 +49,16 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({ user, visible, onCl
           {user.address || "N/A"}
         </Descriptions.Item>
         <Descriptions.Item label="Country">
-          {user.country || "N/A"}
+          <div className="flex items-center">
+            <Image
+              src={`https://flagcdn.com/w40/${user.country.toLowerCase()}.png`}
+              alt={user.country}
+              width={24}
+              height={16}
+              className="mr-2 h-[16px] w-[24px]"
+            />
+            <p className="ml-2">{listCountries.find((country) => country.code === user.country)?.name || "N/A"}</p>
+          </div>
         </Descriptions.Item>
         <Descriptions.Item label="Date of Birth">
           {user.date_of_birth

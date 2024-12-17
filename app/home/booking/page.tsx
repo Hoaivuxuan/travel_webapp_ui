@@ -38,10 +38,6 @@ const BookingHotel = () => {
 
   const [step, setStep] = useState(2);
   const [windowLoaded, setWindowLoaded] = useState(false);
-  
-  useEffect(() => {
-    setWindowLoaded(true);
-  }, []);
 
   const searchParams = useSearchParams();
   const params: BookingParams = {
@@ -49,6 +45,10 @@ const BookingHotel = () => {
     bookingHotel: decodeToJWT(searchParams.get("bookingHotel") || ""),
     roomSelection: decodeToJWT(searchParams.get("roomSelection") || ""),
   };
+
+  useEffect(() => {
+    setWindowLoaded(true);
+  }, []);
 
   return (
     <div className="container mx-auto p-6">
@@ -103,7 +103,7 @@ const BookingHotel = () => {
                 {`${params.roomSelection.totalRooms} phòng cho ${params.bookingHotel?.booking?.adults} người lớn, ${params.bookingHotel?.booking?.children} trẻ em`}
               </p>
               <div className="pb-4">
-                {params?.roomSelection?.selectedRooms?.map((room: any, index: any) => (
+                {params?.roomSelection?.bookingRooms?.map((room: any, index: any) => (
                   <div key={index} className="flex justify-between text-sm grid grid-cols-2 gap-2">
                     <span>{room.type}</span>
                     <span>{room.count} phòng</span>

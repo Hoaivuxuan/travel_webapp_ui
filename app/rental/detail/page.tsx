@@ -3,18 +3,17 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
-import { GiPositionMarker } from "react-icons/gi";
+import { IoLocationOutline } from "react-icons/io5";
 import { AiOutlineDropbox, AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
 import { FaRegClock, FaStar, FaRegStar } from "react-icons/fa";
-import { Radio, Input, Space, Button, Modal, Select, AutoComplete } from "antd";
+import { Radio, Input, Space, Button, Modal, Select, AutoComplete, Rate } from "antd";
 import { importantInfo, policies, requirements } from "@/data/defaultValues";
 import Image from "next/image";
 import VehicleDetailInfo from "./VehicleInfo";
 import { decodeToJWT, encodeToJWT } from "@/utils/JWT";
 
 const availableServices = [
-  { key: "bonusDriver", name: "Tài xế phụ", max: 3 },
   { key: "babySeat", name: "Ghế em bé", max: 2 },
   { key: "childSeat", name: "Ghế trẻ em", max: 2 },
   { key: "gps", name: "GPS", max: 1 },
@@ -37,7 +36,10 @@ const VehicleDetail = () => {
   const [listAttraction, setListAttraction] = useState<any>([]);
   const [pickupSuggestions, setPickupSuggestions] = useState<any>([]);
   const [returnSuggestions, setReturnSuggestions] = useState<any>([]);
-  const [isReviewModalVisible, setIsReviewModalVisible] = useState(false);
+  const [isViewReviewModalVisible, setIsViewReviewModalVisible] = useState(false);
+  const [isSendReviewModalVisible, setIsSendReviewModalVisible] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
 
   const params = useSearchParams();
   const rentalVehicle = decodeToJWT(params.get("rentalVehicle") || "");
@@ -45,15 +47,17 @@ const VehicleDetail = () => {
   const vehicleItem: any = rentalVehicle?.vehicle;
   const facility: any = vehicleItem.facilities.find((item: any) => item.id === facilityId);
 
-  const totalServiceCost = Object.values(services).reduce((sum, count) => sum + count * 300000, 0);
   const search = localStorage.getItem("searchVehicle");
   const searchObject = search ? JSON.parse(search) : null;
 
-  const servicesJson = availableServices.map((service) => ({
-    name: service.name,
-    quantity: services[service.key],
-    cost: services[service.key] * 300000,
-  }));
+  const bonusServices = availableServices
+    .map((service) => ({
+      name: service.name,
+      count: services[service.key],
+      price: services[service.key] * 300000,
+    }))
+    .filter((service) => service.count > 0);
+  const totalServiceCost = Object.values(services).reduce((sum, count) => sum + count * 300000, 0);
 
   useEffect(() => {
     const fetchOffice = async () => {
@@ -91,12 +95,28 @@ const VehicleDetail = () => {
   }, [facilityId, rentalVehicle.location.id]);
   
 
-  const handleOpenReviewModal = () => {
-    setIsReviewModalVisible(true);
+  const handleOpenViewReviewModal = () => {
+    setIsViewReviewModalVisible(true);
   };
 
-  const handleCloseReviewModal = () => {
-    setIsReviewModalVisible(false);
+  const handleCloseViewReviewModal = () => {
+    setIsViewReviewModalVisible(false);
+  };
+
+  const handleOpenSendReviewModal = () => {
+    setIsSendReviewModalVisible(true);
+  };
+
+  const handleCloseSendReviewModal = () => {
+    setIsSendReviewModalVisible(false);
+    setRating(0);
+    setComment("");
+  };
+
+  const handleSendReviewModal = () => {
+    console.log(`Đánh giá: ${rating}, Nhận xét: ${comment}`);
+    setRating(0);
+    setComment("");
   };
 
   const handlePickupSearch = (value: string) => {
@@ -135,7 +155,7 @@ const VehicleDetail = () => {
   };
 
   const handleBookingClick = () => {
-    const schedule = {
+    const booking = {
       pickup: {
         location: pickupLocation,
         date: format(searchObject.dateRange.pickupDate, "yyyy-MM-dd"),
@@ -144,10 +164,13 @@ const VehicleDetail = () => {
         location: returnLocation,
         date: format(searchObject.dateRange.returnDate, "yyyy-MM-dd"),
       },
+      bonusServices,
+      totalServiceCost,
     };
+
     const {facilities, ...vehicle} = vehicleItem;
-    const bookingVehicle = {vehicle, facility, schedule};
-    router.push(`/rental/booking?booking=${encodeToJWT(bookingVehicle)}`);
+    const bookingVehicle = {vehicle, facility, booking};
+    router.push(`/rental/booking?rental=${encodeToJWT(bookingVehicle)}`);
   };
 
   return (
@@ -265,7 +288,7 @@ const VehicleDetail = () => {
 
           <div className="p-4 bg-white border rounded-lg">
             <div className="flex items-center space-x-2 mb-4">
-              <GiPositionMarker className="text-[20px] text-blue-600" />
+              <IoLocationOutline className="text-[20px] text-blue-600" />
               <h2 className="text-lg font-bold">Điểm nhận xe</h2>
             </div>
             <div className="mb-4">
@@ -319,7 +342,7 @@ const VehicleDetail = () => {
 
           <div className="p-4 bg-white border rounded-lg">
             <div className="flex items-center space-x-2 mb-4">
-              <GiPositionMarker className="text-[20px] text-blue-600" />
+              <IoLocationOutline className="text-[20px] text-blue-600" />
               <h2 className="text-lg font-bold">Điểm trả xe</h2>
             </div>
             <div className="mb-4">
@@ -403,49 +426,54 @@ const VehicleDetail = () => {
 
         <div className="col-span-1">
           <div className="space-y-4 sticky top-5">
-            <div className="p-4 bg-white border rounded-lg">
+            <div className="p-4 bg-white border rounded-lg flex flex-col">
               <div className="flex items-center justify-center">
                 <p className="mb-2 flex items-center justify-center flex-shrink-0 w-[60px] h-[60px] text-3xl font-bold text-white bg-blue-600 rounded-sm">
                   {facility.name.charAt(0).toUpperCase()}
                 </p>
               </div>
-              <div className="text-sm pb-3">
-                {`Bởi ${facility.name}`}
-              </div>
-              
+              <div className="text-sm pb-3">{`Bởi ${facility.name}`}</div>
               <div className="flex items-center space-x-2 my-2">
                 <p className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold text-white bg-blue-600 rounded-lg">
                   {facility.reviewResponse.average_rating.toFixed(1) || "N/A"}
                 </p>
                 <p className="text-xs">{facility.reviewResponse.total_reviews} lượt đánh giá</p>
               </div>
-              <h3 className="font-semibold mt-8 mb-2">Top Reviews</h3>
-              <div
-                className="py-2"
-                onClick={handleOpenReviewModal}
-              >
-                {facility.reviewResponse.comments.slice(-2).map((comment: any, index: number) => (
-                  <div
-                    key={index}
-                    className={`py-2 border-t min-h-[100px] ${index === facility.reviewResponse.comments.slice(-2).length - 1 ? 'border-b' : ''}`}
-                  >
-                    <div className="flex justify-between mb-2">
-                      <p className="text-sm font-semibold">{comment.user}</p>
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, starIndex) => (
-                          <span key={starIndex} className="mr-1">
-                            {starIndex < comment.rating ? (
-                              <FaStar className="text-yellow-300" />
-                            ) : (
-                              <FaRegStar className="text-yellow-300" />
-                            )}
-                          </span>
-                        ))}
+              <div className="mt-auto">
+                <h3 className="font-semibold mt-8 mb-2">Top Reviews</h3>
+                <div
+                  className="py-2"
+                  onClick={handleOpenViewReviewModal}
+                >
+                  {facility.reviewResponse.comments.slice(-2).map((comment: any, index: number) => (
+                    <div
+                      key={index}
+                      className={`py-2 border-t min-h-[100px] ${index === facility.reviewResponse.comments.slice(-2).length - 1 ? 'border-b' : ''}`}
+                    >
+                      <div className="flex justify-between mb-2">
+                        <p className="text-sm font-semibold">{comment.user}</p>
+                        <div className="flex items-center">
+                          {[...Array(5)].map((_, starIndex) => (
+                            <span key={starIndex} className="mr-1">
+                              {starIndex < comment.rating ? (
+                                <FaStar className="text-yellow-300" />
+                              ) : (
+                                <FaRegStar className="text-yellow-300" />
+                              )}
+                            </span>
+                          ))}
+                        </div>
                       </div>
+                      <p className="text-sm">{comment.comment}</p>
                     </div>
-                    <p className="text-sm">{comment.comment}</p>
-                  </div>
-                ))}
+                  ))}
+                </div>
+                <div className="flex items-center space-x-2" onClick={handleOpenSendReviewModal}>
+                  <Input placeholder="Đánh giá của bạn" readOnly />
+                  <Button type="primary" className="bg-blue-600">
+                    Viết đánh giá
+                  </Button>
+                </div>
               </div>
             </div>
             
@@ -457,12 +485,12 @@ const VehicleDetail = () => {
                 </span>
               </div>
               <div className="space-y-2">
-                {servicesJson.map((service, index) => (
-                  service.quantity > 0 && (
+                {bonusServices.map((service, index) => (
+                  service.count > 0 && (
                     <div key={index} className="flex justify-between items-center">
-                      <span className="text-sm">{service.quantity} x {service.name}</span>
+                      <span className="text-sm">{service.count} x {service.name}</span>
                       <span className="text-sm">
-                        {service.cost.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                        {service.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                       </span>
                     </div>
                   )
@@ -472,8 +500,7 @@ const VehicleDetail = () => {
               <div className="flex justify-between border-t pt-4">
                 <span className="text-lg font-bold">Tổng giá tiền</span>
                 <span className="text-xl font-semibold">
-                  {((facility?.price || 0) + totalServiceCost)
-                    .toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                  {((facility?.price + totalServiceCost) || 0).toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
                 </span>
               </div>
 
@@ -486,8 +513,8 @@ const VehicleDetail = () => {
       </section>
       <Modal
         title="Top Reviews"
-        visible={isReviewModalVisible}
-        onCancel={handleCloseReviewModal}
+        visible={isViewReviewModalVisible}
+        onCancel={handleCloseViewReviewModal}
         footer={null}
         centered
       >
@@ -514,6 +541,35 @@ const VehicleDetail = () => {
               <p className="text-sm">{comment.comment}</p>
             </div>
           ))}
+        </div>
+      </Modal>
+      <Modal
+        title="Đánh giá"
+        visible={isSendReviewModalVisible}
+        onCancel={handleCloseSendReviewModal}
+        centered
+        footer={[
+          <Button key="cancel" onClick={handleCloseSendReviewModal}>
+            Hủy
+          </Button>,
+          <Button key="submit" type="primary" className="bg-green-600" onClick={handleSendReviewModal}>
+            Gửi đánh giá
+          </Button>,
+        ]}
+      >
+        <div className="space-y-4">
+          <Rate
+            value={rating}
+            onChange={setRating}
+            className="text-xl"
+          />
+          <Input.TextArea
+            placeholder="Nhập nội dung nhận xét..."
+            rows={4}
+            className="w-full"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
         </div>
       </Modal>
     </div>

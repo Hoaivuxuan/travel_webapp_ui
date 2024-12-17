@@ -1,30 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { Modal, Table, Tag, Collapse, Button, Dropdown, Menu, Space, message } from "antd";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { Collapse, Table, Button, Space, Tag, message, Menu, Dropdown } from "antd";
+import { AiOutlineBars, AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { statusTags } from "@/data/defaultValues";
 import { format } from "date-fns";
-import { AiOutlineEye, AiOutlineDelete, AiOutlineBars } from "react-icons/ai";
+import BookingDetailsModal from "./BookingHotelDetails";
 
-interface UserBookingsModalProps {
-  user: any;
-  visible: boolean;
-  onClose: () => void;
-}
-
-const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
-  user,
-  visible,
-  onClose,
-}) => {
+const BookingHotelPage: React.FC = () => {
   const [listBookingHotel, setListBookingHotel] = useState<any | null>();
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
+  const userId = Number(localStorage.getItem("userId"));
 
   useEffect(() => {
-    if(!user) return;
     const fetchData = async () => {
       try {
         setLoading(true);
         const bearerToken = localStorage.getItem("token");
-        const response = await fetch(`http://localhost:8080/bookingRoom/user/${user.id}`, {
+        const response = await fetch(`http://localhost:8080/bookingRoom/user/${userId}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${bearerToken}`,
@@ -57,11 +52,11 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
     };
   
     fetchData();
-  }, [listBookingHotel, user]);
+  }, [listBookingHotel, userId]);
 
   const userMenu = (record: any) => (
     <Menu>
-      <Menu.Item key="1">
+      <Menu.Item key="1" onClick={() => handleViewDetails(record)}>
         <div className="flex items-center">
           <AiOutlineEye className="mr-2" /> Xem chi tiết
         </div>
@@ -90,7 +85,7 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
       title: "ID",
       dataIndex: "id",
       key: "id",
-      // render: (id: string) => id.toUpperCase(),
+      render: (id: string) => id.toUpperCase(),
     },
     {
       title: "Khách sạn",
@@ -163,49 +158,48 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
     },
   ];
 
+  const handleViewDetails = (record: any) => {
+    setSelectedBooking(record);
+    setIsModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setSelectedBooking(null);
+    setIsModalVisible(false);
+  };
+
   return (
-    <Modal
-      title={`Danh sách hóa đơn`}
-      visible={visible}
-      onCancel={onClose}
-      footer={null}
-      width={1300}
-      centered
-    >
-      <Collapse accordion>
+    <div className="max-w-7xl mx-auto">
+      <Collapse
+        bordered
+        defaultActiveKey={["1"]}
+        expandIconPosition="right"
+        accordion
+      >
         <Collapse.Panel header="HÓA ĐƠN ĐẶT PHÒNG" key="1">
           <Table
+            bordered
             dataSource={listBookingHotel}
             columns={columns}
-            bordered
-            rowKey="id"
-            pagination={{ pageSize: 5 }}
+            rowClassName="editable-row"
+            pagination={{ pageSize: 10 }}
             scroll={{ x: 1500 }}
           />
         </Collapse.Panel>
         <Collapse.Panel header="HÓA ĐƠN THUÊ XE" key="2">
-          {/* <Table
-            dataSource={filteredBookings}
-            columns={columns}
-            bordered
-            rowKey="id"
-            pagination={{ pageSize: 5 }}
-            scroll={{ x: 1500 }}
-          /> */}
+          {/* Add corresponding data and columns for rental invoices */}
         </Collapse.Panel>
         <Collapse.Panel header="HÓA ĐƠN ĐẶT TOUR/VÉ THAM QUAN" key="3">
-          {/* <Table
-            dataSource={filteredBookings}
-            columns={columns}
-            bordered
-            rowKey="id"
-            pagination={{ pageSize: 5 }}
-            scroll={{ x: 1500 }}
-          /> */}
+          {/* Add corresponding data and columns for tour invoices */}
         </Collapse.Panel>
       </Collapse>
-    </Modal>
+      <BookingDetailsModal
+        booking={selectedBooking}
+        visible={isModalVisible}
+        onClose={handleModalClose}
+      />
+    </div>
   );
 };
 
-export default UserBookingsModal;
+export default BookingHotelPage;

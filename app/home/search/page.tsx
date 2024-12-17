@@ -39,7 +39,13 @@ function SearchPage({ searchParams }: Props) {
   useEffect(() => {
     const fetchFilter = async () => {
       try {
-        const response = await fetch("http://localhost:8080/hotels?noRooms=0&keyword");
+        const bearerToken = localStorage.getItem("token");
+        const response = await fetch("http://localhost:8080/hotels?noRooms=0&keyword", {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+            "Content-Type": "application/json",
+          },
+        });
         const data = await response.json();
         const type = Array.from(new Set<string>(data.hotels.map((hotel: any) => hotel.type)))
           .sort((a, b) => a.localeCompare(b))
@@ -57,8 +63,14 @@ function SearchPage({ searchParams }: Props) {
           .trim()
           .replace(/\s+/g, "")
           .toLowerCase();
-
-        const response = await fetch(`http://localhost:8080/hotels?noRooms=0&keyword=${removeAccent(keyword)}`);
+          
+        const bearerToken = localStorage.getItem("token");
+        const response = await fetch(`http://localhost:8080/hotels?noRooms=0&keyword=${removeAccent(keyword)}`, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+            "Content-Type": "application/json",
+          },
+        });
         const data = await response.json();
 
         const minPrice = Math.min(
@@ -71,7 +83,7 @@ function SearchPage({ searchParams }: Props) {
         setMinPrice(minPrice);
         setMaxPrice(maxPrice);
         setPriceRange([minPrice, maxPrice]);
-        setHotels(data.hotels.sort((a: any, b: any) => a.name.localeCompare(b.name)));
+        setHotels(data.hotels);
         setLoading(false);
       } catch (error) {
         setLoading(false);

@@ -73,8 +73,8 @@
   },
   {
     "name": "Bahrain",
-    "flag": "🇧🇭",
-    "code": "BH",
+    "flag": "🇧🇦",
+    "code": "BA",
     "phoneCode": "+973"
   },
   {
@@ -126,9 +126,9 @@
     "phoneCode": "+591"
   },
   {
-    "name": "Bosnia and Herzegovina",
-    "flag": "🇧🇦",
-    "code": "BA",
+    "name": "Bosnia & Herzegovina",
+    "flag": "🇧🇭",
+    "code": "BH",
     "phoneCode": "+387"
   },
   {

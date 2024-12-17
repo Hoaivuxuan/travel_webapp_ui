@@ -1,21 +1,70 @@
-import { listHotels } from "@/data/typeHotel";
 import React, { useState } from "react";
-import { Checkbox, Button } from "antd";
+import { Checkbox, Button, message } from "antd";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Notification from "@/components/Notification";
+import { useRouter } from "next/navigation";
 
 interface ConfirmBookingProps {
   hotel: any;
 }
 
 const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
+  const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { notifySuccess, notifyWarning } = Notification();
 
   const handleCheckboxChange = (e: any) => {
     setIsChecked(e.target.checked);
   };
 
-  const handleConfirm = () => {
-    const invoice = localStorage.getItem("bookingHotel");
-    console.log(JSON.parse(invoice || ""));
+  const handleConfirm = async () => {
+    const bookingHotel = JSON.parse(localStorage.getItem("bookingHotel") || "{}");
+    const booking = {
+      user_id: bookingHotel.user,
+      full_name: bookingHotel.customerInfo.fullName,
+      email: bookingHotel.customerInfo.email,
+      phone: bookingHotel.customerInfo.phone,
+      country: bookingHotel.customerInfo.country,
+      check_in_date: bookingHotel.checkinDate,
+      check_out_date: bookingHotel.checkoutDate,
+      adults: bookingHotel.adults,
+      children: bookingHotel.children,
+      booked_rooms: bookingHotel.roomSelection.bookingRooms.map((room: any) => ({
+        room_id: room.room_id,
+        amount: room.count,
+      })),
+      special_request: bookingHotel.specialRequest,
+      arrival_time: bookingHotel.arrivalTime,
+      totalPrice: bookingHotel.roomSelection.totalPrice,
+      status: bookingHotel.status,
+    };
+
+    try {
+      setLoading(true);
+      const bearerToken = localStorage.getItem("token");
+      const response = await fetch("http://localhost:8080/bookingRoom", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${bearerToken}`,
+        },
+        body: JSON.stringify(booking),
+      });
+
+      if (!response.ok) {
+        notifyWarning("Đặt phòng thất bại. Vui lòng thử lại.");
+      }
+
+      const result = await response.json();
+      notifySuccess("Đặt phòng thành công!");
+      router.push(`/home/bookingDetails?id=${result.id}`);
+    } catch (error: any) {
+      notifyWarning("Đặt phòng thất bại. Vui lòng thử lại.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,7 +80,11 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
         </div>
       </div>
       <div className="flex items-start my-4">
-        <Checkbox className="text-blue-600" checked={isChecked} onChange={handleCheckboxChange}>
+        <Checkbox
+          className="text-blue-600"
+          checked={isChecked}
+          onChange={handleCheckboxChange}
+        >
           Tôi đồng ý nhận email marketing từ Booking.com, bao gồm khuyến mãi, đề xuất được cá nhân hóa, tặng thưởng, trải nghiệm du lịch và cập nhật về các sản phẩm và dịch vụ của Booking.com.
         </Checkbox>
       </div>
@@ -45,10 +98,13 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
           type="primary"
           className="bg-blue-600 text-white w-1/2 py-2 rounded"
           onClick={handleConfirm}
+          disabled={!isChecked}
+          loading={loading} // Hiển thị trạng thái tải
         >
-          Hoàn tất đặt chỗ
+          HOÀN TẤT
         </Button>
       </div>
+      <ToastContainer />
     </div>
   );
 };

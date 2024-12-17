@@ -13,14 +13,9 @@ type Props = {
 export type RentalSearchParams = {
   url: URL;
   location: string;
+  city: number;
   pickup: string;
   return: string;
-};
-
-const removeAccent = (str: string) => {
-  return str
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
 };
 
 const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
@@ -38,7 +33,7 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
   useEffect(() => {
     const fetchFilter = async () => {
       try {
-        const response = await fetch("http://localhost:8080/vehicles?city", {
+        const response = await fetch(`http://localhost:8080/vehicles?id=0`, {
           headers: {
             Authorization: `Bearer ${bearerToken}`,
           },
@@ -57,29 +52,27 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
 
     const fetchVehicles = async () => {
       try {
-        const keyword = (searchParams.location || "")
-          .trim()
-          .replace(/\s+/g, "")
-          .toLowerCase();
-
-        const response = await fetch(`http://localhost:8080/vehicles?city=${removeAccent(keyword)}`, {
+        const response = await fetch(`http://localhost:8080/vehicles?id=${searchParams.city}`, {
           headers: {
             Authorization: `Bearer ${bearerToken}`,
           },
         });
         const data = await response.json();
 
+        const listData = data.vehicles
+          .sort((a: any, b: any) => a.model.localeCompare(b.model));
+        
         const minPrice = Math.min(
-          ...data.vehicles.map((vehicle: any) => Math.min(...vehicle.facilities.map((facility: any) => facility.price))),
+          ...listData.map((vehicle: any) => Math.min(...vehicle.facilities.map((facility: any) => facility.price))),
         );
         const maxPrice = Math.max(
-          ...data.vehicles.map((vehicle: any) => Math.min(...vehicle.facilities.map((facility: any) => facility.price))),
+          ...listData.map((vehicle: any) => Math.min(...vehicle.facilities.map((facility: any) => facility.price))),
         );
 
         setMinPrice(minPrice);
         setMaxPrice(maxPrice);
         setPriceRange([minPrice, maxPrice]);
-        setVehicles(data.vehicles.sort((a: any, b: any) => a.model.localeCompare(b.model)));
+        setVehicles(listData);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -90,7 +83,7 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
     fetchFilter();
     fetchVehicles();
     
-  }, [bearerToken, searchParams.location, searchParams.url]);
+  }, [bearerToken, searchParams.city, searchParams.url, vehicles]);
 
   const handlePriceChange = (value: number | number[]) => {
     if (Array.isArray(value)) {
@@ -188,7 +181,7 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
               {filteredResults.map((item: any) =>
                 <VehicleItem
                   key={item.id}
-                  id={item.id.toString()}
+                  vehicle={item}
                   isFacilityVisible={selectedItemId === item.id.toString()}
                   onFacilityToggle={() => setSelectedItemId(selectedItemId === item.id.toString() ? null : item.id.toString())}
                 />

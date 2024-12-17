@@ -1,5 +1,6 @@
 import React from "react";
-import countries from "@/data/SelectCountry.json";
+import Image from "next/image";
+import listCountries from "@/data/SelectCountry.json"
 import paymentMethods from "@/data/SelectPayment.json";
 import { Form, Input, Select, Radio, Checkbox, Button } from "antd";
 import { AiOutlineCheckCircle } from "react-icons/ai";
@@ -13,18 +14,22 @@ type BookingFormProps = {
 const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
   const [form] = Form.useForm();
 
+  const initialValues = {
+    whoBooking: "self",
+    payment: "none",
+    nearbyRooms: false,
+    country: "Vietnam",
+  };
+
   const saveBookingHotel = (values: any) => {
     const bookingHotel = {
       user: params.bookingHotel?.user?.id,
-      hotel: {
-        name: params.bookingHotel?.hotel?.hotel_name,
-        city: params.bookingHotel?.hotel?.city.name,
-      },
+      hotel: params.bookingHotel?.hotel?.id,
       customerInfo: {
         fullName: values.fullName,
         email: values.email,
         phone: values.phone,
-        country: values.country || "Vietnam",
+        country: listCountries.find((item) => item.name === (values.country || "Vietnam"))?.code,
       },
       checkinDate: params.bookingHotel?.booking?.dateRange.startDate,
       checkoutDate: params.bookingHotel?.booking?.dateRange.endDate,
@@ -51,17 +56,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
   };
 
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      className="space-y-4"
-      initialValues={{
-        country: "Vietnam",
-        whoBooking: "self",
-        payment: "none",
-        nearbyRooms: false,
-      }}
-    >
+    <Form form={form} layout="vertical" initialValues={initialValues} className="space-y-4">
       <div className="p-4 bg-white border rounded-lg">
         <h2 className="text-xl font-bold mb-4">Nhập thông tin chi tiết của bạn</h2>
         <div className="grid grid-cols-2 gap-4">
@@ -83,15 +78,24 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
           </Form.Item>
           <Form.Item label="Quốc gia" name="country" rules={[{ required: true }]}>
             <Select>
-              {countries.map((country, index) => (
+              {listCountries.map((country, index) => (
                 <Select.Option key={index} value={country.name}>
-                  {country.name}
+                  <div className="flex items-center">
+                    <Image
+                      src={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png`}
+                      alt={country.code}
+                      width={24}
+                      height={16}
+                      className="mr-2 h-[16px] w-[24px]"
+                    />
+                    {country.name}
+                  </div>
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
         </div>
-        <hr className="mb-4"></hr>
+        <hr className="mb-4" />
         <Form.Item label="Bạn đặt phòng cho ai?" name="whoBooking">
           <Radio.Group>
             <Radio value="self" className="block">

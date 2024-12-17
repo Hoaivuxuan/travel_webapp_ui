@@ -74,40 +74,25 @@ const RegisterPage = () => {
             className="w-full p-2 border border-gray-300 rounded"
           />
         </div>
-
         <div className="mb-4 relative">
           <label className="block mb-2">Mật Khẩu</label>
-          <Input
-            type={showPassword ? "text" : "password"}
+          <Input.Password
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            visibilityToggle={{ visible: showPassword, onVisibleChange: setShowPassword }}
             required
             className="w-full p-2 border border-gray-300 rounded"
           />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-[60%] transform text-gray-500"
-          >
-            {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
-          </button>
         </div>
         <div className="mb-4 relative">
           <label className="block mb-2">Xác Nhận Mật Khẩu</label>
-          <Input
-            type={showConfirmPassword ? "text" : "password"}
+          <Input.Password
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            visibilityToggle={{ visible: showConfirmPassword, onVisibleChange: setShowConfirmPassword }}
             required
             className="w-full p-2 border border-gray-300 rounded"
           />
-          <button
-            type="button"
-            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute right-3 top-[60%] transform text-gray-500"
-          >
-            {showConfirmPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
-          </button>
         </div>
 
         <div className="mt-4">

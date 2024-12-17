@@ -4,8 +4,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 
 const settingMenu = [
-  { name: "home", title: "Thông tin chung", href: "home" },
-  { name: "bookingHotel", title: "Đặt nơi lưu trú", href: "bookingHotel" },
+  { name: "booking", title: "Thông tin chung", href: "booking" },
   { name: "other", title: "Khác", href: "home" },
 ];
 

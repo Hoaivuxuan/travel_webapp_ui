@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import { AutoComplete, Button, DatePicker, Input } from "antd";
 import { useRouter } from "next/navigation";
 import { AiOutlineClose } from 'react-icons/ai';
-import { GiPositionMarker } from "react-icons/gi";
+import { IoLocationOutline } from "react-icons/io5";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import dayjs from "dayjs";
 
@@ -196,7 +196,7 @@ function ActivitiesSearchForm() {
                             />
                           </AutoComplete>
                           <span className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                            <GiPositionMarker className="text-gray-400" />
+                            <IoLocationOutline className="text-gray-400" />
                           </span>
                           {keyword && (
                             <AiOutlineClose

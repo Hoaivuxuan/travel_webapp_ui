@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
 
 interface Room {
+  room_id: number;
   name: string;
   type: string;
   size: number;
@@ -30,43 +31,42 @@ interface AvailableRoomsTableProps {
 
 const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms }) => {
   const initialSelection = {
-    selectedRooms: Array(rooms.length).fill(0),
+    bookingRooms: Array(rooms.length).fill(0),
     totalRooms: 0,
     totalPrice: 0,
   };
 
-  const [selectedRooms, setSelectedRooms] = useState<number[]>(initialSelection.selectedRooms);
-  const [totalRooms, setTotalRooms] = useState<number>(initialSelection.totalRooms);
-  const [totalPrice, setTotalPrice] = useState<number>(initialSelection.totalPrice);
   const router = useRouter();
   const { notifyWarning } = Notification();
+  const [bookingRooms, setBookingRooms] = useState<number[]>(initialSelection.bookingRooms);
+  const [totalRooms, setTotalRooms] = useState<number>(initialSelection.totalRooms);
+  const [totalPrice, setTotalPrice] = useState<number>(initialSelection.totalPrice);
 
   useEffect(() => {
-    const newTotalRooms = selectedRooms.reduce((sum, count) => sum + count, 0);
-    const newTotalPrice = selectedRooms.reduce(
+    const newTotalRooms = bookingRooms.reduce((sum, count) => sum + count, 0);
+    const newTotalPrice = bookingRooms.reduce(
       (sum, count, index) => sum + count * rooms[index].price, 0
     );
     setTotalRooms(newTotalRooms);
     setTotalPrice(newTotalPrice);
-  }, [selectedRooms, rooms]);
+  }, [bookingRooms, rooms]);
 
   const handleRoomSelect = (index: number, value: number) => {
-    const updatedSelection = [...selectedRooms];
+    const updatedSelection = [...bookingRooms];
     updatedSelection[index] = value;
-    setSelectedRooms(updatedSelection);
+    setBookingRooms(updatedSelection);
   };
 
   const handleBookingClick = () => {
     const search = localStorage.getItem("searchHotel");
     const user = localStorage.getItem("user");
     const roomSelection = {
-      selectedRooms: selectedRooms
-        .map((count, index) => ({
+      bookingRooms: bookingRooms.map((count, index) => ({
+          room_id: rooms[index].room_id,
           type: rooms[index].name,
-          count,
           price: rooms[index].price,
-        }))
-        .filter((room) => room.count > 0),
+          count,
+        })).filter((room) => room.count > 0),
       totalRooms,
       totalPrice,
     };
@@ -100,7 +100,7 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms 
     {
       title: "Loại chỗ ở",
       dataIndex: "name",
-      width: "30%",
+      width: "28%",
       key: "type",
       render: (_: any, record: any) => (
         <div className="space-y-1">
@@ -114,16 +114,18 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms 
                 <RxRulerSquare className="text-lg mr-2" /> {record.size} m²
               </span>
             </div>
-            <hr />
-            <p>{record.no_bed_1} x {record.type_bed_1}</p>
-            <p>{record.type_bed_2 && `${record.no_bed_2} x ${record.type_bed_2}`}</p>
+            <div className="pt-2 border-t">
+              <p>{record.no_bed_1} x {record.type_bed_1}</p>
+              <p>{record.type_bed_2 && `${record.no_bed_2} x ${record.type_bed_2}`}</p>
+            </div>
           </div>
         </div>
       ),
     },
     {
-      title: "Số lượng khách",
+      title: "Số khách tối đa",
       dataIndex: "max_guests",
+      width: "12%",
       key: "max_guests",
       render: (maxGuests: number) => (
         <div className="flex items-center">
@@ -134,6 +136,7 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms 
     {
       title: "Giá phòng",
       dataIndex: "price",
+      width: "15%",
       key: "price",
       render: (price: number) => 
         `${price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`,
@@ -152,13 +155,13 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms 
       ),
     },
     {
-      title: "Chọn số lượng",
+      title: "Số lượng",
       dataIndex: "select",
       key: "select",
       width: "10%",
       render: (_: any, record: any, index: number) => (
         <Select
-          value={selectedRooms[index]}
+          value={bookingRooms[index]}
           onChange={(value: number) => handleRoomSelect(index, value)}
           className="w-full"
         >
@@ -174,6 +177,7 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms 
 
   const data = rooms.map((room, index) => ({
     key: index,
+    room_id: room.room_id,
     name: room.name,
     type: room.type,
     size: room.size,

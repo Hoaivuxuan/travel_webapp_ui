@@ -12,6 +12,7 @@ const nextConfig = {
       "www.shutterstock.com",
       "example.com",
       "res.cloudinary.com",
+      "flagcdn.com",
     ],
   },
 };
