@@ -32,18 +32,18 @@ const BookingHotelPage: React.FC = () => {
         }
   
         const data = await response.json();
-        const bookingHotelData = data.bookingRoom.map((item: any, index: number) => ({
-          id: item.id,
-          hotel: item.hotel,
-          customer: item.customerInfo,
-          checkin: item.checkin_date,
-          checkout: item.checkout_date,
-          roomSelection: item.room_selection,
-          totalPrice: item.totalPrice,
-          noAdults: item.adults,
-          noChildren: item.children,
-        }));
-        setListBookingHotel(bookingHotelData);
+        // const bookingHotelData = data.bookingRoom.map((item: any, index: number) => ({
+        //   id: item.id,
+        //   hotel: item.hotel,
+        //   customer: item.customerInfo,
+        //   checkin: item.checkin_date,
+        //   checkout: item.checkout_date,
+        //   roomSelection: item.room_selection,
+        //   totalPrice: item.totalPrice,
+        //   noAdults: item.adults,
+        //   noChildren: item.children,
+        // }));
+        setListBookingHotel(data.bookingRoom);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -95,19 +95,19 @@ const BookingHotelPage: React.FC = () => {
     },
     {
       title: "Khách hàng",
-      dataIndex: ["customer", "fullname"],
+      dataIndex: ["customerInfo", "fullname"],
       key: "customerName",
       width: 200,
     },
     {
       title: "Email",
-      dataIndex: ["customer", "email"],
+      dataIndex: ["customerInfo", "email"],
       key: "email",
       width: 250,
     },
     {
       title: "Điện thoai",
-      dataIndex: ["customer", "phone"],
+      dataIndex: ["customerInfo", "phone"],
       key: "phone",
       width: 150,
     },
@@ -116,14 +116,14 @@ const BookingHotelPage: React.FC = () => {
       key: "time",
       width: 250,
       render: (_: any, record: any) => {
-        const checkin = format(new Date(record.checkin), "dd/MM/yyyy");
-        const checkout = format(new Date(record.checkout), "dd/MM/yyyy");
+        const checkin = format(new Date(record.checkin_date), "dd/MM/yyyy");
+        const checkout = format(new Date(record.checkout_date), "dd/MM/yyyy");
         return `${checkin} - ${checkout}`;
       },
     },    
     {
       title: "Số phòng",
-      dataIndex: ["roomSelection", "totalRooms"],
+      dataIndex: ["room_selection", "totalRooms"],
       key: "totalRooms",
       width: 100,
     },
@@ -132,7 +132,7 @@ const BookingHotelPage: React.FC = () => {
       key: "guest",
       width: 100,
       render: (_: any, record: any) => {
-        return record.noAdults + (record.noChildren || 0);
+        return record.no_adult + (record.no_children || 0);
       },
     }, 
     {

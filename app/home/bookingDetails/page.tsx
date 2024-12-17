@@ -55,8 +55,8 @@ const BookingDetails: React.FC = () => {
     hotel,
     checkin_date,
     checkout_date,
-    adults,
-    children,
+    no_adult,
+    no_children,
     room_selection,
     totalPrice,
   } = bookingDetails;
@@ -107,14 +107,14 @@ const BookingDetails: React.FC = () => {
         <Descriptions.Item label="Email" span={3}>
           {customerInfo?.email}
         </Descriptions.Item>
-        <Descriptions.Item label="Số điện thoại" span={3}>
+        <Descriptions.Item label="Điện thoại" span={3}>
           {customerInfo?.phone}
         </Descriptions.Item>
         <Descriptions.Item label="Quốc gia" span={3}>
           {listCountries.find((country) => country.code === customerInfo.country)?.name || ""}
         </Descriptions.Item>
         <Descriptions.Item label="Khách sạn">
-          Khách sạn số {hotel}
+          {hotel.hotel_name}
         </Descriptions.Item>
         <Descriptions.Item label="Ngày nhận phòng">
           {checkin_date}
@@ -123,10 +123,10 @@ const BookingDetails: React.FC = () => {
           {checkout_date}
         </Descriptions.Item>
         <Descriptions.Item label="Người lớn">
-          {adults}
+          {no_adult}
         </Descriptions.Item>
         <Descriptions.Item label="Trẻ em">
-          {children}
+          {no_children}
         </Descriptions.Item>
         <Descriptions.Item label="Tổng số phòng">
           {room_selection?.totalRooms}

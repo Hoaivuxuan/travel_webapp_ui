@@ -1,16 +1,48 @@
 import React, { useState } from "react";
-import { Checkbox, Button } from "antd";
+import { Checkbox, Button, message } from "antd";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Notification from "@/components/Notification";
+import { useRouter } from "next/navigation";
 
 const ConfirmBooking = () => {
+  const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { notifySuccess, notifyWarning } = Notification();
 
   const handleCheckboxChange = (e: any) => {
     setIsChecked(e.target.checked);
   };
 
-  const handleConfirm = () => {
-    const invoice = localStorage.getItem("rentalVehicle");
-    console.log(JSON.parse(invoice || ""));
+  const handleConfirm = async () => {
+    const booking = JSON.parse(localStorage.getItem("rentalVehicle") || "{}");
+    console.log(booking);
+
+    try {
+      setLoading(true);
+      const bearerToken = localStorage.getItem("token");
+      const response = await fetch("http://localhost:8080/bookingVehicle", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${bearerToken}`,
+        },
+        body: JSON.stringify(booking),
+      });
+
+      if (!response.ok) {
+        notifyWarning("Đặt phòng thất bại. Vui lòng thử lại.");
+      }
+
+      const result = await response.json();
+      notifySuccess("Đặt xe thành công!");
+      router.push(`/rental/bookingDetails?id=${result.id}`);
+    } catch (error: any) {
+      notifyWarning("Đặt xe thất bại, vui lòng thử lại.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -39,8 +71,10 @@ const ConfirmBooking = () => {
           type="primary"
           className="bg-blue-600 text-white w-1/2 py-2 rounded"
           onClick={handleConfirm}
+          disabled={!isChecked}
+          loading={loading}
         >
-          Hoàn tất thuê xe
+          HOÀN TẤT
         </Button>
       </div>
     </div>

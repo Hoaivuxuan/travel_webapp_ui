@@ -163,14 +163,15 @@ const VehicleDetail = () => {
 
   const bonusServices = listAccessory
     .map((service: any) => ({
+      accessory_id: service.id,
       name: service.name,
-      count: Number(services[service.name] || 0),
-      cost: Number((services[service.name] || 0) * service.price),
+      amount: Number(services[service.name] || 0),
+      price_per: service.price,
     }))
-    .filter((service: any) => service.count > 0);
+    .filter((service: any) => service.amount > 0);
   
   const totalServiceCost = bonusServices.reduce(
-    (sum: number, service: { cost: number }) => sum + (service.cost || 0),
+    (sum: number, service: any) => sum + (service.amount * service.price_per || 0),
     0
   );
 
@@ -504,11 +505,11 @@ const VehicleDetail = () => {
               </div>
               <div className="space-y-2">
                 {bonusServices.map((service: any, index: number) => (
-                  service.count > 0 && (
+                  service.amount > 0 && (
                     <div key={index} className="flex justify-between items-center">
-                      <span className="text-sm">{service.count} x {service.name}</span>
+                      <span className="text-sm">{service.amount} x {service.name}</span>
                       <span className="text-sm">
-                        {service.cost.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                        {(service.amount * service.price_per).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                       </span>
                     </div>
                   )

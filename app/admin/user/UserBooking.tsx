@@ -37,18 +37,7 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
         }
   
         const data = await response.json();
-        const bookingHotelData = data.bookingRoom.map((item: any, index: number) => ({
-          id: item.id,
-          hotel: item.hotel,
-          customer: item.customerInfo,
-          checkin: item.checkin_date,
-          checkout: item.checkout_date,
-          roomSelection: item.room_selection,
-          totalPrice: item.totalPrice,
-          noAdults: item.adults,
-          noChildren: item.children,
-        }));
-        setListBookingHotel(bookingHotelData);
+        setListBookingHotel(data.bookingRoom);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -90,7 +79,7 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
       title: "ID",
       dataIndex: "id",
       key: "id",
-      // render: (id: string) => id.toUpperCase(),
+      render: (id: string) => id.toUpperCase(),
     },
     {
       title: "Khách sạn",
@@ -100,19 +89,19 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
     },
     {
       title: "Khách hàng",
-      dataIndex: ["customer", "fullname"],
+      dataIndex: ["customerInfo", "fullname"],
       key: "customerName",
       width: 200,
     },
     {
       title: "Email",
-      dataIndex: ["customer", "email"],
+      dataIndex: ["customerInfo", "email"],
       key: "email",
       width: 250,
     },
     {
       title: "Điện thoai",
-      dataIndex: ["customer", "phone"],
+      dataIndex: ["customerInfo", "phone"],
       key: "phone",
       width: 150,
     },
@@ -121,14 +110,14 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
       key: "time",
       width: 250,
       render: (_: any, record: any) => {
-        const checkin = format(new Date(record.checkin), "dd/MM/yyyy");
-        const checkout = format(new Date(record.checkout), "dd/MM/yyyy");
+        const checkin = format(new Date(record.checkin_date), "dd/MM/yyyy");
+        const checkout = format(new Date(record.checkout_date), "dd/MM/yyyy");
         return `${checkin} - ${checkout}`;
       },
     },    
     {
       title: "Số phòng",
-      dataIndex: ["roomSelection", "totalRooms"],
+      dataIndex: ["room_selection", "totalRooms"],
       key: "totalRooms",
       width: 100,
     },
@@ -137,7 +126,7 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
       key: "guest",
       width: 100,
       render: (_: any, record: any) => {
-        return record.noAdults + (record.noChildren || 0);
+        return record.no_adult + record.no_children;
       },
     }, 
     {
@@ -154,7 +143,7 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
       width: 120,
       render: (text: any, record: any) => {
         const status = statusTags
-          .filter(tag => tag.id === 0)
+          .filter(tag => tag.id === Number(record.status))
           .map(tag => 
             <Tag color={tag.color} key={tag.id}>{tag.text}</Tag>
           );
