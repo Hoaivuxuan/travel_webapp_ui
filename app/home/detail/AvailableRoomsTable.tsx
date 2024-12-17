@@ -26,18 +26,20 @@ interface Room {
 
 interface AvailableRoomsTableProps {
   hotel: any;
+  night: number;
   rooms: Room[];
 }
 
-const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms }) => {
+const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms, night }) => {
+  const router = useRouter();
+  const { notifyWarning } = Notification();
+
   const initialSelection = {
     bookingRooms: Array(rooms.length).fill(0),
     totalRooms: 0,
     totalPrice: 0,
   };
 
-  const router = useRouter();
-  const { notifyWarning } = Notification();
   const [bookingRooms, setBookingRooms] = useState<number[]>(initialSelection.bookingRooms);
   const [totalRooms, setTotalRooms] = useState<number>(initialSelection.totalRooms);
   const [totalPrice, setTotalPrice] = useState<number>(initialSelection.totalPrice);
@@ -45,7 +47,7 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms 
   useEffect(() => {
     const newTotalRooms = bookingRooms.reduce((sum, count) => sum + count, 0);
     const newTotalPrice = bookingRooms.reduce(
-      (sum, count, index) => sum + count * rooms[index].price, 0
+      (sum, count, index) => sum + count * rooms[index].price * night, 0
     );
     setTotalRooms(newTotalRooms);
     setTotalPrice(newTotalPrice);
@@ -64,7 +66,7 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms 
       bookingRooms: bookingRooms.map((count, index) => ({
           room_id: rooms[index].room_id,
           type: rooms[index].name,
-          price: rooms[index].price,
+          price: rooms[index].price * night,
           count,
         })).filter((room) => room.count > 0),
       totalRooms,
@@ -134,12 +136,12 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms 
       ),
     },
     {
-      title: "Giá phòng",
+      title: `Giá phòng ${night} đêm`,
       dataIndex: "price",
       width: "15%",
       key: "price",
       render: (price: number) => 
-        `${price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`,
+        `${(price * night).toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`,
     },
     {
       title: "Các lựa chọn",

@@ -34,27 +34,24 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
         location: params.returnLocation,
         date: params.returnDate,
       },
-      services: {
-        bonusServices: params.bonusServices,
-        totalServices: params.totalServiceCost,
-      },
+      accessory_booking: params.bonusServices.map((service: any) => {
+        const { name, ...rest } = service;
+        return rest;
+      }),
       customerInfo: {
         fullName: values.fullName.toUpperCase(),
         email: values.email,
         phone: values.customerPhone,
         country: listCountries.find((item) => item.name === (values.country || "Vietnam"))?.code,
       },
-      driverInfo: {
-        totalDriver: addDriversCount + 1,
-        listDrivers: [
-          {
-            title: values.driverTitle,
-            fullName: values.driverFullName.toUpperCase(),
-            phone: values.driverPhone,
-          },
-          ...(values.additionalDrivers || []),
-        ],
-      },
+      driverInfo: [
+        {
+          title: Number(values.driverTitle),
+          fullName: values.driverFullName.toUpperCase(),
+          phone: values.driverPhone,
+        },
+        ...(values.additionalDrivers || []),
+      ],
     };
 
     localStorage.setItem("rentalVehicle", JSON.stringify(rentalVehicle));
@@ -171,8 +168,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
             className="w-[12%]"
           >
             <Select placeholder="Chọn">
-              <Select.Option value="0">Ông</Select.Option>
-              <Select.Option value="1">Bà</Select.Option>
+              <Select.Option value="1">Ông</Select.Option>
+              <Select.Option value="0">Bà</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item
@@ -210,8 +207,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
               className="w-[12%]"
             >
               <Select placeholder="Chọn">
-                <Select.Option value="0">Ông</Select.Option>
-                <Select.Option value="1">Bà</Select.Option>
+                <Select.Option value="1">Ông</Select.Option>
+                <Select.Option value="0">Bà</Select.Option>
               </Select>
             </Form.Item>
             <Form.Item

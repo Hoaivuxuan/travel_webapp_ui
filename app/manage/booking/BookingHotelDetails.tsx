@@ -67,11 +67,11 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
         <Descriptions.Item label="Khách sạn">
           {bookingHotel?.hotel.hotel_name}
         </Descriptions.Item>
-        <Descriptions.Item label="Khách hàng">{bookingHotel?.customerInfo.fullname}</Descriptions.Item>
+        <Descriptions.Item label="Khách hàng">{bookingHotel?.customerInfo?.fullname}</Descriptions.Item>
         <Descriptions.Item label="Email">{bookingHotel?.customerInfo.email}</Descriptions.Item>
         <Descriptions.Item label="Điện thoại">{bookingHotel?.customerInfo.phone}</Descriptions.Item>
         <Descriptions.Item label="Thời gian lưu trú">
-          {format(new Date(bookingHotel?.checkin_date), "dd/MM/yyyy")} - {format(new Date(bookingHotel?.checkout_date), "dd/MM/yyyy")}
+          {bookingHotel?.checkin_date} đến {bookingHotel?.checkout_date}
         </Descriptions.Item>
         <Descriptions.Item label="Số phòng">
           {bookingHotel?.room_selection?.selected_rooms.map((option: any, index: number) => (
@@ -79,7 +79,7 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
           ))}
         </Descriptions.Item>
         <Descriptions.Item label="Số khách">
-          {`${bookingHotel?.adults} người lớn, ${bookingHotel?.children} trẻ em`}
+          {`${bookingHotel?.no_adult} người lớn, ${bookingHotel?.no_children} trẻ em`}
         </Descriptions.Item>
         <Descriptions.Item label="Tổng chi phí">
           {`${bookingHotel?.totalPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`}
@@ -87,7 +87,7 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
         <Descriptions.Item label="Đã thanh toán">0</Descriptions.Item>
         <Descriptions.Item label="Trạng thái">
           {statusTags
-            .filter(tag => tag.id === 0)
+            .filter(tag => tag.id === Number(bookingHotel?.status))
             .map(tag =>
               <Tag color={tag.color} key={tag.id}>{tag.text}</Tag>
             )

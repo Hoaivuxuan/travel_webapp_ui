@@ -17,6 +17,7 @@ const HotelDetailPage = () => {
   const detailsParams = useSearchParams();
   const hotelToken = detailsParams.get("token");
   const hotel = decodeToJWT(hotelToken || "");
+  const booking = JSON.parse(localStorage.getItem("searchHotel") || "{}");
   const minPrice = Math.min(...(hotel.rooms ?? []).map((room: any) => room.price));
 
   const [isViewReviewModalVisible, setIsViewReviewModalVisible] = useState(false);
@@ -42,10 +43,22 @@ const HotelDetailPage = () => {
     setComment("");
   };
 
+  if (!booking) {
+    throw new Error("Token không tồn tại.");
+  }
+
   const handleSendReviewModal = () => {
     console.log(`Đánh giá: ${rating}, Nhận xét: ${comment}`);
     setRating(0);
     setComment("");
+  };
+
+  const calculateNights = (str1: string, str2: string): number => {
+    const date1 = new Date(str1);
+    const date2 = new Date(str2);
+    const diffInMilliseconds = date2.getTime() - date1.getTime();
+    const diffInDays = diffInMilliseconds / (1000 * 60 * 60 * 24);
+    return Math.max(diffInDays, 0);
   };
 
   return (
@@ -216,7 +229,11 @@ const HotelDetailPage = () => {
       <div className="px-6 py-4 mx-auto max-w-7xl">
         <h2 className="text-xl font-semibold px-2 pb-2">Phòng còn trống tại {hotel.hotel_name}</h2>
         <div className="bg-white p-4 w-full border rounded-lg hover:shadow-lg transition-shadow duration-200">
-          <AvailableRoomsTable hotel={hotel} rooms={hotel?.rooms} />
+          <AvailableRoomsTable
+            hotel={hotel}
+            rooms={hotel?.rooms}
+            night={calculateNights(booking?.dateRange.startDate, booking?.dateRange.endDate)}
+          />
         </div>
       </div>
       <div className="px-6 py-4 mx-auto max-w-7xl">
