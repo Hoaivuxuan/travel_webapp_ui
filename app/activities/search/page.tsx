@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { activitiesSearch } from "@/data/fakeData";
 import "./style.css";
 
-export default function Search({ params }: { params: { id: string } }) {
+export default function Search() {
   const router = useRouter();
 
   const handleCardClick = (index: number) => {
@@ -37,10 +37,11 @@ export default function Search({ params }: { params: { id: string } }) {
         <FilterPanel />
 
         <div className="flex-1 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6 ml-6">
-          {activitiesSearch.map((activity, index) => (
-            <div key={index} onClick={() => handleCardClick(index)}>
-              <ActivityCard {...activity} />
-            </div>
+          {activitiesSearch.map((item) => (
+            // <div key={index} onClick={() => handleCardClick(index)}>
+            //   <ActivityCard {...activity} />
+            // </div>
+            <ActivityCard key={item.id} id={item.id} />
           ))}
         </div>
       </section>
