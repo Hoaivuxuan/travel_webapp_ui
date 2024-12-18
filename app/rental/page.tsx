@@ -84,7 +84,7 @@ const RentalPage = () => {
         </div>
       </section>
 
-      <section className="px-6 py-2 mx-auto mt-10 bg-white rounded-t-lg max-w-7xl">
+      <section className="px-6 py-2 mx-auto bg-white rounded-t-lg max-w-7xl">
         <div>
           <h3 className="text-xl font-bold">Các cơ sở cho thuê xe</h3>
           <p className="font-light">

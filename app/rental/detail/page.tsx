@@ -35,8 +35,17 @@ const VehicleDetail = () => {
   const facilityId = Number(params.get("facility") || "");
   const vehicleItem: any = rentalVehicle?.vehicle;
   const facility: any = vehicleItem?.facilities?.find((item: any) => item.id === facilityId);
-  const search = JSON.parse(localStorage.getItem("searchVehicle") || "{}");
-  const bearerToken = localStorage.getItem("token");
+  const [search, setSearch] = useState<any>(null);
+  const [bearerToken, setBearerToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedSearch = localStorage.getItem("searchVehicle");
+      const token = localStorage.getItem("token");
+      setSearch(storedSearch ? JSON.parse(storedSearch) : {});
+      setBearerToken(token);
+    }
+  }, []);
 
   useEffect(() => {
     if(!search || !bearerToken) return;
@@ -87,7 +96,7 @@ const VehicleDetail = () => {
     fetchAttraction();
     fetchAccessory();
 
-  }, [facilityId, rentalVehicle.location.id, vehicleItem.type]);
+  }, [bearerToken, facilityId, rentalVehicle.location.id, search, vehicleItem.type]);
 
   useEffect(() => {
     if (listAccessory.length > 0) {
@@ -419,9 +428,9 @@ const VehicleDetail = () => {
             <div className="grid grid-cols-3 my-4">
               <div className="mr-auto text-left">
                 <p className="font-bold">Nhận xe</p>
-                <p className="text-sm">
-                  {format(search.dateRange.pickupDate, "dd/MM/yyyy")}
-                </p>
+                {/* <p className="text-sm">
+                  {new Date(search?.dateRange.pickupDate).toISOString()}
+                </p> */}
               </div>
               <div className="flex justify-center items-center">
                 <p className="w-auto inline-block bg-blue-200 text-blue-600 rounded-lg px-3 py-1 text-sm">
@@ -430,9 +439,9 @@ const VehicleDetail = () => {
               </div>
               <div className="ml-auto text-right">
                 <p className="font-bold">Trả xe</p>
-                <p className="text-sm">
-                  {format(search.dateRange.returnDate, "dd/MM/yyyy")}
-                </p>
+                {/* <p className="text-sm">
+                  {format(new Date(search?.dateRange.returnDate), "yyyy-MM-dd") || "N/A"}
+                </p> */}
               </div>
             </div>
           </div>

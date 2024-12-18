@@ -93,7 +93,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
   return (
     <Form form={form} layout="vertical" initialValues={initialValues} className="space-y-6">
       <div className="p-4 bg-white border rounded-lg">
-        <h2 className="text-xl font-bold mb-4">Thông tin liên hệ</h2>
+        <h2 className="text-xl font-bold mb-4">THÔNG TIN KHÁCH HÀNG</h2>
         <div className="grid grid-cols-2 gap-2">
           <Form.Item
             label="Email"
@@ -163,12 +163,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
       </div>
 
       <div className="p-4 bg-white border rounded-lg">
-        <h2 className="text-xl font-bold mb-4">Thông tin người lái xe</h2>
+        <h2 className="text-xl font-bold mb-4">THÔNG TIN LÁI XE</h2>
         <div className="flex space-x-2">
           <Form.Item
             label="Danh xưng"
             name="driverTitle"
-            className="w-[12%]"
+            className="w-1/4"
           >
             <Select placeholder="Chọn">
               <Select.Option value="1">Ông</Select.Option>
@@ -178,11 +178,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
           <Form.Item
             label="Họ tên"
             name="driverFullName"
-            className="w-[60%]"
+            className="w-1/2"
             rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}
           >
             <Input
-              className="w-full"
               placeholder="ví dụ: Nguyễn Văn A"
               style={{ textTransform: 'uppercase' }}
               onChange={(e) => {
@@ -192,6 +191,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
           </Form.Item>
           <Form.Item
             label="Điện thoại"
+            className="w-1/4"
             name="driverPhone"
             rules={[
               { required: true, message: "Vui lòng nhập số điện thoại!" },
@@ -207,7 +207,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
             <Form.Item
               label="Danh xưng"
               name={["additionalDrivers", index, "title"]}
-              className="w-[12%]"
+              className="w-1/4"
             >
               <Select placeholder="Chọn">
                 <Select.Option value="1">Ông</Select.Option>
@@ -216,12 +216,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
             </Form.Item>
             <Form.Item
               label="Họ tên"
-              className="w-[60%]"
+              className="w-1/2"
               name={["additionalDrivers", index, "fullName"]}
               rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}
             >
               <Input
-                className="w-full"
                 placeholder="ví dụ: Nguyễn Văn A"
                 style={{ textTransform: 'uppercase' }}
                 onChange={(e) => {
@@ -231,6 +230,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
             </Form.Item>
             <Form.Item
               label="Điện thoại"
+              className="w-1/4"
               name={["additionalDrivers", index, "phone"]}
               rules={[
                 { required: true, message: "Vui lòng nhập số điện thoại!" },
@@ -242,19 +242,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
           </div>
         ))}
 
-        <div className="flex justify-end mb-4">
-          <Button
-            type="dashed"
-            className="mx-2"
-            onClick={() => removeAdditionalDriver(addDriversCount - 1)}
-          >
+        <div className="flex justify-end space-x-2 mb-4">
+          <Button type="dashed" onClick={() => removeAdditionalDriver(addDriversCount - 1)}>
             <AiOutlineDelete className="text-sm" /> Loại bỏ
           </Button>
-          <Button
-            type="dashed"
-            className="mx-2"
-            onClick={addAdditionalDriver}
-          >
+          <Button type="dashed" onClick={addAdditionalDriver}>
             <AiOutlinePlusCircle className="text-sm" />Thêm lái xe
           </Button>
         </div>

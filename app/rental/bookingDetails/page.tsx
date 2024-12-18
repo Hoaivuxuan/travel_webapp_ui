@@ -155,7 +155,7 @@ const BookingVehicleDetails: React.FC = () => {
           </Descriptions.Item>
         </Descriptions>
       </div>
-      <div className="mt-4 grid grid-cols-2 gap-2">
+      <div className="mt-4 grid grid-cols-2 gap-4">
         <div>
           <h2 className="text-lg font-semibold mt-6">Dịch vụ bổ sung</h2>
           <Table
@@ -168,15 +168,14 @@ const BookingVehicleDetails: React.FC = () => {
           />
         </div>
         <div>
-          <h2 className="text-lg font-semibold mt-6">Danh sách tài xế</h2>
-          <Table
-            dataSource={driverInfo?.listDrivers || []}
-            columns={driverColumns}
-            size="middle"
-            rowKey="fullName"
-            pagination={false}
-            bordered
-          />
+          <h2 className="text-lg font-semibold mt-6">Thông tin tài xế</h2>
+          <ul className="pl-4">
+            {driverInfo?.listDrivers?.map((driver: any, index: number) => (
+              <li key={index}>
+                {index + 1}. {driver.title} {driver.fullName} - {driver.phone}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
       <div className="mt-6">

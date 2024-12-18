@@ -2,19 +2,19 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Input, Button } from "antd";
 import { ToastContainer } from "react-toastify";
 import Notification from "@/components/Notification";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
-import { Input, Button } from "antd";
 
 const BecomeAdminPage = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const router = useRouter();
 
   const { notifySuccess, notifyWarning } = Notification();
 
@@ -33,6 +33,7 @@ const BecomeAdminPage = () => {
     };
 
     try {
+      setLoading(true);
       const response = await fetch("http://localhost:8080/users/createAdmin", {
         method: "POST",
         headers: {
@@ -42,6 +43,7 @@ const BecomeAdminPage = () => {
       });
 
       if (response.ok) {
+        setLoading(false);
         notifySuccess("Bạn đã đăng ký thành công!");
         setTimeout(() => {
           router.push("/login");
@@ -100,6 +102,7 @@ const BecomeAdminPage = () => {
             type="primary"
             htmlType="submit"
             className="w-full bg-[#472f91] text-white p-2 rounded"
+            loading={loading}
           >
             Đăng Ký
           </Button>

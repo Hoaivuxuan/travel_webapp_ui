@@ -40,8 +40,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
       arrivalTime: values.arrivalTime || null,
       status: 0,
     };
-
-    localStorage.setItem("bookingHotel", JSON.stringify(bookingHotel));
   };
 
   const handleConfirm = () => {

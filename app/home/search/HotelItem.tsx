@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { encodeToJWT } from "@/utils/JWT";
+import { Button } from "antd";
 
 type HotelItemProps = {
   id: string;
@@ -131,12 +132,13 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
                 })}
                 /đêm
               </p>
-              <button
+              <Button
+                type="primary"
                 onClick={handleDetailClick}
                 className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2"
               >
                 Chọn phòng
-              </button>
+              </Button>
             </div>
           </div>
         </div>

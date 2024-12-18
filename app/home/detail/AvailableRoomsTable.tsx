@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Table, Select } from "antd";
+import { Table, Select, Button } from "antd";
 import { hotelOptions } from "@/data/defaultValues";
 import { encodeToJWT } from "@/utils/JWT";
 import { ToastContainer } from "react-toastify";
@@ -206,12 +206,13 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms,
       />
       <div className="mt-4 grid grid-cols-2 gap-2">
         <div>
-          <button
+          <Button
+            type="primary"
             onClick={handleBookingClick}
             className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-green-400 text-sm font-semibold"
           >
             Chọn phòng
-          </button>
+          </Button>
         </div>
         {totalRooms > 0 && (
           <div>

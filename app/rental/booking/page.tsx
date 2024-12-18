@@ -72,7 +72,7 @@ const BookingVehicle = () => {
               </div>
             </div>
             <div className="p-4 bg-white border rounded-lg">
-              <h3 className="text-lg font-bold mb-4">Nhận xe và trả xe</h3>
+              <h3 className="text-lg font-bold mb-4">NHẬN XE & TRẢ XE</h3>
               <div className="my-4 text-sm">
                 <div className="pb-4">
                   <p className="font-bold">Ngày bắt đầu</p>
@@ -99,7 +99,7 @@ const BookingVehicle = () => {
               </span>
             </div>
             <div className="p-4 bg-white border rounded-lg">
-              <h3 className="text-lg font-bold mb-4">Chi tiết giá cả</h3>
+              <h3 className="text-lg font-bold mb-4">CHI TIẾT GIÁ CẢ</h3>
               <div className="space-y-2 mt-4 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-700">Phí thuê xe</span>

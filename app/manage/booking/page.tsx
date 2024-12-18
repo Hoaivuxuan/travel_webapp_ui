@@ -272,7 +272,7 @@ const BookingHotelPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto mb-6">
       <Collapse
         bordered
         defaultActiveKey={["1"]}
@@ -286,7 +286,7 @@ const BookingHotelPage: React.FC = () => {
             columns={hotelColumns}
             size="middle"
             rowClassName="editable-row"
-            pagination={{ pageSize: 10 }}
+            pagination={{ pageSize: 8 }}
             scroll={{ x: 1500 }}
           />
         </Collapse.Panel>
@@ -297,7 +297,7 @@ const BookingHotelPage: React.FC = () => {
             columns={rentalColumns}
             size="middle"
             rowClassName="editable-row"
-            pagination={{ pageSize: 10 }}
+            pagination={{ pageSize: 8 }}
             scroll={{ x: 1500 }}
           />
         </Collapse.Panel>

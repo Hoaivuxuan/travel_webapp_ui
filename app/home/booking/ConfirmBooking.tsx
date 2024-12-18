@@ -20,7 +20,10 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
   };
 
   const handleConfirm = async () => {
+    const bearerToken = localStorage.getItem("token");
     const bookingHotel = JSON.parse(localStorage.getItem("bookingHotel") || "{}");
+    if(!bearerToken || !bookingHotel) return;
+
     const booking = {
       user_id: bookingHotel.user,
       full_name: bookingHotel.customerInfo.fullName,
@@ -43,7 +46,6 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
 
     try {
       setLoading(true);
-      const bearerToken = localStorage.getItem("token");
       const response = await fetch("http://localhost:8080/bookingRoom", {
         method: "POST",
         headers: {
@@ -99,7 +101,7 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
           className="bg-blue-600 text-white w-1/2 py-2 rounded"
           onClick={handleConfirm}
           disabled={!isChecked}
-          loading={loading} // Hiển thị trạng thái tải
+          loading={loading}
         >
           HOÀN TẤT
         </Button>
