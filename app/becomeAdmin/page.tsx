@@ -63,7 +63,7 @@ const BecomeAdminPage = () => {
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded shadow-md w-[20%]"
       >
-        <h2 className="text-2xl mb-6 text-center">Đăng Ký</h2>
+        <h2 className="text-2xl mb-6 text-center">Hãy trở thành CTV của chúng tôi</h2>
         <div className="mb-4">
           <label className="block mb-2">Email</label>
           <Input
