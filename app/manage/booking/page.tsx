@@ -14,15 +14,15 @@ const BookingHotelPage: React.FC = () => {
   const [selectedBookingVehicle, setSelectedBookingVehicle] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
-  const userId = Number(localStorage.getItem("userId"));
 
   useEffect(() => {
-    if(!userId) return;
+    const userId = Number(localStorage.getItem("userId"));
+    const bearerToken = localStorage.getItem("token");
+    if(!userId || !bearerToken) return;
 
     const fetchBookingHotel = async () => {
       try {
         setLoading(true);
-        const bearerToken = localStorage.getItem("token");
         const response = await fetch(`http://localhost:8080/bookingRoom/user/${userId}`, {
           method: "GET",
           headers: {
@@ -47,7 +47,6 @@ const BookingHotelPage: React.FC = () => {
     const fetchBookingVehicle = async () => {
       try {
         setLoading(true);
-        const bearerToken = localStorage.getItem("token");
         const response = await fetch(`http://localhost:8080/bookingVehicle/user/${userId}`, {
           method: "GET",
           headers: {
@@ -72,7 +71,7 @@ const BookingHotelPage: React.FC = () => {
     fetchBookingHotel();
     fetchBookingVehicle();
 
-  }, [userId]);
+  }, []);
 
   const hotelMenu = (record: any) => (
     <Menu>

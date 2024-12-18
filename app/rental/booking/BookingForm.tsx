@@ -22,8 +22,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
   };
 
   const saveRentalVehicle = (values: any) => {
+    const userId = Number(localStorage.getItem("userId"));
+    if(!userId) return;
+    
     const rentalVehicle = {
-      user: Number(localStorage.getItem("userId")),
+      user: userId,
       vehicle: params.vehicle.id,
       facility: params.facility.id,
       pickup: {

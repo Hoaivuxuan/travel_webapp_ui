@@ -1,11 +1,9 @@
 import { FaCar, FaMotorcycle, FaUsers, FaLuggageCart, FaGasPump } from 'react-icons/fa';
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Radio } from "antd";
 import { encodeToJWT } from '@/utils/JWT';
-
-const bearerToken = localStorage.getItem("token");
 
 const handleDetailClick = (
   router: ReturnType<typeof useRouter>,

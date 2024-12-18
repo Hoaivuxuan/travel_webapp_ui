@@ -24,6 +24,8 @@ const HotelDetailPage = () => {
   const [isSendReviewModalVisible, setIsSendReviewModalVisible] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  
+  if (!booking) return;
 
   const handleOpenViewReviewModal = () => {
     setIsViewReviewModalVisible(true);
@@ -42,10 +44,6 @@ const HotelDetailPage = () => {
     setRating(0);
     setComment("");
   };
-
-  if (!booking) {
-    throw new Error("Token không tồn tại.");
-  }
 
   const handleSendReviewModal = () => {
     console.log(`Đánh giá: ${rating}, Nhận xét: ${comment}`);

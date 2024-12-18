@@ -35,13 +35,13 @@ const VehicleDetail = () => {
   const facilityId = Number(params.get("facility") || "");
   const vehicleItem: any = rentalVehicle?.vehicle;
   const facility: any = vehicleItem?.facilities?.find((item: any) => item.id === facilityId);
-
-  const search = localStorage.getItem("searchVehicle");
-  const searchObject = search ? JSON.parse(search) : null;
+  const search = JSON.parse(localStorage.getItem("searchVehicle") || "{}");
+  const bearerToken = localStorage.getItem("token");
 
   useEffect(() => {
+    if(!search || !bearerToken) return;
+
     const fetchOffice = async () => {
-      const bearerToken = localStorage.getItem("token");
       try {
         const response = await fetch(`http://localhost:8080/attraction/office?city=${rentalVehicle.location.id}&rental=${facilityId}`, {
           headers: {
@@ -56,7 +56,6 @@ const VehicleDetail = () => {
     };
 
     const fetchAttraction = async () => {
-      const bearerToken = localStorage.getItem("token");
       try {
         const response = await fetch(`http://localhost:8080/attraction/not-office?city=${rentalVehicle.location.id}`, {
           headers: {
@@ -71,7 +70,6 @@ const VehicleDetail = () => {
     };
 
     const fetchAccessory = async () => {
-      const bearerToken = localStorage.getItem("token");
       try {
         const response = await fetch(`http://localhost:8080/accessory?type=${vehicleItem.type}`, {
           headers: {
@@ -88,6 +86,7 @@ const VehicleDetail = () => {
     fetchOffice();
     fetchAttraction();
     fetchAccessory();
+
   }, [facilityId, rentalVehicle.location.id, vehicleItem.type]);
 
   useEffect(() => {
@@ -179,11 +178,11 @@ const VehicleDetail = () => {
     const booking = {
       pickup: {
         location: pickupLocation,
-        date: format(searchObject.dateRange.pickupDate, "yyyy-MM-dd"),
+        date: format(search.dateRange.pickupDate, "yyyy-MM-dd"),
       },
       return: {
         location: returnLocation,
-        date: format(searchObject.dateRange.returnDate, "yyyy-MM-dd"),
+        date: format(search?.dateRange.returnDate, "yyyy-MM-dd"),
       },
       bonusServices,
       totalServiceCost,
@@ -421,7 +420,7 @@ const VehicleDetail = () => {
               <div className="mr-auto text-left">
                 <p className="font-bold">Nhận xe</p>
                 <p className="text-sm">
-                  {format(searchObject.dateRange.pickupDate, "dd/MM/yyyy")}
+                  {format(search.dateRange.pickupDate, "dd/MM/yyyy")}
                 </p>
               </div>
               <div className="flex justify-center items-center">
@@ -432,7 +431,7 @@ const VehicleDetail = () => {
               <div className="ml-auto text-right">
                 <p className="font-bold">Trả xe</p>
                 <p className="text-sm">
-                  {format(searchObject.dateRange.returnDate, "dd/MM/yyyy")}
+                  {format(search.dateRange.returnDate, "dd/MM/yyyy")}
                 </p>
               </div>
             </div>

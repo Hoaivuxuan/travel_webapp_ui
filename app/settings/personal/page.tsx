@@ -47,6 +47,7 @@ const PersonalInfoPage = () => {
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     const bearerToken = localStorage.getItem("token");
+
     const fetchUserData = async () => {
       if (!userId || !bearerToken) return;
       try {
@@ -101,6 +102,8 @@ const PersonalInfoPage = () => {
     if (isUserDataChanged) {
       try {
         const bearerToken = localStorage.getItem("token");
+        if(!bearerToken) return;
+        
         const response = await fetch(`http://localhost:8080/users`, {
           method: "PUT",
           headers: {

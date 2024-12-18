@@ -67,6 +67,8 @@ function SearchForm() {
   useEffect(() => {
     const fetchCity = async () => {
       const bearerToken = localStorage.getItem("token");
+      if(!bearerToken) return;
+      
       try {
         const response = await fetch(`http://localhost:8080/city`, {
           headers: {

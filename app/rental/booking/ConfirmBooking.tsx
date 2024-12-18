@@ -17,11 +17,11 @@ const ConfirmBooking = () => {
 
   const handleConfirm = async () => {
     const booking = JSON.parse(localStorage.getItem("rentalVehicle") || "{}");
-    console.log(booking);
+    const bearerToken = localStorage.getItem("token");
+    if(!booking || !bearerToken) return;
 
     try {
       setLoading(true);
-      const bearerToken = localStorage.getItem("token");
       const response = await fetch("http://localhost:8080/bookingVehicle", {
         method: "POST",
         headers: {
@@ -77,6 +77,7 @@ const ConfirmBooking = () => {
           HOÀN TẤT
         </Button>
       </div>
+      <ToastContainer />
     </div>
   );
 };

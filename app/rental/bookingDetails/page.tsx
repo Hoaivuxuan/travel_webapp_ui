@@ -13,10 +13,12 @@ const BookingVehicleDetails: React.FC = () => {
   const bookingId = detailsParams.get("id");
 
   useEffect(() => {
+    const bearerToken = localStorage.getItem("token");
+    if(!bearerToken) return;
+
     const fetchBookingVehicleDetails = async () => {
       try {
         setLoading(true);
-        const bearerToken = localStorage.getItem("token");
         const response = await fetch(`http://localhost:8080/bookingVehicle/${bookingId}`, {
           method: "GET",
           headers: {
@@ -44,12 +46,12 @@ const BookingVehicleDetails: React.FC = () => {
     }
   }, [bookingId]);
 
-  if (loading) {
-    return <div>Đang tải thông tin đặt xe...</div>;
-  }
-
   if (!bookingDetails) {
     return <div>Không tìm thấy thông tin đặt xe.</div>;
+  }
+  
+  if (loading) {
+    return <div>Đang tải thông tin đặt xe...</div>;
   }
 
   const {

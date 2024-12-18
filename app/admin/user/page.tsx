@@ -17,8 +17,9 @@ export default function UserAdmin() {
 
   useEffect(() => {
     const fetchUsers = async () => {
+      const bearerToken = localStorage.getItem("token");
       try {
-        const bearerToken = localStorage.getItem("token");
+        if (!bearerToken) return;
         const response = await fetch("http://localhost:8080/users", {
           method: "GET",
           headers: {

@@ -31,6 +31,8 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
   const bearerToken = localStorage.getItem("token");
 
   useEffect(() => {
+    if(!bearerToken) return;
+    
     const fetchFilter = async () => {
       try {
         const response = await fetch(`http://localhost:8080/vehicles?id=0`, {

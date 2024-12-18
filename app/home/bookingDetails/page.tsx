@@ -13,10 +13,12 @@ const BookingDetails: React.FC = () => {
   const bookingId = detailsParams.get("id");
 
   useEffect(() => {
+    const bearerToken = localStorage.getItem("token");
+    if(!bearerToken) return;
+
     const fetchBookingDetails = async () => {
       try {
         setLoading(true);
-        const bearerToken = localStorage.getItem("token");
         const response = await fetch(`http://localhost:8080/bookingRoom/${bookingId}`, {
           method: "GET",
           headers: {

@@ -51,7 +51,7 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms,
     );
     setTotalRooms(newTotalRooms);
     setTotalPrice(newTotalPrice);
-  }, [bookingRooms, rooms]);
+  }, [bookingRooms, night, rooms]);
 
   const handleRoomSelect = (index: number, value: number) => {
     const updatedSelection = [...bookingRooms];
@@ -62,6 +62,8 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms,
   const handleBookingClick = () => {
     const search = localStorage.getItem("searchHotel");
     const user = localStorage.getItem("user");
+    if(!search || !user) return;
+    
     const roomSelection = {
       bookingRooms: bookingRooms.map((count, index) => ({
           room_id: rooms[index].room_id,

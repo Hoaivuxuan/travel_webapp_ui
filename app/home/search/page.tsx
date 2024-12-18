@@ -37,9 +37,11 @@ function SearchPage({ searchParams }: Props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const bearerToken = localStorage.getItem("token");
+    if(!bearerToken) return;
+
     const fetchFilter = async () => {
       try {
-        const bearerToken = localStorage.getItem("token");
         const response = await fetch("http://localhost:8080/hotels?noRooms=0&keyword", {
           headers: {
             Authorization: `Bearer ${bearerToken}`,
@@ -63,8 +65,7 @@ function SearchPage({ searchParams }: Props) {
           .trim()
           .replace(/\s+/g, "")
           .toLowerCase();
-          
-        const bearerToken = localStorage.getItem("token");
+        
         const response = await fetch(`http://localhost:8080/hotels?noRooms=0&keyword=${removeAccent(keyword)}`, {
           headers: {
             Authorization: `Bearer ${bearerToken}`,
