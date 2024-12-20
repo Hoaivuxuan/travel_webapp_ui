@@ -134,7 +134,7 @@ export default function Home() {
               <div
                 key={item.id}
                 className="relative cursor-pointer group"
-                onClick={() => router.push(`/home/detail?token=${encodeToJWT(item)}`)}
+                onClick={() => router.push(`/booking-hotel/hotel?token=${encodeToJWT(item)}`)}
               >
                 <Image
                   className="object-cover rounded-lg w-full h-72"

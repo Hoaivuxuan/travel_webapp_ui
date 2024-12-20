@@ -2,8 +2,18 @@ import { FaCar, FaMotorcycle, FaUsers, FaLuggageCart, FaGasPump } from 'react-ic
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Button, Radio } from "antd";
+import { Button, Radio, Tag } from "antd";
 import { encodeToJWT } from '@/utils/JWT';
+import { typeVehicleTags } from '@/data/defaultValues';
+import { format } from 'date-fns';
+
+const calculateDate = (str1: string, str2: string): number => {
+  const date1 = new Date(str1);
+  const date2 = new Date(str2);
+  const diffInMilliseconds = date2.getTime() - date1.getTime();
+  const diffInDays = diffInMilliseconds / (1000 * 60 * 60 * 24);
+  return Math.max(diffInDays, 0);
+};
 
 const handleDetailClick = (
   router: ReturnType<typeof useRouter>,
@@ -20,15 +30,16 @@ const handleDetailClick = (
         rentalVehicle: encodeToJWT(rentalVehicle),
       });
 
-      router.push(`/rental/detail?url=2&${query.toString()}`);
+      router.push(`/rental-vehicle/vehicle?url=2&${query.toString()}`);
     } catch (error) {
     }
   }
 };
 
 export function VehicleItem({
-  vehicle, isFacilityVisible, onFacilityToggle,
+  params, vehicle, isFacilityVisible, onFacilityToggle,
 } : {
+  params: any;
   vehicle: any;
   isFacilityVisible: boolean;
   onFacilityToggle: () => void;
@@ -55,15 +66,22 @@ export function VehicleItem({
             height={300}
           />
         </div>
-        <div className="flex flex-col justify-between col-span-3">
+        <div className="flex flex-col justify-between col-span-3 py-4">
           <div>
-            <div className="mb-4">
-              <p className="mb-1 text-xs text-green-600 bg-green-200 rounded-sm px-2 py-1 inline-block">
-                {vehicle.details.brand}
-              </p>
-              <p className="font-bold text-blue-600 text-lg">{vehicle.model}</p>
+            <div className="mb-3">
+              <div className="flex items-center">
+                {typeVehicleTags.filter(tag => tag.type === vehicle.type).map(tag => (
+                  <Tag color={tag.color} key={tag.type} className="text-sm">
+                    <tag.icon className="my-1" />
+                  </Tag>
+                ))}
+                <Tag color={"blue"} className="text-sm">
+                  {vehicle.details.brand}
+                </Tag>
+                <p className="font-bold text-blue-600 text-lg">{vehicle.model}</p>
+              </div>
             </div>
-            { vehicle.type === "car" ? (
+            {(vehicle.type === "car") ? (
               <div className="w-1/2 grid grid-cols-2 gap-1">
                 <p className="text-sm flex items-center text-gray-600">
                   <FaCar className="mx-2 w-4" />
@@ -98,7 +116,9 @@ export function VehicleItem({
         </div>
         <div className="flex flex-col justify-end col-span-1 h-full">
           <div className="flex flex-col justify-end items-end mt-2">
-            <p className="text-sm">Giá cho 3 ngày</p>
+            <p className="text-sm">
+              Giá cho {calculateDate(params?.pickup, params?.return)} ngày
+            </p>
             <p className="text-lg font-bold text-blue-600 text-right">
                từ {rentalMinPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
             </p>

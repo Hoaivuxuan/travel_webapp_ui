@@ -183,15 +183,7 @@ export default function UserAdmin() {
     {
       title: "Username",
       dataIndex: "name",
-      width: 150,
-    },
-    {
-      title: "Full Name",
-      width: 200,
-      render: (_: any, record: any) =>
-        (record.first_name && record.last_name)
-          ? `${record.first_name} ${record.last_name}`
-          : `ADMIN ${record.id}`,
+      width: 350,
     },
     {
       title: "Email",
@@ -223,18 +215,20 @@ export default function UserAdmin() {
           bordered
           dataSource={listUser.filter((user: any) => user.role === "USER")}
           columns={userColumns}
-          rowClassName="editable-row"
           loading={loading}
+          size="middle"
+          rowClassName="editable-row"
           pagination={{ pageSize: 10 }}
           scroll={{ x: 1500 }}
         />
-        <h3 className="mb-2 text-xl font-bold">Quản trị viên</h3>
+        <h3 className="mb-2 text-xl font-bold">Danh sách Quản trị viên</h3>
         <Table
           bordered
           dataSource={listUser.filter((user: any) => user.role === "ADMIN")}
           columns={adminColumns}
-          rowClassName="editable-row"
           loading={loading}
+          size="middle"
+          rowClassName="editable-row"
           pagination={{ pageSize: 10 }}
           scroll={{ x: 1500 }}
         />

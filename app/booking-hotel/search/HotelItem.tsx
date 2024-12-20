@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { encodeToJWT } from "@/utils/JWT";
-import { Button } from "antd";
+import { Button, Tag } from "antd";
 
 type HotelItemProps = {
   id: string;
@@ -45,8 +45,10 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
 
   const minPrice = Math.min(...hotel.rooms.map((room: any) => room.price));
   const handleDetailClick = () => {
+    setLoading(true);
     const token = encodeToJWT(hotel);
-    router.push(`/home/detail?token=${token}`);
+    router.push(`/booking-hotel/hotel?token=${token}`);
+    setLoading(false);
   };
 
   return (
@@ -63,17 +65,14 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
       <div className="col-span-3 p-4">
         <div className="grid grid-cols-4 gap-2">
           <div className="col-span-3">
-            <p className="mt-2 text-blue-600 text-lg font-bold">{hotel.hotel_name}</p>
-            <Link
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(hotel.city)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <p className="text-blue-600 text-xs underline">{hotel.city.name}</p>
-            </Link>
-            <p className="mt-4 text-blue-600 text-xs bg-blue-200 rounded-lg px-2 py-1 inline-block">
-              {hotel.type}
-            </p>
+            <p className="text-blue-600 text-lg font-bold mt-2">{hotel.hotel_name}</p>
+            <div className="flex items-center mb-4">
+              {(hotel.reviews.total_reviews <= 3) && (
+                <Tag color={"red"}>NEW</Tag>
+              )}
+              <Tag color={"blue"}>{hotel.type}</Tag>
+              <Tag color={"blue"}>{hotel.city.name}</Tag>
+            </div>
           </div>
           <div className="flex flex-col items-end h-full">
             <div className="flex items-center space-x-2 text-right mt-2">
@@ -95,19 +94,19 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap items-center space-x-2 mt-2 relative">
+        <div className="flex flex-wrap items-center space-x-2 mt-1 relative">
           {hotel.amenities.slice(0, 3).map((amenity: string, index: number) => (
             <div
               key={index}
-              className="bg-gray-200 text-gray-600 rounded-lg px-2 py-1 my-1 text-xs flex items-center"
+              className="bg-gray-200 text-gray-600 rounded-sm px-2 py-1 my-1 text-xs flex items-center"
             >
               {amenity}
             </div>
           ))}
           {hotel.amenities.length > 3 && (
-            <div className="bg-gray-200 text-gray-600 rounded-lg px-2 py-1 my-1 text-xs flex items-center relative group">
+            <div className="bg-gray-200 text-gray-600 rounded-sm px-2 py-1 my-1 text-xs flex items-center relative group">
               {hotel.amenities.length - 3}+
-              <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-4 rounded-lg text-xs w-max">
+              <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white p-4 rounded-sm text-xs w-max">
                 Cơ sở lưu trú này có:
                 <ul className="list-disc pl-5">
                   {hotel.amenities.map((amenity: string, index: number) => (
@@ -135,6 +134,7 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
               <Button
                 type="primary"
                 onClick={handleDetailClick}
+                loading={loading}
                 className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2"
               >
                 Chọn phòng

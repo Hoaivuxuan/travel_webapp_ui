@@ -102,15 +102,7 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
     );
   }, [vehicles, selectedTypes, selectedBrands, priceRange]);
 
-  if (!searchParams.url) {
-    return (
-      <div className="text-center py-4">
-        <h2 className="text-xl font-semibold">
-          Không có kết quả nào cho tìm kiếm của bạn.
-        </h2>
-      </div>
-    );
-  }
+  if (!searchParams.url) return;
 
   return (
     <section>
@@ -125,7 +117,6 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
             từ {searchParams.pickup} đến {searchParams.return} ({filteredResults.length} kết quả)
           </span>
         </h2>
-
         <hr className="mb-5" />
 
         <div className="grid grid-cols-5 gap-4">

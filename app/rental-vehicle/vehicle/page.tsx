@@ -7,8 +7,8 @@ import { IoLocationOutline } from "react-icons/io5";
 import { AiOutlineDropbox, AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
 import { FaRegClock, FaStar, FaRegStar } from "react-icons/fa";
-import { Radio, Input, Space, Button, Modal, Select, AutoComplete, Rate } from "antd";
-import { importantInfo, policies, requirements } from "@/data/defaultValues";
+import { Radio, Input, Space, Button, Modal, Select, AutoComplete, Rate, Tag } from "antd";
+import { importantInfo, policies, requirements, typeVehicleTags } from "@/data/defaultValues";
 import Image from "next/image";
 import VehicleDetailInfo from "./VehicleInfo";
 import { decodeToJWT, encodeToJWT } from "@/utils/JWT";
@@ -199,7 +199,7 @@ const VehicleDetail = () => {
 
     const { facilities, ...vehicle } = vehicleItem;
     const bookingVehicle = { vehicle, facility, booking };
-    router.push(`/rental/booking?rental=${encodeToJWT(bookingVehicle)}`);
+    router.push(`/rental-vehicle/booking?rental=${encodeToJWT(bookingVehicle)}`);
   };
 
   return (
@@ -216,26 +216,31 @@ const VehicleDetail = () => {
       <section className="p-6 !pt-2 mx-auto max-w-7xl grid grid-cols-3 gap-4 mb-6">
         <div className="col-span-2 space-y-4">
           <div className="p-4 bg-white border rounded-lg space-y-4">
-            <div className="p-4 bg-white">
-              <div className="grid grid-cols-2 gap-4 my-4 pb-4">
-                <div className="h-[300px]">
-                  <Image
-                    src={`https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg`}
-                    alt={`Image of VEHICLE`}
-                    className="rounded-l-lg h-full w-auto"
-                    width={300}
-                    height={300}
-                  />
-                </div>
-                <div>
-                  <div className="pb-4">
-                    <h1 className="text-2xl font-bold">{vehicleItem.model}</h1>
-                    <p className="text-gray-500 text-sm">
-                      Cung cấp bởi {facility.name}
-                    </p>
+            <div className="grid grid-cols-3 gap-4 my-4 pb-4">
+              <div className="h-[220px] mx-auto">
+                <Image
+                  src={`https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg`}
+                  alt={`Image of VEHICLE`}
+                  className="rounded-sm h-full w-auto"
+                  width={220}
+                  height={220}
+                />
+              </div>
+              <div className="col-span-2">
+                <div className="pb-4">
+                  <h1 className="text-xl font-bold mb-1">{vehicleItem.model.toUpperCase()}</h1>
+                  <div className="flex items-center">
+                    {typeVehicleTags.filter(tag => tag.type === vehicleItem.type).map(tag => (
+                      <Tag color={tag.color} key={tag.type} className="text-sm">
+                        <tag.icon className="my-1" />
+                      </Tag>
+                    ))}
+                    <Tag color={"blue"} className="text-sm">
+                      {vehicleItem.details.brand}
+                    </Tag>
                   </div>
-                  <VehicleDetailInfo type={vehicleItem.type} details={vehicleItem.details} />
                 </div>
+                <VehicleDetailInfo type={vehicleItem.type} details={vehicleItem.details} />
               </div>
             </div>
 
@@ -454,17 +459,19 @@ const VehicleDetail = () => {
         <div className="col-span-1">
           <div className="space-y-4 sticky top-5">
             <div className="p-4 bg-white border rounded-lg flex flex-col">
-              <div className="flex items-center justify-center">
-                <p className="mb-2 flex items-center justify-center flex-shrink-0 w-[60px] h-[60px] text-3xl font-bold text-white bg-blue-600 rounded-sm">
+              <div className="flex items-end space-x-3">
+                <p className="flex items-center justify-center flex-shrink-0 w-[60px] h-[60px] text-3xl font-bold text-white bg-blue-600 rounded-sm">
                   {facility.name.charAt(0).toUpperCase()}
                 </p>
-              </div>
-              <div className="text-sm pb-3">{`Bởi ${facility.name}`}</div>
-              <div className="flex items-center space-x-2 my-2">
-                <p className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold text-white bg-blue-600 rounded-lg">
-                  {facility.reviewResponse.average_rating.toFixed(1) || "N/A"}
-                </p>
-                <p className="text-xs">{facility.reviewResponse.total_reviews} lượt đánh giá</p>
+                <div className="">
+                  <div className="text-sm">{`Bởi ${facility.name}`}</div>
+                  <div className="flex items-center">
+                    <Tag color={"blue"}>
+                      <p className="my-1">{facility.reviewResponse.average_rating.toFixed(1) || "N/A"}</p>
+                    </Tag>
+                    <p className="text-xs">{facility.reviewResponse.total_reviews} lượt đánh giá</p>
+                  </div>
+                </div>
               </div>
               <div className="mt-auto">
                 <h3 className="font-semibold mt-8 mb-2">Top Reviews</h3>
@@ -551,7 +558,10 @@ const VehicleDetail = () => {
               className={`py-2 border-t min-h-[100px] ${index === facility.reviewResponse.comments.length - 1 ? 'border-b' : ''}`}
             >
               <div className="flex justify-between mb-2">
-                <p className="font-semibold">{comment.user}</p>
+                <div className="flex items-center">
+                  <p className="font-semibold mr-1">{comment.user}</p>
+                  <p>{`- ${format(new Date(comment.date), "dd/MM/yyyy")}`}</p>
+                </div>
                 <div className="flex items-center">
                   {[...Array(5)].map((_, starIndex) => (
                     <span key={starIndex} className="mr-1">

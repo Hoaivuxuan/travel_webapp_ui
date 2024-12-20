@@ -96,7 +96,7 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms,
         bookingHotel: encodeToJWT(bookingHotel),
         roomSelection: encodeToJWT(roomSelection),
       });
-      router.push(`/home/booking?url=1&${query.toString()}`);
+      router.push(`/booking-hotel/booking?url=1&${query.toString()}`);
     }
   };
 

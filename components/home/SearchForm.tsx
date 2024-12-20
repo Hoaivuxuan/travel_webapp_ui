@@ -161,7 +161,7 @@ function SearchForm() {
       children: values.children.toString(),
       rooms: values.rooms.toString(),
     });
-    router.push(`/home/search?url=1&${query.toString()}`);
+    router.push(`/booking-hotel/search?url=1&${query.toString()}`);
   };
 
   const onError = (errors: any) => {

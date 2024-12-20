@@ -149,7 +149,7 @@ function RentalSearchForm() {
       return: format(values.dateRange.returnDate, "dd-MM-yyyy"),
     });
   
-    router.push(`/rental/search?url=2&${query.toString()}`);
+    router.push(`/rental-vehicle/search?url=2&${query.toString()}`);
   };
 
   const onError = (errors: any) => {

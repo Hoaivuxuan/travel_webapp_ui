@@ -28,6 +28,7 @@
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "browser-image-compression": "^2.0.2",
+    "caniuse-lite": "^1.0.30001690",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.5.1",
     "clsx": "^2.1.0",

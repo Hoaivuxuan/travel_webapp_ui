@@ -13,13 +13,13 @@ const mainMenu = [
   {
     name: "hotel",
     title: "TÌM NƠI LƯU TRÚ",
-    href: "/home",
+    href: "/booking-hotel",
     icon: <AiOutlineHome className="text-lg" />,
   },
   {
-    name: "rental",
+    name: "vehicle",
     title: "CHO THUÊ XE",
-    href: "/rental",
+    href: "/rental-vehicle",
     icon: <FaCar className="text-lg" />,
   },
   {
@@ -67,7 +67,7 @@ const Header = () => {
       <nav className="grid grid-cols-6 items-center p-6 mx-auto max-w-7xl">
         <div className="col-span-1">
           <Link
-            href="/home"
+            href="/booking-hotel"
             className="flex items-center"
             onClick={handleLinkClick}
           >

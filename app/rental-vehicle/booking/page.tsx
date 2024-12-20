@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import BookingSteps from "./BookingStep";
-import ConfirmBooking from "@/app/rental/booking/ConfirmBooking";
+import ConfirmBooking from "@/app/rental-vehicle/booking/ConfirmBooking";
 import BookingForm from "./BookingForm";
 import { decodeToJWT } from "@/utils/JWT";
 

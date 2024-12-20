@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaTachometerAlt, FaUsers, FaHotel, FaCar, FaBuilding, FaGlobeAmericas } from 'react-icons/fa';
+import { FaTachometerAlt, FaUsers, FaHotel, FaBuilding, FaGlobeAmericas } from 'react-icons/fa';
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -19,12 +19,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             <a href="/admin/hotels" className="text-white hover:text-gray-400">Hotel</a>
           </li>
           <li className="flex items-center space-x-2">
-            <FaCar className="mr-2" />
-            <a href="#" className="text-white hover:text-gray-400">Vehicle</a>
-          </li>
-          <li className="flex items-center space-x-2">
             <FaBuilding className="mr-2" />
-            <a href="#" className="text-white hover:text-gray-400">Rental Facility</a>
+            <a href="/admin/facilities" className="text-white hover:text-gray-400">Rental Facility</a>
           </li>
           <li className="flex items-center space-x-2">
             <FaGlobeAmericas className="mr-2" />

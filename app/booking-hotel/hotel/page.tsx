@@ -3,14 +3,15 @@
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ratingLabel } from "@/data/typeHotel";
-import { Button, Carousel, Input, Modal, Rate } from "antd";
+import { Button, Carousel, Input, Modal, Rate, Tag } from "antd";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import { amenityIcons, typeIcons } from "@/data/selectIcon";
+import { format } from "date-fns";
 import { decodeToJWT } from "@/utils/JWT";
 import FAQSection from "@/components/home/FAQs";
 import AvailableRoomsTable from "./AvailableRoomsTable";
 import Image from "next/image";
 import PolicySection from "@/components/home/Policy";
-import { amenityIcons, typeIcons } from "@/data/selectIcon";
 
 const HotelDetailPage = () => {
   const router = useRouter();
@@ -99,9 +100,7 @@ const HotelDetailPage = () => {
               <h1 className="text-2xl font-bold mt-2">{hotel.hotel_name}</h1>
               <p className="text-sm text-gray-600 mb-2">{hotel.address}</p>
               <div className="flex items-center">
-                <span className="bg-blue-200 text-blue-600 rounded-lg px-4 py-1 text-sm inline-block mt-2">
-                  {hotel.type}
-                </span>
+                <Tag color={"blue"} className="text-sm">{hotel.type}</Tag>
               </div>
             </div>
             <div className="flex flex-row justify-end items-center h-full">
@@ -247,14 +246,17 @@ const HotelDetailPage = () => {
         visible={isViewReviewModalVisible}
         onCancel={handleCloseViewReviewModal}
         footer={null}
-        width={1000}
+        width={600}
         centered
       >
-        <div className="py-2 max-h-[400px] overflow-y-auto">
+        <div className="py-2 max-h-[500px] overflow-y-auto">
           {hotel.reviews.recent_reviews.map((comment: any, index: number) => (
-            <div key={index} className="py-2 border-t">
+            <div key={index} className="py-2 border-t h-[100px] overflow-y-auto">
               <div className="flex justify-between mb-2">
-                <p className="font-semibold">{comment.user}</p>
+                <div className="flex items-center">
+                  <p className="font-semibold mr-1">{comment.user}</p>
+                  <p>{`- ${format(new Date(comment.date), "dd/MM/yyyy")}`}</p>
+                </div>
                 <div className="flex items-center">
                   {[...Array(5)].map((_, starIndex) => (
                     <span key={starIndex} className="mr-1">
