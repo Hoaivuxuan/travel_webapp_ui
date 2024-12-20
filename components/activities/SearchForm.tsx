@@ -26,7 +26,7 @@ export const formSchema = z.object({
 function ActivitiesSearchForm() {
   const router = useRouter();
   const [keyword, setKeyword] = useState("");
-  const [listCity, setListCity] = useState<any[]>([]);
+  const [listActivity, setListActivity] = useState<any[]>([]);
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const today = new Date();
   const tomorrow = new Date();
@@ -52,7 +52,7 @@ function ActivitiesSearchForm() {
   });
 
   useEffect(() => {
-    const fetchCity = async () => {
+    const fetchActivity = async () => {
       const bearerToken = localStorage.getItem("token");
       try {
         const response = await fetch(`http://localhost:8080/city`, {
@@ -61,26 +61,26 @@ function ActivitiesSearchForm() {
           },
         });
         const data = await response.json();
-        setListCity(data.response);
+        setListActivity(data.response);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
-    if (Array.isArray(listCity)) {
+    if (Array.isArray(listActivity)) {
       const normalizedKeyword = normalizeString(keyword);
-      const filtered = listCity.filter((loc: any) => {
+      const filtered = listActivity.filter((loc: any) => {
         const normalizedLocationName = normalizeString(loc.name);
         return normalizedLocationName.includes(normalizedKeyword);
       });
       setSuggestions(filtered);
     } else {
-      console.warn("listCity is not an array:", listCity);
+      console.warn("listActivity is not an array:", listActivity);
       setSuggestions([]);
     }
   
-    fetchCity();
-  }, [keyword, listCity]);
+    fetchActivity();
+  }, [keyword, listActivity]);
 
   useEffect(() => {
     const storedValues = localStorage.getItem("searchActivities");
@@ -122,13 +122,13 @@ function ActivitiesSearchForm() {
       setSuggestions([]);
       return;
     }
-    if (Array.isArray(listCity)) {
-      const filteredSuggestions = listCity.filter((location) =>
+    if (Array.isArray(listActivity)) {
+      const filteredSuggestions = listActivity.filter((location) =>
         location.name.toLowerCase().includes(keyword.toLowerCase())
       );
       setSuggestions(filteredSuggestions);
     } else {
-      console.error("listCity is not an array");
+      console.error("listActivity is not an array");
     }
   };
 
