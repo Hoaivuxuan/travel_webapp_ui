@@ -15,15 +15,17 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
   visible,
   onClose,
 }) => {
-  const [listBookingHotel, setListBookingHotel] = useState<any | null>();
   const [loading, setLoading] = useState(true);
+  const [listBookingHotel, setListBookingHotel] = useState<any | null>();
+  const [listBookingVehicle, setListBookingVehicle] = useState<any | null>();
 
   useEffect(() => {
-    if(!user) return;
-    const fetchData = async () => {
+    const bearerToken = localStorage.getItem("token");
+    if(!user || !bearerToken) return;
+
+    const fetchBookingHotel = async () => {
       try {
         setLoading(true);
-        const bearerToken = localStorage.getItem("token");
         const response = await fetch(`http://localhost:8080/bookingRoom/user/${user.id}`, {
           method: "GET",
           headers: {
@@ -44,11 +46,36 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
         message.error("Failed to fetch bookings. Please try again.");
       }
     };
+
+    const fetchBookingVehicle = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`http://localhost:8080/bookingVehicle/user/${user.id}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+            "Content-Type": "application/json",
+          },
+        });
   
-    fetchData();
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        setListBookingVehicle(data.response);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        message.error("Failed to fetch bookings. Please try again.");
+      }
+    };
+  
+    fetchBookingHotel();
+    fetchBookingVehicle();
   }, [listBookingHotel, user]);
 
-  const userMenu = (record: any) => (
+  const hotelMenu = (record: any) => (
     <Menu>
       <Menu.Item key="1">
         <div className="flex items-center">
@@ -63,13 +90,28 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
     </Menu>
   );
 
-  const columns = [
+  const vehicleMenu = (record: any) => (
+    <Menu>
+      <Menu.Item key="1">
+        <div className="flex items-center">
+          <AiOutlineEye className="mr-2" /> Xem chi tiết
+        </div>
+      </Menu.Item>
+      <Menu.Item key="2">
+        <div className="flex items-center">
+          <AiOutlineDelete className="mr-2" /> Hủy đơn đặt
+        </div>
+      </Menu.Item>
+    </Menu>
+  );
+
+  const hotelColumns = [
     {
       title: "",
       key: "actions",
       render: (_: any, record: any) => (
         <Space className="flex items-center justify-center">
-          <Dropdown overlay={userMenu(record)} trigger={['click']}>
+          <Dropdown overlay={hotelMenu(record)} trigger={['click']}>
             <Button type="link" icon={<AiOutlineBars className="text-lg" />} />
           </Dropdown>
         </Space>
@@ -152,6 +194,75 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
     },
   ];
 
+  const vehicleColumns = [
+    {
+      title: "",
+      key: "actions",
+      render: (_: any, record: any) => (
+        <Space className="flex items-center justify-center">
+          <Dropdown overlay={vehicleMenu(record)} trigger={['click']}>
+            <Button type="link" icon={<AiOutlineBars className="text-lg" />} />
+          </Dropdown>
+        </Space>
+      ),
+    },
+    {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+      render: (id: string) => id.toUpperCase(),
+    },
+    {
+      title: "Khách hàng",
+      dataIndex: ["customerInfo", "fullName"],
+      key: "customerName",
+      width: 200,
+    },
+    {
+      title: "Email",
+      dataIndex: ["customerInfo", "email"],
+      key: "email",
+      width: 250,
+    },
+    {
+      title: "Điện thoai",
+      dataIndex: ["customerInfo", "phone"],
+      key: "phone",
+      width: 150,
+    },  
+    {
+      title: "Phương tiện",
+      dataIndex: ["vehicle", "name"],
+      key: "vehicle",
+    },
+    {
+      title: "Cơ sở cho thuê",
+      dataIndex: ["facility", "name"],
+      key: "facility",
+    }, 
+    {
+      title: "Tổng chi phí",
+      dataIndex: ["total_price"],
+      key: "totalPrice",
+      width: 200,
+      render: (totalPrice: number) => `${(totalPrice|| 0).toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`,
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      width: 120,
+      render: (text: any, record: any) => {
+        const status = statusTags
+          .filter(tag => tag.id === 0)
+          .map(tag => 
+            <Tag color={tag.color} key={tag.id}>{tag.text}</Tag>
+          );
+        return <>{status}</>;
+      },
+    },
+  ];
+
   return (
     <Modal
       title={`Danh sách hóa đơn`}
@@ -165,22 +276,24 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
         <Collapse.Panel header="HÓA ĐƠN ĐẶT PHÒNG" key="1">
           <Table
             dataSource={listBookingHotel}
-            columns={columns}
-            bordered
+            columns={hotelColumns}
+            size="middle"
             rowKey="id"
             pagination={{ pageSize: 5 }}
             scroll={{ x: 1500 }}
+            bordered
           />
         </Collapse.Panel>
         <Collapse.Panel header="HÓA ĐƠN THUÊ XE" key="2">
-          {/* <Table
-            dataSource={filteredBookings}
-            columns={columns}
-            bordered
+          <Table
+            dataSource={listBookingVehicle}
+            columns={vehicleColumns}
+            size="middle"
             rowKey="id"
             pagination={{ pageSize: 5 }}
             scroll={{ x: 1500 }}
-          /> */}
+            bordered
+          />
         </Collapse.Panel>
         <Collapse.Panel header="HÓA ĐƠN ĐẶT TOUR/VÉ THAM QUAN" key="3">
           {/* <Table

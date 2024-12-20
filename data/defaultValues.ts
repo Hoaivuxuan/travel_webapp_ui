@@ -1,3 +1,5 @@
+import { FaCar, FaMotorcycle } from "react-icons/fa";
+
 export const policies = [
   "Sử dụng tới 24 giờ mỗi ngày thuê",
   "Trả xe với cùng mức nhiên liệu khi nhận",
@@ -38,6 +40,9 @@ export const statusTags = [
 export const roleTags = [
   { role: "ADMIN", color: "red" },
   { role: "USER", color: "blue" },
-  { role: "SUPERADMIN", color: "green" },
-  { role: "DEV", color: "orange" },
+];
+
+export const typeVehicleTags = [
+  { type: "car", color: "red", icon: FaCar },
+  { type: "motor", color: "green", icon: FaMotorcycle },
 ];

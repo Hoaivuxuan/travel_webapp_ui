@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import "./index.css";
-import { Table, Space, Button } from "antd";
-import { AiOutlineEye } from "react-icons/ai";
+import { Table, Space, Button, Menu, Dropdown } from "antd";
+import { AiOutlineBars, AiOutlineEye } from "react-icons/ai";
 import HotelDetailsModal from "./HotelDetails";
 
 export default function UserAdmin() {
@@ -42,6 +42,21 @@ export default function UserAdmin() {
     setIsHotelDetailsVisible(false);
   };
 
+  const hotelMenu = (record: any) => (
+    <Menu>
+      <Menu.Item key="1" onClick={() => handleViewDetails(record)}>
+        <div className="flex items-center">
+          <AiOutlineEye className="mr-2" /> Xem chi tiết
+        </div>
+      </Menu.Item>
+      <Menu.Item key="2">
+        <div className="flex items-center">
+          <AiOutlineBars className="mr-2" /> Lịch sử đặt phòng
+        </div>
+      </Menu.Item>
+    </Menu>
+  );
+
   const hotelColumns = [
     {
       title: "",
@@ -49,11 +64,9 @@ export default function UserAdmin() {
       width: 50,
       render: (_: any, record: any) => (
         <Space className="flex items-center justify-center">
-          <Button
-            type="link"
-            icon={<AiOutlineEye className="text-lg" />}
-            onClick={() => handleViewDetails(record)}
-          />
+          <Dropdown overlay={hotelMenu(record)} trigger={['click']}>
+            <Button type="link" icon={<AiOutlineBars className="text-lg" />} />
+          </Dropdown>
         </Space>
       ),
     },

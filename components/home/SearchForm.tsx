@@ -67,6 +67,8 @@ function SearchForm() {
   useEffect(() => {
     const fetchCity = async () => {
       const bearerToken = localStorage.getItem("token");
+      if(!bearerToken) return;
+      
       try {
         const response = await fetch(`http://localhost:8080/city`, {
           headers: {
@@ -159,7 +161,7 @@ function SearchForm() {
       children: values.children.toString(),
       rooms: values.rooms.toString(),
     });
-    router.push(`/home/search?url=1&${query.toString()}`);
+    router.push(`/booking-hotel/search?url=1&${query.toString()}`);
   };
 
   const onError = (errors: any) => {

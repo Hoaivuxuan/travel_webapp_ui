@@ -61,6 +61,8 @@ function RentalSearchForm() {
   useEffect(() => {
     const fetchCity = async () => {
       const bearerToken = localStorage.getItem("token");
+      if(!bearerToken) return;
+      
       try {
         const response = await fetch(`http://localhost:8080/city`, {
           headers: {
@@ -147,7 +149,7 @@ function RentalSearchForm() {
       return: format(values.dateRange.returnDate, "dd-MM-yyyy"),
     });
   
-    router.push(`/rental/search?url=2&${query.toString()}`);
+    router.push(`/rental-vehicle/search?url=2&${query.toString()}`);
   };
 
   const onError = (errors: any) => {

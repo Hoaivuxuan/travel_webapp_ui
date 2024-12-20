@@ -1,4 +1,4 @@
-import { SearchParams } from "@/app/home/search/page";
+import { SearchParams } from "@/app/booking-hotel/search/page";
 import { Result } from "@/types";
 
 export async function fetchResults(searchParams: SearchParams) {

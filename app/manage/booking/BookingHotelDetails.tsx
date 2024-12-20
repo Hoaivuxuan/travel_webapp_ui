@@ -19,9 +19,10 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
 
   useEffect(() => {
     const fetchBookingDetails = async () => {
-      if (!booking) return;
-      setLoading(true);
       const bearerToken = localStorage.getItem("token");
+      if (!booking || !bearerToken) return;
+      
+      setLoading(true);
       try {
         const response = await fetch(
           `http://localhost:8080/bookingRoom/${booking.id}`,

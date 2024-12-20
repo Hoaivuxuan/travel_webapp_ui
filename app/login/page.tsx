@@ -41,7 +41,7 @@ const LoginPage = () => {
             notifySuccess("Đăng nhập thành công!");
             login(data.id, data.token);
             setTimeout(() => {
-              if (data.role === "USER") window.location.href = "/home";
+              if (data.role === "USER") window.location.href = "/booking-hotel";
               if (data.role === "ADMIN") window.location.href = "/admin";
             }, 3000);
           }

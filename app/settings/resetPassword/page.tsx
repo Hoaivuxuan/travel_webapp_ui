@@ -26,6 +26,9 @@ const ResetPasswordPage = () => {
 
     try {
       const bearerToken = localStorage.getItem("token");
+      const userId = Number(localStorage.getItem("userId"));
+      if(!userId || ! !bearerToken) return;
+
       const response = await fetch("http://localhost:8080/users/change-password", {
         method: "POST",
         headers: {
@@ -36,7 +39,7 @@ const ResetPasswordPage = () => {
           old_password: oldPassword,
           new_password: newPassword,
           confirm_new_password: confirmPassword,
-          user_id: Number(localStorage.getItem("userId")),
+          user_id: userId,
         }),
       });
 
