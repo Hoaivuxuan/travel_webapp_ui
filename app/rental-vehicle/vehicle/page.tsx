@@ -474,7 +474,7 @@ const VehicleDetail = () => {
                 </div>
               </div>
               <div className="mt-auto">
-                <h3 className="font-semibold mt-8 mb-2">Top Reviews</h3>
+                <h3 className="font-semibold mt-8 mb-2">Đánh giá nổi bật</h3>
                 <div
                   className="py-2"
                   onClick={handleOpenViewReviewModal}
@@ -545,7 +545,7 @@ const VehicleDetail = () => {
         </div>
       </section>
       <Modal
-        title="Top Reviews"
+        title="Đánh giá nổi bật"
         visible={isViewReviewModalVisible}
         onCancel={handleCloseViewReviewModal}
         footer={null}

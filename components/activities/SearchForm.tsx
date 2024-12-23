@@ -54,6 +54,8 @@ function ActivitiesSearchForm() {
   useEffect(() => {
     const fetchActivity = async () => {
       const bearerToken = localStorage.getItem("token");
+      if (!bearerToken) return;
+  
       try {
         const response = await fetch(`http://localhost:8080/city`, {
           headers: {
@@ -61,13 +63,17 @@ function ActivitiesSearchForm() {
           },
         });
         const data = await response.json();
-        setListActivity(data.response);
+        setListCity(data.response || []);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
+  
+    fetchCity();
+  }, []);
 
-    if (Array.isArray(listActivity)) {
+  useEffect(() => {
+    if (Array.isArray(listCity) && keyword) {
       const normalizedKeyword = normalizeString(keyword);
       const filtered = listActivity.filter((loc: any) => {
         const normalizedLocationName = normalizeString(loc.name);
@@ -75,12 +81,9 @@ function ActivitiesSearchForm() {
       });
       setSuggestions(filtered);
     } else {
-      console.warn("listActivity is not an array:", listActivity);
       setSuggestions([]);
     }
-  
-    fetchActivity();
-  }, [keyword, listActivity]);
+  }, [keyword, listCity]);
 
   useEffect(() => {
     const storedValues = localStorage.getItem("searchActivities");

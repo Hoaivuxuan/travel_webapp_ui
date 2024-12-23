@@ -242,7 +242,7 @@ const HotelDetailPage = () => {
         <FAQSection hotel={hotel} />
       </div>
       <Modal
-        title={`Top reviews for ${hotel.hotel_name}`}
+        title={`Những đánh giá về ${hotel.hotel_name}`}
         visible={isViewReviewModalVisible}
         onCancel={handleCloseViewReviewModal}
         footer={null}
