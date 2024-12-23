@@ -5,6 +5,7 @@ import { useState, useEffect, useMemo } from "react";
 import { VehicleItem } from "./RentalItem";
 import RentalSearchForm from "@/components/rental/RentalSearchForm";
 import { Slider, Checkbox, Button } from "antd";
+import { parse } from "date-fns";
 
 type Props = {
   searchParams: RentalSearchParams;
@@ -84,8 +85,9 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
     if (!searchParams.url) notFound();
     fetchFilter();
     fetchVehicles();
+    // console.log(parse(searchParams.pickup, "dd-MM-yyyy", new Date()));
     
-  }, [bearerToken, searchParams.city, searchParams.url, vehicles]);
+  }, [bearerToken, searchParams, vehicles]);
 
   const handlePriceChange = (value: number | number[]) => {
     if (Array.isArray(value)) {
@@ -174,6 +176,7 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
               {filteredResults.map((item: any) =>
                 <VehicleItem
                   key={item.id}
+                  params={searchParams}
                   vehicle={item}
                   isFacilityVisible={selectedItemId === item.id.toString()}
                   onFacilityToggle={() => setSelectedItemId(selectedItemId === item.id.toString() ? null : item.id.toString())}

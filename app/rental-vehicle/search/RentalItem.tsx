@@ -5,15 +5,13 @@ import { useState } from "react";
 import { Button, Radio, Tag } from "antd";
 import { encodeToJWT } from '@/utils/JWT';
 import { typeVehicleTags } from '@/data/defaultValues';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 
-const calculateDate = (str1: string, str2: string): number => {
-  const date1 = new Date(str1);
-  const date2 = new Date(str2);
-  const diffInMilliseconds = date2.getTime() - date1.getTime();
-  const diffInDays = diffInMilliseconds / (1000 * 60 * 60 * 24);
-  return Math.max(diffInDays, 0);
-};
+// const calculateDate = (date1: Date, str2: Date): number => {
+//   const diffInMilliseconds = date2.getTime() - date1.getTime();
+//   const diffInDays = diffInMilliseconds / (1000 * 60 * 60 * 24);
+//   return Math.max(diffInDays, 0);
+// };
 
 const handleDetailClick = (
   router: ReturnType<typeof useRouter>,
@@ -116,9 +114,9 @@ export function VehicleItem({
         </div>
         <div className="flex flex-col justify-end col-span-1 h-full">
           <div className="flex flex-col justify-end items-end mt-2">
-            <p className="text-sm">
-              Giá cho {calculateDate(params?.pickup, params?.return)} ngày
-            </p>
+            {/* <p className="text-sm">
+              Giá cho {calculateDate(parse(params?.pickup, "dd-MM-yyyy", new Date()), parse(params?.return, "dd-MM-yyyy", new Date()))} ngày
+            </p> */}
             <p className="text-lg font-bold text-blue-600 text-right">
                từ {rentalMinPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
             </p>
