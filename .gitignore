@@ -30,7 +30,7 @@ yarn-error.log*
 .env
 
 # image
-/img
+/img/
 
 # vercel
 .vercel
