@@ -61,9 +61,7 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
           },
         });
         const data = await response.json();
-
-        const listData = data.vehicles
-          .sort((a: any, b: any) => a.model.localeCompare(b.model));
+        const listData = data.vehicles.sort((a: any, b: any) => a.model.localeCompare(b.model));
         
         const minPrice = Math.min(
           ...listData.map((vehicle: any) => Math.min(...vehicle.facilities.map((facility: any) => facility.price))),
@@ -85,14 +83,11 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
     if (!searchParams.url) notFound();
     fetchFilter();
     fetchVehicles();
-    // console.log(parse(searchParams.pickup, "dd-MM-yyyy", new Date()));
     
   }, [bearerToken, searchParams, vehicles]);
 
   const handlePriceChange = (value: number | number[]) => {
-    if (Array.isArray(value)) {
-      setPriceRange(value as [number, number]);
-    }
+    if (Array.isArray(value)) setPriceRange(value as [number, number]);
   };
 
   const filteredResults = useMemo(() => {
@@ -115,8 +110,7 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
 
         <h2 className="py-4">
           <span className="ml-2">
-            {searchParams.location},{" "}
-            từ {searchParams.pickup} đến {searchParams.return} ({filteredResults.length} kết quả)
+            {`${searchParams.location}, từ ${searchParams.pickup} đến ${searchParams.return} (${filteredResults.length} kết quả)`}
           </span>
         </h2>
         <hr className="mb-5" />

@@ -4,6 +4,7 @@ import listCountries from "@/data/SelectCountry.json"
 import paymentMethods from "@/data/SelectPayment.json";
 import { Form, Input, Select, Radio, Checkbox, Button } from "antd";
 import { AiOutlineCheckCircle } from "react-icons/ai";
+import { format } from "date-fns";
 
 type BookingFormProps = {
   params: any;
@@ -31,8 +32,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
         phone: values.phone,
         country: listCountries.find((item) => item.name === (values.country || "Vietnam"))?.code,
       },
-      checkinDate: params.bookingHotel?.booking?.dateRange.startDate,
-      checkoutDate: params.bookingHotel?.booking?.dateRange.endDate,
+      checkinDate: format(new Date(params.bookingHotel?.booking?.dateRange.startDate), "yyyy-MM-dd"),
+      checkoutDate: format(new Date (params.bookingHotel?.booking?.dateRange.endDate), "yyyy-MM-dd"),
       adults: Number(params.bookingHotel?.booking?.adults),
       children: Number(params.bookingHotel?.booking?.children),
       roomSelection: params.roomSelection,
@@ -40,6 +41,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
       arrivalTime: values.arrivalTime || null,
       status: 0,
     };
+
+    localStorage.setItem("bookingHotel", JSON.stringify(bookingHotel));
   };
 
   const handleConfirm = () => {
