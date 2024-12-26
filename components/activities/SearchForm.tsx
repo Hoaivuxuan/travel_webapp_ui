@@ -26,6 +26,7 @@ export const formSchema = z.object({
 function ActivitiesSearchForm() {
   const router = useRouter();
   const [keyword, setKeyword] = useState("");
+  const [listCity, setListCity] = useState<any[]>([]);
   const [listActivity, setListActivity] = useState<any[]>([]);
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const today = new Date();
@@ -52,7 +53,7 @@ function ActivitiesSearchForm() {
   });
 
   useEffect(() => {
-    const fetchActivity = async () => {
+    const fetchCity = async () => {
       const bearerToken = localStorage.getItem("token");
       if (!bearerToken) return;
   
@@ -83,7 +84,7 @@ function ActivitiesSearchForm() {
     } else {
       setSuggestions([]);
     }
-  }, [keyword, listCity]);
+  }, [keyword, listActivity, listCity]);
 
   useEffect(() => {
     const storedValues = localStorage.getItem("searchActivities");
