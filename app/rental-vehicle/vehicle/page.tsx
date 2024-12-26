@@ -13,6 +13,7 @@ import Image from "next/image";
 import VehicleDetailInfo from "./VehicleInfo";
 import { decodeToJWT, encodeToJWT } from "@/utils/JWT";
 import { formatDate } from "@/utils/DateToString";
+import { AccessoryService, AttractionService } from "@/services/CommonService";
 
 const VehicleDetail = () => {
   const router = useRouter();
@@ -37,28 +38,21 @@ const VehicleDetail = () => {
   const vehicleItem: any = rentalVehicle?.vehicle;
   const facility: any = vehicleItem?.facilities?.find((item: any) => item.id === facilityId);
   const [search, setSearch] = useState<any>(null);
-  const [bearerToken, setBearerToken] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedSearch = localStorage.getItem("searchVehicle");
-      const token = localStorage.getItem("token");
       setSearch(storedSearch ? JSON.parse(storedSearch) : {});
-      setBearerToken(token);
     }
   }, []);
 
   useEffect(() => {
-    if(!search || !bearerToken) return;
+    if(!search) return;
 
     const fetchOffice = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/attraction/office?city=${rentalVehicle.location.id}&rental=${facilityId}`, {
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
-          },
-        });
-        const data = await response.json();
+        const city = rentalVehicle.location.id;
+        const data = (await AttractionService.getOffice(city, facilityId)).data;
         setListOffice(data);
       } catch (error) {
         console.error("Error fetching office data:", error);
@@ -67,12 +61,8 @@ const VehicleDetail = () => {
 
     const fetchAttraction = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/attraction/not-office?city=${rentalVehicle.location.id}`, {
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
-          },
-        });
-        const data = await response.json();
+        const city = rentalVehicle.location.id;
+        const data = (await AttractionService.getAttraction(city)).data;
         setListAttraction(data);
       } catch (error) {
         console.error("Error fetching attraction data:", error);
@@ -81,12 +71,7 @@ const VehicleDetail = () => {
 
     const fetchAccessory = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/accessory?type=${vehicleItem.type}`, {
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
-          },
-        });
-        const data = await response.json();
+        const data = (await AccessoryService.getByType(vehicleItem.type)).data;
         setListAccessory(data);
       } catch (error) {
         console.error("Error fetching accessory data:", error);
@@ -97,7 +82,7 @@ const VehicleDetail = () => {
     fetchAttraction();
     fetchAccessory();
 
-  }, [bearerToken, facilityId, rentalVehicle.location.id, search, vehicleItem.type]);
+  }, [facilityId, rentalVehicle.location.id, search, vehicleItem.type]);
 
   useEffect(() => {
     if (listAccessory.length > 0) {

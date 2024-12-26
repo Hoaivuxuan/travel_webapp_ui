@@ -3,9 +3,9 @@
 import { notFound } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import { VehicleItem } from "./RentalItem";
-import RentalSearchForm from "@/components/rental/RentalSearchForm";
 import { Slider, Checkbox, Button } from "antd";
-import { parse } from "date-fns";
+import RentalSearchForm from "@/components/rental/RentalSearchForm";
+import VehicleService from "@/services/VehicleService";
 
 type Props = {
   searchParams: RentalSearchParams;
@@ -29,19 +29,11 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
   const [minPrice, setMinPrice] = useState<number>();
   const [maxPrice, setMaxPrice] = useState<number>();
   const [loading, setLoading] = useState(true);
-  const bearerToken = localStorage.getItem("token");
 
-  useEffect(() => {
-    if(!bearerToken) return;
-    
+  useEffect(() => {  
     const fetchFilter = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/vehicles?id=0`, {
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
-          },
-        });
-        const data = await response.json();
+        const data = (await VehicleService.getByCity(0)).data;
         const brands = Array.from(new Set<string>(data.vehicles.map((vehicle: any) => vehicle.details.brand)))
           .sort((a, b) => a.localeCompare(b))
           .map((brand, id) => ({ id: id, name: brand }));
@@ -55,12 +47,7 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
 
     const fetchVehicles = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/vehicles?id=${searchParams.city}`, {
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
-          },
-        });
-        const data = await response.json();
+        const data = (await VehicleService.getByCity(searchParams.city)).data;
         const listData = data.vehicles.sort((a: any, b: any) => a.model.localeCompare(b.model));
         
         const minPrice = Math.min(
@@ -84,7 +71,7 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
     fetchFilter();
     fetchVehicles();
     
-  }, [bearerToken, searchParams, vehicles]);
+  }, [searchParams, vehicles]);
 
   const handlePriceChange = (value: number | number[]) => {
     if (Array.isArray(value)) setPriceRange(value as [number, number]);

@@ -5,6 +5,7 @@ import SearchForm from "@/components/home/SearchForm";
 import { notFound } from "next/navigation";
 import { Slider, Checkbox, Button, Radio } from "antd";
 import HotelItem from "./HotelItem";
+import HotelService from "@/services/HotelService";
 
 type Props = {
   searchParams: SearchParams;
@@ -37,18 +38,9 @@ function SearchPage({ searchParams }: Props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const bearerToken = localStorage.getItem("token");
-    if(!bearerToken) return;
-
     const fetchFilter = async () => {
       try {
-        const response = await fetch("http://localhost:8080/hotels?noRooms=0&keyword", {
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await response.json();
+        const data = (await HotelService.getByCity(removeAccent(""))).data;
         const type = Array.from(new Set<string>(data.hotels.map((hotel: any) => hotel.type)))
           .sort((a, b) => a.localeCompare(b))
           .map((type, id) => ({ id: id, name: type }));
@@ -66,14 +58,7 @@ function SearchPage({ searchParams }: Props) {
           .replace(/\s+/g, "")
           .toLowerCase();
         
-        const response = await fetch(`http://localhost:8080/hotels?noRooms=0&keyword=${removeAccent(keyword)}`, {
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await response.json();
-
+        const data = (await HotelService.getByCity(removeAccent(keyword))).data;
         const minPrice = Math.min(
           ...data.hotels.map((hotel: any) => Math.min(...hotel.rooms.map((room: any) => room.price))),
         );

@@ -2,8 +2,9 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import SearchForm from "@/components/home/SearchForm";
-import { destination } from "@/data/fakeData";
 import Image from "next/image";
+import HotelService from "@/services/HotelService";
+import { destination } from "@/data/fakeData";
 import { useRouter } from "next/navigation";
 import { Button } from "antd";
 import { encodeToJWT } from "@/utils/JWT";
@@ -18,8 +19,7 @@ export default function Home() {
   useEffect(() => {
     const fetchHotels = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/hotels?noRooms=0&keyword=`);
-        const data = await response.json();
+        const data = (await HotelService.getByCity("")).data;
         setListHotels(data.hotels);
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu:", error);
