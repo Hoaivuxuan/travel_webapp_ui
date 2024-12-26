@@ -67,8 +67,8 @@ function SearchForm() {
   useEffect(() => {
     const fetchCity = async () => {
       const bearerToken = localStorage.getItem("token");
-      if(!bearerToken) return;
-      
+      if (!bearerToken) return;
+  
       try {
         const response = await fetch(`http://localhost:8080/city`, {
           headers: {
@@ -76,13 +76,17 @@ function SearchForm() {
           },
         });
         const data = await response.json();
-        setListCity(data.response);
+        setListCity(data.response || []);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
+  
+    fetchCity();
+  }, []);
 
-    if (Array.isArray(listCity)) {
+  useEffect(() => {
+    if (Array.isArray(listCity) && keyword) {
       const normalizedKeyword = normalizeString(keyword);
       const filtered = listCity.filter((loc: any) => {
         const normalizedLocationName = normalizeString(loc.name);
@@ -92,8 +96,6 @@ function SearchForm() {
     } else {
       setSuggestions([]);
     }
-  
-    fetchCity();
   }, [keyword, listCity]);
 
   useEffect(() => {

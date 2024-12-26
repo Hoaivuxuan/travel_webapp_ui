@@ -12,11 +12,12 @@ import { importantInfo, policies, requirements, typeVehicleTags } from "@/data/d
 import Image from "next/image";
 import VehicleDetailInfo from "./VehicleInfo";
 import { decodeToJWT, encodeToJWT } from "@/utils/JWT";
+import { formatDate } from "@/utils/DateToString";
 
 const VehicleDetail = () => {
   const router = useRouter();
-  const [pickupOption, setPickupOption] = useState("other");
-  const [returnOption, setReturnOption] = useState("other");
+  const [pickupOption, setPickupOption] = useState("office");
+  const [returnOption, setReturnOption] = useState("office");
   const [pickupLocation, setPickupLocation] = useState("");
   const [returnLocation, setReturnLocation] = useState("");
   const [listOffice, setListOffice] = useState<any>([]);
@@ -169,6 +170,12 @@ const VehicleDetail = () => {
     setComment("");
   };
 
+  const calculateDaysBetween = (date1: Date, date2: Date): number => {
+    const diffInMilliseconds = date2.getTime() - date1.getTime();
+    const diffInDays = diffInMilliseconds / (1000 * 60 * 60 * 24);
+    return diffInDays;
+  };
+
   const bonusServices = listAccessory
     .map((service: any) => ({
       accessory_id: service.id,
@@ -187,11 +194,11 @@ const VehicleDetail = () => {
     const booking = {
       pickup: {
         location: pickupLocation,
-        date: format(search.dateRange.pickupDate, "yyyy-MM-dd"),
+        date: formatDate(new Date(search?.dateRange.pickupDate)),
       },
       return: {
         location: returnLocation,
-        date: format(search?.dateRange.returnDate, "yyyy-MM-dd"),
+        date: formatDate(new Date(search?.dateRange.returnDate)),
       },
       bonusServices,
       totalServiceCost,
@@ -219,7 +226,7 @@ const VehicleDetail = () => {
             <div className="grid grid-cols-3 gap-4 my-4 pb-4">
               <div className="h-[220px] mx-auto">
                 <Image
-                  src={`https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg`}
+                  src={vehicleItem.image_url}
                   alt={`Image of VEHICLE`}
                   className="rounded-sm h-full w-auto"
                   width={220}
@@ -433,20 +440,20 @@ const VehicleDetail = () => {
             <div className="grid grid-cols-3 my-4">
               <div className="mr-auto text-left">
                 <p className="font-bold">Nhận xe</p>
-                {/* <p className="text-sm">
-                  {new Date(search?.dateRange.pickupDate).toISOString()}
-                </p> */}
+                <p className="text-sm">
+                  {formatDate(new Date(search?.dateRange.pickupDate))}
+                </p>
               </div>
               <div className="flex justify-center items-center">
                 <p className="w-auto inline-block bg-blue-200 text-blue-600 rounded-lg px-3 py-1 text-sm">
-                  6 ngày
+                  {calculateDaysBetween(new Date(search?.dateRange.pickupDate), new Date(search?.dateRange.returnDate))} ngày
                 </p>
               </div>
               <div className="ml-auto text-right">
                 <p className="font-bold">Trả xe</p>
-                {/* <p className="text-sm">
-                  {format(new Date(search?.dateRange.returnDate), "yyyy-MM-dd") || "N/A"}
-                </p> */}
+                <p className="text-sm">
+                  {formatDate(new Date(search?.dateRange.returnDate))}
+                </p>
               </div>
             </div>
           </div>
@@ -473,8 +480,19 @@ const VehicleDetail = () => {
                   </div>
                 </div>
               </div>
+              <div className="mt-2 relative group h-[200px] overflow-hidden">
+                <iframe
+                  src={`https://www.google.com/maps?q=${listOffice[0]?.latitude},${listOffice[0]?.longitude}&output=embed`}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  title="Map"
+                />
+              </div>
               <div className="mt-auto">
-                <h3 className="font-semibold mt-8 mb-2">Top Reviews</h3>
+                <h3 className="font-semibold mt-8 mb-2">Đánh giá nổi bật</h3>
                 <div
                   className="py-2"
                   onClick={handleOpenViewReviewModal}
@@ -545,7 +563,7 @@ const VehicleDetail = () => {
         </div>
       </section>
       <Modal
-        title="Top Reviews"
+        title="Đánh giá nổi bật"
         visible={isViewReviewModalVisible}
         onCancel={handleCloseViewReviewModal}
         footer={null}

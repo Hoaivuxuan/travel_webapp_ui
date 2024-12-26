@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { encodeToJWT } from "@/utils/JWT";
@@ -137,7 +136,7 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
                 loading={loading}
                 className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-orange-600 text-sm font-semibold mt-2"
               >
-                Chọn phòng
+                Xem chi tiết
               </Button>
             </div>
           </div>

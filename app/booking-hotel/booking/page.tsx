@@ -32,6 +32,7 @@ const calculateNights = (s1: string, s2: string): number => {
 
 const BookingHotel = () => {
   const router = useRouter();
+  const tax = 0;
   const handleGoBack = () => {
     router.back();
   };
@@ -133,10 +134,7 @@ const BookingHotel = () => {
             <div className="grid grid-cols-3 gap-2 text-sm my-2">
               <p className="col-span-2 font-bold">Thuế và phí</p>
               <p>
-                {`${params.roomSelection.totalPrice.toLocaleString('vi-VN', {
-                  style: 'currency',
-                  currency: 'VND',
-                })}`}
+                {`${tax.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`}
               </p>
             </div>
             <hr className="my-1 border border-gray-200" />

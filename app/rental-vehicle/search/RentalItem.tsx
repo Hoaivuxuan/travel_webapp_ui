@@ -5,14 +5,19 @@ import { useState } from "react";
 import { Button, Radio, Tag } from "antd";
 import { encodeToJWT } from '@/utils/JWT';
 import { typeVehicleTags } from '@/data/defaultValues';
-import { format } from 'date-fns';
 
-const calculateDate = (str1: string, str2: string): number => {
-  const date1 = new Date(str1);
-  const date2 = new Date(str2);
+const calculateDaysBetween = (s1: string, s2: string): number => {
+  const parseDate = (dateString: string): Date => {
+    const [day, month, year] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
+  const date1 = parseDate(s1);
+  const date2 = parseDate(s2);
   const diffInMilliseconds = date2.getTime() - date1.getTime();
   const diffInDays = diffInMilliseconds / (1000 * 60 * 60 * 24);
-  return Math.max(diffInDays, 0);
+
+  return diffInDays;
 };
 
 const handleDetailClick = (
@@ -59,7 +64,7 @@ export function VehicleItem({
       >
         <div className="col-span-1 flex justify-center items-center h-[200px]">
           <Image
-            src={`https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg`}
+            src={vehicle.image_url}
             alt={`Vehicle ${vehicle.id}`}
             className="rounded-l-lg h-full w-auto"
             width={300}
@@ -117,7 +122,7 @@ export function VehicleItem({
         <div className="flex flex-col justify-end col-span-1 h-full">
           <div className="flex flex-col justify-end items-end mt-2">
             <p className="text-sm">
-              Giá cho {calculateDate(params?.pickup, params?.return)} ngày
+              Giá cho {calculateDaysBetween(params?.pickup, params?.return)} ngày
             </p>
             <p className="text-lg font-bold text-blue-600 text-right">
                từ {rentalMinPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
