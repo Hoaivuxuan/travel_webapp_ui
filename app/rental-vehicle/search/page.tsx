@@ -36,42 +36,44 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
         const data = (await VehicleService.getByCity(0)).data;
         const brands = Array.from(new Set<string>(data.vehicles.map((vehicle: any) => vehicle.details.brand)))
           .sort((a, b) => a.localeCompare(b))
-          .map((brand, id) => ({ id: id, name: brand }));
-
+          .map((brand, id) => ({ id, name: brand }));
+  
         setListBrand(brands);
-        setLoading(false);
       } catch (error) {
+        console.error("Error fetching brands:", error);
+      } finally {
         setLoading(false);
       }
     };
-
+  
     const fetchVehicles = async () => {
       try {
         const data = (await VehicleService.getByCity(searchParams.city)).data;
         const listData = data.vehicles.sort((a: any, b: any) => a.model.localeCompare(b.model));
-        
+  
         const minPrice = Math.min(
-          ...listData.map((vehicle: any) => Math.min(...vehicle.facilities.map((facility: any) => facility.price))),
+          ...listData.map((vehicle: any) => Math.min(...vehicle.facilities.map((facility: any) => facility.price)))
         );
         const maxPrice = Math.max(
-          ...listData.map((vehicle: any) => Math.min(...vehicle.facilities.map((facility: any) => facility.price))),
+          ...listData.map((vehicle: any) => Math.min(...vehicle.facilities.map((facility: any) => facility.price)))
         );
-
+  
         setMinPrice(minPrice);
         setMaxPrice(maxPrice);
         setPriceRange([minPrice, maxPrice]);
         setVehicles(listData);
-        setLoading(false);
       } catch (error) {
+        console.error("Error fetching vehicles:", error);
+      } finally {
         setLoading(false);
       }
     };
-
-    if (!searchParams.url) notFound();
+  
+    if (!searchParams.url) return;
+    
     fetchFilter();
     fetchVehicles();
-    
-  }, [searchParams, vehicles]);
+  }, [searchParams]);
 
   const handlePriceChange = (value: number | number[]) => {
     if (Array.isArray(value)) setPriceRange(value as [number, number]);
