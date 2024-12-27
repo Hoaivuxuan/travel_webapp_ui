@@ -1,11 +1,10 @@
 import axios from "axios";
 
-const API_VEHICLE_URL = "http://localhost:8080/vehicles";
 const bearerToken = localStorage.getItem("token");
 
 const VehicleService = {
   getByCity: (id) => {
-    return axios.get(`${API_VEHICLE_URL}?id=${id}`, {
+    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/vehicles?id=${id}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${bearerToken}`,

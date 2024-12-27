@@ -1,11 +1,10 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080";
 const bearerToken = localStorage.getItem("token");
 
 export const AttractionService = {
   getAttraction: (city) => {
-    return axios.get(`${API_URL}/attraction/not-office?city=${city}`, {
+    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/attraction/not-office?city=${city}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${bearerToken}`,
@@ -13,7 +12,7 @@ export const AttractionService = {
     });
   },
   getOffice: (city, rental) => {
-    return axios.get(`${API_URL}/attraction/office?city=${city}&rental=${rental}`, {
+    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/attraction/office?city=${city}&rental=${rental}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${bearerToken}`,
@@ -24,7 +23,7 @@ export const AttractionService = {
 
 export const AccessoryService = {
   getByType: (type) => {
-    return axios.get(`${API_URL}/accessory?type=${type}`, {
+    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/accessory?type=${type}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${bearerToken}`,
@@ -35,7 +34,7 @@ export const AccessoryService = {
 
 export const CityService = {
   getAll: () => {
-    return axios.get(`${API_URL}/city`, {
+    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/city`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${bearerToken}`,
@@ -46,28 +45,28 @@ export const CityService = {
 
 export const UserService = {
   register: (data) => {
-    return axios.post(`${API_URL}/users/register`, data, {
+    return axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, data, {
       headers: {
         "Content-Type": "application/json",
       },
     });
   },
   becomeAdmin: (data) => {
-    return axios.post(`${API_URL}/users/createAdmin`, data, {
+    return axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/createAdmin`, data, {
       headers: {
         "Content-Type": "application/json",
       },
     });
   },
   login: (data) => {
-    return axios.post(`${API_URL}/users/login`, data, {
+    return axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, data, {
       headers: {
         "Content-Type": "application/json",
       },
     });
   },
   getAllUsers: () => {
-    return axios.get(`${API_URL}/users`, {
+    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${bearerToken}`,
@@ -75,7 +74,7 @@ export const UserService = {
     });
   },
   getById: (id) => {
-    return axios.get(`${API_URL}/users/details?id=${id}`, {
+    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/details?id=${id}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${bearerToken}`,
@@ -83,7 +82,7 @@ export const UserService = {
     });
   },
   updateUserInfo: (data) => {
-    return axios.put(`${API_URL}/users`, data, {
+    return axios.put(`${process.env.NEXT_PUBLIC_API_URL}/users`, data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${bearerToken}`,
@@ -91,7 +90,7 @@ export const UserService = {
     });
   },
   resetPassword: (input) => {
-    return axios.post(`${API_URL}/users/change-password`, input, {
+    return axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/change-password`, input, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${bearerToken}`,

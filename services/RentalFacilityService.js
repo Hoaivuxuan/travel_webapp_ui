@@ -1,11 +1,10 @@
 import axios from "axios";
 
-const API_FACILITY_URL = "http://localhost:8080/rental";
 const bearerToken = localStorage.getItem("token");
 
 const RentalFacilityService = {
   getAll: () => {
-    return axios.get(`${API_FACILITY_URL}`, {
+    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/rental`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${bearerToken}`,

@@ -1,11 +1,10 @@
 import axios from "axios";
 
-const API_HOTEL_URL = "http://localhost:8080/hotels";
 const bearerToken = localStorage.getItem("token");
 
 const HotelService = {
   getByCity: (key) => {
-    return axios.get(`${API_HOTEL_URL}?noRooms=0&keyword=${key}`, {
+    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/hotels?noRooms=0&keyword=${key}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${bearerToken}`,
@@ -13,7 +12,7 @@ const HotelService = {
     });
   },
   getById: (id) => {
-    return axios.get(`${API_HOTEL_URL}/${id}`, {
+    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/hotels/${id}`, {
       headers: {
         "Content-Type": "application/json",
       },

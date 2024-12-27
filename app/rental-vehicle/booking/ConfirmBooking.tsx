@@ -22,10 +22,10 @@ const ConfirmBooking = () => {
     if(!booking || !bearerToken) return;
 
     try {
-      setLoading(true);
+      setLoading(true);;
       const result = (await BookingVehicleService.postBooking(booking)).data;
       notifySuccess("Đặt xe thành công!");
-      // router.push(`/rental-vehicle/details?id=${result.id}`);
+      router.push(`/rental-vehicle/details?id=${result.id}`);
     } catch (error: any) {
       notifyWarning("Đặt xe thất bại, vui lòng thử lại.");
     } finally {
