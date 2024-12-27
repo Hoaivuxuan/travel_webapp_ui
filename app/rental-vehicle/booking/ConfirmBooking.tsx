@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
 import { useRouter } from "next/navigation";
+import { BookingVehicleService } from "@/services/BookingService";
 
 const ConfirmBooking = () => {
   const router = useRouter();
@@ -22,22 +23,9 @@ const ConfirmBooking = () => {
 
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:8080/bookingVehicle", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${bearerToken}`,
-        },
-        body: JSON.stringify(booking),
-      });
-
-      if (!response.ok) {
-        notifyWarning("Đặt phòng thất bại. Vui lòng thử lại.");
-      }
-
-      const result = await response.json();
+      const result = (await BookingVehicleService.postBooking(booking)).data;
       notifySuccess("Đặt xe thành công!");
-      router.push(`/rental-vehicle/details?id=${result.id}`);
+      // router.push(`/rental-vehicle/details?id=${result.id}`);
     } catch (error: any) {
       notifyWarning("Đặt xe thất bại, vui lòng thử lại.");
     } finally {

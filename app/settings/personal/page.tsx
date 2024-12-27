@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import listCountries from "@/data/SelectCountry.json"
 import Image from "next/image";
 import { UserService } from "@/services/CommonService";
+import { formatDate } from "@/utils/DateToString";
 
 type UserInfoKeys = keyof UserData;
 interface UserData {
@@ -91,23 +92,11 @@ const PersonalInfoPage = () => {
 
     if (isUserDataChanged) {
       try {
-        const bearerToken = localStorage.getItem("token");
-        if(!bearerToken) return;
-        
-        const response = await fetch(`http://localhost:8080/users`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${bearerToken}`,
-          },
-          body: JSON.stringify(updatedData),
-        });
-
-        if (response.ok) {
-          const updatedUserData = await response.json();
+        const result = (await UserService.updateUserInfo(updatedData)).data;
+        if (result) {
           notifySuccess("Thông tin người dùng đã được cập nhật!");
-          localStorage.setItem("user", JSON.stringify(updatedUserData));
-          setUser(updatedUserData);
+          localStorage.setItem("user", JSON.stringify(result));
+          setUser(result);
           setEditingIndex(null);
         } else {
           notifyWarning("Cập nhật thất bại!");

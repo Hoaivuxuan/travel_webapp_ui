@@ -3,6 +3,7 @@ import { Modal, Table, Tag, Collapse, Button, Dropdown, Menu, Space, message } f
 import { statusTags } from "@/data/defaultValues";
 import { format } from "date-fns";
 import { AiOutlineEye, AiOutlineDelete, AiOutlineBars } from "react-icons/ai";
+import { BookingHotelService, BookingVehicleService } from "@/services/BookingService";
 
 interface UserBookingsModalProps {
   user: any;
@@ -20,25 +21,12 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
   const [listBookingVehicle, setListBookingVehicle] = useState<any | null>();
 
   useEffect(() => {
-    const bearerToken = localStorage.getItem("token");
-    if(!user || !bearerToken) return;
+    if(!user) return;
 
     const fetchBookingHotel = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:8080/bookingRoom/user/${user.id}`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
-            "Content-Type": "application/json",
-          },
-        });
-  
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-  
-        const data = await response.json();
+        const data = (await BookingHotelService.getBookingByUser(user.id)).data;
         setListBookingHotel(data.bookingRoom);
         setLoading(false);
       } catch (error) {
@@ -50,19 +38,7 @@ const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
     const fetchBookingVehicle = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:8080/bookingVehicle/user/${user.id}`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
-            "Content-Type": "application/json",
-          },
-        });
-  
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-  
-        const data = await response.json();
+        const data = (await BookingVehicleService.getBookingByUser(user.id)).data;
         setListBookingVehicle(data.response);
         setLoading(false);
       } catch (error) {

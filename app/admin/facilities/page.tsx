@@ -5,6 +5,7 @@ import "./index.css";
 import { Table, Space, Button, Menu, Dropdown } from "antd";
 import { AiOutlineBars, AiOutlineShop } from "react-icons/ai";
 import ListVehicleModal from "./ListVehicle";
+import RentalFacilityService from "@/services/RentalFacilityService";
 
 export default function UserAdmin() {
   const [listRentalFacility, setListRentalFacility] = useState<any>([]);
@@ -16,18 +17,7 @@ export default function UserAdmin() {
     const fetchHotels = async () => {
       const bearerToken = localStorage.getItem("token");
       try {
-        if (!bearerToken) return;
-        const response = await fetch("http://localhost:8080/rental", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
-            "Content-Type": "application/json",
-          },
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = (await RentalFacilityService.getAll()).data;
         setListRentalFacility(data);
       } catch (error) {
         console.error("Error fetching rental facilities:", error);

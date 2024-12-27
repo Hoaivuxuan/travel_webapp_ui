@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ToastContainer } from "react-toastify";
 import Notification from "@/components/Notification";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 import { Input, Button } from "antd";
+import { UserService } from "@/services/CommonService";
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -33,24 +33,14 @@ const RegisterPage = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(registrationData),
-      });
-
-      if (response.ok) {
+      const result = (await UserService.register(registrationData)).data;
+      if (result) {
         notifySuccess("Bạn đã đăng ký thành công!");
         setTimeout(() => {
           router.push("/login");
         }, 3000);
       } else {
-        const errorResponse = await response.json();
-        notifyWarning(
-          errorResponse.message || "Đã xảy ra lỗi trong quá trình đăng ký!"
-        );
+        notifyWarning(result.message || "Đã xảy ra lỗi trong quá trình đăng ký!");
       }
     } catch (error) {
       notifyWarning("Đã xảy ra lỗi trong quá trình đăng ký!");

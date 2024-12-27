@@ -22,6 +22,17 @@ export const AttractionService = {
   },
 };
 
+export const AccessoryService = {
+  getByType: (type) => {
+    return axios.get(`${API_URL}/accessory?type=${type}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    });
+  },
+};
+
 export const CityService = {
   getAll: () => {
     return axios.get(`${API_URL}/city`, {
@@ -34,6 +45,27 @@ export const CityService = {
 };
 
 export const UserService = {
+  register: (data) => {
+    return axios.post(`${API_URL}/users/register`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  },
+  becomeAdmin: (data) => {
+    return axios.post(`${API_URL}/users/createAdmin`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  },
+  login: (data) => {
+    return axios.post(`${API_URL}/users/login`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  },
   getAllUsers: () => {
     return axios.get(`${API_URL}/users`, {
       headers: {
@@ -50,4 +82,20 @@ export const UserService = {
       },
     });
   },
+  updateUserInfo: (data) => {
+    return axios.put(`${API_URL}/users`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    });
+  },
+  resetPassword: (input) => {
+    return axios.post(`${API_URL}/users/change-password`, input, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    });
+  }
 };

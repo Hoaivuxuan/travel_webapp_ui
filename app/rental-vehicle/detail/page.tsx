@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Descriptions, Table, message } from "antd";
 import { useSearchParams, useRouter } from "next/navigation";
+import { BookingVehicleService } from "@/services/BookingService";
 import listCountries from "@/data/SelectCountry.json";
 
 const BookingVehicleDetails: React.FC = () => {
@@ -13,25 +14,10 @@ const BookingVehicleDetails: React.FC = () => {
   const bookingId = detailsParams.get("id");
 
   useEffect(() => {
-    const bearerToken = localStorage.getItem("token");
-    if(!bearerToken) return;
-
     const fetchBookingVehicleDetails = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:8080/bookingVehicle/${bookingId}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${bearerToken}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`Lỗi ${response.status}: ${response.statusText}`);
-        }
-
-        const data = await response.json();
+        const data = (await BookingVehicleService.getDetails(bookingId)).data;
         setBookingDetails(data);
       } catch (error: any) {
         message.error("Lỗi khi tải thông tin đặt xe.");
