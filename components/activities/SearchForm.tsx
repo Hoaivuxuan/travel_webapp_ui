@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { AiOutlineClose } from 'react-icons/ai';
 import { IoLocationOutline } from "react-icons/io5";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { CityService } from "@/services/CommonService";
 import dayjs from "dayjs";
 
 export const formSchema = z.object({
@@ -26,6 +27,7 @@ export const formSchema = z.object({
 function ActivitiesSearchForm() {
   const router = useRouter();
   const [keyword, setKeyword] = useState("");
+  const [listCity, setListCity] = useState<any[]>([]);
   const [listActivity, setListActivity] = useState<any[]>([]);
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const today = new Date();
@@ -52,17 +54,9 @@ function ActivitiesSearchForm() {
   });
 
   useEffect(() => {
-    const fetchActivity = async () => {
-      const bearerToken = localStorage.getItem("token");
-      if (!bearerToken) return;
-  
+    const fetchCity = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/city`, {
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
-          },
-        });
-        const data = await response.json();
+        const data = (await CityService.getAll()).data;
         setListCity(data.response || []);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -83,7 +77,7 @@ function ActivitiesSearchForm() {
     } else {
       setSuggestions([]);
     }
-  }, [keyword, listCity]);
+  }, [keyword, listActivity, listCity]);
 
   useEffect(() => {
     const storedValues = localStorage.getItem("searchActivities");

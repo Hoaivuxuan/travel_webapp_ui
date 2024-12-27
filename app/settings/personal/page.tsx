@@ -9,6 +9,8 @@ import Notification from "@/components/Notification";
 import dayjs from "dayjs";
 import listCountries from "@/data/SelectCountry.json"
 import Image from "next/image";
+import { UserService } from "@/services/CommonService";
+import { formatDate } from "@/utils/DateToString";
 
 type UserInfoKeys = keyof UserData;
 interface UserData {
@@ -46,24 +48,13 @@ const PersonalInfoPage = () => {
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
-    const bearerToken = localStorage.getItem("token");
 
     const fetchUserData = async () => {
-      if (!userId || !bearerToken) return;
+      if (!userId) return;
       try {
-        const response = await fetch(`http://localhost:8080/users/details?id=${userId}`, {
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
-          },
-        });
-
-        if (response.ok) {
-          const userData: UserData = await response.json();
-          setUser(userData);
-          setValues(userData);
-        } else {
-          console.error("Failed to fetch user data");
-        }
+        const userData: UserData = (await UserService.getById(userId)).data;
+        setUser(userData);
+        setValues(userData);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -91,7 +82,7 @@ const PersonalInfoPage = () => {
       date_of_birth: values?.date_of_birth,
       country: values?.country,
       address: values?.address,
-      avatar: "https://firebasestorage.googleapis.com/v0/b/travel-web-7b510.appspot.com/o/UNKNOWN_USER.PNG?alt=media&token=5a0b3bba-f852-491c-8f50-c532be5ca4b0",
+      avatar: values?.avatar,
     };
 
     if (isUserDataChanged) setLoading(true);
@@ -101,23 +92,11 @@ const PersonalInfoPage = () => {
 
     if (isUserDataChanged) {
       try {
-        const bearerToken = localStorage.getItem("token");
-        if(!bearerToken) return;
-        
-        const response = await fetch(`http://localhost:8080/users`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${bearerToken}`,
-          },
-          body: JSON.stringify(updatedData),
-        });
-
-        if (response.ok) {
-          const updatedUserData = await response.json();
+        const result = (await UserService.updateUserInfo(updatedData)).data;
+        if (result) {
           notifySuccess("Thông tin người dùng đã được cập nhật!");
-          localStorage.setItem("user", JSON.stringify(updatedUserData));
-          setUser(updatedUserData);
+          localStorage.setItem("user", JSON.stringify(result));
+          setUser(result);
           setEditingIndex(null);
         } else {
           notifyWarning("Cập nhật thất bại!");

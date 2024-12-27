@@ -7,6 +7,7 @@ import { AiOutlineEye, AiOutlineBars, AiOutlineDelete } from "react-icons/ai";
 import listCountries from "@/data/SelectCountry.json"
 import UserDetailsModal from "./UserDatails";
 import UserBookingModal from "./UserBooking";
+import { UserService } from "@/services/CommonService";
 
 export default function UserAdmin() {
   const [listUser, setListUser] = useState<any>([]);
@@ -17,21 +18,8 @@ export default function UserAdmin() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const bearerToken = localStorage.getItem("token");
       try {
-        if (!bearerToken) return;
-        const response = await fetch("http://localhost:8080/users", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = (await UserService.getAllUsers()).data;
         setListUser(data.users);
       } catch (error) {
         console.error("Error fetching users:", error);

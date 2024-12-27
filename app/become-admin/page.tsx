@@ -6,6 +6,7 @@ import { Input, Button } from "antd";
 import { ToastContainer } from "react-toastify";
 import Notification from "@/components/Notification";
 import "react-toastify/dist/ReactToastify.css";
+import { UserService } from "@/services/CommonService";
 
 const BecomeAdminPage = () => {
   const router = useRouter();
@@ -20,7 +21,6 @@ const BecomeAdminPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (password !== confirmPassword) {
       notifyWarning("Mật khẩu và xác nhận mật khẩu không khớp.");
       return;
@@ -34,25 +34,15 @@ const BecomeAdminPage = () => {
 
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:8080/users/createAdmin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(registrationData),
-      });
-
-      if (response.ok) {
+      const result = (await UserService.becomeAdmin(registrationData)).data;
+      if (result) {
         setLoading(false);
         notifySuccess("Bạn đã đăng ký thành công!");
         setTimeout(() => {
           router.push("/login");
         }, 3000);
       } else {
-        const errorResponse = await response.json();
-        notifyWarning(
-          errorResponse.message || "Đã xảy ra lỗi trong quá trình đăng ký!"
-        );
+        notifyWarning(result.message || "Đã xảy ra lỗi trong quá trình đăng ký!");
       }
     } catch (error) {
       notifyWarning("Đã xảy ra lỗi trong quá trình đăng ký!");
@@ -65,7 +55,7 @@ const BecomeAdminPage = () => {
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded shadow-md w-[20%]"
       >
-        <h2 className="text-2xl mb-6 text-center">Hãy trở thành CTV của chúng tôi</h2>
+        <h2 className="text-2xl mb-6 text-center">Hãy trở thành QTV của chúng tôi</h2>
         <div className="mb-4">
           <label className="block mb-2">Email</label>
           <Input

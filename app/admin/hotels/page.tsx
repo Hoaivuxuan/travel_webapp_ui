@@ -5,6 +5,7 @@ import "./index.css";
 import { Table, Space, Button, Menu, Dropdown } from "antd";
 import { AiOutlineBars, AiOutlineEye } from "react-icons/ai";
 import HotelDetailsModal from "./HotelDetails";
+import HotelService from "@/services/HotelService";
 
 export default function UserAdmin() {
   const [listHotel, setListHotel] = useState<any>([]);
@@ -15,13 +16,8 @@ export default function UserAdmin() {
   useEffect(() => {
     const fetchHotels = async () => {
       try {
-        const response = await fetch("http://localhost:8080/hotels?noRooms=0&keyword=");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = (await HotelService.getByCity("")).data;
         setListHotel(data.hotels);
-        localStorage.setItem("listBookingHotel", JSON.stringify(listHotel));
       } catch (error) {
         console.error("Error fetching hotels:", error);
       } finally {

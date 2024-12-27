@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
 import { useRouter } from "next/navigation";
+import { BookingHotelService } from "@/services/BookingService";
 
 interface ConfirmBookingProps {
   hotel: any;
@@ -20,10 +21,8 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
   };
 
   const handleConfirm = async () => {
-    const bearerToken = localStorage.getItem("token");
     const bookingHotel = JSON.parse(localStorage.getItem("bookingHotel") || "{}");
-    if(!bearerToken || !bookingHotel) return;
-
+    if(!bookingHotel) return;
     const booking = {
       user_id: bookingHotel.user,
       full_name: bookingHotel.customerInfo.fullName,
@@ -46,20 +45,7 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
 
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:8080/bookingRoom", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${bearerToken}`,
-        },
-        body: JSON.stringify(booking),
-      });
-
-      if (!response.ok) {
-        notifyWarning("Đặt phòng thất bại. Vui lòng thử lại.");
-      }
-
-      const result = await response.json();
+      const result = (await BookingHotelService.postBooking(booking)).data;
       notifySuccess("Đặt phòng thành công!");
       router.push(`/booking-hotel/details?id=${result.id}`);
     } catch (error: any) {

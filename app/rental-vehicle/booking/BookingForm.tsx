@@ -55,6 +55,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
         },
         ...(values.additionalDrivers || []),
       ],
+      status: 0,
     };
 
     localStorage.setItem("rentalVehicle", JSON.stringify(rentalVehicle));

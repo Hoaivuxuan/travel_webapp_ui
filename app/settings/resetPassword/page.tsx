@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import Notification from "@/components/Notification";
 import "react-toastify/dist/ReactToastify.css";
+import { UserService } from "@/services/CommonService";
 
 const { notifySuccess, notifyWarning } = Notification();
 
@@ -18,36 +19,25 @@ const ResetPasswordPage = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
     if (newPassword !== confirmPassword) {
       notifyWarning("Mật khẩu mới và xác nhận mật khẩu không khớp!");
       return;
     }
 
     try {
-      const bearerToken = localStorage.getItem("token");
       const userId = Number(localStorage.getItem("userId"));
-      if(!userId || ! !bearerToken) return;
+      if(!userId) return;
+      const input = {
+        old_password: oldPassword,
+        new_password: newPassword,
+        confirm_new_password: confirmPassword,
+        user_id: userId,
+      };
 
-      const response = await fetch("http://localhost:8080/users/change-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${bearerToken}`,
-        },
-        body: JSON.stringify({
-          old_password: oldPassword,
-          new_password: newPassword,
-          confirm_new_password: confirmPassword,
-          user_id: userId,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Đã xảy ra lỗi");
+      const result = (await UserService.resetPassword(input)).data;
+      if(!result) {
+        throw new Error(result.message || "Đã xảy ra lỗi");
       }
-
       notifySuccess("Đổi mật khẩu thành công!");
       setOldPassword("");
       setNewPassword("");

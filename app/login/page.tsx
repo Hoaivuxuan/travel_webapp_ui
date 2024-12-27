@@ -3,48 +3,34 @@
 import { useState } from "react";
 import { useAuth } from "@/app/login/AuthContext";
 import { ToastContainer } from "react-toastify";
+import { Input, Button } from "antd";
 import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Input, Button } from "antd";
+import { UserService } from "@/services/CommonService";
 
 const LoginPage = () => {
   const { login } = useAuth();
+  const { notifySuccess, notifyWarning } = Notification();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  const { notifySuccess, notifyWarning } = Notification();
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (email && password) {
       try {
-        const response = await fetch("http://localhost:8080/users/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        });
+        const data = { email, password }
+        const result = (await UserService.login(data)).data;
 
-        if (response.ok) {
-          const data = await response.json();
-
-          if (data) {
-            console.log(data);
-            notifySuccess("Đăng nhập thành công!");
-            login(data.id, data.token);
-            setTimeout(() => {
-              if (data.role === "USER") window.location.href = "/booking-hotel";
-              if (data.role === "ADMIN") window.location.href = "/admin";
-            }, 3000);
-          }
+        if (result) {
+          console.log(result);
+          notifySuccess("Đăng nhập thành công!");
+          login(result.id, result.token);
+          setTimeout(() => {
+            if (result.role === "USER") window.location.href = "/booking-hotel";
+            if (result.role === "ADMIN") window.location.href = "/admin";
+          }, 3000);
         } else {
           notifyWarning("Email hoặc mật khẩu không đúng!");
         }

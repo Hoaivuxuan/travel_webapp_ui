@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { encodeToJWT } from "@/utils/JWT";
 import { Button, Tag } from "antd";
+import Image from "next/image";
+import HotelService from "@/services/HotelService";
 
 type HotelItemProps = {
   id: string;
@@ -20,11 +21,7 @@ const HotelItem: React.FC<HotelItemProps> = ({ id }) => {
     const fetchHotel = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:8080/hotels/${id}`);
-        if (!response.ok) {
-          throw new Error("Không thể lấy thông tin khách sạn");
-        }
-        const data = await response.json();
+        const data = (await HotelService.getById(id)).data;
         setHotel(data);
       } catch (err: any) {
         setError(err);

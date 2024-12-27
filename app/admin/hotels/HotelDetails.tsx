@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Descriptions } from "antd";
-import Link from "next/link";
+import HotelService from "@/services/HotelService";
 
 interface HotelDetailsModalProps {
   hotel: any;
@@ -16,11 +16,7 @@ const HotelDetailsModal: React.FC<HotelDetailsModalProps> = ({ hotel, visible, o
   useEffect(() => {
     const fetchHotel = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/hotels/${hotel?.id}`);
-        if (!response.ok) {
-          throw new Error("Không thể lấy thông tin khách sạn");
-        }
-        const data = await response.json();
+        const data = (await HotelService.getById(hotel.id)).data;
         setHotelInfo(data);
       } catch (err: any) {
         setError("Không thể tải thông tin khách sạn.");

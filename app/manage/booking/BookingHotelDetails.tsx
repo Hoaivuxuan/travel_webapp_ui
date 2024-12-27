@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Descriptions, Tag } from "antd";
 import { statusTags } from "@/data/defaultValues";
-import { format } from "date-fns";
+import { BookingHotelService } from "@/services/BookingService";
 
 interface BookingDetailsModalProps {
   booking: any;
@@ -19,27 +19,10 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
 
   useEffect(() => {
     const fetchBookingDetails = async () => {
-      const bearerToken = localStorage.getItem("token");
-      if (!booking || !bearerToken) return;
-      
+      if (!booking) return;
       setLoading(true);
       try {
-        const response = await fetch(
-          `http://localhost:8080/bookingRoom/${booking.id}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${bearerToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch booking details");
-        }
-
-        const data = await response.json();
+        const data = (await BookingHotelService.getDetails(booking.id)).data;
         setBookingHotel(data);
       } catch (error) {
         console.error(error || "An error occurred while fetching data.");
@@ -49,7 +32,6 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
     };
 
     fetchBookingDetails();
-    
   }, [booking]);
 
   return (
