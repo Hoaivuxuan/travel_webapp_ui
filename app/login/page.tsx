@@ -24,7 +24,6 @@ const LoginPage = () => {
         const result = (await UserService.login(data)).data;
 
         if (result) {
-          console.log(result);
           notifySuccess("Đăng nhập thành công!");
           login(result.id, result.token);
           setTimeout(() => {
