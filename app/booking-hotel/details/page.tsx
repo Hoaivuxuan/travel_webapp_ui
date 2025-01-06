@@ -80,14 +80,10 @@ const BookingDetails: React.FC = () => {
     <div className="container mx-auto p-6">
       <div className="pb-4">
         <a
-          href="#"
+          href="/booking-hotel"
           className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-gray-400 transition duration-150"
-          onClick={(e) => {
-            e.preventDefault();
-            router.back();
-          }}
         >
-          Quay lại trang trước
+          Quay lại trang chính
         </a>
       </div>
       <h1 className="text-2xl font-bold mb-4">Chi tiết đơn hàng</h1>
