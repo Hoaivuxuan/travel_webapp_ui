@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "@/components/Modal";
 import { listHotels, ratingLabel } from "@/data/typeHotel";
 import {
@@ -11,40 +11,50 @@ import {
 } from "next/navigation";
 import { decodeToJWT } from "@/utils/JWT";
 import Image from "next/image";
+import { DatePicker, Space } from "antd";
+import dayjs from "dayjs";
 
 const ActivitiesDetailPage = () => {
-  const { id } = useParams();
   const router = useRouter();
   const detailsParams = useSearchParams();
   const activityToken = detailsParams.get("token");
-  const activity = decodeToJWT(activityToken || "");
-  //
-  const activityItem =
-    listHotels?.find((item: any) => item.id === Number(id)) || undefined;
-  const [selectedDate, setSelectedDate] = useState("CN 3 Tháng 11");
+  const activityItem = decodeToJWT(activityToken || "");
+  const [filteredTickets, setFilteredTickets] = useState([]);
   const [selectedTime, setSelectedTime] = useState("16:10");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [directionsUrl, setDirectionsUrl] = useState("");
+  const [dateRange, setDateRange] = useState<dayjs.Dayjs | null>(null);
+
   if (!activityItem) return notFound();
   const activityAddress = encodeURIComponent(`${activityItem.address}`);
-  const tickets = [
-    {
-      type: "Vé tiêu chuẩn",
-      price: "500000",
-      description: "Vé dành cho người lớn và trẻ em với tiện ích cơ bản.",
-    },
-    {
-      type: "Vé VIP",
-      price: "1000000",
-      description: "Vé hạng VIP với dịch vụ cao cấp và ưu tiên.",
-    },
-    {
-      type: "Vé tiết kiệm",
-      price: "300000",
-      description: "Vé giá rẻ phù hợp cho học sinh và sinh viên.",
-    },
-  ];
   //
+  useEffect(() => {
+    console.log("check activityItem:", activityItem);
+  }, [dateRange]);
+
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+
+  const handleDateChange = (dates: dayjs.Dayjs | null) => {
+    if (dates) {
+      console.log("check dates:", dates?.toDate() ?? today);
+      setDateRange(dates);
+      const formattedDate = dates.format("YYYY-MM-DD");
+      const dailyTickets =
+        activityItem.tour_schedule_responses[0]?.dailyTicketAvailabilities ||
+        [];
+      const filteredTickets = dailyTickets.filter(
+        (ticket: any) => ticket.happen_date === formattedDate
+      );
+      setFilteredTickets(filteredTickets);
+      console.log("check filteredTickets:", filteredTickets);
+    }
+  };
+
+  const handleBookingClick = async (ticket: any) => {
+    router.push(`/activities/booking?url=1`);
+  };
 
   return (
     <div className="pb-6">
@@ -61,25 +71,13 @@ const ActivitiesDetailPage = () => {
         </a>
       </div>
       <div className="p-6 mx-auto max-w-7xl">
-        <div className="text-gray-500">
-          <a href="#" className="hover:underline">
-            Trang chủ
-          </a>{" "}
-          {">"}
-          <a href="#" className="hover:underline">
-            Các địa điểm tham quan
-          </a>{" "}
-          {">"}
-          {activity.name}
-        </div>
-
-        <h1 className="text-3xl font-bold mt-2">{activity.name}</h1>
-        <p className="text-blue-600 mt-1">Bán chạy #1 ở Hà Nội</p>
+        <h1 className="text-3xl font-bold mt-2">{activityItem.name}</h1>
+        <p className="text-blue-600 mt-1">Bán chạy #1 ở {activityItem.city}</p>
 
         <div className="flex mt-6">
           <div className="w-2/3">
             <Image
-              src="https://r-xx.bstatic.com/xdata/images/xphoto/max1200/153554304.jpg?k=c4f7d09fa35799ed21178297bd8c6c0bf349d0002eefaec21aff476e3b8012f3&o="
+              src={activityItem.images[0].url}
               alt="Water Puppet Show"
               width={800}
               height={600}
@@ -89,22 +87,15 @@ const ActivitiesDetailPage = () => {
 
           <div className="w-1/3 flex flex-col space-y-2 ml-4">
             <Image
-              src="https://r-xx.bstatic.com/xdata/images/xphoto/max1200/153554304.jpg?k=c4f7d09fa35799ed21178297bd8c6c0bf349d0002eefaec21aff476e3b8012f3&o="
+              src={activityItem.images[1].url}
               alt="Thumbnail 1"
               width={800}
               height={600}
               className="w-full rounded"
             />
             <Image
-              src="https://r-xx.bstatic.com/xdata/images/xphoto/max1200/153554304.jpg?k=c4f7d09fa35799ed21178297bd8c6c0bf349d0002eefaec21aff476e3b8012f3&o="
+              src={activityItem.images[2].url}
               alt="Thumbnail 2"
-              width={800}
-              height={600}
-              className="w-full rounded"
-            />
-            <Image
-              src="https://r-xx.bstatic.com/xdata/images/xphoto/max1200/153554304.jpg?k=c4f7d09fa35799ed21178297bd8c6c0bf349d0002eefaec21aff476e3b8012f3&o="
-              alt="Thumbnail 3"
               width={800}
               height={600}
               className="w-full rounded"
@@ -123,7 +114,7 @@ const ActivitiesDetailPage = () => {
               <p className="mt-4 text-gray-500">
                 Vui lòng có mặt ít nhất 15 phút trước khi hoạt động bắt đầu.
               </p>
-              <h2 className="text-xl font-semibold mt-10">
+              <h2 className="text-xl font-semibold mt-10 mb-5">
                 Đánh giá của khách hàng
               </h2>
               <div className="text-lg font-semibold">
@@ -150,7 +141,7 @@ const ActivitiesDetailPage = () => {
                   </div>
                 ))}
               </div>
-              <h2 className="text-xl font-semibold mt-10">
+              <h2 className="text-xl font-semibold mt-10 mb-5">
                 Điều khách yêu thích nhất
               </h2>
               <div className="space-y-4">
@@ -176,7 +167,7 @@ const ActivitiesDetailPage = () => {
                 ))}
               </div>
               {/* Quy định */}
-              <h2 className="text-xl font-semibold mt-10">Quy định</h2>
+              <h2 className="text-xl font-semibold mt-10 mb-5">Quy định</h2>
               <ul className="list-disc pl-6 text-gray-700">
                 <li>
                   Vui lòng có mặt ít nhất 15 phút trước khi hoạt động bắt đầu.
@@ -184,18 +175,27 @@ const ActivitiesDetailPage = () => {
               </ul>
 
               {/* Thông tin thêm */}
-              <h2 className="text-xl font-semibold mt-10">Thông tin thêm</h2>
+              <h2 className="text-xl font-semibold mt-10 mb-5">
+                Thông tin thêm
+              </h2>
               <ul className="list-disc pl-6 text-gray-700 space-y-2">
+                <li>
+                  Không có vé giảm giá cho tour này. Tất cả người tham gia cần
+                  phải mua vé.
+                </li>
+                <li>
+                  Vui lòng tuân thủ các hướng dẫn và quy định phòng dịch
+                  COVID-19 ở địa phương khi tham gia tour.
+                </li>
                 <li>Vui lòng mang theo vé đến điểm tham quan.</li>
                 <li>
                   Lưu ý rằng nhà cung cấp có thể hủy vì những lý do không biết
                   trước.
                 </li>
                 <li>Bạn cần phải từ 18 tuổi trở lên để đặt chỗ.</li>
-                <li>Điều hành bởi Klook.</li>
               </ul>
               {/*  */}
-              <h2 className="text-xl font-semibold mt-10">Vị trí</h2>
+              <h2 className="text-xl font-semibold mt-10 mb-5">Vị trí</h2>
               <div
                 className="relative group"
                 style={{ height: "300px", overflow: "hidden" }}
@@ -244,25 +244,34 @@ const ActivitiesDetailPage = () => {
             {/*  */}
             <div className="bg-white p-4 rounded shadow">
               <div className="">
-                <h2 className="text-xl font-semibold">Vé và giá</h2>
-                <h3 className="text-lg font-medium">Chọn ngày giờ</h3>
+                <h2 className="text-xl font-semibold my-5">Chọn ngày giờ</h2>
                 <div className="flex space-x-2 mt-2">
-                  <button
-                    className={`py-2 px-4 rounded ${selectedDate === "CN 3 Tháng 11" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                    onClick={() => setSelectedDate("CN 3 Tháng 11")}
-                  >
-                    CN 3 Tháng 11
-                  </button>
-                  <button
-                    className={`py-2 px-4 rounded ${selectedDate === "Th 3 5 Tháng 11" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                    onClick={() => setSelectedDate("Th 3 5 Tháng 11")}
-                  >
-                    Th 3 5 Tháng 11
-                  </button>
+                  <DatePicker
+                    value={dateRange}
+                    onChange={handleDateChange}
+                    disabledDate={(current) =>
+                      current && current < dayjs().startOf("day")
+                    }
+                    format="DD/MM/YYYY"
+                  />
                 </div>
 
                 <div className="flex space-x-2 mt-4">
-                  <button
+                  {activityItem.tour_schedule_responses.map(
+                    (ticket: any, index: any) => (
+                      <>
+                        <button
+                          className={`py-2 px-4 rounded ${selectedTime === `${ticket.start_time}` ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+                          onClick={() =>
+                            setSelectedTime(`${ticket.start_time}`)
+                          }
+                        >
+                          {ticket.start_time}
+                        </button>
+                      </>
+                    )
+                  )}
+                  {/* <button
                     className={`py-2 px-4 rounded ${selectedTime === "16:10" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
                     onClick={() => setSelectedTime("16:10")}
                   >
@@ -279,14 +288,12 @@ const ActivitiesDetailPage = () => {
                     onClick={() => setSelectedTime("18:30")}
                   >
                     18:30
-                  </button>
+                  </button> */}
                 </div>
-                {tickets.map((ticket, index) => (
-                  <div
-                    key={index}
-                    className="border p-4 rounded-lg shadow mt-10"
-                  >
-                    <h3 className="text-lg font-bold">{ticket.type}</h3>
+                <h2 className="text-xl font-semibold my-5">Chọn vé</h2>
+                {filteredTickets.map((ticket: any, index: any) => (
+                  <div key={index} className="border p-4 rounded-lg shadow">
+                    <h3 className="text-lg font-bold">{ticket.name}</h3>
                     <p className="text-green-600 font-semibold">
                       {ticket.description}
                     </p>
@@ -299,7 +306,19 @@ const ActivitiesDetailPage = () => {
                         VND
                       </span>
                     </p>
-                    <button className="mt-4 py-2 px-4 bg-blue-500 text-white rounded">
+                    <p className="text-gray-700 mt-2">
+                      Còn lại{" "}
+                      <span className="font-bold">
+                        {new Intl.NumberFormat("vi-VN").format(
+                          Number(ticket.available_ticket)
+                        )}{" "}
+                        vé
+                      </span>
+                    </p>
+                    <button
+                      onClick={() => handleBookingClick(ticket)}
+                      className="mt-4 py-2 px-4 bg-blue-500 text-white rounded"
+                    >
                       Chọn
                     </button>
                   </div>

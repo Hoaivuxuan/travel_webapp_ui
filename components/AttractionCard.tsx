@@ -43,10 +43,12 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ id }) => {
     return <div>Không tìm thấy thông tin khách sạn.</div>;
   }
 
-  const handleDetailClick = (index: number) => {
-    // const token = encodeToJWT(activity);
-    // router.push(`/activities/detail?token=${token}`);
-    router.push(`/activities/detail/${index}`);
+  const handleDetailClick = () => {
+    setLoading(true);
+    const token = encodeToJWT(activity);
+    router.push(`/activities/detail?token=${token}`);
+    setLoading(false);
+    // router.push(`/activities/detail/${index}`);
   };
 
   return (
@@ -98,7 +100,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ id }) => {
         <p className="text-sm text-gray-500">{activity.availableDate}</p>
 
         <button
-          onClick={() => handleDetailClick(activity.id)}
+          onClick={handleDetailClick}
           className="w-full mt-4 border border-blue-600 text-blue-600 py-2 rounded hover:bg-blue-50 transition duration-200"
           aria-label={`Xem chỗ trống cho ${activity.name}`}
         >
