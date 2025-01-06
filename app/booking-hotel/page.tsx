@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchForm from "@/components/home/SearchForm";
 import Image from "next/image";
 import HotelService from "@/services/HotelService";
@@ -14,7 +14,6 @@ export default function Home() {
   const router = useRouter();
   const trendingDestinations = destination.slice(0, 5);
   const [listHotels, setListHotels] = useState([]);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchHotels = async () => {
@@ -30,14 +29,16 @@ export default function Home() {
   }, []);
 
   const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -300, behavior: "smooth" });
+    const scrollContainer = document.querySelector(".scroll-container");
+    if (scrollContainer) {
+      (scrollContainer as HTMLElement).scrollBy({ left: -300, behavior: "smooth" });
     }
   };
 
   const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 300, behavior: "smooth" });
+    const scrollContainer = document.querySelector(".scroll-container");
+    if (scrollContainer) {
+      (scrollContainer as HTMLElement).scrollBy({ left: 300, behavior: "smooth" });
     }
   };
 
@@ -98,8 +99,7 @@ export default function Home() {
             className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600"
           />
           <div
-            ref={scrollContainerRef}
-            className="flex py-5 space-x-4 overflow-x-hidden scroll-smooth"
+            className="scroll-container flex py-5 space-x-4 overflow-x-hidden scroll-smooth"
           >
             {destination.map((item) => (
               <div key={item.id} className="relative cursor-pointer group space-y-1 shrink-0 w-[233.59px]">

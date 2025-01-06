@@ -7,7 +7,7 @@ import { AiOutlineUser, AiOutlineHome, AiOutlineCamera } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
 import { FaCar } from "react-icons/fa";
 import { useAuth } from "@/app/login/AuthContext";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const mainMenu = [
   {
@@ -32,7 +32,6 @@ const mainMenu = [
 
 const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
   const { isLoggedIn, user, logout } = useAuth();
@@ -49,14 +48,19 @@ const Header = () => {
     setDropdownOpen(false);
   };
 
+  // Handling clicks outside the dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      const target = event.target as HTMLElement;
+
+      // Check if the click was outside the dropdown area
+      if (target && !target.closest(".dropdown-menu") && !target.closest(".dropdown-toggle")) {
         setDropdownOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -91,8 +95,7 @@ const Header = () => {
                   href={item.href}
                   onClick={handleLinkClick}
                   className={`flex items-center text-sm font-semibold mx-4 p-2 rounded-lg
-                    ${pathname === item.href ? "text-yellow-400" : "text-white"}`
-                  }
+                    ${pathname === item.href ? "text-yellow-400" : "text-white"}`}
                 >
                   <span className="mr-2">{item.icon}</span>
                   {item.title}
@@ -104,7 +107,6 @@ const Header = () => {
 
         <div
           className="col-span-1 relative flex items-center justify-end space-x-2"
-          ref={dropdownRef}
         >
           {isLoggedIn ? (
             <>
@@ -113,7 +115,7 @@ const Header = () => {
                 alt={`${username}`}
                 width={40}
                 height={40}
-                className="w-10 h-10 rounded-full cursor-pointer"
+                className="w-10 h-10 rounded-full cursor-pointer dropdown-toggle"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               />
               <span
@@ -124,7 +126,7 @@ const Header = () => {
               </span>
 
               {dropdownOpen && (
-                <div className="absolute right-0 top-10 mt-2 w-48 bg-white shadow-lg">
+                <div className="absolute right-0 top-10 mt-2 w-48 bg-white shadow-lg dropdown-menu">
                   <Link
                     href="/settings/personal"
                     className="flex block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
@@ -133,7 +135,7 @@ const Header = () => {
                     <AiOutlineUser className="text-lg mr-2" />
                     Quản lý tài khoản
                   </Link>
-                  {(role === "USER") &&
+                  {(role === "USER") && (
                     <Link
                       href="/manage/booking"
                       className="flex block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
@@ -142,7 +144,7 @@ const Header = () => {
                       <AiOutlineUser className="text-lg mr-2" />
                       Theo dõi đơn
                     </Link>
-                  }
+                  )}
                   <button
                     onClick={handleLogoutClick}
                     className="flex block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
