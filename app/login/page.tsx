@@ -78,10 +78,14 @@ const LoginPage = () => {
             Đăng Nhập
           </Button>
           <p className="mt-2 text-center">
-            Chưa có tài khoản?{" "}
-            <a href="/register" className="text-blue-600">
-              Đăng ký ở đây
-            </a>
+            Chưa có tài khoản?
+            <Button
+              type="primary"
+              href="/register"
+              className="w-full bg-[#472f91] text-white mt-2 p-2 rounded"
+            >
+              Đăng ký ngay
+            </Button>
           </p>
         </div>
       </form>
