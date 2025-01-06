@@ -235,7 +235,7 @@ const HotelDetailPage = () => {
       </div>
       <div className="px-6 py-4 mx-auto max-w-7xl">
         <h2 className="text-xl font-semibold px-2 pb-2">Quy tắc chung ở {hotel.hotel_name}</h2>
-        <PolicySection />
+        <PolicySection policy={hotel?.hotel_policies}/>
       </div>
       <div className="px-6 py-4 mx-auto max-w-7xl">
         <h2 className="text-xl font-semibold px-2 pb-2">Câu hỏi thường gặp về {hotel.hotel_name}</h2>

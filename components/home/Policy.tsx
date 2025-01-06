@@ -11,7 +11,11 @@ import {
   FaUser,
 } from "react-icons/fa";
 
-const PolicySection = () => {
+interface PolicySectionProps {
+  policy: any;
+}
+
+const PolicySection: React.FC<PolicySectionProps> = ({ policy }) => {
   return (
     <section className="bg-white p-4 w-full border rounded-lg hover:shadow-lg transition-shadow duration-200">
       <div className="space-y-4">
@@ -37,14 +41,9 @@ const PolicySection = () => {
             <FaInfoCircle className="text-lg text-blue-600" />
             <h4 className="font-medium">Hủy đặt phòng/Trả trước</h4>
           </div>
-          <div className="col-span-3"></div>
-        </div>
-        <div className="grid grid-cols-4 items-center pb-4 border-b">
-          <div className="flex items-center space-x-3">
-            <FaUsers className="text-lg text-blue-600" />
-            <h4 className="font-medium">Trẻ em và giường</h4>
+          <div className="col-span-3 text-sm text-gray-500">
+            {policy?.cancellation_policy}
           </div>
-          <div className="col-span-3"></div>
         </div>
         <div className="grid grid-cols-4 items-center pb-4 border-b">
           <div className="flex items-center space-x-3">
@@ -60,7 +59,9 @@ const PolicySection = () => {
             <FaSmoking className="text-lg text-blue-600" />
             <h4 className="font-medium">Hút thuốc</h4>
           </div>
-          <p className="col-span-3 text-sm text-gray-500">Không cho phép hút thuốc</p>
+          <p className="col-span-3 text-sm text-gray-500">
+            {policy?.smoking_policy ? ("Cho phép hút thuốc") : ("Không cho phép hút thuốc")}
+          </p>
         </div>
         <div className="grid grid-cols-4 items-center pb-4 border-b">
           <div className="flex items-center space-x-3">
@@ -85,7 +86,9 @@ const PolicySection = () => {
             <FaDog className="text-lg text-blue-600" />
             <h4 className="font-medium">Vật nuôi</h4>
           </div>
-          <p className="col-span-3 text-sm text-gray-500">Vật nuôi không được phép</p>
+          <p className="col-span-3 text-sm text-gray-500">
+            Vật nuôi {!policy?.pets_allowed && "không"} được cho phép
+          </p>
         </div>
       </div>
     </section>
