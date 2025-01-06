@@ -7,8 +7,6 @@ import { activities } from "@/data/fakeData";
 import Image from "next/image";
 import "./style.css";
 
-const AnyReactComponent = ({ text }: any) => <div>{text}</div>;
-
 export default function Activities({ params }: { params: { id: string } }) {
   const router = useRouter();
   const trendingActivities = activities.slice(0, 4);

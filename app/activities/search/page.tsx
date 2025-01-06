@@ -1,18 +1,64 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import SearchForm from "@/components/activities/SearchForm";
 import ActivityCard from "@/components/AttractionCard";
 import FilterPanel from "@/components/activities/FilterPanel";
 import { useRouter } from "next/navigation";
 import { activitiesSearch } from "@/data/fakeData";
+import TourService from "@/services/TourService";
 import "./style.css";
 
-export default function Search() {
-  const router = useRouter();
+type Props = {
+  searchParams: SearchParams;
+};
 
-  const handleCardClick = (index: number) => {
-    router.push(`/activities/detail/${index}`);
-  };
+export type SearchParams = {
+  url: URL;
+  location: string;
+  start: string;
+  end: string;
+};
+
+const removeAccent = (str: string) => {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
+
+export default function Search({ searchParams }: Props) {
+  const [activities, setActivities] = useState([]);
+  const [selectedTypes, setSelectedTypes] = useState<number[]>([]);
+  const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 0]);
+  const [minPrice, setMinPrice] = useState<number>();
+  const [maxPrice, setMaxPrice] = useState<number>();
+  const [listType, setListType] = useState<any>();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const locationFromParam = (searchParams.location || "")
+          .trim()
+          .replace(/\s+/g, "")
+          .toLowerCase();
+
+        console.log(
+          "Check removeAccent(locationFromParam):",
+          removeAccent(locationFromParam)
+        );
+        const data = (
+          await TourService.search(removeAccent(locationFromParam), "")
+        ).data.responses;
+        console.log("Check data:", data);
+        setActivities(data);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+
+    fetchActivities();
+  }, [searchParams.location]);
+
   return (
     <main className="bg-white">
       <div className="bg-[#472f91] py-2">
@@ -37,7 +83,7 @@ export default function Search() {
         <FilterPanel />
 
         <div className="flex-1 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6 ml-6">
-          {activitiesSearch.map((item) => (
+          {activities.map((item: any) => (
             // <div key={index} onClick={() => handleCardClick(index)}>
             //   <ActivityCard {...activity} />
             // </div>

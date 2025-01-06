@@ -53,18 +53,18 @@ function ActivitiesSearchForm() {
     },
   });
 
-  useEffect(() => {
-    const fetchCity = async () => {
-      try {
-        const data = (await CityService.getAll()).data;
-        setListCity(data.response || []);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchCity = async () => {
+  //     try {
+  //       const data = (await CityService.getAll()).data;
+  //       setListCity(data.response || []);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
   
-    fetchCity();
-  }, []);
+  //   fetchCity();
+  // }, []);
 
   useEffect(() => {
     if (Array.isArray(listCity) && keyword) {

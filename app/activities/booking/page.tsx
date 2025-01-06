@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { ratingLabel } from "@/data/typeHotel";
 import { useRouter, useSearchParams } from "next/navigation";
-import BookingSteps from "@/app/home/booking/BookingStep";
+import BookingSteps from "./BookingStep";
 import BookingForm from "./BookingForm";
 import ConfirmBooking from "./ConfirmBooking";
 import { decodeToJWT } from "@/utils/JWT";
@@ -157,7 +157,7 @@ const BookingHotel = () => {
           {step === 2 ? (
             <BookingForm params={params} step={step} setStep={setStep} />
           ) : step === 3 ? (
-            <ConfirmBooking hotel={params.ticket?.type} />
+            <ConfirmBooking ticket={params.ticket?.type} />
           ) : null}
         </div>
       </div>

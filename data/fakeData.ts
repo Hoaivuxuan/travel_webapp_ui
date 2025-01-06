@@ -103,7 +103,7 @@ export const activitiesSearch = [
     reviews: 446,
     price: "80000",
     image_url:
-      "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222171388.jpg?k=5e8c66b47d003a3652ad270a965c8cf854b816db44e51c99ba83e785fd3905c0&o=&quot",
+      "https://r-xx.bstatic.com/xdata/images/xphoto/800x800/222572168.jpg?k=5f351c429055fff045356847861f726ac480e3d395192ce444fe5ab703b8cd78&o=&quot",
     cancellationPolicy: 0,
     availableDate: "Mở cửa từ 5 tháng 11",
   },

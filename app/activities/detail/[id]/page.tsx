@@ -7,6 +7,7 @@ import { useParams, notFound, useRouter } from "next/navigation";
 import Image from "next/image";
 import { encodeToJWT } from "@/utils/JWT";
 import { Table, Select } from "antd";
+import TourService from "@/services/TourService";
 
 const ActivitiesDetailPage = () => {
   const { id } = useParams();
@@ -21,28 +22,42 @@ const ActivitiesDetailPage = () => {
   const hotelAddress = encodeURIComponent(`${hotelItem.address}`);
   const tickets = [
     {
+      id: 1,
       type: "Vé tiêu chuẩn",
       price: "500000",
       description: "Vé dành cho người lớn và trẻ em với tiện ích cơ bản.",
     },
     {
+      id: 2,
       type: "Vé VIP",
       price: "1000000",
       description: "Vé hạng VIP với dịch vụ cao cấp và ưu tiên.",
     },
     {
+      id: 3,
       type: "Vé tiết kiệm",
       price: "300000",
       description: "Vé giá rẻ phù hợp cho học sinh và sinh viên.",
     },
   ];
 
-  const handleBookingClick = (ticket: any) => {
-    console.log("check:", ticket);
-    const query = new URLSearchParams({
-      bookingTicket: encodeToJWT(ticket),
-    });
-    router.push(`/activities/booking?url=1&${query.toString()}`);
+  // const handleBookingClick = (ticket: any) => {
+  //   console.log("check:", ticket);
+  //   const query = new URLSearchParams({
+  //     bookingTicket: encodeToJWT(ticket),
+  //   });
+  //   router.push(`/activities/booking?url=1&${query.toString()}`);
+  // };
+
+  const handleBookingClick = async (ticket: any) => {
+    console.log(
+      "check process.env.NEXT_PUBLIC_API_URL:",
+      process.env.NEXT_PUBLIC_API_URL
+    );
+    const res = await TourService.getById(ticket.id);
+    console.log("check data:", res.data);
+    const res_search = await TourService.search("", "");
+    console.log("check data_search:", res_search.data.responses);
   };
 
   const handleRoomSelect = (index: number, value: number) => {
@@ -96,26 +111,26 @@ const ActivitiesDetailPage = () => {
 
           <div className="w-1/3 flex flex-col space-y-2 ml-4">
             <Image
-              src="https://r-xx.bstatic.com/xdata/images/xphoto/max1200/153554304.jpg?k=c4f7d09fa35799ed21178297bd8c6c0bf349d0002eefaec21aff476e3b8012f3&o="
+              src="https://q-xx.bstatic.com/xdata/images/xphoto/max1200/153554432.jpg?k=109cb97e143d42661d9be34ced8cacc55152646089a4b2d542cf46e59547af82&o="
               alt="Thumbnail 1"
               width={800}
               height={600}
               className="w-full rounded"
             />
             <Image
-              src="https://r-xx.bstatic.com/xdata/images/xphoto/max1200/153554304.jpg?k=c4f7d09fa35799ed21178297bd8c6c0bf349d0002eefaec21aff476e3b8012f3&o="
+              src="https://r-xx.bstatic.com/xdata/images/xphoto/max1200/153554370.jpg?k=60f836cd315f27d044b5962e15bc519d726bc0bcf0bead6b3b737cb1933165f5&o="
               alt="Thumbnail 2"
               width={800}
               height={600}
               className="w-full rounded"
             />
-            <Image
+            {/* <Image
               src="https://r-xx.bstatic.com/xdata/images/xphoto/max1200/153554304.jpg?k=c4f7d09fa35799ed21178297bd8c6c0bf349d0002eefaec21aff476e3b8012f3&o="
               alt="Thumbnail 3"
               width={800}
               height={600}
               className="w-full rounded"
-            />
+            /> */}
           </div>
         </div>
         <div className="text-sm col-span-8 bg-white rounded-lg mt-4">
@@ -208,7 +223,7 @@ const ActivitiesDetailPage = () => {
                 style={{ height: "300px", overflow: "hidden" }}
               >
                 <iframe
-                  src={`https://www.google.com/maps?q=${hotelAddress}&output=embed`}
+                  src={`https://www.google.com/maps?q="Thang Long Water Puppet Theatre, Đinh Tiên Hoàng, Ly Thai To, Hoàn Kiếm, Hanoi"&output=embed`}
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}

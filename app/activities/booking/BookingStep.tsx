@@ -10,7 +10,7 @@ const BookingSteps: React.FC<BookingStepsProps> = ({ step }) => {
       <div className="flex space-x-4">
         <div className={`w-1/3 text-center ${step >= 1 ? 'text-blue-600' : 'text-gray-500'}`}>
           <span className="font-bold">Bước 1</span>
-          <p>Chọn khách sạn</p>
+          <p>Chọn vé</p>
         </div>
         <div className={`w-1/3 text-center ${step >= 2 ? 'text-blue-600' : 'text-gray-500'}`}>
           <span className="font-bold">Bước 2</span>
