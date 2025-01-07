@@ -12,6 +12,7 @@ interface ConfirmBookingProps {
 
 const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
   const router = useRouter();
+  const bookingHotel = JSON.parse(localStorage.getItem("bookingHotel") || "{}");
   const [isChecked, setIsChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const { notifySuccess, notifyWarning } = Notification();
@@ -21,7 +22,6 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
   };
 
   const handleConfirm = async () => {
-    const bookingHotel = JSON.parse(localStorage.getItem("bookingHotel") || "{}");
     if(!bookingHotel) return;
     const booking = {
       user_id: bookingHotel.user,
@@ -59,12 +59,21 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
     <div>
       <div className="p-4 bg-white border rounded-lg">
         <div className="grid grid-cols-7 gap-2">
-          <div className="col-span-6">
-            <h3 className="font-bold mb-2">Không yêu cầu thông tin thanh toán</h3>
-            <p className="text-sm text-gray-500">
+          {bookingHotel.payment === "none" ? (
+            <div className="col-span-6">
+              <h3 className="font-bold mb-2">Không yêu cầu thông tin thanh toán</h3>
+              <p className="text-sm text-gray-500">
               {`Thanh toán của bạn sẽ do ${hotel.hotel_name} xử lý, nên bạn không cần nhập thông tin thanh toán cho đơn đặt này.`}
             </p>
-          </div>
+            </div>
+          ) : (
+            <div className="col-span-7">
+              <h3 className="font-bold mb-2">Bạn đã thanh toán thành công đơn đặt phòng</h3>
+              <p className="text-sm text-gray-500">
+              {`Thanh toán của bạn đã được hệ thống ${hotel.hotel_name} ghi nhận thông tin.`}
+            </p>
+            </div>
+          )}
         </div>
       </div>
       <div className="flex items-start my-4">
