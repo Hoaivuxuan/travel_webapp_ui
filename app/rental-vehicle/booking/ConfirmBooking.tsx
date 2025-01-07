@@ -8,6 +8,8 @@ import { BookingVehicleService } from "@/services/BookingService";
 
 const ConfirmBooking = () => {
   const router = useRouter();
+  const booking = JSON.parse(localStorage.getItem("rentalVehicle") || "{}");
+  const bearerToken = localStorage.getItem("token");
   const [isChecked, setIsChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const { notifySuccess, notifyWarning } = Notification();
@@ -17,10 +19,7 @@ const ConfirmBooking = () => {
   };
 
   const handleConfirm = async () => {
-    const booking = JSON.parse(localStorage.getItem("rentalVehicle") || "{}");
-    const bearerToken = localStorage.getItem("token");
     if(!booking || !bearerToken) return;
-
     try {
       setLoading(true);;
       const result = (await BookingVehicleService.postBooking(booking)).data;
@@ -37,12 +36,18 @@ const ConfirmBooking = () => {
     <div>
       <div className="p-4 bg-white border rounded-lg">
         <div className="grid grid-cols-7 gap-2">
-          <div className="col-span-6">
-            <h3 className="font-bold mb-2">Không yêu cầu thông tin thanh toán</h3>
-            <p className="text-sm text-gray-500">
-              {`Thanh toán của bạn sẽ do xử lý, nên bạn không cần nhập thông tin thanh toán cho đơn đặt này.`}
-            </p>
-          </div>
+          {booking.payment === "none" ? (
+            <div className="col-span-6">
+              <h3 className="font-bold mb-2">Không yêu cầu thông tin thanh toán</h3>
+              <p className="text-sm text-gray-500">
+                Thanh toán của bạn sẽ do xử lý, nên bạn không cần nhập thông tin thanh toán cho đơn đặt này.
+              </p>
+            </div>
+          ) : (
+            <div className="col-span-7">
+              <h3 className="font-bold mb-2">Bạn đã thanh toán thành công đơn thuê xe</h3>
+            </div>
+          )}
         </div>
       </div>
       <div className="flex items-start my-4">

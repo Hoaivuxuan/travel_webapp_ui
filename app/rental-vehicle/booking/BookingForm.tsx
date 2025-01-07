@@ -28,6 +28,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
   const router = useRouter();
   const [selectedPayment, setSelectedPayment] = useState(initialValues?.payment);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const saveRentalVehicle = (values: any) => {
     const userId = Number(localStorage.getItem("userId"));
@@ -107,6 +108,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
       '_blank'
     );
     setIsModalVisible(true);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      handleNextStep();
+    }, 15000);
   };
 
   const handleVNPayModalCancel = () => {
@@ -325,6 +331,13 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
             </span>
           </div>
         </div>
+        <Button
+          type="primary"
+          loading={loading}
+          className="bg-blue-600 text-white w-full mt-4 py-2 rounded"
+        >
+          Đang xử lý thanh toán
+        </Button>
       </Modal>
     </Form>
   );
