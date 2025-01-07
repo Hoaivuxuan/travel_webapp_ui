@@ -6,7 +6,7 @@ import ActivityCard from "@/components/AttractionCard";
 import FilterPanel from "@/components/activities/FilterPanel";
 import { useRouter } from "next/navigation";
 import { activitiesSearch } from "@/data/fakeData";
-import TourService from "@/services/TourService";
+import { TourService } from "@/services/TourService";
 import "./style.css";
 
 type Props = {

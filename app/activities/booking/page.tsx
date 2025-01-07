@@ -44,7 +44,7 @@ const BookingActivity = () => {
     bookingTicket: decodeToJWT(searchParams.get("bookingTicket") || ""),
   };
   const paramsBookingTicket = {
-    user: params.bookingTicket.id,
+    user: params.bookingTicket.user,
     full_name: params.bookingTicket.full_name,
     email: params.bookingTicket.email,
     phone: params.bookingTicket.phone_number,

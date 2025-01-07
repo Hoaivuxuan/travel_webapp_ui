@@ -58,32 +58,21 @@ const ActivitiesDetailPage = () => {
   };
 
   const handleTicketSelect = (ticket_class_id: number, quantity: number) => {
-    const existingIndex = bookingTickets.findIndex(
-      (ticket) => ticket.ticket_class_id === ticket_class_id
-    );
-    console.log("check existingIndex:", existingIndex);
+    const updatedSelection = [{ ticket_class_id, quantity }];
     console.log("check ticket_class_id:", ticket_class_id);
-    console.log("check quantity:", quantity);
-    let updatedSelection;
-    if (existingIndex !== -1) {
-      updatedSelection = [...bookingTickets];
-      updatedSelection[existingIndex].quantity = quantity;
-    } else {
-      updatedSelection = [...bookingTickets, { ticket_class_id, quantity }];
-    }
-
     setBookingTickets(updatedSelection);
     console.log("check updatedSelection:", updatedSelection);
   };
 
   const handleBookingClick = async (ticket: any) => {
+    console.log("check ticket:", ticket);
     if (selectedTicketId === ticket.id) {
       setSelectedTicketId(null);
     } else {
       setSelectedTicketId(ticket.id);
     }
     //
-    if (bookingTickets.length > 0) {
+    if (ticket.id == bookingTickets[0]?.ticket_class_id) {
       let userData: string | null = localStorage.getItem("user");
       if (!userData) {
         console.error("User data not found in localStorage.");
@@ -359,8 +348,8 @@ const ActivitiesDetailPage = () => {
                           {Array.from(
                             { length: ticket.available_ticket + 1 },
                             (_, i) => (
-                              <Select.Option key={i} value={i}>
-                                {i}
+                              <Select.Option key={i + 1} value={i + 1}>
+                                {i + 1}
                               </Select.Option>
                             )
                           )}
