@@ -65,9 +65,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
       '_blank'
     );
     setIsModalVisible(true);
-  };
-
-  const handlePayment = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -235,7 +232,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
         <Button
           type="primary"
           loading={isLoading}
-          onClick={handlePayment}
           className="bg-blue-600 text-white w-full mt-4 py-2 rounded"
         >
           Đang xử lý thanh toán
