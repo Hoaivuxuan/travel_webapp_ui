@@ -1,24 +1,43 @@
 "use client";
 
 import RentalSearchForm from "@/components/rental/RentalSearchForm";
-import React, { useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { destination } from "@/data/fakeData";
 import { Button } from "antd";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
+import RentalFacilityService from "@/services/RentalFacilityService";
 
 const RentalPage = () => {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [rentalFacility, setRentalFacility] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {  
+    const fetchFilter = async () => {
+      try {
+        const data = (await RentalFacilityService.getAll()).data;
+        setRentalFacility(data);
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchFilter();
+  }, []);
 
   const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -300, behavior: "smooth" });
+    const scrollContainer = document.querySelector(".scroll-container");
+    if (scrollContainer) {
+      (scrollContainer as HTMLElement).scrollBy({ left: -300, behavior: "smooth" });
     }
   };
 
   const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 300, behavior: "smooth" });
+    const scrollContainer = document.querySelector(".scroll-container");
+    if (scrollContainer) {
+      (scrollContainer as HTMLElement).scrollBy({ left: 300, behavior: "smooth" });
     }
   };
 
@@ -57,8 +76,7 @@ const RentalPage = () => {
             className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600"
           />
           <div
-            ref={scrollContainerRef}
-            className="flex py-5 space-x-4 overflow-x-hidden scroll-smooth"
+            className="scroll-container flex py-5 space-x-4 overflow-x-hidden scroll-smooth"
           >
             {destination.map((item) => (
               <div key={item.id} className="relative cursor-pointer group space-y-1 shrink-0 w-[233.59px]">
@@ -98,21 +116,19 @@ const RentalPage = () => {
             className="absolute -left-[20px] w-[40px] z-10 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-600"
           />
           <div
-            ref={scrollContainerRef}
-            className="flex py-5 space-x-4 overflow-x-hidden scroll-smooth"
+            className="scroll-container flex py-5 space-x-4 overflow-x-hidden scroll-smooth"
           >
-            {destination.map((item) => (
+            {rentalFacility.map((item: any) => (
               <div key={item.id} className="relative cursor-pointer group space-y-1 shrink-0 w-[233.59px]">
                 <Image
-                  className="object-cover rounded-lg w-80 h-72"
-                  src={item.src}
-                  alt={item.title}
-                  width={540}
-                  height={405}
+                  className="object-cover rounded-lg w-60 h-40"
+                  src="https://firebasestorage.googleapis.com/v0/b/travel-web-7b510.appspot.com/o/car%2Fdefault_lrg.jpg?alt=media&token=bc8c6c9b-a920-436c-8bf6-38e35f62d331"
+                  alt="RENTAL"
+                  width={600}
+                  height={400}
                 />
                 <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent text-white p-3 rounded-b-lg">
-                  <p className="text-sm font-bold">{item.title}</p>
-                  <p className="text-xs">{item.location}</p>
+                  <p className="text-sm font-bold">{item.name}</p>
                 </div>
               </div>
             ))}

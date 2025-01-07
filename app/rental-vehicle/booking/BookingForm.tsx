@@ -74,11 +74,13 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
   };
 
   const addAdditionalDriver = () => {
-    setAddDriversCount((prev) => prev + 1);
-    const currentDrivers = form.getFieldValue("additionalDrivers") || [];
-    form.setFieldsValue({
-      additionalDrivers: [...currentDrivers, { title: '', fullName: '', phone: '' }],
-    });
+    if(addDriversCount < 3){
+      setAddDriversCount((prev) => prev + 1);
+      const currentDrivers = form.getFieldValue("additionalDrivers") || [];
+      form.setFieldsValue({
+        additionalDrivers: [...currentDrivers, { title: '', fullName: '', phone: '' }],
+      });
+    }
   };
 
   const removeAdditionalDriver = (index: number) => {
