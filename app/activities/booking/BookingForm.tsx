@@ -4,6 +4,7 @@ import listCountries from "@/data/SelectCountry.json";
 import paymentMethods from "@/data/SelectPayment.json";
 import { Form, Input, Select, Radio, Checkbox, Button, Modal } from "antd";
 import { AiOutlineCheckCircle } from "react-icons/ai";
+import { PaymentService } from "@/services/CommonService";
 
 type BookingFormProps = {
   paramsBookingTicket: any;
@@ -18,8 +19,8 @@ const BookingForm: React.FC<BookingFormProps> = ({
 }) => {
   const [form] = Form.useForm();
   const [selectedPayment, setSelectedPayment] = useState("none");
-  const [isSendReviewModalVisible, setIsSendReviewModalVisible] =
-    useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialValues = {
     whoBooking: "self",
@@ -53,19 +54,27 @@ const BookingForm: React.FC<BookingFormProps> = ({
   //   localStorage.setItem("bookingHotel", JSON.stringify(bookingHotel));
   // };
 
+  const showVNPayModal = async (price: any) => {
+    const res = (await PaymentService.paymentByVNPay(price)).data;
+    console.log("check res:", res);
+    window.open(`${res.paymentUrl}`, "_blank");
+    setIsModalVisible(true);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      handleConfirm();
+    }, 15000);
+  };
+
+  const handleVNPayModalCancel = () => {
+    setIsModalVisible(false);
+  };
+
   const handleConfirm = () => {
     form.validateFields().then((values) => {
       // saveBookingHotel(values);
       handleNextStep();
     });
-  };
-
-  const handleConfirmPay = () => {
-    setIsSendReviewModalVisible(true);
-  };
-
-  const handleCloseSendReviewModal = () => {
-    setIsSendReviewModalVisible(false);
   };
 
   const handleNextStep = () => {
@@ -154,40 +163,19 @@ const BookingForm: React.FC<BookingFormProps> = ({
           </Form.Item>
         </div>
 
-        <div className="p-4 bg-white border rounded-lg">
-          <h2 className="text-xl font-bold mb-4">Các yêu cầu đặc biệt</h2>
-          <Form.Item
-            label="Yêu cầu đặc biệt (không bắt buộc)"
-            name="specialRequest"
-          >
-            <Input.TextArea rows={3} />
-          </Form.Item>
-        </div>
-        <div className="p-4 bg-white border rounded-lg">
-          <h2 className="text-xl font-bold mb-4">Thời gian đến của bạn</h2>
-          <Form.Item
-            label="Thêm thời gian đến dự kiến của bạn (không bắt buộc)"
-            name="arrivalTime"
-          >
-            <Select placeholder="Vui lòng chọn">
-              <Select.Option value="14:00-15:00">14:00 - 15:00</Select.Option>
-              <Select.Option value="15:00-16:00">15:00 - 16:00</Select.Option>
-              <Select.Option value="16:00-17:00">16:00 - 17:00</Select.Option>
-              <Select.Option value="17:00-18:00">17:00 - 18:00</Select.Option>
-              <Select.Option value="18:00-19:00">18:00 - 19:00</Select.Option>
-              <Select.Option value="19:00-20:00">19:00 - 20:00</Select.Option>
-              <Select.Option value="20:00-21:00">20:00 - 21:00</Select.Option>
-            </Select>
-          </Form.Item>
-          <p className="text-sm text-gray-500">
-            Thời gian theo múi giờ nơi bạn sống
-          </p>
-        </div>
         <div className="mt-4 flex justify-end">
           {selectedPayment === "vnpay" ? (
             <Button
               type="primary"
-              onClick={handleConfirmPay}
+              onClick={() =>
+                showVNPayModal(
+                  Math.round(
+                    Number(paramsBookingTicket.booked_tickets_detail.price) *
+                      Number(paramsBookingTicket.booked_tickets[0].quantity) *
+                      1.1
+                  )
+                )
+              }
               className="bg-blue-600 text-white w-1/2 py-2 rounded"
             >
               Thanh toán
@@ -204,23 +192,12 @@ const BookingForm: React.FC<BookingFormProps> = ({
         </div>
       </Form>
       <Modal
-        title="Xác nhận thông tin thanh toán?"
-        visible={isSendReviewModalVisible}
-        onCancel={handleCloseSendReviewModal}
+        title="THÔNG TIN THANH TOÁN"
+        visible={isModalVisible}
+        onCancel={handleVNPayModalCancel}
+        footer={null}
+        width={500}
         centered
-        footer={[
-          <Button key="cancel" onClick={handleCloseSendReviewModal}>
-            Hủy
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            className="bg-green-600"
-            // onClick={handleSendReviewModal}
-          >
-            Xác nhận
-          </Button>,
-        ]}
       >
         <div className="space-y-4">
           <div className="p-4 bg-white border rounded-lg">
@@ -261,6 +238,13 @@ const BookingForm: React.FC<BookingFormProps> = ({
               </span>
             </div>
           </div>
+          <Button
+            type="primary"
+            loading={isLoading}
+            className="bg-blue-600 text-white w-full mt-4 py-2 rounded"
+          >
+            Đang xử lý thanh toán
+          </Button>
         </div>
       </Modal>
     </>
