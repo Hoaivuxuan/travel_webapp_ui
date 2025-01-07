@@ -40,7 +40,7 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
       special_request: bookingHotel.specialRequest,
       arrival_time: bookingHotel.arrivalTime,
       totalPrice: bookingHotel.roomSelection.totalPrice,
-      status: bookingHotel.status,
+      status: (bookingHotel.payment === "none" ? 0 : 1),
     };
 
     try {

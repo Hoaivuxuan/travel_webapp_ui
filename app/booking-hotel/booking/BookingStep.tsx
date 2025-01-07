@@ -14,11 +14,11 @@ const BookingSteps: React.FC<BookingStepsProps> = ({ step }) => {
         </div>
         <div className={`w-1/3 text-center ${step >= 2 ? 'text-blue-600' : 'text-gray-500'}`}>
           <span className="font-bold">Bước 2</span>
-          <p>Nhập thông tin</p>
+          <p>Nhập thông tin & thanh toán</p>
         </div>
         <div className={`w-1/3 text-center ${step >= 3 ? 'text-blue-600' : 'text-gray-500'}`}>
           <span className="font-bold">Bước 3</span>
-          <p>Thanh toán và xác nhận</p>
+          <p>Xác nhận</p>
         </div>
       </div>
       <div className="w-full h-1 bg-gray-200 mt-2">
