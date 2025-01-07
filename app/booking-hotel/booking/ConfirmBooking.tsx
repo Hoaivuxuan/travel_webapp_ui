@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
 import { useRouter } from "next/navigation";
 import { BookingHotelService } from "@/services/BookingService";
+import { PaymentService } from "@/services/CommonService";
 
 interface ConfirmBookingProps {
   hotel: any;
@@ -19,6 +20,15 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
 
   const handleCheckboxChange = (e: any) => {
     setIsChecked(e.target.checked);
+  };
+
+  const handlePayment = async () => {
+    const payment = (await PaymentService.paymentByVNPay(bookingHotel.roomSelection.totalPrice)).data;
+    window.open(`${payment.paymentUrl}`, "_blank");
+    setLoading(true);
+    setTimeout(() => {
+      handleConfirm();
+    }, 15000);
   };
 
   const handleConfirm = async () => {
@@ -44,7 +54,6 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
     };
 
     try {
-      setLoading(true);
       const result = (await BookingHotelService.postBooking(booking)).data;
       notifySuccess("Đặt phòng thành công!");
       router.push(`/booking-hotel/details?id=${result.id}`);
@@ -94,11 +103,11 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
         <Button
           type="primary"
           className="bg-blue-600 text-white w-1/2 py-2 rounded"
-          onClick={handleConfirm}
+          onClick={handlePayment}
           disabled={!isChecked}
           loading={loading}
         >
-          HOÀN TẤT
+          THANH TOÁN & HOÀN TẤT
         </Button>
       </div>
       <ToastContainer />

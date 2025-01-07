@@ -60,21 +60,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
     setStep((prev) => prev + 1);
   };
 
-  const showVNPayModal = async () => {
-    const payment = (await PaymentService.paymentByVNPay(params.roomSelection.totalPrice)).data;
-    window.open(`${payment.paymentUrl}`, "_blank");
-    setIsModalVisible(true);
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      handleConfirm();
-    }, 15000);
-  };
-  
-  const handleVNPayModalCancel = () => {
-    setIsModalVisible(false);
-  };
-
   return (
     <Form form={form} layout="vertical" initialValues={initialValues} className="space-y-4">
       <div className="p-4 bg-white border rounded-lg">
@@ -177,65 +162,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
         <p className="text-sm text-gray-500">Thời gian theo múi giờ của Hà Nội</p>
       </div>
       <div className="mt-4 flex justify-end">
-        {selectedPayment === "none" ? (
-          <Button
-            type="primary"
-            onClick={handleConfirm}
-            className="bg-blue-600 text-white w-1/2 py-2 rounded"
-          >
-            Tiếp theo
-          </Button>
-        ) : (
-          <Button
-            type="primary"
-            onClick={showVNPayModal}
-            className="bg-blue-600 text-white w-1/2 py-2 rounded"
-          >
-            Thanh toán
-          </Button>
-        )}
-      </div>
-      <Modal
-        title="THÔNG TIN THANH TOÁN"
-        visible={isModalVisible}
-        onCancel={handleVNPayModalCancel}
-        footer={null}
-        width={500}
-        centered
-      >
-        <div className="p-4 bg-white border rounded-lg">
-          <h3 className="text-lg font-bold mb-4">Tóm tắt giá</h3>
-          <div className="grid grid-cols-3 gap-2 text-sm my-2">
-            <p className="col-span-2 font-bold">Giá phòng</p>
-            <p>
-              {`${params.roomSelection.totalPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`}
-            </p>
-          </div>
-          <div className="grid grid-cols-3 gap-2 text-sm my-2">
-            <p className="col-span-2 font-bold">Thuế và phí</p>
-            <p>
-              {`${params.tax.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`}
-            </p>
-          </div>
-          <hr className="my-1 border border-gray-200" />
-          <div className="grid grid-cols-3 gap-2 text-sm my-2">
-            <p className="col-span-2 font-bold">Tổng cộng</p>
-            <p>
-              {`${(params.roomSelection.totalPrice + params.tax).toLocaleString('vi-VN', {
-                style: 'currency',
-                currency: 'VND',
-              })}`}
-            </p>
-          </div>
-        </div>
         <Button
           type="primary"
-          loading={isLoading}
-          className="bg-blue-600 text-white w-full mt-4 py-2 rounded"
+          onClick={handleConfirm}
+          className="bg-blue-600 text-white w-1/2 py-2 rounded"
         >
-          Đang xử lý thanh toán
+          Tiếp theo
         </Button>
-      </Modal>
+      </div>
     </Form>
   );
 };
