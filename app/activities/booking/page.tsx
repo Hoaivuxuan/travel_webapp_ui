@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ratingLabel } from "@/data/typeHotel";
+// import { ratingLabel } from "@/data/typeActivity";
 import { useRouter, useSearchParams } from "next/navigation";
 import BookingSteps from "./BookingStep";
 import BookingForm from "./BookingForm";
@@ -29,7 +29,7 @@ const calculateNights = (s1: string, s2: string): number => {
   return Math.max(diffInDays, 0);
 };
 
-const BookingHotel = () => {
+const BookingActivity = () => {
   const router = useRouter();
   const handleGoBack = () => {
     router.back();
@@ -39,13 +39,25 @@ const BookingHotel = () => {
   const [windowLoaded, setWindowLoaded] = useState(false);
 
   const searchParams = useSearchParams();
-  const params: BookingParams = {
+  const params: any = {
     url: windowLoaded ? window.location.href : "",
-    ticket: decodeToJWT(searchParams.get("ticket") || ""),
+    bookingTicket: decodeToJWT(searchParams.get("bookingTicket") || ""),
+  };
+  const paramsBookingTicket = {
+    user: params.bookingTicket.id,
+    full_name: params.bookingTicket.full_name,
+    email: params.bookingTicket.email,
+    phone: params.bookingTicket.phone_number,
+    country: params.bookingTicket.country,
+    booked_tickets_detail: JSON.parse(
+      params.bookingTicket.booked_tickets_detail
+    ),
+    booked_tickets: JSON.parse(params.bookingTicket.booked_tickets),
   };
 
   useEffect(() => {
     setWindowLoaded(true);
+    console.log("check paramsBookingTicket:", paramsBookingTicket);
   }, []);
 
   return (
@@ -55,22 +67,22 @@ const BookingHotel = () => {
         <div className="space-y-4">
           <div className="p-4 bg-white border rounded-lg">
             <div className="mb-4">
-              <p className="text-sm text-gray-500">{params.ticket?.type}</p>
-              <h3 className="text-lg font-bold">{params.ticket?.type}</h3>
-              <p className="text-sm text-gray-500">{params.ticket?.type}</p>
+              {/* <p className="text-sm text-gray-500">{paramsBookingTicket.type}</p>
+              <h3 className="text-lg font-bold">{paramsBookingTicket.type}</h3>
+              <p className="text-sm text-gray-500">{paramsBookingTicket.type}</p> */}
             </div>
             <div className="flex items-center space-x-2 mt-4">
               <p className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold text-white bg-blue-600 rounded-lg">
-                {/* {params.ticket?.reviews.average_rating.toFixed(1) || "N/A"} */}
+                {/* {paramsBookingTicket.reviews.average_rating.toFixed(1) || "N/A"} */}
               </p>
               <div>
                 <p className="text-blue-600 text-sm font-bold">
                   {/* {ratingLabel.find(
-                    (r) => params.ticket?.reviews.average_rating >= r.min
+                    (r) => paramsBookingTicket.reviews.average_rating >= r.min
                   )?.label || "Đánh giá"} */}
                 </p>
                 <p className="text-xs">
-                  {/* {params.ticket?.reviews.total_reviews} lượt đánh giá */}
+                  {/* {paramsBookingTicket.reviews.total_reviews} lượt đánh giá */}
                 </p>
               </div>
             </div>
@@ -78,39 +90,25 @@ const BookingHotel = () => {
 
           <div className="p-4 bg-white border rounded-lg">
             <h3 className="text-lg font-bold mb-4">Chi tiết đặt vé của bạn</h3>
-            <div className="grid grid-cols-2 mt-4">
-              <div className="pr-4 border-r border-blue-200">
-                <p className="font-bold">Nhận vé</p>
-                <p className="text-sm">
-                  {/* {formatDate(params.ticket?.booking?.dateRange.startDate)} */}
-                </p>
-              </div>
-              <div className="pl-4 border-l border-blue-200">
-                <p className="font-bold">Trả vé</p>
-                <p className="text-sm">
-                  {/* {formatDate(params.ticket?.booking?.dateRange.endDate)} */}
-                </p>
-              </div>
-            </div>
+            <div className="grid grid-cols-2 mt-4"></div>
             <hr className="my-4 border-t-2 border-gray-200" />
             <div className="mt-4">
               <p className="font-bold">Bạn đã chọn:</p>
               <p className="font-bold text-sm my-2">
-                {/* {`${params.roomSelection.totalRooms} vé cho ${params.ticket?.booking?.adults} người lớn, ${params.ticket?.booking?.children} trẻ em`} */}
+                <div className="border p-4 rounded-lg shadow">
+                  <h3 className="text-lg font-bold">
+                    {paramsBookingTicket.booked_tickets_detail.name}
+                  </h3>
+                  <p className="text-gray-700 mt-2">
+                    <span className="font-bold">
+                      {new Intl.NumberFormat("vi-VN").format(
+                        Number(paramsBookingTicket.booked_tickets_detail.price)
+                      )}{" "}
+                      VND
+                    </span>
+                  </p>
+                </div>
               </p>
-              <div className="pb-4">
-                {/* {params?.roomSelection?.bookingRooms?.map(
-                  (room: any, index: any) => (
-                    <div
-                      key={index}
-                      className="flex justify-between text-sm grid grid-cols-2 gap-2"
-                    >
-                      <span>{room.type}</span>
-                      <span>{room.count} vé</span>
-                    </div>
-                  )
-                )} */}
-              </div>
             </div>
             <span
               className="text-sm text-blue-500 mt-4 underline hover:no-underline cursor-pointer"
@@ -121,43 +119,54 @@ const BookingHotel = () => {
           </div>
 
           <div className="p-4 bg-white border rounded-lg">
-            <h3 className="text-lg font-bold mb-4">Tóm tắt giá</h3>
             <div className="grid grid-cols-3 gap-2 text-sm my-2">
-              <p className="col-span-2 font-bold">Giá vé</p>
-              <p>
-                {/* {`${params.roomSelection.totalPrice.toLocaleString("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                })}`} */}
-              </p>
+              <p className="col-span-2 font-bold">Loại vé:</p>
+              <span>{paramsBookingTicket.booked_tickets_detail.name}</span>
+              <p className="col-span-2 font-bold">Giá vé:</p>
+              <span>
+                {new Intl.NumberFormat("vi-VN").format(
+                  Number(paramsBookingTicket.booked_tickets_detail.price)
+                )}{" "}
+                VND
+              </span>
+              <p className="col-span-2 font-bold"> Số lượng:</p>
+              <span>{paramsBookingTicket.booked_tickets[0].quantity} vé</span>
             </div>
             <div className="grid grid-cols-3 gap-2 text-sm my-2">
-              <p className="col-span-2 font-bold">Thuế và phí</p>
-              <p>
-                {/* {`${params.roomSelection.totalPrice.toLocaleString("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                })}`} */}
-              </p>
+              <p className="col-span-2 font-bold">Thuế và phí(VAT 10%):</p>
+              <span>
+                {new Intl.NumberFormat("vi-VN").format(
+                  Number(paramsBookingTicket.booked_tickets_detail.price) *
+                    Number(paramsBookingTicket.booked_tickets[0].quantity) *
+                    0.1
+                )}{" "}
+                VND
+              </span>
             </div>
             <hr className="my-1 border border-gray-200" />
             <div className="grid grid-cols-3 gap-2 text-sm my-2">
               <p className="col-span-2 font-bold">Tổng cộng</p>
-              <p>
-                {/* {`${params.roomSelection.totalPrice.toLocaleString("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                })}`} */}
-              </p>
+              <span>
+                {new Intl.NumberFormat("vi-VN").format(
+                  Number(paramsBookingTicket.booked_tickets_detail.price) *
+                    Number(paramsBookingTicket.booked_tickets[0].quantity) *
+                    1.1
+                )}{" "}
+                VND
+              </span>
             </div>
           </div>
         </div>
 
         <div className="col-span-2 space-y-4">
           {step === 2 ? (
-            <BookingForm params={params} step={step} setStep={setStep} />
+            <BookingForm
+              paramsBookingTicket={paramsBookingTicket}
+              step={step}
+              setStep={setStep}
+            />
           ) : step === 3 ? (
-            <ConfirmBooking ticket={params.ticket?.type} />
+            <ConfirmBooking ticket={paramsBookingTicket.user} />
           ) : null}
         </div>
       </div>
@@ -165,4 +174,4 @@ const BookingHotel = () => {
   );
 };
 
-export default BookingHotel;
+export default BookingActivity;

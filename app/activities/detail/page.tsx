@@ -2,14 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import Modal from "@/components/Modal";
-import { listHotels, ratingLabel } from "@/data/typeHotel";
+import { Table, Select, Button } from "antd";
 import {
   useParams,
   notFound,
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import { decodeToJWT } from "@/utils/JWT";
+import { encodeToJWT, decodeToJWT } from "@/utils/JWT";
 import Image from "next/image";
 import { DatePicker, Space } from "antd";
 import dayjs from "dayjs";
@@ -22,8 +22,12 @@ const ActivitiesDetailPage = () => {
   const [filteredTickets, setFilteredTickets] = useState([]);
   const [selectedTime, setSelectedTime] = useState("16:10");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
   const [directionsUrl, setDirectionsUrl] = useState("");
   const [dateRange, setDateRange] = useState<dayjs.Dayjs | null>(null);
+  const [bookingTickets, setBookingTickets] = useState<
+    { ticket_class_id: number; quantity: number }[]
+  >([]);
 
   if (!activityItem) return notFound();
   const activityAddress = encodeURIComponent(`${activityItem.address}`);
@@ -48,12 +52,61 @@ const ActivitiesDetailPage = () => {
         (ticket: any) => ticket.happen_date === formattedDate
       );
       setFilteredTickets(filteredTickets);
+      setBookingTickets([]);
       console.log("check filteredTickets:", filteredTickets);
     }
   };
 
+  const handleTicketSelect = (ticket_class_id: number, quantity: number) => {
+    const existingIndex = bookingTickets.findIndex(
+      (ticket) => ticket.ticket_class_id === ticket_class_id
+    );
+    console.log("check existingIndex:", existingIndex);
+    console.log("check ticket_class_id:", ticket_class_id);
+    console.log("check quantity:", quantity);
+    let updatedSelection;
+    if (existingIndex !== -1) {
+      updatedSelection = [...bookingTickets];
+      updatedSelection[existingIndex].quantity = quantity;
+    } else {
+      updatedSelection = [...bookingTickets, { ticket_class_id, quantity }];
+    }
+
+    setBookingTickets(updatedSelection);
+    console.log("check updatedSelection:", updatedSelection);
+  };
+
   const handleBookingClick = async (ticket: any) => {
-    router.push(`/activities/booking?url=1`);
+    if (selectedTicketId === ticket.id) {
+      setSelectedTicketId(null);
+    } else {
+      setSelectedTicketId(ticket.id);
+    }
+    //
+    if (bookingTickets.length > 0) {
+      let userData: string | null = localStorage.getItem("user");
+      if (!userData) {
+        console.error("User data not found in localStorage.");
+        return;
+      }
+      const parsedUserData = JSON.parse(userData);
+      const bookingTicket = {
+        user: parsedUserData.id,
+        full_name: `${parsedUserData.first_name} ${parsedUserData.last_name}`,
+        email: parsedUserData.email,
+        phone: parsedUserData.phone_number,
+        country: parsedUserData.country,
+        booked_tickets_detail: JSON.stringify(ticket),
+        booked_tickets: JSON.stringify(bookingTickets),
+      };
+
+      const query: any = new URLSearchParams({
+        bookingTicket: encodeToJWT(bookingTicket),
+      });
+      console.log("check userData:", userData);
+      console.log("check bookingTicket:", bookingTicket);
+      router.push(`/activities/booking?url=1&${query.toString()}`);
+    }
   };
 
   return (
@@ -271,32 +324,11 @@ const ActivitiesDetailPage = () => {
                       </>
                     )
                   )}
-                  {/* <button
-                    className={`py-2 px-4 rounded ${selectedTime === "16:10" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                    onClick={() => setSelectedTime("16:10")}
-                  >
-                    16:10
-                  </button>
-                  <button
-                    className={`py-2 px-4 rounded ${selectedTime === "17:20" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                    onClick={() => setSelectedTime("17:20")}
-                  >
-                    17:20
-                  </button>
-                  <button
-                    className={`py-2 px-4 rounded ${selectedTime === "18:30" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                    onClick={() => setSelectedTime("18:30")}
-                  >
-                    18:30
-                  </button> */}
                 </div>
                 <h2 className="text-xl font-semibold my-5">Chọn vé</h2>
                 {filteredTickets.map((ticket: any, index: any) => (
                   <div key={index} className="border p-4 rounded-lg shadow">
                     <h3 className="text-lg font-bold">{ticket.name}</h3>
-                    <p className="text-green-600 font-semibold">
-                      {ticket.description}
-                    </p>
                     <p className="text-gray-700 mt-2">
                       Từ{" "}
                       <span className="font-bold">
@@ -315,6 +347,27 @@ const ActivitiesDetailPage = () => {
                         vé
                       </span>
                     </p>
+                    {selectedTicketId === ticket.id && (
+                      <>
+                        <Select
+                          // value={bookingTickets[index].ticket_class_id}
+                          onChange={(value: number) =>
+                            handleTicketSelect(ticket.id, value)
+                          }
+                          className="w-1/2 mt-2"
+                        >
+                          {Array.from(
+                            { length: ticket.available_ticket + 1 },
+                            (_, i) => (
+                              <Select.Option key={i} value={i}>
+                                {i}
+                              </Select.Option>
+                            )
+                          )}
+                        </Select>
+                      </>
+                    )}
+                    <br></br>
                     <button
                       onClick={() => handleBookingClick(ticket)}
                       className="mt-4 py-2 px-4 bg-blue-500 text-white rounded"
