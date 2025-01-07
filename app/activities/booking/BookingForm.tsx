@@ -29,34 +29,8 @@ const BookingForm: React.FC<BookingFormProps> = ({
     country: "Vietnam",
   };
 
-  // const saveBookingHotel = (values: any) => {
-  //   const bookingHotel = {
-  //     user: params.bookingHotel?.user?.id,
-  //     hotel: params.bookingHotel?.hotel?.id,
-  //     customerInfo: {
-  //       fullName: values.fullName,
-  //       email: values.email,
-  //       phone: values.phone,
-  //       country: listCountries.find(
-  //         (item) => item.name === (values.country || "Vietnam")
-  //       )?.code,
-  //     },
-  //     checkinDate: params.bookingHotel?.booking?.dateRange.startDate,
-  //     checkoutDate: params.bookingHotel?.booking?.dateRange.endDate,
-  //     adults: Number(params.bookingHotel?.booking?.adults),
-  //     children: Number(params.bookingHotel?.booking?.children),
-  //     roomSelection: params.roomSelection,
-  //     specialRequest: values.specialRequest || "",
-  //     arrivalTime: values.arrivalTime || null,
-  //     status: 0,
-  //   };
-
-  //   localStorage.setItem("bookingHotel", JSON.stringify(bookingHotel));
-  // };
-
   const showVNPayModal = async (price: any) => {
     const res = (await PaymentService.paymentByVNPay(price)).data;
-    console.log("check res:", res);
     window.open(`${res.paymentUrl}`, "_blank");
     setIsModalVisible(true);
     setIsLoading(true);

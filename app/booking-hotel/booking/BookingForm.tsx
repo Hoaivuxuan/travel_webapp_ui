@@ -5,6 +5,7 @@ import paymentMethods from "@/data/SelectPayment.json";
 import { Form, Input, Select, Radio, Checkbox, Button, Modal } from "antd";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { format } from "date-fns";
+import { PaymentService } from "@/services/CommonService";
 
 type BookingFormProps = {
   params: any;
@@ -59,11 +60,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
     setStep((prev) => prev + 1);
   };
 
-  const showVNPayModal = () => {
-    window.open(
-      `https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=1200000&vnp_Command=pay&vnp_CreateDate=20250107104109&vnp_CurrCode=VND&vnp_ExpireDate=20250107105609&vnp_IpAddr=0%3A0%3A0%3A0%3A0%3A0%3A0%3A1&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang%3A42475329&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A8080%2Fpayment%2Fvn-pay-callback&vnp_TmnCode=4ROYBF62&vnp_TxnRef=30799294&vnp_Version=2.1.0&vnp_SecureHash=840a46712063623c6b607ee2d247cb9b9758024acbee733fbfeb7767234022242d2bb50b1186894fff99eb4a791a28295df6d6b3c17d8e3ddc25c24a9905418b`,
-      '_blank'
-    );
+  const showVNPayModal = async () => {
+    const payment = (await PaymentService.paymentByVNPay(params.roomSelection.totalPrice)).data;
+    window.open(`${payment.paymentUrl}`, "_blank");
     setIsModalVisible(true);
     setIsLoading(true);
     setTimeout(() => {
