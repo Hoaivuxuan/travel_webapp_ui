@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import listCountries from "@/data/SelectCountry.json"
 import paymentMethods from "@/data/SelectPayment.json";
-import { Form, Input, Select, Radio, Checkbox, Button } from "antd";
+import { Form, Input, Select, Radio, Checkbox, Button, Modal } from "antd";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { format } from "date-fns";
 
@@ -21,13 +21,16 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
     nearbyRooms: false,
     country: "Vietnam",
   };
+  const [selectedPayment, setSelectedPayment] = useState(initialValues?.payment);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const saveBookingHotel = (values: any) => {
     const bookingHotel = {
       user: params.bookingHotel?.user?.id,
       hotel: params.bookingHotel?.hotel?.id,
       customerInfo: {
-        fullName: values.fullName,
+        fullName: values.fullName.toUpperCase(),
         email: values.email,
         phone: values.phone,
         country: listCountries.find((item) => item.name === (values.country || "Vietnam"))?.code,
@@ -39,7 +42,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
       roomSelection: params.roomSelection,
       specialRequest: values.specialRequest || "",
       arrivalTime: values.arrivalTime || null,
-      status: 0,
+      payment: values.payment,
     };
 
     localStorage.setItem("bookingHotel", JSON.stringify(bookingHotel));
@@ -56,14 +59,31 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
     setStep((prev) => prev + 1);
   };
 
+  const showVNPayModal = () => {
+    window.open(
+      `https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=1200000&vnp_Command=pay&vnp_CreateDate=20250107104109&vnp_CurrCode=VND&vnp_ExpireDate=20250107105609&vnp_IpAddr=0%3A0%3A0%3A0%3A0%3A0%3A0%3A1&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang%3A42475329&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A8080%2Fpayment%2Fvn-pay-callback&vnp_TmnCode=4ROYBF62&vnp_TxnRef=30799294&vnp_Version=2.1.0&vnp_SecureHash=840a46712063623c6b607ee2d247cb9b9758024acbee733fbfeb7767234022242d2bb50b1186894fff99eb4a791a28295df6d6b3c17d8e3ddc25c24a9905418b`,
+      '_blank'
+    );
+    setIsModalVisible(true);
+  };
+
+  const handlePayment = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      handleConfirm();
+    }, 15000);
+  };
+  
+  const handleVNPayModalCancel = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <Form form={form} layout="vertical" initialValues={initialValues} className="space-y-4">
       <div className="p-4 bg-white border rounded-lg">
         <h2 className="text-xl font-bold mb-4">Nhập thông tin chi tiết của bạn</h2>
         <div className="grid grid-cols-2 gap-4">
-          <Form.Item label="Họ tên" name="fullName" rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}>
-            <Input placeholder="ví dụ: Nguyễn Văn A" />
-          </Form.Item>
           <Form.Item
             label="Email"
             name="email"
@@ -73,6 +93,15 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
             ]}
           >
             <Input placeholder="email@example.com" />
+          </Form.Item>
+          <Form.Item label="Họ tên" name="fullName" rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}>
+            <Input
+              placeholder="ví dụ: Nguyễn Văn A"
+              style={{ textTransform: 'uppercase' }}
+              onChange={(e) => {
+                e.target.value = e.target.value.toUpperCase();
+              }}
+            />
           </Form.Item>
           <Form.Item label="Số điện thoại" name="phone" rules={[{ required: true, message: "Vui lòng nhập số điện thoại!" }]}>
             <Input placeholder="Số điện thoại" />
@@ -108,7 +137,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
           </Radio.Group>
         </Form.Item>
         <Form.Item label="Bạn muốn thanh toán bằng cách nào?" name="payment">
-          <Radio.Group>
+          <Radio.Group onChange={(e) => setSelectedPayment(e.target.value)}>
             {paymentMethods.map((method) => (
               <Radio key={method.value} value={method.value} className="block">
                 <span>{method.text}</span>
@@ -152,14 +181,66 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
         <p className="text-sm text-gray-500">Thời gian theo múi giờ của Hà Nội</p>
       </div>
       <div className="mt-4 flex justify-end">
+        {selectedPayment === "none" ? (
+          <Button
+            type="primary"
+            onClick={handleConfirm}
+            className="bg-blue-600 text-white w-1/2 py-2 rounded"
+          >
+            Tiếp theo
+          </Button>
+        ) : (
+          <Button
+            type="primary"
+            onClick={showVNPayModal}
+            className="bg-blue-600 text-white w-1/2 py-2 rounded"
+          >
+            Thanh toán
+          </Button>
+        )}
+      </div>
+      <Modal
+        title="THÔNG TIN THANH TOÁN"
+        visible={isModalVisible}
+        onCancel={handleVNPayModalCancel}
+        footer={null}
+        width={500}
+        centered
+      >
+        <div className="p-4 bg-white border rounded-lg">
+          <h3 className="text-lg font-bold mb-4">Tóm tắt giá</h3>
+          <div className="grid grid-cols-3 gap-2 text-sm my-2">
+            <p className="col-span-2 font-bold">Giá phòng</p>
+            <p>
+              {`${params.roomSelection.totalPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`}
+            </p>
+          </div>
+          <div className="grid grid-cols-3 gap-2 text-sm my-2">
+            <p className="col-span-2 font-bold">Thuế và phí</p>
+            <p>
+              {`${params.tax.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`}
+            </p>
+          </div>
+          <hr className="my-1 border border-gray-200" />
+          <div className="grid grid-cols-3 gap-2 text-sm my-2">
+            <p className="col-span-2 font-bold">Tổng cộng</p>
+            <p>
+              {`${(params.roomSelection.totalPrice + params.tax).toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+              })}`}
+            </p>
+          </div>
+        </div>
         <Button
           type="primary"
-          onClick={handleConfirm}
-          className="bg-blue-600 text-white w-1/2 py-2 rounded"
+          loading={isLoading}
+          onClick={handlePayment}
+          className="bg-blue-600 text-white w-full mt-4 py-2 rounded"
         >
-          Tiếp theo
+          Đang xử lý thanh toán
         </Button>
-      </div>
+      </Modal>
     </Form>
   );
 };

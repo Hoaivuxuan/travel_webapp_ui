@@ -13,6 +13,7 @@ export type BookingParams = {
   url: string;
   bookingHotel: any;
   roomSelection: any | null;
+  tax: number;
 };
 
 const formatDate = (date: string): string => {
@@ -32,7 +33,6 @@ const calculateNights = (s1: string, s2: string): number => {
 
 const BookingHotel = () => {
   const router = useRouter();
-  const tax = 0;
   const handleGoBack = () => {
     router.back();
   };
@@ -45,6 +45,7 @@ const BookingHotel = () => {
     url: windowLoaded ? window.location.href : "",
     bookingHotel: decodeToJWT(searchParams.get("bookingHotel") || ""),
     roomSelection: decodeToJWT(searchParams.get("roomSelection") || ""),
+    tax: 0
   };
 
   useEffect(() => {
@@ -105,9 +106,8 @@ const BookingHotel = () => {
               </p>
               <div className="pb-4">
                 {params?.roomSelection?.bookingRooms?.map((room: any, index: any) => (
-                  <div key={index} className="flex justify-between text-sm grid grid-cols-2 gap-2">
-                    <span>{room.type}</span>
-                    <span>{room.count} phòng</span>
+                  <div key={index} className="flex justify-between text-sm">
+                    {room.count} x {room.type}
                   </div>
                 ))}
               </div>
@@ -125,23 +125,20 @@ const BookingHotel = () => {
             <div className="grid grid-cols-3 gap-2 text-sm my-2">
               <p className="col-span-2 font-bold">Giá phòng</p>
               <p>
-                {`${params.roomSelection.totalPrice.toLocaleString('vi-VN', {
-                  style: 'currency',
-                  currency: 'VND',
-                })}`}
+                {`${params.roomSelection.totalPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`}
               </p>
             </div>
             <div className="grid grid-cols-3 gap-2 text-sm my-2">
               <p className="col-span-2 font-bold">Thuế và phí</p>
               <p>
-                {`${tax.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`}
+                {`${params.tax.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`}
               </p>
             </div>
             <hr className="my-1 border border-gray-200" />
             <div className="grid grid-cols-3 gap-2 text-sm my-2">
               <p className="col-span-2 font-bold">Tổng cộng</p>
               <p>
-                {`${params.roomSelection.totalPrice.toLocaleString('vi-VN', {
+                {`${(params.roomSelection.totalPrice + params.tax).toLocaleString('vi-VN', {
                   style: 'currency',
                   currency: 'VND',
                 })}`}

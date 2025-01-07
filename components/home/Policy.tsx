@@ -3,10 +3,8 @@ import {
   FaArrowLeft,
   FaArrowRight,
   FaInfoCircle,
-  FaUsers,
   FaSmoking,
   FaUtensils,
-  FaMicrophoneSlash,
   FaDog,
   FaUser,
 } from "react-icons/fa";
@@ -39,7 +37,7 @@ const PolicySection: React.FC<PolicySectionProps> = ({ policy }) => {
         <div className="grid grid-cols-4 items-center pb-4 border-b">
           <div className="flex items-center space-x-3">
             <FaInfoCircle className="text-lg text-blue-600" />
-            <h4 className="font-medium">Hủy đặt phòng/Trả trước</h4>
+            <h4 className="font-medium">Hủy đặt phòng</h4>
           </div>
           <div className="col-span-3 text-sm text-gray-500">
             {policy?.cancellation_policy}
@@ -60,7 +58,7 @@ const PolicySection: React.FC<PolicySectionProps> = ({ policy }) => {
             <h4 className="font-medium">Hút thuốc</h4>
           </div>
           <p className="col-span-3 text-sm text-gray-500">
-            {policy?.smoking_policy ? ("Cho phép hút thuốc") : ("Không cho phép hút thuốc")}
+            {policy.smoking_policy ? ("Cho phép hút thuốc") : ("Không cho phép hút thuốc")}
           </p>
         </div>
         <div className="grid grid-cols-4 items-center pb-4 border-b">
@@ -69,16 +67,7 @@ const PolicySection: React.FC<PolicySectionProps> = ({ policy }) => {
             <h4 className="font-medium">Tiệc tùng</h4>
           </div>
           <p className="col-span-3 text-sm text-gray-500">
-            Không cho phép tiệc tùng/sự kiện
-          </p>
-        </div>
-        <div className="grid grid-cols-4 items-center pb-4 border-b">
-          <div className="flex items-center space-x-3">
-            <FaMicrophoneSlash className="text-lg text-blue-600" />
-            <h4 className="font-medium">Thời gian yên lặng</h4>
-          </div>
-          <p className="col-span-3 text-sm text-gray-500">
-            Khách cần giữ yên lặng từ 22:00 đến 06:00
+            {policy.party_policy ? ("Cho phép tiệc tùng/sự kiện") : ("Không cho phép tiệc tùng")}
           </p>
         </div>
         <div className="grid grid-cols-4 items-center">

@@ -159,7 +159,7 @@ const BookingHotelPage: React.FC = () => {
       width: 120,
       render: (text: any, record: any) => {
         const status = statusTags
-          .filter(tag => tag.id === 0)
+          .filter(tag => tag.id === Number(record.status))
           .map(tag => 
             <Tag color={tag.color} key={tag.id}>{tag.text}</Tag>
           );

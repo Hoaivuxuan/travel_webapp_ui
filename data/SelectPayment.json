@@ -4,7 +4,7 @@
     "text": "Thanh toán trực tiếp"
   },
   {
-    "value": "paypal",
-    "text": "Thanh toán bằng PayPal"
+    "value": "vnpay",
+    "text": "Thanh toán bằng VNPay"
   }
 ]

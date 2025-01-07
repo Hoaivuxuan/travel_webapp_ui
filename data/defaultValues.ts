@@ -7,7 +7,6 @@ export const policies = [
 
 export const requirements = [
   "Thẻ căn cước công dân còn hiệu lực (Chứng minh nhân dân hoặc Hộ chiếu)",
-  "Đặt cọc 15.000.000 ₫",
   "Giấy phép lái xe/Giấy phép lái xe quốc tế còn hiệu lực",
 ];
 
