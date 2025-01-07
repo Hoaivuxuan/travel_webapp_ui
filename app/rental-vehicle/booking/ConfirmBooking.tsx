@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
 import { useRouter } from "next/navigation";
 import { BookingVehicleService } from "@/services/BookingService";
+import { PaymentService } from "@/services/CommonService";
 
 const ConfirmBooking = () => {
   const router = useRouter();
@@ -18,10 +19,19 @@ const ConfirmBooking = () => {
     setIsChecked(e.target.checked);
   };
 
+  const handlePayment = async () => {
+    const price = booking.facility.price + booking.totalServiceCost;
+    const payment = (await PaymentService.paymentByVNPay(price)).data;
+    window.open(`${payment.paymentUrl}`, "_blank");
+    setLoading(true);
+    setTimeout(() => {
+      handleConfirm();
+    }, 15000);
+  };
+
   const handleConfirm = async () => {
     if(!booking || !bearerToken) return;
     try {
-      setLoading(true);;
       const result = (await BookingVehicleService.postBooking(booking)).data;
       notifySuccess("Đặt xe thành công!");
       router.push(`/rental-vehicle/details?id=${result.id}`);
@@ -45,7 +55,9 @@ const ConfirmBooking = () => {
             </div>
           ) : (
             <div className="col-span-7">
-              <h3 className="font-bold mb-2">Bạn đã thanh toán thành công đơn thuê xe</h3>
+              <p className="text-sm text-gray-500">
+                Thanh toán của bạn sẽ ghi nhận vào hệ thống.
+              </p>
             </div>
           )}
         </div>

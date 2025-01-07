@@ -103,22 +103,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
     }
   };
 
-  const showVNPayModal = async () => {
-    const price = params.facility.price + params.totalServiceCost;
-    const payment = (await PaymentService.paymentByVNPay(price)).data;
-    window.open(`${payment.paymentUrl}`, "_blank");
-    setIsModalVisible(true);
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      handleNextStep();
-    }, 15000);
-  };
-
-  const handleVNPayModalCancel = () => {
-    setIsModalVisible(false);
-  };
-
   return (
     <Form form={form} layout="vertical" initialValues={initialValues} className="space-y-6">
       <div className="p-4 bg-white border rounded-lg">
@@ -282,63 +266,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
       </div>
 
       <div className="mt-4 flex justify-end">
-        {selectedPayment === "none" ? (
-          <Button
-            type="primary"
-            onClick={handleNextStep}
-            className="bg-blue-600 text-white w-1/2 py-2 rounded"
-          >
-            Tiếp theo
-          </Button>
-        ) : (
-          <Button
-            type="primary"
-            onClick={showVNPayModal}
-            className="bg-blue-600 text-white w-1/2 py-2 rounded"
-          >
-            Thanh toán
-          </Button>
-        )}
-      </div>
-      <Modal
-        title="THÔNG TIN THANH TOÁN"
-        visible={isModalVisible}
-        onCancel={handleVNPayModalCancel}
-        footer={null}
-        width={500}
-        centered
-      >
-        <div className="space-y-2 mt-4 text-sm">
-          <div className="flex justify-between">
-            <span className="text-gray-700">Phí thuê xe</span>
-            <span className="text-gray-700">
-              {params?.facility?.price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-700">Dịch vụ khác</span>
-            <span className="text-gray-700">
-              {params?.totalServiceCost.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
-            </span>
-          </div>
-
-          <hr className="my-2" />
-          <div className="flex justify-between font-bold">
-            <span className="text-gray-700">Giá cho 4 ngày</span>
-            <span className="text-gray-700">
-              {((params?.facility?.price + params?.totalServiceCost) || 0)
-                .toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
-            </span>
-          </div>
-        </div>
         <Button
           type="primary"
-          loading={loading}
-          className="bg-blue-600 text-white w-full mt-4 py-2 rounded"
+          onClick={handleNextStep}
+          className="bg-blue-600 text-white w-1/2 py-2 rounded"
         >
-          Đang xử lý thanh toán
+          Tiếp theo
         </Button>
-      </Modal>
+      </div>
     </Form>
   );
 };
