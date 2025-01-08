@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Notification from "@/components/Notification";
 import { useRouter } from "next/navigation";
 import { BookingHotelService } from "@/services/BookingService";
+import { PaymentService } from "@/services/CommonService";
 
 interface ConfirmBookingProps {
   hotel: any;
@@ -21,8 +22,19 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
     setIsChecked(e.target.checked);
   };
 
+  const handlePayment = async () => {
+    const payment = (
+      await PaymentService.paymentByVNPay(bookingHotel.roomSelection.totalPrice)
+    ).data;
+    window.open(`${payment.paymentUrl}`, "_blank");
+    setLoading(true);
+    setTimeout(() => {
+      handleConfirm();
+    }, 15000);
+  };
+
   const handleConfirm = async () => {
-    if(!bookingHotel) return;
+    if (!bookingHotel) return;
     const booking = {
       user_id: bookingHotel.user,
       full_name: bookingHotel.customerInfo.fullName,
@@ -33,14 +45,16 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
       check_out_date: bookingHotel.checkoutDate,
       adults: bookingHotel.adults,
       children: bookingHotel.children,
-      booked_rooms: bookingHotel.roomSelection.bookingRooms.map((room: any) => ({
-        room_id: room.room_id,
-        amount: room.count,
-      })),
+      booked_rooms: bookingHotel.roomSelection.bookingRooms.map(
+        (room: any) => ({
+          room_id: room.room_id,
+          amount: room.count,
+        })
+      ),
       special_request: bookingHotel.specialRequest,
       arrival_time: bookingHotel.arrivalTime,
       totalPrice: bookingHotel.roomSelection.totalPrice,
-      status: (bookingHotel.payment === "none" ? 0 : 1),
+      status: (bookingHotel.payment === "none" ? 1 : 0),
     };
 
     try {
@@ -61,16 +75,18 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
         <div className="grid grid-cols-7 gap-2">
           {bookingHotel.payment === "none" ? (
             <div className="col-span-6">
-              <h3 className="font-bold mb-2">Không yêu cầu thông tin thanh toán</h3>
+              <h3 className="font-bold mb-2">
+                Không yêu cầu thông tin thanh toán
+              </h3>
               <p className="text-sm text-gray-500">
-              {`Thanh toán của bạn sẽ do ${hotel.hotel_name} xử lý, nên bạn không cần nhập thông tin thanh toán cho đơn đặt này.`}
-            </p>
+                {`Thanh toán của bạn sẽ do ${hotel.hotel_name} xử lý, nên bạn không cần nhập thông tin thanh toán cho đơn đặt này.`}
+              </p>
             </div>
           ) : (
             <div className="col-span-7">
-              <h3 className="font-bold mb-2">Bạn đã thanh toán thành công đơn đặt phòng</h3>
+              <h3 className="font-bold mb-2">Đơn đặt phòng của bạn đang chờ được thanh toán</h3>
               <p className="text-sm text-gray-500">
-              {`Thanh toán của bạn đã được hệ thống ${hotel.hotel_name} ghi nhận thông tin.`}
+              {`Thanh toán của bạn sẽ được hệ thống ${hotel.hotel_name} ghi nhận thông tin.`}
             </p>
             </div>
           )}
@@ -82,7 +98,9 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
           checked={isChecked}
           onChange={handleCheckboxChange}
         >
-          Tôi đồng ý nhận email marketing từ Booking.com, bao gồm khuyến mãi, đề xuất được cá nhân hóa, tặng thưởng, trải nghiệm du lịch và cập nhật về các sản phẩm và dịch vụ của Booking.com.
+          Tôi đồng ý nhận email marketing từ Booking.com, bao gồm khuyến mãi, đề
+          xuất được cá nhân hóa, tặng thưởng, trải nghiệm du lịch và cập nhật về
+          các sản phẩm và dịch vụ của Booking.com.
         </Checkbox>
       </div>
       <div className="space-y-4">
@@ -94,11 +112,11 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
         <Button
           type="primary"
           className="bg-blue-600 text-white w-1/2 py-2 rounded"
-          onClick={handleConfirm}
+          onClick={bookingHotel.payment === "none" ? handleConfirm : handlePayment}
           disabled={!isChecked}
           loading={loading}
         >
-          HOÀN TẤT
+          THANH TOÁN & HOÀN TẤT
         </Button>
       </div>
       <ToastContainer />

@@ -31,8 +31,8 @@ export const hotelOptions = [
 ];
 
 export const statusTags = [
-  { id: 0, text: "PENDING", color: "orange" },
-  { id: 1, text: "DONE", color: "green" },
+  { id: 0, text: "DONE", color: "green" },
+  { id: 1, text: "PENDING", color: "orange" },
   { id: 2, text: "CANCEL", color: "red" },
 ];
 

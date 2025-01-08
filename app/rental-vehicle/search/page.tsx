@@ -19,6 +19,20 @@ export type RentalSearchParams = {
   return: string;
 };
 
+const calculateDaysBetween = (s1: string, s2: string): number => {
+  const parseDate = (dateString: string): Date => {
+    const [day, month, year] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
+  const date1 = parseDate(s1);
+  const date2 = parseDate(s2);
+  const diffInMilliseconds = date2.getTime() - date1.getTime();
+  const diffInDays = diffInMilliseconds / (1000 * 60 * 60 * 24);
+
+  return diffInDays;
+};
+
 const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
@@ -108,7 +122,7 @@ const RentalSearchPage: React.FC<Props> = ({ searchParams }) => {
           <aside className="col-span-1 p-4 border rounded-lg sticky top-6 h-fit">
             <h3 className="font-bold text-sm mb-3">Chọn lọc theo:</h3>
             <div className="text-sm border-t py-4">
-              <h4 className="font-semibold mb-2">Giá mỗi đêm (₫)</h4>
+              <h4 className="font-semibold mb-2">Giá cho {calculateDaysBetween(searchParams?.pickup, searchParams?.return)} ngày (₫)</h4>
               <Slider
                 range
                 value={priceRange}

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Modal, Table, Tag } from "antd";
+import React, { useState } from "react";
+import { Button, Dropdown, Menu, Modal, Space, Table, Tag } from "antd";
 import { typeVehicleTags } from "@/data/defaultValues";
+import { AiOutlineBars, AiFillEdit } from "react-icons/ai";
 
 interface ListVehicleModalProps {
   data: any;
@@ -9,10 +10,31 @@ interface ListVehicleModalProps {
 }
 
 const ListVehicleModal: React.FC<ListVehicleModalProps> = ({ data, visible, onClose }) => {
-  const [loading, setLoading] = useState(true);
   if(!data) return;
 
+  const rentalMenu = (record: any) => (
+    <Menu>
+      <Menu.Item key="1">
+        <div className="flex items-center">
+          <AiFillEdit className="mr-2" /> Chỉnh sửa giá thuê
+        </div>
+      </Menu.Item>
+    </Menu>
+  );
+
   const vehicleColumns = [
+    {
+      title: "",
+      key: "actions",
+      width: 50,
+      render: (_: any, record: any) => (
+        <Space className="flex items-center justify-center">
+          <Dropdown overlay={rentalMenu(record)} trigger={['click']}>
+            <Button type="link" icon={<AiOutlineBars className="text-lg" />} />
+          </Dropdown>
+        </Space>
+      ),
+    },
     {
       title: "ID",
       dataIndex: "id",
@@ -67,7 +89,7 @@ const ListVehicleModal: React.FC<ListVehicleModalProps> = ({ data, visible, onCl
         columns={vehicleColumns}
         size="middle"
         rowKey="id"
-        className="h-[520px]"
+        className="h-[550px]"
         pagination={{ pageSize: 8 }}
         bordered
       />

@@ -7,12 +7,10 @@ import { activities } from "@/data/fakeData";
 import Image from "next/image";
 import "./style.css";
 
-const AnyReactComponent = ({ text }: any) => <div>{text}</div>;
-
 export default function Activities({ params }: { params: { id: string } }) {
   const router = useRouter();
   const trendingActivities = activities.slice(0, 4);
-  const nearbyDestinations = activities.slice(2, 5);
+  const nearbyDestinations = activities.slice(4, 9);
 
   const handleImageClick = () => {
     router.push("/activities/search");
@@ -79,6 +77,26 @@ export default function Activities({ params }: { params: { id: string } }) {
         </div>
 
         <div className="pt-5">
+          <h3 className="text-xl font-bold">Điểm đến lân cận</h3>
+        </div>
+        <div className="py-5 grid grid-cols-3 gap-4">
+          {nearbyDestinations.map((item) => (
+            <div key={item.id} className="cursor-pointer">
+              <Image
+                className="object-cover rounded-xl w-full h-72"
+                src={item.src}
+                alt={item.title}
+                width={540}
+                height={405}
+              />
+              <div className="pt-3">
+                <p className="">{item.title}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* <div className="pt-5">
           <h3 className="text-xl font-bold">Tìm hoạt động vui chơi ở Hà Nội</h3>
         </div>
 
@@ -95,41 +113,7 @@ export default function Activities({ params }: { params: { id: string } }) {
               <div className="activity-title">{item.title}</div>
             </div>
           ))}
-        </div>
-
-        <div className="pt-5">
-          <h3 className="text-xl font-bold">Điểm đến lân cận</h3>
-        </div>
-        <div className="py-5 grid grid-cols-3 gap-4">
-          {nearbyDestinations.map((item) => (
-            <div key={item.id} className="cursor-pointer">
-              <Image
-                className="object-cover rounded-xl w-full h-72"
-                src={item.src}
-                alt={item.title}
-                width={540}
-                height={405}
-              />
-              <div className="pt-3">
-                <p className="">{item.location}</p>
-              </div>
-            </div>
-          ))}
-          {nearbyDestinations.map((item) => (
-            <div key={item.id} className="cursor-pointer">
-              <Image
-                className="object-cover rounded-xl w-full h-72"
-                src={item.src}
-                alt={item.title}
-                width={540}
-                height={405}
-              />
-              <div className="pt-3">
-                <p className="">{item.location}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        </div> */}
       </section>
     </main>
   );

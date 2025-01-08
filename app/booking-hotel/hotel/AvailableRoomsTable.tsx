@@ -30,7 +30,11 @@ interface AvailableRoomsTableProps {
   rooms: Room[];
 }
 
-const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms, night }) => {
+const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({
+  hotel,
+  rooms,
+  night,
+}) => {
   const router = useRouter();
   const { notifyWarning } = Notification();
 
@@ -40,14 +44,21 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms,
     totalPrice: 0,
   };
 
-  const [bookingRooms, setBookingRooms] = useState<number[]>(initialSelection.bookingRooms);
-  const [totalRooms, setTotalRooms] = useState<number>(initialSelection.totalRooms);
-  const [totalPrice, setTotalPrice] = useState<number>(initialSelection.totalPrice);
+  const [bookingRooms, setBookingRooms] = useState<number[]>(
+    initialSelection.bookingRooms
+  );
+  const [totalRooms, setTotalRooms] = useState<number>(
+    initialSelection.totalRooms
+  );
+  const [totalPrice, setTotalPrice] = useState<number>(
+    initialSelection.totalPrice
+  );
 
   useEffect(() => {
     const newTotalRooms = bookingRooms.reduce((sum, count) => sum + count, 0);
     const newTotalPrice = bookingRooms.reduce(
-      (sum, count, index) => sum + count * rooms[index].price * night, 0
+      (sum, count, index) => sum + count * rooms[index].price * night,
+      0
     );
     setTotalRooms(newTotalRooms);
     setTotalPrice(newTotalPrice);
@@ -62,15 +73,17 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms,
   const handleBookingClick = () => {
     const search = localStorage.getItem("searchHotel");
     const user = localStorage.getItem("user");
-    if(!search || !user) return;
-    
+    if (!search || !user) return;
+
     const roomSelection = {
-      bookingRooms: bookingRooms.map((count, index) => ({
+      bookingRooms: bookingRooms
+        .map((count, index) => ({
           room_id: rooms[index].room_id,
           type: rooms[index].name,
           price: rooms[index].price * night,
           count,
-        })).filter((room) => room.count > 0),
+        }))
+        .filter((room) => room.count > 0),
       totalRooms,
       totalPrice,
     };
@@ -81,14 +94,16 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms,
         user: JSON.parse(user),
         hotel,
         booking: JSON.parse(search),
-      }
+      };
 
       if (roomSelection.totalRooms === 0) {
         notifyWarning("Vui lòng chọn ít nhất một phòng trước khi tiếp tục!");
         return;
       }
       if (roomSelection.totalRooms > booking.rooms) {
-        notifyWarning("Số phòng bạn chọn vượt quá số lượng phòng bạn muốn đặt!");
+        notifyWarning(
+          "Số phòng bạn chọn vượt quá số lượng phòng bạn muốn đặt!"
+        );
         return;
       }
 
@@ -119,8 +134,13 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms,
               </span>
             </div>
             <div className="pt-2 border-t">
-              <p>{record.no_bed_1} x {record.type_bed_1}</p>
-              <p>{record.type_bed_2 && `${record.no_bed_2} x ${record.type_bed_2}`}</p>
+              <p>
+                {record.no_bed_1} x {record.type_bed_1}
+              </p>
+              <p>
+                {record.type_bed_2 &&
+                  `${record.no_bed_2} x ${record.type_bed_2}`}
+              </p>
             </div>
           </div>
         </div>
@@ -142,8 +162,8 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms,
       dataIndex: "price",
       width: "15%",
       key: "price",
-      render: (price: number) => 
-        `${(price * night).toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`,
+      render: (price: number) =>
+        `${(price * night).toLocaleString("vi-VN", { style: "currency", currency: "VND" })}`,
     },
     {
       title: "Các lựa chọn",
@@ -219,7 +239,10 @@ const AvailableRoomsTable: React.FC<AvailableRoomsTableProps> = ({ hotel, rooms,
             <p className="text-sm font-semibold">
               <p className="text-blue-600">{totalRooms} phòng tổng giá:</p>
               <p className="text-green-600">
-                {totalPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                {totalPrice.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })}
               </p>
             </p>
           </div>

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Form, Input, Select, Button, Radio, Modal } from "antd";
 import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
 import { useRouter } from "next/navigation";
+import { PaymentService } from "@/services/CommonService";
 
 type BookingFormProps = {
   params: any;
@@ -100,23 +101,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
         additionalDrivers: currentDrivers.filter((_: any, i: number) => i !== index),
       });
     }
-  };
-
-  const showVNPayModal = () => {
-    window.open(
-      `https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=1200000&vnp_Command=pay&vnp_CreateDate=20250107104109&vnp_CurrCode=VND&vnp_ExpireDate=20250107105609&vnp_IpAddr=0%3A0%3A0%3A0%3A0%3A0%3A0%3A1&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang%3A42475329&vnp_OrderType=other&vnp_ReturnUrl=http%3A%2F%2Flocalhost%3A8080%2Fpayment%2Fvn-pay-callback&vnp_TmnCode=4ROYBF62&vnp_TxnRef=30799294&vnp_Version=2.1.0&vnp_SecureHash=840a46712063623c6b607ee2d247cb9b9758024acbee733fbfeb7767234022242d2bb50b1186894fff99eb4a791a28295df6d6b3c17d8e3ddc25c24a9905418b`,
-      '_blank'
-    );
-    setIsModalVisible(true);
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      handleNextStep();
-    }, 15000);
-  };
-
-  const handleVNPayModalCancel = () => {
-    setIsModalVisible(false);
   };
 
   return (
@@ -282,63 +266,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
       </div>
 
       <div className="mt-4 flex justify-end">
-        {selectedPayment === "none" ? (
-          <Button
-            type="primary"
-            onClick={handleNextStep}
-            className="bg-blue-600 text-white w-1/2 py-2 rounded"
-          >
-            Tiếp theo
-          </Button>
-        ) : (
-          <Button
-            type="primary"
-            onClick={showVNPayModal}
-            className="bg-blue-600 text-white w-1/2 py-2 rounded"
-          >
-            Thanh toán
-          </Button>
-        )}
-      </div>
-      <Modal
-        title="THÔNG TIN THANH TOÁN"
-        visible={isModalVisible}
-        onCancel={handleVNPayModalCancel}
-        footer={null}
-        width={500}
-        centered
-      >
-        <div className="space-y-2 mt-4 text-sm">
-          <div className="flex justify-between">
-            <span className="text-gray-700">Phí thuê xe</span>
-            <span className="text-gray-700">
-              {params?.facility?.price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-700">Dịch vụ khác</span>
-            <span className="text-gray-700">
-              {params?.totalServiceCost.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
-            </span>
-          </div>
-
-          <hr className="my-2" />
-          <div className="flex justify-between font-bold">
-            <span className="text-gray-700">Giá cho 4 ngày</span>
-            <span className="text-gray-700">
-              {((params?.facility?.price + params?.totalServiceCost) || 0)
-                .toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
-            </span>
-          </div>
-        </div>
         <Button
           type="primary"
-          loading={loading}
-          className="bg-blue-600 text-white w-full mt-4 py-2 rounded"
+          onClick={handleNextStep}
+          className="bg-blue-600 text-white w-1/2 py-2 rounded"
         >
-          Đang xử lý thanh toán
+          Tiếp theo
         </Button>
-      </Modal>
+      </div>
     </Form>
   );
 };

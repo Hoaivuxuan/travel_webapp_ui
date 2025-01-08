@@ -1,18 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import listCountries from "@/data/SelectCountry.json";
 import paymentMethods from "@/data/SelectPayment.json";
-import { Form, Input, Select, Radio, Checkbox, Button } from "antd";
+import { Form, Input, Select, Radio, Checkbox, Button, Modal } from "antd";
 import { AiOutlineCheckCircle } from "react-icons/ai";
+import { PaymentService } from "@/services/CommonService";
 
 type BookingFormProps = {
-  params: any;
+  paramsBookingTicket: any;
   step: number;
   setStep: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
+const BookingForm: React.FC<BookingFormProps> = ({
+  paramsBookingTicket,
+  step,
+  setStep,
+}) => {
   const [form] = Form.useForm();
+  const [selectedPayment, setSelectedPayment] = useState("none");
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialValues = {
     whoBooking: "self",
@@ -21,40 +29,47 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
     country: "Vietnam",
   };
 
-  const saveBookingHotel = (values: any) => {
-    const bookingHotel = {
-      user: params.bookingHotel?.user?.id,
-      hotel: params.bookingHotel?.hotel?.id,
-      customerInfo: {
-        fullName: values.fullName,
-        email: values.email,
-        phone: values.phone,
-        country: listCountries.find(
-          (item) => item.name === (values.country || "Vietnam")
-        )?.code,
-      },
-      checkinDate: params.bookingHotel?.booking?.dateRange.startDate,
-      checkoutDate: params.bookingHotel?.booking?.dateRange.endDate,
-      adults: Number(params.bookingHotel?.booking?.adults),
-      children: Number(params.bookingHotel?.booking?.children),
-      roomSelection: params.roomSelection,
-      specialRequest: values.specialRequest || "",
-      arrivalTime: values.arrivalTime || null,
-      status: 0,
-    };
+  const showVNPayModal = async (price: any) => {
+    const res = (await PaymentService.paymentByVNPay(price)).data;
+    window.open(`${res.paymentUrl}`, "_blank");
+    setIsModalVisible(true);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      handleConfirm();
+    }, 15000);
+  };
 
-    localStorage.setItem("bookingHotel", JSON.stringify(bookingHotel));
+  const saveBookingTicket = (formValues: any, paramsBookingTicket: any) => {
+    const bookingTicket = {
+      user: paramsBookingTicket.user,
+      full_name: formValues.fullName,
+      email: formValues.email,
+      phone: formValues.phone,
+      country: formValues.country,
+      booked_tickets: paramsBookingTicket.booked_tickets,
+      totalPrice: Math.round(
+        Number(paramsBookingTicket.booked_tickets_detail.price) *
+          Number(paramsBookingTicket.booked_tickets[0].quantity) *
+          1.1
+      ),
+    };
+    localStorage.setItem("bookingTicket", JSON.stringify(bookingTicket));
   };
 
   const handleConfirm = () => {
     form.validateFields().then((values) => {
-      saveBookingHotel(values);
+      saveBookingTicket(values, paramsBookingTicket);
       handleNextStep();
     });
   };
 
   const handleNextStep = () => {
     setStep((prev) => prev + 1);
+  };
+
+  const handlePaymentChange = (e: any) => {
+    setSelectedPayment(e.target.value);
   };
 
   return (
@@ -120,7 +135,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
         </div>
         <hr className="mb-4" />
         <Form.Item label="Bạn muốn thanh toán bằng cách nào?" name="payment">
-          <Radio.Group>
+          <Radio.Group onChange={handlePaymentChange} value={selectedPayment}>
             {paymentMethods.map((method) => (
               <Radio key={method.value} value={method.value} className="block">
                 <span>{method.text}</span>
@@ -130,35 +145,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ params, step, setStep }) => {
         </Form.Item>
       </div>
 
-      <div className="p-4 bg-white border rounded-lg">
-        <h2 className="text-xl font-bold mb-4">Các yêu cầu đặc biệt</h2>
-        <Form.Item
-          label="Yêu cầu đặc biệt (không bắt buộc)"
-          name="specialRequest"
-        >
-          <Input.TextArea rows={3} />
-        </Form.Item>
-      </div>
-      <div className="p-4 bg-white border rounded-lg">
-        <h2 className="text-xl font-bold mb-4">Thời gian đến của bạn</h2>
-        <Form.Item
-          label="Thêm thời gian đến dự kiến của bạn (không bắt buộc)"
-          name="arrivalTime"
-        >
-          <Select placeholder="Vui lòng chọn">
-            <Select.Option value="14:00-15:00">14:00 - 15:00</Select.Option>
-            <Select.Option value="15:00-16:00">15:00 - 16:00</Select.Option>
-            <Select.Option value="16:00-17:00">16:00 - 17:00</Select.Option>
-            <Select.Option value="17:00-18:00">17:00 - 18:00</Select.Option>
-            <Select.Option value="18:00-19:00">18:00 - 19:00</Select.Option>
-            <Select.Option value="19:00-20:00">19:00 - 20:00</Select.Option>
-            <Select.Option value="20:00-21:00">20:00 - 21:00</Select.Option>
-          </Select>
-        </Form.Item>
-        <p className="text-sm text-gray-500">
-          Thời gian theo múi giờ của Hà Nội
-        </p>
-      </div>
       <div className="mt-4 flex justify-end">
         <Button
           type="primary"
