@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { AutoComplete, Button, DatePicker, Input } from "antd";
 import { useRouter } from "next/navigation";
-import { AiOutlineClose } from 'react-icons/ai';
+import { AiOutlineClose } from "react-icons/ai";
 import { IoLocationOutline } from "react-icons/io5";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { ToastContainer } from "react-toastify";
@@ -18,7 +18,10 @@ import dayjs from "dayjs";
 
 export const formSchema = z.object({
   location: z.object({
-    name: z.string().min(1, "Vui lòng nhập điểm đến để bắt đầu tìm kiếm!").max(50),
+    name: z
+      .string()
+      .min(1, "Vui lòng nhập điểm đến để bắt đầu tìm kiếm!")
+      .max(50),
     id: z.number().optional(),
   }),
   dateRange: z.object({
@@ -68,7 +71,7 @@ function TourSearchForm() {
         console.error("Error fetching data:", error);
       }
     };
-  
+
     fetchCity();
   }, []);
 
@@ -89,7 +92,10 @@ function TourSearchForm() {
     const storedValues = localStorage.getItem("searchVehicle");
     if (storedValues) {
       const parsedValues = JSON.parse(storedValues);
-      form.setValue("location", parsedValues.location || { name: "", id: undefined });
+      form.setValue(
+        "location",
+        parsedValues.location || { name: "", id: undefined }
+      );
       form.setValue("dateRange", {
         startDate: new Date(parsedValues.dateRange.startDate),
         endDate: new Date(parsedValues.dateRange.endDate),
@@ -107,10 +113,13 @@ function TourSearchForm() {
     return () => subscription.unsubscribe();
   }, [form]);
 
+  const [dateRange, setDateRange] = useState<
+    [dayjs.Dayjs | null, dayjs.Dayjs | null]
+  >([null, null]);
 
-  const [dateRange, setDateRange] = useState<[dayjs.Dayjs | null, dayjs.Dayjs | null]>([null, null]);
-
-  const handleDateChange = (dates: [dayjs.Dayjs | null, dayjs.Dayjs | null] | null) => {
+  const handleDateChange = (
+    dates: [dayjs.Dayjs | null, dayjs.Dayjs | null] | null
+  ) => {
     if (dates) {
       setDateRange(dates);
       form.setValue("dateRange", {
@@ -143,7 +152,7 @@ function TourSearchForm() {
       startDate: format(values.dateRange.startDate, "dd-MM-yyyy"),
       endDate: format(values.dateRange.endDate, "dd-MM-yyyy"),
     });
-  
+
     router.push(`/activities/search?url=3&${query.toString()}`);
   };
 
@@ -162,7 +171,7 @@ function TourSearchForm() {
         <div className="grid grid-cols-9 gap-2">
           <div className="col-span-8">
             <div className=" grid grid-cols-3 gap-2">
-              <div className="col-span-2">
+              <div className="col-span-3">
                 <FormField
                   control={form.control}
                   name="location"
@@ -171,25 +180,31 @@ function TourSearchForm() {
                       <FormControl>
                         <div className="relative">
                           <AutoComplete
-                            options={suggestions.slice(0,5).map((suggestion: any) => ({
-                              value: suggestion.name,
-                              label: (
-                                <div className="flex justify-between">
-                                  <span className="text-sm">{suggestion.name}</span>
-                                  <span className="bg-green-200 text-green-600 rounded-lg px-2 py-1 text-xs">
-                                    {suggestion.type}
-                                  </span>
-                                </div>
-                              ),
-                              id: suggestion.id,
-                            }))}
+                            options={suggestions
+                              .slice(0, 5)
+                              .map((suggestion: any) => ({
+                                value: suggestion.name,
+                                label: (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm">
+                                      {suggestion.name}
+                                    </span>
+                                    <span className="bg-green-200 text-green-600 rounded-lg px-2 py-1 text-xs">
+                                      {suggestion.type}
+                                    </span>
+                                  </div>
+                                ),
+                                id: suggestion.id,
+                              }))}
                             onSearch={(value) => {
                               setKeyword(value);
                               handleLocationSearch(value, setSuggestions);
                               field.onChange({ name: value, id: undefined });
                             }}
                             onSelect={(value, option: any) => {
-                              const selectedSuggestion = suggestions.find((s) => s.name === value);
+                              const selectedSuggestion = suggestions.find(
+                                (s) => s.name === value
+                              );
                               if (selectedSuggestion) {
                                 form.setValue("location", {
                                   name: selectedSuggestion.name,
@@ -206,7 +221,10 @@ function TourSearchForm() {
                               value={keyword || field.value?.name || ""}
                               onChange={(e) => {
                                 setKeyword(e.target.value);
-                                field.onChange({ name: e.target.value, id: undefined });
+                                field.onChange({
+                                  name: e.target.value,
+                                  id: undefined,
+                                });
                               }}
                               className="pl-10"
                             />
@@ -219,7 +237,10 @@ function TourSearchForm() {
                               className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
                               onClick={() => {
                                 setKeyword("");
-                                form.setValue("location", { name: "", id: undefined });
+                                form.setValue("location", {
+                                  name: "",
+                                  id: undefined,
+                                });
                                 setSuggestions([]);
                               }}
                             />
@@ -231,7 +252,7 @@ function TourSearchForm() {
                 />
               </div>
 
-              <div className="col-span-1">
+              {/* <div className="col-span-1">
                 <FormField
                   control={form.control}
                   name="dateRange"
@@ -248,12 +269,16 @@ function TourSearchForm() {
                     </FormItem>
                   )}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
 
           <div className="col-span-1 flex justify-center items-center">
-            <Button type="primary" htmlType="submit" className="w-full bg-yellow-400 text-[#472f91]">
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="w-full bg-yellow-400 text-[#472f91]"
+            >
               Tìm kiếm
             </Button>
           </div>
