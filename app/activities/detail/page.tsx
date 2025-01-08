@@ -29,6 +29,14 @@ const ActivitiesDetailPage = () => {
     { ticket_class_id: number; quantity: number }[]
   >([]);
 
+  const reviewBreakdown = Object.values({
+    star_1: activityItem.review.review_breakdown["1_star"],
+    star_2: activityItem.review.review_breakdown["2_star"],
+    star_3: activityItem.review.review_breakdown["3_star"],
+    star_4: activityItem.review.review_breakdown["4_star"],
+    star_5: activityItem.review.review_breakdown["5_star"],
+  }) as number[];
+
   if (!activityItem) return notFound();
   const activityAddress = encodeURIComponent(`${activityItem.address}`);
   //
@@ -148,18 +156,18 @@ const ActivitiesDetailPage = () => {
           <div className="grid grid-cols-3 gap-4">
             <div className="bg-white p-4 rounded shadow col-span-2">
               <h2 className="text-xl font-semibold">Bạn cần đến nhận vé</h2>
-              <p className="text-gray-700 mt-2">
-                Trải nghiệm này sẽ mang đến cho bạn cơ hội khám phá nghệ thuật
-                múa rối nước xa xưa ở Hà Nội. Bạn sẽ ghé thăm nhà hát múa rối
-                nước Thăng Long...
-              </p>
               <p className="mt-4 text-gray-500">
                 Vui lòng có mặt ít nhất 15 phút trước khi hoạt động bắt đầu.
               </p>
+              <p className="text-gray-700 mt-2">{activityItem.description}</p>
               <h2 className="text-xl font-semibold mt-10 mb-5">
                 Đánh giá của khách hàng
               </h2>
-              <div className="text-lg font-semibold">⭐ - Tuyệt vời</div>
+              <div className="flex items-center justify-between text-lg font-semibold">
+                <span>{activityItem.review.average_rating}⭐ - Tuyệt vời</span>
+                <span className="text-sm text-gray-600">Mức độ hài lòng</span>
+                <span className="text-sm text-gray-600">Số lượt</span>
+              </div>
               <div className="space-y-2 mt-4">
                 {[
                   "Lượt đánh giá 1⭐",
@@ -174,11 +182,11 @@ const ActivitiesDetailPage = () => {
                       <div
                         className="absolute bg-yellow-500 h-2.5 rounded-full"
                         style={{
-                          width: `${[2.5, 2.5, 2.5, 2.5, 2.5][index] * 20}%`,
+                          width: `${[1, 2, 3, 4, 5][index] * 20}%`,
                         }}
                       ></div>
                     </div>
-                    <span className="ml-2">{[2, 3, 3, 5, 4][index]}</span>
+                    <span className="ml-2">{reviewBreakdown[index]}</span>
                   </div>
                 ))}
               </div>
@@ -186,26 +194,20 @@ const ActivitiesDetailPage = () => {
                 Điều khách yêu thích nhất
               </h2>
               <div className="space-y-4">
-                {[
-                  {
-                    user: "Hong - Việt Nam",
-                    comment:
-                      "Độc đáo, thú vị, là nơi có thể đưa bạn bè người thân giải trí cuối tuần",
-                    date: "06 tháng 3, 2024",
-                  },
-                  {
-                    user: "Ny - Việt Nam",
-                    comment:
-                      "Mình đến muộn vì tắc đường nhưng vẫn được các bạn hỗ trợ nhiệt tình...",
-                    date: "16 tháng 3, 2023",
-                  },
-                ].map((review, index) => (
-                  <div key={index} className="p-4 bg-gray-100 rounded shadow">
-                    <div className="font-bold">{review.user}</div>
-                    <p className="text-gray-700">{review.comment}</p>
-                    <span className="text-sm text-gray-500">{review.date}</span>
-                  </div>
-                ))}
+                {activityItem?.review?.recent_reviews?.map(
+                  (review: any, index: any) => (
+                    <div key={index} className="p-4 bg-gray-100 rounded shadow">
+                      <div className="text-lg font-semibold">
+                        {review.rating}⭐
+                      </div>
+                      <div className="font-bold py-2">{review.user}</div>
+                      <p className="text-gray-700">{review.comment}</p>
+                      <span className="text-sm text-gray-500">
+                        {review.date}
+                      </span>
+                    </div>
+                  )
+                )}
               </div>
               {/* Quy định */}
               <h2 className="text-xl font-semibold mt-10 mb-5">Quy định</h2>

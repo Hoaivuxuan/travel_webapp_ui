@@ -52,13 +52,15 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ id }) => {
 
   return (
     <article className="flex border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 max-w">
-      <Image
-        src={activity.images[0].url}
-        alt={`Hình ảnh của ${name}`}
-        className="w-1/3 h-full object-cover"
-        width={300}
-        height={200}
-      />
+      <div className="w-1/3 h-52 relative overflow-hidden">
+        <Image
+          src={activity.images[0].url}
+          alt={`Hình ảnh của ${activity.name}`}
+          className="object-cover w-full h-full"
+          width={300}
+          height={200}
+        />
+      </div>
       <div className="p-4 flex-1">
         <h3 className="text-lg font-semibold">{activity.name}</h3>
         <p className="text-sm text-gray-500">{activity.city}</p>
@@ -72,7 +74,9 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ id }) => {
         <p className="mt-2 text-sm text-gray-700">{`${activity.address}`}</p>
 
         <div className="mt-2 flex items-center text-green-600">
-          <span className="text-yellow-500">⭐ {activity.rating}</span>
+          <span className="text-yellow-500">
+            ⭐ {activity.review.average_rating}
+          </span>
           <span className="ml-1">- Tuyệt vời</span>
           <span className="ml-1 text-gray-500">
             ({activity.review.total_reviews} đánh giá)
