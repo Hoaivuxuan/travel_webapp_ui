@@ -9,6 +9,7 @@ import { TicketService } from "@/services/TourService";
 const BookingDetails: React.FC = () => {
   const router = useRouter();
   const [bookingDetails, setBookingDetails] = useState<any>(null);
+  const [ticketDetails, setTicketDetails] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const detailsParams = useSearchParams();
   const bookingId = detailsParams.get("id");
@@ -23,6 +24,15 @@ const BookingDetails: React.FC = () => {
         const data = (await TicketService.getBookingByUser(bookingId)).data
           .bookingTicketResponses[0];
         console.log("check data:", data);
+        const detailsTicket = [
+          {
+            nameTour: data.tour.tour_name,
+            nameTicket: data.buyed_ticket[0].ticket_class,
+            count: data.buyed_ticket[0].quantity,
+            price: data.total_price * 1.1,
+          },
+        ];
+        setTicketDetails(detailsTicket);
         setBookingDetails(data);
       } catch (error: any) {
         message.error("Lỗi khi tải thông tin đơn hàng.");
@@ -94,17 +104,18 @@ const BookingDetails: React.FC = () => {
       </Descriptions>
 
       <h2 className="text-xl font-semibold mt-6">Chi tiết vé</h2>
-      {/* <Table
-        // dataSource={tourName:bookingDetails.tour.tour}
+      <Table
+        dataSource={ticketDetails}
         columns={columns}
         size="middle"
         rowKey="name"
         pagination={false}
-      /> */}
+      />
 
       <div className="mt-6">
         <p className="text-lg font-bold mt-2">
-          Tổng giá: {bookingDetails.total_price.toLocaleString("vi-VN")} VNĐ
+          Tổng giá: {(bookingDetails.total_price * 1.1).toLocaleString("vi-VN")}{" "}
+          VNĐ
         </p>
       </div>
     </div>
