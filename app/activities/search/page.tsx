@@ -17,8 +17,8 @@ type Props = {
 export type SearchParams = {
   url: URL;
   location: string;
-  start: string;
-  end: string;
+  startDate: string;
+  endDate: string;
 };
 
 const removeAccent = (str: string) => {
