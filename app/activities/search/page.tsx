@@ -16,8 +16,8 @@ type Props = {
 export type SearchParams = {
   url: URL;
   location: string;
-  start: string;
-  end: string;
+  startDate: string;
+  endDate: string;
 };
 
 const removeAccent = (str: string) => {
@@ -65,9 +65,14 @@ export default function Search({ searchParams }: Props) {
         <div className="pb-4">
           <SearchForm />
         </div>
-        <div className="max-w-7xl mx-auto py-20 px-4 flex">
+        <h2 className="py-4">
+          <span className="ml-2">
+            {`${searchParams.location}, từ ${searchParams.startDate} đến ${searchParams.endDate}`}
+          </span>
+        </h2>
+        <hr className="mb-5" />
+        <div className="mx-auto flex">
           <FilterPanel />
-
           <div className="flex-1 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6 ml-6">
             {activities.map((item: any) => (
               <ActivityCard key={item.id} id={item.id} />

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import "./index.css";
 import { Table, Switch, Space, Button, Menu, Dropdown } from "antd";
-import { AiOutlineEye, AiOutlineBars, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineEye, AiOutlineBars } from "react-icons/ai";
 import listCountries from "@/data/SelectCountry.json"
 import UserDetailsModal from "./UserDatails";
 import UserBookingModal from "./UserBooking";
@@ -68,11 +68,6 @@ export default function UserAdmin() {
       <Menu.Item key="2" onClick={() => handleViewBooking(record)}>
         <div className="flex items-center">
           <AiOutlineBars className="mr-2" /> Xem đặt phòng
-        </div>
-      </Menu.Item>
-      <Menu.Item key="3">
-        <div className="flex items-center">
-          <AiOutlineDelete className="mr-2" /> Xóa
         </div>
       </Menu.Item>
     </Menu>

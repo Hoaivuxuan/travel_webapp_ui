@@ -5,20 +5,30 @@ import { Layout, Table, Card, Col, Row, Statistic, Spin } from "antd";
 import { bookingHotel } from "@/data/fakeData";
 import { format } from "date-fns";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { BookingHotelService } from "@/services/BookingService";
 
-const { Content } = Layout;
-
-const Dashboard: React.FC = () => {
+const Dashboard: React.FC = async () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [revenueData, setRevenueData] = useState<any[]>([]);
-  const [bookingsData, setBookingsData] = useState<any[]>([]);
+  const [bookingData, setBookingData] = useState<any[]>([]);
+  const [booking, setBooking] = useState<any[]>([]);
 
-  // Dummy data for testing, replace it with an API call if necessary
   useEffect(() => {
+    const fetchBooking = async () => {
+      try {
+        const response = (await BookingHotelService.getBookingByUser(5)).data;
+        setBooking(response.bookingRoom);
+      } catch (error) {
+        console.error("Error fetching booking:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBooking();
     setLoading(true);
     try {
-      // Calculate revenue data
       setRevenueData([
         { month: 'Jan', revenue: 12000 },
         { month: 'Feb', revenue: 15000 },
@@ -30,7 +40,6 @@ const Dashboard: React.FC = () => {
       ]);
 
       const bookingsByDate: Record<string, number> = {};
-
       bookingHotel.forEach((booking) => {
         const createdDate = format(new Date(booking.createdDate), "yyyy-MM-dd");
         bookingsByDate[createdDate] = (bookingsByDate[createdDate] || 0) + 1;
@@ -41,7 +50,7 @@ const Dashboard: React.FC = () => {
         bookings: bookingsByDate[date],
       }));
 
-      setBookingsData(formattedBookingsData);
+      setBookingData(formattedBookingsData);
       setLoading(false);
     } catch (err) {
       setError("Lỗi khi tải dữ liệu.");
@@ -86,7 +95,7 @@ const Dashboard: React.FC = () => {
   return (
     <Layout className="min-h-screen">
       <Layout className="site-layout">
-        <Content className="p-4">
+        <Layout.Content className="p-4">
           {loading ? (
             <Spin size="large" />
           ) : error ? (
@@ -130,7 +139,7 @@ const Dashboard: React.FC = () => {
                 <Col span={12}>
                   <Card title="Biến động số đơn đặt khách sạn" className="shadow-lg">
                     <ResponsiveContainer width="100%" height={300}>
-                      <LineChart data={bookingsData}>
+                      <LineChart data={bookingData}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="date" />
                         <YAxis />
@@ -155,7 +164,7 @@ const Dashboard: React.FC = () => {
               </div>
             </>
           )}
-        </Content>
+        </Layout.Content>
       </Layout>
     </Layout>
   );
