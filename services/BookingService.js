@@ -27,6 +27,15 @@ export const BookingHotelService = {
       },
     });
   },
+  cancelBooking: (id) => {
+    const data = { status: "2" };
+    return axios.put(`${process.env.NEXT_PUBLIC_API_URL}/bookingRoom/${id}`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    });
+  },
 };
 
 export const BookingVehicleService = {
