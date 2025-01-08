@@ -49,7 +49,7 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ ticket }) => {
       const result = (await TicketService.createBookingTicket(booking)).data;
       console.log("check result: ", result);
       notifySuccess("Đặt vé thành công!");
-      // router.push(`/booking-ticket/details?id=${result.id}`);
+      router.push(`/activities/details?id=${bookingTicket.user}`);
     } catch (error: any) {
       notifyWarning("Đặt vé thất bại. Vui lòng thử lại.");
     } finally {
@@ -61,14 +61,25 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ ticket }) => {
     <div>
       <div className="p-4 bg-white border rounded-lg">
         <div className="grid grid-cols-7 gap-2">
-          <div className="col-span-6">
-            <h3 className="font-bold mb-2">
-              Không yêu cầu thông tin thanh toán
-            </h3>
-            <p className="text-sm text-gray-500">
-              {/* {`Thanh toán của bạn sẽ do ${ticket.ticket_name} xử lý, nên bạn không cần nhập thông tin thanh toán cho đơn đặt này.`} */}
-            </p>
-          </div>
+          {bookingTicket.payment === "none" ? (
+            <div className="col-span-6">
+              <h3 className="font-bold mb-2">
+                Không yêu cầu thông tin thanh toán
+              </h3>
+              <p className="text-sm text-gray-500">
+                {`Thanh toán của bạn sẽ do đơn vị xử lý, bạn không cần nhập thông tin thanh toán cho đơn đặt này.`}
+              </p>
+            </div>
+          ) : (
+            <div className="col-span-7">
+              {/* <h3 className="font-bold mb-2">
+                Bạn đã thanh toán thành công đơn đặt phòng
+              </h3> */}
+              <p className="text-sm text-gray-500">
+                {`Thanh toán của bạn đã được hệ thống ghi nhận thông tin.`}
+              </p>
+            </div>
+          )}
         </div>
       </div>
       <div className="flex items-start my-4">

@@ -65,28 +65,13 @@ const BookingActivity = () => {
       <BookingSteps step={step} />
       <div className="grid grid-cols-3 gap-4">
         <div className="space-y-4">
-          <div className="p-4 bg-white border rounded-lg">
-            <div className="mb-4">
-              {/* <p className="text-sm text-gray-500">{paramsBookingTicket.type}</p>
+          {/* <div className="p-4 bg-white border rounded-lg"> */}
+          {/* <div className="mb-4"> */}
+          {/* <p className="text-sm text-gray-500">{paramsBookingTicket.type}</p>
               <h3 className="text-lg font-bold">{paramsBookingTicket.type}</h3>
               <p className="text-sm text-gray-500">{paramsBookingTicket.type}</p> */}
-            </div>
-            <div className="flex items-center space-x-2 mt-4">
-              <p className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold text-white bg-blue-600 rounded-lg">
-                {/* {paramsBookingTicket.reviews.average_rating.toFixed(1) || "N/A"} */}
-              </p>
-              <div>
-                <p className="text-blue-600 text-sm font-bold">
-                  {/* {ratingLabel.find(
-                    (r) => paramsBookingTicket.reviews.average_rating >= r.min
-                  )?.label || "Đánh giá"} */}
-                </p>
-                <p className="text-xs">
-                  {/* {paramsBookingTicket.reviews.total_reviews} lượt đánh giá */}
-                </p>
-              </div>
-            </div>
-          </div>
+          {/* </div> */}
+          {/* </div> */}
 
           <div className="p-4 bg-white border rounded-lg">
             <h3 className="text-lg font-bold mb-4">Chi tiết đặt vé của bạn</h3>

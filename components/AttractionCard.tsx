@@ -5,8 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { encodeToJWT } from "@/utils/JWT";
-import { activitiesSearch } from "@/data/fakeData";
-import TourService from "@/services/TourService";
+import { TourService } from "@/services/TourService";
 interface ActivityCardProps {
   id: number;
 }
