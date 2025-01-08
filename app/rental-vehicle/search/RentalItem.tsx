@@ -51,7 +51,8 @@ export function VehicleItem({
 }) {
   const router = useRouter();
   const [selectedFacilityId, setSelectedFacilityId] = useState<number | null>(null);
-  const rentalMinPrice = Math.min(...vehicle.facilities.map((facility: any) => facility.price));
+  const totalDate = calculateDaysBetween(params?.pickup, params?.return);
+  const rentalMinPrice = Math.min(...vehicle.facilities.map((facility: any) => facility.price)) * totalDate;
 
   return (
     <div className="p-4 border rounded-lg">

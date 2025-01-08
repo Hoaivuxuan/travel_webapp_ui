@@ -24,6 +24,12 @@ const formatDate = (dateString: string): string => {
   return `${day} tháng ${month}, ${year}`;
 };
 
+const calculateDaysBetween = (date1: Date, date2: Date): number => {
+  const diffInMilliseconds = date2.getTime() - date1.getTime();
+  const diffInDays = diffInMilliseconds / (1000 * 60 * 60 * 24);
+  return diffInDays;
+};
+
 const BookingVehicle = () => {
   const searchParams = useSearchParams();
   const [step, setStep] = useState(2);
@@ -45,6 +51,9 @@ const BookingVehicle = () => {
     totalServiceCost: rentalVehicle?.booking.totalServiceCost,
     noDriver: rentalVehicle?.booking.noDriver,
   };
+
+  const totalDate = calculateDaysBetween(new Date(params?.pickupDate), new Date(params?.returnDate));
+  const totalPrice = params?.facility?.price * totalDate;
 
   useEffect(() => {
     setWindowLoaded(true);
@@ -102,9 +111,9 @@ const BookingVehicle = () => {
               <h3 className="text-lg font-bold mb-4">CHI TIẾT GIÁ CẢ</h3>
               <div className="space-y-2 mt-4 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-700">Phí thuê xe</span>
+                  <span className="text-gray-700">Tổng phí thuê xe</span>
                   <span className="text-gray-700">
-                    {params?.facility?.price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                    {totalPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -118,7 +127,7 @@ const BookingVehicle = () => {
                 <div className="flex justify-between font-bold">
                   <span className="text-gray-700">Giá cho 4 ngày</span>
                   <span className="text-gray-700">
-                    {((params?.facility?.price + params?.totalServiceCost) || 0)
+                    {((totalPrice + params?.totalServiceCost) || 0)
                       .toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
                   </span>
                 </div>
@@ -134,7 +143,7 @@ const BookingVehicle = () => {
               setStep={setStep}
             />
           ) : step === 3 ? (
-            <ConfirmBooking />
+            <ConfirmBooking params={params}/>
           ) : null}
         </div>
       </div>

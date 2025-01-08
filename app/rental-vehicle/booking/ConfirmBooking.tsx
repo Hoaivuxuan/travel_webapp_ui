@@ -7,9 +7,13 @@ import { useRouter } from "next/navigation";
 import { BookingVehicleService } from "@/services/BookingService";
 import { PaymentService } from "@/services/CommonService";
 
-const ConfirmBooking = () => {
+interface ConfirmBookingProps {
+  params: any;
+}
+
+const ConfirmBooking: React.FC<ConfirmBookingProps> = ({params}) => {
   const router = useRouter();
-  const booking = JSON.parse(localStorage.getItem("rentalVehicle") || "{}");
+  const bookingVehicle = JSON.parse(localStorage.getItem("rentalVehicle") || "{}");
   const bearerToken = localStorage.getItem("token");
   const [isChecked, setIsChecked] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -20,7 +24,7 @@ const ConfirmBooking = () => {
   };
 
   const handlePayment = async () => {
-    const price = booking.facility.price + booking.totalServiceCost;
+    const price = params.facility.price + params.totalServiceCost;
     const payment = (await PaymentService.paymentByVNPay(price)).data;
     window.open(`${payment.paymentUrl}`, "_blank");
     setLoading(true);
@@ -30,8 +34,21 @@ const ConfirmBooking = () => {
   };
 
   const handleConfirm = async () => {
-    if(!booking || !bearerToken) return;
+    if(!bookingVehicle || !bearerToken) return;
+    const booking = {
+      user: bookingVehicle.user,
+      vehicle: bookingVehicle.vehicle,
+      facility: bookingVehicle.facility,
+      pickup: bookingVehicle.pickup,
+      return: bookingVehicle.return,
+      accessory_booking: bookingVehicle.accessory_booking,
+      customerInfo: bookingVehicle.customerInfo,
+      driverInfo: bookingVehicle.driverInfo,
+      status: (bookingVehicle.payment === "none" ? 1 : 0),
+    };
+
     try {
+      setLoading(true);
       const result = (await BookingVehicleService.postBooking(booking)).data;
       notifySuccess("Đặt xe thành công!");
       router.push(`/rental-vehicle/details?id=${result.id}`);
@@ -46,7 +63,7 @@ const ConfirmBooking = () => {
     <div>
       <div className="p-4 bg-white border rounded-lg">
         <div className="grid grid-cols-7 gap-2">
-          {booking.payment === "none" ? (
+          {bookingVehicle.payment === "none" ? (
             <div className="col-span-6">
               <h3 className="font-bold mb-2">Không yêu cầu thông tin thanh toán</h3>
               <p className="text-sm text-gray-500">
@@ -75,11 +92,11 @@ const ConfirmBooking = () => {
         <Button
           type="primary"
           className="bg-blue-600 text-white w-1/2 py-2 rounded"
-          onClick={handleConfirm}
+          onClick={bookingVehicle.payment === "none" ? handleConfirm : handlePayment}
           disabled={!isChecked}
           loading={loading}
         >
-          HOÀN TẤT
+          THANH TOÁN & HOÀN TẤT
         </Button>
       </div>
       <ToastContainer />

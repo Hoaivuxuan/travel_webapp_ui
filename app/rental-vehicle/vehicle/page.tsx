@@ -170,6 +170,7 @@ const VehicleDetail = () => {
     }))
     .filter((service: any) => service.amount > 0);
   
+  const totalDate = calculateDaysBetween(new Date(search?.dateRange.pickupDate), new Date(search?.dateRange.returnDate))
   const totalServiceCost = bonusServices.reduce(
     (sum: number, service: any) => sum + (service.amount * service.price_per || 0),
     0
@@ -431,7 +432,7 @@ const VehicleDetail = () => {
               </div>
               <div className="flex justify-center items-center">
                 <p className="w-auto inline-block bg-blue-200 text-blue-600 rounded-lg px-3 py-1 text-sm">
-                  {calculateDaysBetween(new Date(search?.dateRange.pickupDate), new Date(search?.dateRange.returnDate))} ngày
+                  {totalDate} ngày
                 </p>
               </div>
               <div className="ml-auto text-right">
@@ -518,7 +519,7 @@ const VehicleDetail = () => {
               <div className="flex justify-between">
                 <span className="text-sm font-bold">Giá thuê cơ bản</span>
                 <span className="text-sm font-semibold">
-                  {facility?.price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                  {(facility?.price * totalDate).toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
                 </span>
               </div>
               <div className="space-y-2">
@@ -536,7 +537,7 @@ const VehicleDetail = () => {
               <div className="flex justify-between border-t pt-4">
                 <span className="text-lg font-bold">Tổng giá tiền</span>
                 <span className="text-xl font-semibold">
-                  {((facility?.price + totalServiceCost)).toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+                  {((facility?.price * totalDate + totalServiceCost)).toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
                 </span>
               </div>
 

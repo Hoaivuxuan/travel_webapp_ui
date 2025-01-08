@@ -50,10 +50,11 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
       special_request: bookingHotel.specialRequest,
       arrival_time: bookingHotel.arrivalTime,
       totalPrice: bookingHotel.roomSelection.totalPrice,
-      status: (bookingHotel.payment === "none" ? 0 : 1),
+      status: (bookingHotel.payment === "none" ? 1 : 0),
     };
 
     try {
+      setLoading(true);
       const result = (await BookingHotelService.postBooking(booking)).data;
       notifySuccess("Đặt phòng thành công!");
       router.push(`/booking-hotel/details?id=${result.id}`);
@@ -77,9 +78,9 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
             </div>
           ) : (
             <div className="col-span-7">
-              <h3 className="font-bold mb-2">Bạn đã thanh toán thành công đơn đặt phòng</h3>
+              {/* <h3 className="font-bold mb-2">Bạn sẽ thanh toán thành công đơn đặt phòng</h3> */}
               <p className="text-sm text-gray-500">
-              {`Thanh toán của bạn đã được hệ thống ${hotel.hotel_name} ghi nhận thông tin.`}
+              {`Thanh toán của bạn sẽ được hệ thống ${hotel.hotel_name} ghi nhận thông tin.`}
             </p>
             </div>
           )}
@@ -103,7 +104,7 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
         <Button
           type="primary"
           className="bg-blue-600 text-white w-1/2 py-2 rounded"
-          onClick={handlePayment}
+          onClick={bookingHotel.payment === "none" ? handleConfirm : handlePayment}
           disabled={!isChecked}
           loading={loading}
         >

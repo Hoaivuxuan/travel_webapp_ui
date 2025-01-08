@@ -161,8 +161,8 @@ const BookingVehicleDetails: React.FC = () => {
         </div>
       </div>
       <div className="mt-6">
+        <p className="text-lg font-bold">Tổng giá thuê xe: {total_price?.toLocaleString("vi-VN")} VNĐ</p>
         <p className="text-lg font-bold">Phí dịch vụ: {services?.totalServices?.toLocaleString("vi-VN")} VNĐ</p>
-        <p className="text-lg font-bold">Tổng chi phí: {total_price?.toLocaleString("vi-VN")} VNĐ</p>
       </div>
     </div>
   );
