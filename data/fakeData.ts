@@ -186,7 +186,7 @@ export const activities: Destination[] = [
   },
   {
     id: 6,
-    src: "https://r-xx.bstatic.com/xdata/images/city/540x405/688853.jpg?k=f6427c8fccdf777e4bbc75fcd245e7c66204280181bea23350388c76c57348d1&o=",
+    src: "https://q-xx.bstatic.com/xdata/images/city/533x300/981524.jpg?k=855540c54e026d67de390c0bdcee5690fedb503dbc3ad2ef5ae8007c637d682a&o=",
     title: "Hà Nội",
     location: "Việt Nam",
     description: "0 Deals",

@@ -81,7 +81,7 @@ const BookingDetails: React.FC = () => {
     <div className="container mx-auto p-6">
       <div className="pb-4">
         <a
-          href="/booking-hotel"
+          href="/activities"
           className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-gray-400 transition duration-150"
         >
           Quay lại trang chính

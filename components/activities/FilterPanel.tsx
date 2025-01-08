@@ -43,25 +43,6 @@ const FilterPanel = () => {
           </label>
         </div>
       </div>
-
-      {/* Giờ trong ngày */}
-      <div className="mb-4">
-        <h3 className="font-medium">Giờ trong ngày</h3>
-        <div className="mt-2 space-y-2">
-          <label className="flex items-center">
-            <input type="checkbox" className="mr-2" />
-            Buổi sáng (3390)
-          </label>
-          <label className="flex items-center">
-            <input type="checkbox" className="mr-2" />
-            Buổi trưa (700)
-          </label>
-          <label className="flex items-center">
-            <input type="checkbox" className="mr-2" />
-            Buổi tối (525)
-          </label>
-        </div>
-      </div>
     </aside>
   );
 };
