@@ -100,7 +100,7 @@ export default function Search({ searchParams }: Props) {
                 </label>
                 <label className="flex items-center">
                   <input type="checkbox" className="mr-2" />
-                  Hạ Long
+                  Hồ Chí Minh
                 </label>
               </div>
             </div>
