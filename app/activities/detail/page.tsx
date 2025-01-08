@@ -200,7 +200,7 @@ const ActivitiesDetailPage = () => {
                       <div className="text-lg font-semibold">
                         {review.rating}⭐
                       </div>
-                      <div className="font-bold">{review.user}</div>
+                      <div className="font-bold py-2">{review.user}</div>
                       <p className="text-gray-700">{review.comment}</p>
                       <span className="text-sm text-gray-500">
                         {review.date}

@@ -37,18 +37,34 @@ export default function Search({ searchParams }: Props) {
 
   useEffect(() => {
     const fetchFilter = async () => {
-      // try {
-      //   const data = (await HotelService.getByCity(removeAccent(""))).data;
-      //   const type = Array.from(
-      //     new Set<string>(data.hotels.map((hotel: any) => hotel.type))
-      //   )
-      //     .sort((a, b) => a.localeCompare(b))
-      //     .map((type, id) => ({ id: id, name: type }));
-      //   setListType(type);
-      //   setLoading(false);
-      // } catch (error) {
-      //   setLoading(false);
-      // }
+      try {
+        const locationFromParam = (searchParams.location || "")
+          .trim()
+          .replace(/\s+/g, "")
+          .toLowerCase();
+        const data = (
+          await TourService.search(removeAccent(locationFromParam), "")
+        ).data.responses;
+        const typeTicket = Array.from(
+          new Map(
+            data
+              .flatMap((item: any) =>
+                item.tour_schedule_responses.flatMap((response: any) =>
+                  response.dailyTicketAvailabilities.map((ticket: any) => ({
+                    id: ticket.id,
+                    name: ticket.name,
+                  }))
+                )
+              )
+              .map((ticket: any) => [ticket.name, ticket])
+          ).values()
+        );
+        console.log("Check typeTicket:", typeTicket);
+        setListType(typeTicket);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
     };
 
     const fetchActivities = async () => {
@@ -65,7 +81,6 @@ export default function Search({ searchParams }: Props) {
         const data = (
           await TourService.search(removeAccent(locationFromParam), "")
         ).data.responses;
-        console.log("Check data:", data);
         setActivities(data);
       } catch (error) {
         setLoading(false);
@@ -76,9 +91,20 @@ export default function Search({ searchParams }: Props) {
     fetchActivities();
   }, [searchParams.location]);
 
-  const handlePriceChange = (value: number | number[]) => {
-    if (Array.isArray(value)) setPriceRange([value[0], value[1]]);
+  const handleTypeSelection = (checkedValues: number[]) => {
+    setSelectedTypes(checkedValues);
   };
+
+  const filteredResults = activities.filter((item: any) => {
+    const matchesRating =
+      selectedRatings.length === 0 ||
+      selectedRatings.some(
+        (rating) =>
+          item.review?.average_rating !== undefined &&
+          item.review.average_rating >= rating
+      );
+    return matchesRating;
+  });
 
   return (
     <section>
@@ -91,7 +117,7 @@ export default function Search({ searchParams }: Props) {
             <h2 className="text-xl font-semibold mb-4">Lọc theo:</h2>
 
             {/* Địa điểm */}
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <h3 className="font-medium">Địa điểm</h3>
               <div className="mt-2 space-y-2">
                 <label className="flex items-center">
@@ -103,7 +129,7 @@ export default function Search({ searchParams }: Props) {
                   Hồ Chí Minh
                 </label>
               </div>
-            </div>
+            </div> */}
 
             <div className="text-sm border-t py-4">
               <h4 className="font-semibold mb-2">Đánh giá của khách hàng</h4>
@@ -122,7 +148,7 @@ export default function Search({ searchParams }: Props) {
               <h4 className="font-semibold mb-2">Loại vé</h4>
               <Checkbox.Group
                 value={selectedTypes}
-                // onChange={handleTypeSelection}
+                onChange={handleTypeSelection}
               >
                 {Array.isArray(listType) &&
                   listType.length > 0 &&
@@ -140,7 +166,7 @@ export default function Search({ searchParams }: Props) {
           </aside>
 
           <div className="flex-1 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6 ml-6">
-            {activities.map((item: any) => (
+            {filteredResults.map((item: any) => (
               <ActivityCard key={item.id} id={item.id} />
             ))}
           </div>
