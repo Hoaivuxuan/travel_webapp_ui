@@ -6,6 +6,9 @@ import { AiOutlineBars, AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { statusTags } from "@/data/defaultValues";
 import { format } from "date-fns";
 import { BookingHotelService, BookingVehicleService } from "@/services/BookingService";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Notification from "@/components/Notification";
 import BookingDetailsModal from "./BookingHotelDetails";
 
 const BookingHotelPage: React.FC = () => {
@@ -15,6 +18,7 @@ const BookingHotelPage: React.FC = () => {
   const [selectedBookingVehicle, setSelectedBookingVehicle] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { notifySuccess, notifyWarning } = Notification();
 
   useEffect(() => {
     const userId = Number(localStorage.getItem("userId"));
@@ -56,11 +60,13 @@ const BookingHotelPage: React.FC = () => {
           <AiOutlineEye className="mr-2" /> Xem chi tiết
         </div>
       </Menu.Item>
-      <Menu.Item key="2">
-        <div className="flex items-center">
-          <AiOutlineDelete className="mr-2" /> Hủy đơn đặt
-        </div>
-      </Menu.Item>
+      {record.status != 2 && (
+        <Menu.Item key="2" onClick={() => handleCancelBooking(record)}>
+          <div className="flex items-center">
+            <AiOutlineDelete className="mr-2" /> Hủy đơn đặt
+          </div>
+        </Menu.Item>
+      )}
     </Menu>
   );
 
@@ -71,11 +77,13 @@ const BookingHotelPage: React.FC = () => {
           <AiOutlineEye className="mr-2" /> Xem chi tiết
         </div>
       </Menu.Item>
-      <Menu.Item key="2">
-        <div className="flex items-center">
-          <AiOutlineDelete className="mr-2" /> Hủy đơn đặt
-        </div>
-      </Menu.Item>
+      {record.status != 2 && (
+        <Menu.Item key="2">
+          <div className="flex items-center">
+            <AiOutlineDelete className="mr-2" /> Hủy đơn đặt
+          </div>
+        </Menu.Item>
+      )}
     </Menu>
   );
 
@@ -247,6 +255,19 @@ const BookingHotelPage: React.FC = () => {
     setIsModalVisible(false);
   };
 
+  const handleCancelBooking = async (record: any) => {
+    try {
+      const response = await BookingHotelService.cancelBooking(record?.id);
+      if (response) {
+        notifySuccess("Hủy đơn đặt phòng thành công.");
+      } else {
+        notifyWarning("Không thể hủy đơn đặt phòng. Vui lòng thử lại.");
+      }
+    } catch (error) {
+      notifyWarning("Có lỗi xảy ra khi hủy đơn đặt phòng.");
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto mb-6">
       <Collapse
@@ -286,6 +307,7 @@ const BookingHotelPage: React.FC = () => {
         visible={isModalVisible}
         onClose={handleModalClose}
       />
+      <ToastContainer />
     </div>
   );
 };

@@ -67,7 +67,9 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
         <Descriptions.Item label="Tổng chi phí">
           {`${bookingHotel?.totalPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`}
         </Descriptions.Item>
-        <Descriptions.Item label="Đã thanh toán">0</Descriptions.Item>
+        <Descriptions.Item label="Đã thanh toán">
+          {`${bookingHotel?.payed_money.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'}) || 0}`}
+        </Descriptions.Item>
         <Descriptions.Item label="Trạng thái">
           {statusTags
             .filter(tag => tag.id === Number(bookingHotel?.status))
