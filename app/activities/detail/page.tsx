@@ -159,15 +159,14 @@ const ActivitiesDetailPage = () => {
               <h2 className="text-xl font-semibold mt-10 mb-5">
                 Đánh giá của khách hàng
               </h2>
-              <div className="text-lg font-semibold">
-                4.5 - Tuyệt vời (970 đánh giá)
-              </div>
+              <div className="text-lg font-semibold">⭐ - Tuyệt vời</div>
               <div className="space-y-2 mt-4">
                 {[
-                  "Đáng giá tiền",
-                  "Chất lượng dịch vụ",
-                  "Tiện nghi",
-                  "Dễ tiếp cận",
+                  "Lượt đánh giá 1⭐",
+                  "Lượt đánh giá 2⭐",
+                  "Lượt đánh giá 3⭐",
+                  "Lượt đánh giá 4⭐",
+                  "Lượt đánh giá 5⭐",
                 ].map((item, index) => (
                   <div key={index} className="flex items-center">
                     <span className="w-1/3">{item}</span>
@@ -175,11 +174,11 @@ const ActivitiesDetailPage = () => {
                       <div
                         className="absolute bg-yellow-500 h-2.5 rounded-full"
                         style={{
-                          width: `${[4.6, 4.5, 4.5, 4.7][index] * 20}%`,
+                          width: `${[2.5, 2.5, 2.5, 2.5, 2.5][index] * 20}%`,
                         }}
                       ></div>
                     </div>
-                    <span className="ml-2">{[4.6, 4.5, 4.5, 4.7][index]}</span>
+                    <span className="ml-2">{[2, 3, 3, 5, 4][index]}</span>
                   </div>
                 ))}
               </div>

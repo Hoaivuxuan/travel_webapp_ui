@@ -79,14 +79,12 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ id }) => {
           </span>
         </div>
 
-        {activity.cancellationPolicy === 1 && (
-          <p className="text-sm mt-2 text-green-600 flex items-center">
-            <span>✔</span>{" "}
-            <span className="ml-1">Có lựa chọn hủy miễn phí</span>
-          </p>
-        )}
+        <p className="text-sm mt-2 text-green-600 flex items-center">
+          <span>✔</span> <span className="ml-1">Có lựa chọn hủy miễn phí</span>
+        </p>
 
         <p className="mt-2 text-blue-500 font-bold">
+          {" "}
           {new Intl.NumberFormat("vi-VN").format(
             Number(
               activity.tour_schedule_responses[0].dailyTicketAvailabilities[0]
