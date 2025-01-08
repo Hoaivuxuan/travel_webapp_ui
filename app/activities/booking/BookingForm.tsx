@@ -29,17 +29,6 @@ const BookingForm: React.FC<BookingFormProps> = ({
     country: "Vietnam",
   };
 
-  const showVNPayModal = async (price: any) => {
-    const res = (await PaymentService.paymentByVNPay(price)).data;
-    window.open(`${res.paymentUrl}`, "_blank");
-    setIsModalVisible(true);
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      handleConfirm();
-    }, 15000);
-  };
-
   const saveBookingTicket = (formValues: any, paramsBookingTicket: any) => {
     const bookingTicket = {
       user: paramsBookingTicket.user,
