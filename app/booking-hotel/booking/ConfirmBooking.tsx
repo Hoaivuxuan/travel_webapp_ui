@@ -84,7 +84,7 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ hotel }) => {
             </div>
           ) : (
             <div className="col-span-7">
-              {/* <h3 className="font-bold mb-2">Bạn sẽ thanh toán thành công đơn đặt phòng</h3> */}
+              <h3 className="font-bold mb-2">Đơn đặt phòng của bạn đang chờ được thanh toán</h3>
               <p className="text-sm text-gray-500">
               {`Thanh toán của bạn sẽ được hệ thống ${hotel.hotel_name} ghi nhận thông tin.`}
             </p>
