@@ -102,7 +102,9 @@ const ConfirmBooking: React.FC<ConfirmBookingProps> = ({ ticket }) => {
         <Button
           type="primary"
           className="bg-blue-600 text-white w-1/2 py-2 rounded"
-          onClick={handlePayment}
+          onClick={
+            bookingTicket.payment === "none" ? handleConfirm : handlePayment
+          }
           disabled={!isChecked}
           loading={loading}
         >

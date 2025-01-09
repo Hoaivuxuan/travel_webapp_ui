@@ -42,6 +42,7 @@ export default function Search({ searchParams }: Props) {
           .trim()
           .replace(/\s+/g, "")
           .toLowerCase();
+        console.log("Check locationFromParam:", locationFromParam);
         const data = (
           await TourService.search(removeAccent(locationFromParam), "")
         ).data.responses;
@@ -137,9 +138,11 @@ export default function Search({ searchParams }: Props) {
                 value={selectedRatings[0]}
                 onChange={(e) => setSelectedRatings([e.target.value])}
               >
-                {[2.5, 3, 3.5, 4, 4.5].map((rating) => (
+                {[0, 2.5, 3, 3.5, 4, 4.5].map((rating) => (
                   <Radio key={rating} value={rating} className="mb-1 w-full">
-                    <div className="flex items-center">{`≥ ${rating} sao`}</div>
+                    <div className="flex items-center">
+                      {rating === 0 ? "Tất cả" : `≥ ${rating} sao`}
+                    </div>
                   </Radio>
                 ))}
               </Radio.Group>

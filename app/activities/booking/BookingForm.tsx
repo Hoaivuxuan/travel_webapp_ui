@@ -18,9 +18,6 @@ const BookingForm: React.FC<BookingFormProps> = ({
   setStep,
 }) => {
   const [form] = Form.useForm();
-  const [selectedPayment, setSelectedPayment] = useState("none");
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const initialValues = {
     whoBooking: "self",
@@ -28,6 +25,12 @@ const BookingForm: React.FC<BookingFormProps> = ({
     nearbyRooms: false,
     country: "Vietnam",
   };
+
+  const [selectedPayment, setSelectedPayment] = useState(
+    initialValues?.payment
+  );
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const saveBookingTicket = (formValues: any, paramsBookingTicket: any) => {
     const bookingTicket = {
@@ -42,7 +45,9 @@ const BookingForm: React.FC<BookingFormProps> = ({
           Number(paramsBookingTicket.booked_tickets[0].quantity) *
           1.1
       ),
+      payment: formValues.payment,
     };
+    console.log("check formValues: ", formValues);
     localStorage.setItem("bookingTicket", JSON.stringify(bookingTicket));
   };
 
